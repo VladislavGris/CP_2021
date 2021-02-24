@@ -10,5 +10,7 @@
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid/>
+    <Grid>
+		<Button Content="Button" HorizontalAlignment="Left" Margin="168,124,0,0" VerticalAlignment="Top" Command="{Binding CloseApplicationCommand}"/>
+	</Grid>
 </Window>

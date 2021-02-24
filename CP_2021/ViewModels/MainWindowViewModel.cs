@@ -1,4 +1,8 @@
-﻿using CP_2021.ViewModels.Base;
+﻿using CP_2021.Infrastructure.Commands;
+using CP_2021.ViewModels.Base;
+using System.Windows;
+using System.Windows.Input;
+
 namespace CP_2021.ViewModels
 {
     internal class MainWindowViewModel : ViewModelBase
@@ -13,5 +17,33 @@ namespace CP_2021.ViewModels
             set => Set(ref _Title, value);
         }
         #endregion
+
+        #region Команды
+
+        #region CloseApplicationCommand
+
+        public ICommand CloseApplicationCommand { get; }
+
+        private void OnCloseApplicationCommandExecuted(object p)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private bool CanCloseApplicationCommandExecute(object p) => true;
+
+        #endregion
+
+        #endregion
+
+        public MainWindowViewModel()
+        {
+
+            #region Команды
+
+            CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
+
+            #endregion
+
+        }
     }
 }
