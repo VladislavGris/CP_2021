@@ -6,11 +6,9 @@
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         xmlns:l="clr-namespace:CP_2021"
         Title="{Binding Title}" 
-        Height="450" Width="800">
+        Height="800" Width="1130" WindowStyle="SingleBorderWindow">
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
-    <Grid>
-
-    </Grid>
+    <Grid/>
 </Window>
