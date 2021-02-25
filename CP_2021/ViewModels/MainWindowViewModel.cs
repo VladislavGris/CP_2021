@@ -18,32 +18,8 @@ namespace CP_2021.ViewModels
         }
         #endregion
 
-        #region Команды
-
-        #region CloseApplicationCommand
-
-        public ICommand CloseApplicationCommand { get; }
-
-        private void OnCloseApplicationCommandExecuted(object p)
-        {
-            Application.Current.Shutdown();
-        }
-
-        private bool CanCloseApplicationCommandExecute(object p) => true;
-
-        #endregion
-
-        #endregion
-
         public MainWindowViewModel()
         {
-
-            #region Команды
-
-            CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
-
-            #endregion
-
         }
     }
 }
