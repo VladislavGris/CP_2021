@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
 		xmlns:cmd="clr-namespace:CP_2021.Infrastructure.Commands"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:l="clr-namespace:CP_2021"
         Title="{Binding Title}" 
         Height="800" Width="1130" WindowStyle="SingleBorderWindow">
@@ -15,6 +16,6 @@
         <cmd:CloseApplicationCommand x:Key="CloseApplicationCommand"/>
     </Window.Resources>
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="272,247,0,0" VerticalAlignment="Top" Command="{StaticResource CloseApplicationCommand}"/>
+        <fa:ImageAwesome Icon="Regular_File" Foreground="Red" Margin="0,0,1000,0" Height="25"/>
     </Grid>
 </Window>
