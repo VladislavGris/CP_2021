@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
@@ -15,6 +15,13 @@
   <ItemGroup>
     <PackageReference Include="FontAwesome5" Version="2.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\Windows\ProductionPlan.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
 
 </Project>
