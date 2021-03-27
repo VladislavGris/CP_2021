@@ -1,14 +1,27 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.ViewModels.Base;
 using System.Windows.Input;
-using System.ComponentModel;
 using System.Windows;
+using System.Windows.Controls;
+using CP_2021.Views.UserControls;
 
 namespace CP_2021.ViewModels
 {
     internal class ProductionPlanViewModel : ViewModelBase
     {
         #region Свойства
+
+        #region ContentContainerContent
+
+        private UserControl _ContentContainerContent = new UserControlProductionPlan();
+
+        public UserControl ContentContainerContent
+        {
+            get => _ContentContainerContent;
+            set => Set(ref _ContentContainerContent, value);
+        }
+
+        #endregion
 
         #region ButtonCloseMenuVisibility
 
@@ -85,6 +98,35 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region ChangeContentCommand
+
+        public ICommand ChangeContentCommand { get; }
+
+        private bool CanChangeContentCommandExecute(object p) => true;
+
+        private void OnChangeContentCommandExecuted(object p)
+        {
+            switch (((ListViewItem)p).Name)
+            {
+                case "ItemProductionPlan":
+                    ContentContainerContent = new UserControlProductionPlan();
+                    break;
+                case "ItemReports":
+                    ContentContainerContent = new UserControlReports();
+                    break;
+                case "ItemTasks":
+                    ContentContainerContent = new UserControlTasks();
+                    break;
+                case "ItemSettings":
+                    ContentContainerContent = new UserControlSettings();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         public ProductionPlanViewModel()
@@ -93,6 +135,7 @@ namespace CP_2021.ViewModels
 
             ButtonCloseMenuCommand = new LambdaCommand(OnButtonCloseMenuCommandExecuted, CanButtonCloseMenuCommandExecute);
             ButtonOpenMenuCommand = new LambdaCommand(OnButtonOpenMenuCommandExecuted, CanButtonOpenMenuCommandExecute);
+            ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
 
             #endregion
 

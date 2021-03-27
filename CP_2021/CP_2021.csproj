@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Windows\CPIcon.png" />
+    <None Remove="Views\Windows\favicon.ico" />
+    <None Remove="Views\Windows\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Models\" />
     <Folder Include="Services\" />
@@ -15,6 +21,11 @@
   <ItemGroup>
     <PackageReference Include="FontAwesome5" Version="2.1.0" />
     <PackageReference Include="MaterialDesignThemes" Version="4.0.0" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.31" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Views\Windows\icon.png" />
   </ItemGroup>
 
   <ItemGroup>
