@@ -5,29 +5,49 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:vm="clr-namespace:CP_2021.ViewModels"
-             xmlns:conv="clr-namespace:CP_2021.Infrastructure.Converters"
+             xmlns:convert="clr-namespace:CP_2021.Infrastructure.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <conv:NullabaleIntConverter x:Key="NullableIntConverter"/>
+        <GridLength x:Key="TreeToggleWidth">20</GridLength>
+        <convert:LevelConverter x:Key="LevelSpaceConverter" LevelWidth="{StaticResource TreeToggleWidth}"/>
+        <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
     </UserControl.Resources>
     <UserControl.DataContext>
         <vm:DBTestUserControlViewModel/>
     </UserControl.DataContext>
     <StackPanel Background="SkyBlue">
-        <Grid Height="100" Background="#FF31577E"></Grid>
-        <!--<DataGrid x:Name="PeopleDataGrid" 
-                  Margin="5" 
-                  ItemsSource="{Binding People}" 
-                  AutoGenerateColumns="False" 
-                  CanUserReorderColumns="True"
-                  ColumnWidth="*"
-                  CanUserAddRows="False">
+        <Grid Height="100" Background="#FF31577E">
+        </Grid>
+        <DataGrid AutoGenerateColumns="False"
+                  Name="Grid"
+                  CanUserAddRows="False"
+                  AlternationCount="2"
+                  AlternatingRowBackground="LightGray"
+                  ItemsSource="{Binding Model.FlatModel}"
+                  Margin="5"
+                  ColumnWidth="*">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding Id}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Name}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Должность" Binding="{Binding Position}"></DataGridTextColumn>
+                <DataGridTemplateColumn Width="50">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <!--<Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="{Binding Level, Converter={StaticResource LevelSpaceConverter}}"/>
+                                    <ColumnDefinition Width="{StaticResource TreeToggleWidth}"/>
+                                    -->
+                                <!--<ColumnDefinition Width="Auto"/>-->
+                                <!--
+                                </Grid.ColumnDefinitions>-->
+                            
+                            <!--Заменить чекбокс на экспандер-->
+                            <CheckBox IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                      Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}"/>
             </DataGrid.Columns>
-        </DataGrid>-->
+        </DataGrid>
     </StackPanel>
 </UserControl>
