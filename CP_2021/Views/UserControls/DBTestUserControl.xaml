@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <GridLength x:Key="TreeToggleWidth">20</GridLength>
+        <GridLength x:Key="TreeToggleWidth">30</GridLength>
         <convert:LevelConverter x:Key="LevelSpaceConverter" LevelWidth="{StaticResource TreeToggleWidth}"/>
         <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
     </UserControl.Resources>
@@ -26,27 +26,32 @@
                   AlternatingRowBackground="LightGray"
                   ItemsSource="{Binding Model.FlatModel}"
                   Margin="5"
-                  ColumnWidth="*">
+                  CanUserReorderColumns="False">
             <DataGrid.Columns>
-                <DataGridTemplateColumn Width="50">
+                <DataGridTemplateColumn Header="Имя" 
+                                        CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!--<Grid.ColumnDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="{Binding Level, Converter={StaticResource LevelSpaceConverter}}"/>
                                     <ColumnDefinition Width="{StaticResource TreeToggleWidth}"/>
-                                    -->
-                                <!--<ColumnDefinition Width="Auto"/>-->
-                                <!--
-                                </Grid.ColumnDefinitions>-->
-                            
-                            <!--Заменить чекбокс на экспандер-->
-                            <CheckBox IsChecked="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                      Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Expander Grid.Column="1"
+                                          IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                          Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
+                                          Margin="-55 -10 -10 -10"
+                                          Background="Transparent"
+                                          Height="48"/>
+                                <TextBox  Text="{Binding Name}" Grid.Column="2" />
+                            </Grid>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Имя" Binding="{Binding Name}"/>
-                <DataGridTextColumn Header="Должность" Binding="{Binding Position}"/>
+                <!--<DataGridTextColumn Header="Имя" Binding="{Binding Name}" CanUserSort="False"/>-->
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" CanUserSort="False" />
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>
