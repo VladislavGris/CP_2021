@@ -112,7 +112,7 @@ namespace CP_2021.ViewModels
                     ContentContainerContent = new UserControlProductionPlan();
                     break;
                 case "ItemReports":
-                    ContentContainerContent = new DBTestUserControl();
+                    ContentContainerContent = new UserControlReports();
                     break;
                 case "ItemTasks":
                     ContentContainerContent = new UserControlTasks();

@@ -28,6 +28,20 @@
                   Margin="5"
                   CanUserReorderColumns="False">
             <DataGrid.Columns>
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" CanUserSort="False" MaxWidth="300">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="MaxWidth" Value="300"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn Header="Имя" 
                                         CanUserSort="False">
                     <DataGridTemplateColumn.CellTemplate>
@@ -44,14 +58,41 @@
                                           Margin="-55 -10 -10 -10"
                                           Background="Transparent"
                                           Height="48"/>
-                                <TextBox  Text="{Binding Name}" Grid.Column="2" />
+                                <TextBox  Text="{Binding Name}" Grid.Column="2" AcceptsReturn="True" TextWrapping="Wrap" MaxWidth="300"/>
+
                             </Grid>
 
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!--<DataGridTextColumn Header="Имя" Binding="{Binding Name}" CanUserSort="False"/>-->
-                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" CanUserSort="False" />
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" CanUserSort="False" MaxWidth="300">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="MaxWidth" Value="300"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" CanUserSort="False" MaxWidth="300">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="MaxWidth" Value="300"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                    <DataGridTextColumn.EditingElementStyle>
+                        <Style TargetType="TextBox">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="AcceptsReturn" Value="true" />
+                        </Style>
+                    </DataGridTextColumn.EditingElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </StackPanel>
