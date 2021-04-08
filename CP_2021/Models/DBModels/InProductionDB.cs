@@ -11,13 +11,14 @@ namespace CP_2021.Models.DBModels
     [Table("In_Production")]
     class InProductionDB : Entity
     {
-        [Column("Number")]
+        [Column("Number", TypeName ="nvarchar(30)")]
         public string Number { get; set; }
-        [Column("Giving_Date")]
-        public DateTime GivingDate { get; set; }
-        [Column("Executor_Name")]
+        [Column("Giving_Date", TypeName ="date")]
+        public DateTime? GivingDate { get; set; }
+        [Column("Executor_Name", TypeName ="nvarchar(80)")]
         public string ExecutorName { get; set; }
-        [Column("Completion_Date")]
-        public DateTime CompletionDate { get; set; }
+        [Column("Completion_Date", TypeName="date")]
+        public DateTime? CompletionDate { get; set; }
+
     }
 }

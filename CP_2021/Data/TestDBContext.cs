@@ -1,5 +1,7 @@
 ﻿using CP_2021.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 namespace CP_2021.Data
 {
@@ -19,7 +21,11 @@ namespace CP_2021.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-LRSVKUO;Database=Company;Trusted_Connection=True;");
+            var builder = new ConfigurationBuilder();
+            builder.SetBasePath(Directory.GetCurrentDirectory() + "\\Data\\Configs");
+            builder.AddJsonFile("appsettings.json");
+            var config = builder.Build();
+            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
         }
     }
 }

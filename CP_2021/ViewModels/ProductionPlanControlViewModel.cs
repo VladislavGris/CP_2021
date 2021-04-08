@@ -1,4 +1,5 @@
-﻿using CP_2021.ViewModels.Base;
+﻿using CP_2021.Data;
+using CP_2021.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,6 +28,9 @@ namespace CP_2021.ViewModels
             #region Команды
 
             #endregion
+            using(ProductionDBContext context = new ProductionDBContext())
+            {
+            }
         }
     }
 }

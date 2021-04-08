@@ -11,11 +11,11 @@ namespace CP_2021.Models.DBModels
     [Table("Complectation")]
     class ComplectationDB : Entity
     {
-        [Column("Complectation")]
+        [Column("Complectation", TypeName = "nvarchar(100)")]
         public string Complectation { get; set; }
-        [Column("C_Date")]
-        public DateTime ComplectationDate { get; set; }
-        [Column("Comp_Percentage")]
+        [Column("C_Date", TypeName = "date")]
+        public DateTime? ComplectationDate { get; set; }
+        [Column("Comp_Percentage", TypeName = "float")]
         public float? Percentage { get; set; }
     }
 }
