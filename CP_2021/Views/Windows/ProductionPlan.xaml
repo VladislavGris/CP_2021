@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
-        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="CP_2WPFTests.MainWindow"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
+        x:Class="CP_2WPFTests.MainWindow"
         mc:Ignorable="d"
         Title="Company Planner" Height="720" Width="1280" MinHeight="450" MinWidth="500" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png">
     <Window.DataContext>
@@ -59,12 +60,11 @@
                             Visibility="{Binding ButtonOpenMenuVisibility}"
                             HorizontalAlignment="Right" 
                             VerticalAlignment="Top" 
-                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
                             Background="{x:Null}" 
                             BorderBrush="{x:Null}" 
                             Foreground="#FF31577E" 
                             Command="{Binding ButtonOpenMenuCommand}">
-                        <materialDesign:PackIcon Kind="Menu" Width="25" Height="25"/>
+                        <fa:ImageAwesome Icon="Solid_Bars" Width="25" Height="25" Foreground="#FF31577E"/>
                     </Button>
                     <Button x:Name="ButtonCloseMenu" 
                             Visibility="{Binding ButtonCloseMenuVisibility}" 
@@ -72,13 +72,12 @@
                             Width="60" 
                             Margin="5" 
                             HorizontalAlignment="Right" 
-                            VerticalAlignment="Top" 
-                            Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" 
+                            VerticalAlignment="Top"  
                             Background="{x:Null}" 
                             BorderBrush="{x:Null}" 
                             Foreground="#FF31577E" 
                             Command="{Binding ButtonCloseMenuCommand}">
-                        <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
+                        <fa:ImageAwesome Icon="Solid_ArrowLeft" Width="25" Height="25" Foreground="#FF31577E"/>
                     </Button>
                     <Image Height="80" VerticalAlignment="Bottom"/>
                 </Grid>
@@ -90,25 +89,25 @@
                     </ie:Interaction.Triggers>
                     <ListViewItem x:Name="ItemProductionPlan" Height="60">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Subtasks" Height="25" Width="25" Margin="10"/>
+                            <fa:ImageAwesome Icon="Solid_Tasks" Height="25" Width="25" Margin="10" Foreground="#FF5C99D6"/>
                             <TextBlock Text="План производства" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem x:Name="ItemReports" Height="60">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Pencil" Height="25" Width="25" Margin="10"/>
+                            <fa:ImageAwesome Icon="Solid_PencilAlt" Height="25" Width="25" Margin="10" Foreground="#FF5C99D6"/>
                             <TextBlock Text="Отчеты" VerticalAlignment="Center" Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem x:Name="ItemTasks" Height="60">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="CheckBox" Height="25" Width="25" Margin="10"/>
+                            <fa:ImageAwesome Icon="Solid_CheckSquare" Height="25" Width="25" Margin="10" Foreground="#FF5C99D6"/>
                             <TextBlock Text="Задачи" VerticalAlignment="Center"  Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem x:Name="ItemSettings" Height="60">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Settings" Height="25" Width="25" Margin="10"/>
+                            <fa:ImageAwesome Icon="Solid_Cog" Height="25" Width="25" Margin="10" Foreground="#FF5C99D6"/>
                             <TextBlock Text="Настройки" VerticalAlignment="Center"  Margin="20 10"/>
                         </StackPanel>
                     </ListViewItem>
