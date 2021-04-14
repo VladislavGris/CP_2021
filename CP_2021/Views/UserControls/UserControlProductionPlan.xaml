@@ -12,62 +12,6 @@
     <UserControl.DataContext>
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
-    <UserControl.Resources>
-        <convert:DateConverter x:Key="DateConverter"/>
-        <GridLength x:Key="TreeToggleWidth">30</GridLength>
-        <convert:LevelConverter x:Key="LevelSpaceConverter" LevelWidth="{StaticResource TreeToggleWidth}"/>
-        <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
-
-        <Style TargetType="TextBox" x:Key="EditingDatagridCellStyle">
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="AcceptsReturn" Value="true" />
-        </Style>
-        <Style TargetType="TextBlock" x:Key="DatagridCellStyle">
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="MaxWidth" Value="300"/>
-        </Style>
-
-        <Style TargetType="TextBox" x:Key="EditingDatagridCenterCellStyle">
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="AcceptsReturn" Value="true" />
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="TextBlock" x:Key="DatagridCenterCellStyle">
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="MaxWidth" Value="300"/>
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-        </Style>
-
-        <Style TargetType="DataGridColumnHeader" x:Key="DatagridHeaderTextWrapping">
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock TextWrapping="Wrap"
-                                   Text="{Binding}"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="DatagridButton" TargetType="Button">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="ContentTemplate">
-                <Setter.Value>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}"
-                                   FontSize="14"
-                                   FontFamily="Arial"
-                                   TextWrapping="Wrap"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </DataTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Background" Value="LightBlue"/>
-        </Style>
-    </UserControl.Resources>
     <StackPanel Background="SkyBlue">
         <Grid Height="100" Background="#FF31577E">
             <Grid Width="300"
@@ -83,51 +27,34 @@
                 </Grid.RowDefinitions>
                 <Button Grid.Column="0"
                         Grid.Row="0"
-                        Style="{StaticResource DatagridButton}"
+                        Style="{StaticResource ControlPannelButton}"
                         Content="Добавить задачу"/>
                 <Button Grid.Column="0"
                         Grid.Row="1"
-                        Style="{StaticResource DatagridButton}"
+                        Style="{StaticResource ControlPannelButton}"
                         Content="Удалить задачу"/>
                 <Button Grid.Column="1"
                         Grid.Row="0"
-                        Style="{StaticResource DatagridButton}"
+                        Style="{StaticResource ControlPannelButton}"
                         Content="Повысить уровень"/>
                 <Button Grid.Column="1"
                         Grid.Row="1"
-                        Style="{StaticResource DatagridButton}"
+                        Style="{StaticResource ControlPannelButton}"
                         Content="Понизить уровень"/>
                 <Button Grid.Column="2"
                         Grid.Row="0"
-                        Style="{StaticResource DatagridButton}"
+                        Style="{StaticResource ControlPannelButton}"
                         Content=""/>
                 <Button Grid.Column="2"
                         Grid.Row="1"
-                        Style="{StaticResource DatagridButton}"
+                        Style="{StaticResource ControlPannelButton}"
                         Content=""/>
             </Grid>
         </Grid>
-        <DataGrid AutoGenerateColumns="False"
-                  Name="Grid"
-                  CanUserResizeRows="False"
-                  AlternationCount="2"
-                  AlternatingRowBackground="LightGray"
+        <DataGrid Name="Grid"
                   ItemsSource="{Binding Model.FlatModel}"
-                  Margin="5"
-                  CanUserReorderColumns="False"
-                  CanUserSortColumns="False"
-                  CanUserAddRows="False"
-                  CanUserResizeColumns="False"
-                  FontFamily="Arial"
-                  FontSize="14"
-                  ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}">
-            <!--<DataGrid.ContextMenu>
-                <ContextMenu FontSize="12">
-                    <MenuItem Header="Удалить"/>
-                    <MenuItem Header="Повысить уровень"/>
-                    <MenuItem Header="Понизить уровень"/>
-                </ContextMenu>
-            </DataGrid.ContextMenu>-->
+                  Style="{StaticResource DatagridStyle}"
+                  >
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Вып."
                                         CanUserResize="False">
