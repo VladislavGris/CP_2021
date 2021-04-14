@@ -54,7 +54,7 @@
         <DataGrid Name="Grid"
                   ItemsSource="{Binding Model.FlatModel}"
                   Style="{StaticResource DatagridStyle}"
-                  >
+                  ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Вып."
                                         CanUserResize="False">

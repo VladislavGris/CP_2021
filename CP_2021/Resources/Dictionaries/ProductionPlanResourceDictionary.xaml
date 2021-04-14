@@ -36,7 +36,8 @@
             <Setter.Value>
                 <DataTemplate>
                     <TextBlock TextWrapping="Wrap"
-                                   Text="{Binding}"/>
+                               Text="{Binding}"
+                               Foreground="Black"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
@@ -53,7 +54,6 @@
         <Setter Property="CanUserResizeColumns" Value="False"/>
         <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="FontSize" Value="14"/>
-        <Setter Property="ColumnHeaderStyle" Value="{StaticResource DatagridHeaderTextWrapping}"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
     </Style>
     
