@@ -29,54 +29,6 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region Givings
-
-        private List<GivingDB> _Givings;
-
-        public List<GivingDB> Givings
-        {
-            get => _Givings;
-            set => Set(ref _Givings, value);
-        }
-
-        #endregion
-
-        #region Manufactures
-
-        private List<ManufactureDB> _Manufactures;
-
-        public List<ManufactureDB> Manufactures
-        {
-            get => _Manufactures;
-            set => Set(ref _Manufactures, value);
-        }
-
-        #endregion
-
-        #region InProductions
-
-        private List<InProductionDB> _InProductions;
-
-        public List<InProductionDB> InProductions
-        {
-            get => _InProductions;
-            set => Set(ref _InProductions, value);
-        }
-
-        #endregion
-
-        #region Complectations
-
-        private List<ComplectationDB> _Complectations;
-
-        public List<ComplectationDB> Complectations
-        {
-            get => _Complectations;
-            set => Set(ref _Complectations, value);
-        }
-
-        #endregion
-
         #region Model
 
         private TreeGridModel _Model;
@@ -120,22 +72,7 @@ namespace CP_2021.ViewModels
                 {
                     ProductionTask root = new ProductionTask
                     {
-                        Id = p.Id,
-                        IncDoc = p.IncDoc,
-                        ManagDoc = p.ManagDoc,
-                        Name = p.Name,
-                        DetailCount = p.Count,
-                        SpecCost = p.SpecCost,
-                        VishDate = p.VishDate,
-                        RealDate = p.RealDate,
-                        ExpendNum = p.ExpendNum,
-                        Note = p.Note,
-                        ParentId = p.ParentId,
-                        Completion = p.Completion,
-                        Complectation = p.Complectation,
-                        Giving = p.Giving,
-                        InProduction = p.InProduction,
-                        Manufacture = p.Manufacture
+                        Task = p
                     };
                     if (HasChildren(root))
                     {
@@ -151,7 +88,7 @@ namespace CP_2021.ViewModels
         {
             foreach(ProductionTaskDB t in ProductionTasks)
             {
-                if(task.Id == t.ParentId)
+                if(task.Task.Id == t.ParentId)
                 {
                     return true;
                 }
@@ -163,26 +100,11 @@ namespace CP_2021.ViewModels
         {
             foreach(ProductionTaskDB p in ProductionTasks)
             {
-                if(task.Id == p.ParentId)
+                if(task.Task.Id == p.ParentId)
                 {
                     ProductionTask child = new ProductionTask
                     {
-                        Id = p.Id,
-                        IncDoc = p.IncDoc,
-                        ManagDoc = p.ManagDoc,
-                        Name = p.Name,
-                        DetailCount = p.Count,
-                        SpecCost = p.SpecCost,
-                        VishDate = p.VishDate,
-                        RealDate = p.RealDate,
-                        ExpendNum = p.ExpendNum,
-                        Note = p.Note,
-                        ParentId = p.ParentId,
-                        Completion = p.Completion,
-                        Complectation = p.Complectation,
-                        Giving = p.Giving,
-                        InProduction = p.InProduction,
-                        Manufacture = p.Manufacture
+                        Task = p
                     };
                     if (HasChildren(child))
                     {

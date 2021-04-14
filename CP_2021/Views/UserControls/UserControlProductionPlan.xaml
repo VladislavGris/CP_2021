@@ -133,12 +133,12 @@
                                         CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Completion}"/>
+                            <CheckBox IsChecked="{Binding Task.Completion}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Распорядительный документ"
-                                    Binding="{Binding ManagDoc}"
+                                    Binding="{Binding Task.ManagDoc}"
                                     MaxWidth="140"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
@@ -157,7 +157,7 @@
                                           Margin="-55 -10 -10 -10"
                                           Background="Transparent"
                                           Height="48"/>
-                                <TextBlock Text="{Binding Name}"
+                                <TextBlock Text="{Binding Task.Name}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="200"/>
@@ -167,7 +167,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Name}"
+                            <TextBox Text="{Binding Task.Name}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MaxWidth="200"/>
@@ -175,17 +175,17 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Количество"
-                                    Binding="{Binding DetailCount}"
+                                    Binding="{Binding Task.Count}"
                                     MaxWidth="145"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
                 <DataGridTextColumn Header="Стоимость спецификации"
-                                    Binding="{Binding SpecCost}"
+                                    Binding="{Binding Task.SpecCost}"
                                     MaxWidth="110"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
                 <DataGridTextColumn Header="Приходный документ"
-                                    Binding="{Binding IncDoc}"
+                                    Binding="{Binding Task.IncDoc}"
                                     MaxWidth="120"
                                     MinWidth="100"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
@@ -195,7 +195,7 @@
                         <DataTemplate>
                             <TextBlock MaxWidth="300"
                                        TextWrapping="Wrap"
-                                       Text="{Binding VishDate, Converter={StaticResource DateConverter}}"/>
+                                       Text="{Binding Task.VishDate, Converter={StaticResource DateConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -209,7 +209,7 @@
                         <DataTemplate>
                             <TextBlock MaxWidth="300"
                                        TextWrapping="Wrap"
-                                       Text="{Binding RealDate, Converter={StaticResource DateConverter}}"/>
+                                       Text="{Binding Task.RealDate, Converter={StaticResource DateConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -221,7 +221,7 @@
                 <DataGridTemplateColumn Header="Ведомость комплектации">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Complectation.Complectation}"/>
+                            <TextBlock Text="{Binding Task.Complectation.Complectation}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -229,32 +229,32 @@
                                         MaxWidth="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding InProduction.GivingDate, Converter={StaticResource DateConverter}}"/>
+                            <TextBlock Text="{Binding Task.InProduction.GivingDate, Converter={StaticResource DateConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Изготовитель">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Manufacture.Name}"/>
+                            <TextBlock Text="{Binding Task.Manufacture.Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Давальческая">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Giving.State}"
+                            <CheckBox IsChecked="{Binding Task.Giving.State}"
                                       HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Номер и дата акта расходования"
-                                    Binding="{Binding ExpendNum}"
+                                    Binding="{Binding Task.ExpendNum}"
                                     MaxWidth="135"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
                 <DataGridTextColumn Header="Примечания"
-                                    Binding="{Binding Note}"
+                                    Binding="{Binding Task.Note}"
                                     MaxWidth="300"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
