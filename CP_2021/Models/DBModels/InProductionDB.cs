@@ -13,12 +13,18 @@ namespace CP_2021.Models.DBModels
     {
         [Column("Number", TypeName ="nvarchar(30)")]
         public string Number { get; set; }
+
         [Column("Giving_Date", TypeName ="date")]
         public DateTime? GivingDate { get; set; }
+
         [Column("Executor_Name", TypeName ="nvarchar(80)")]
         public string ExecutorName { get; set; }
+
         [Column("Completion_Date", TypeName="date")]
         public DateTime? CompletionDate { get; set; }
-
+        
+        [Column("Production_Task_Id")]
+        public int ProductionTaskId { get; set; }
+        public ProductionTaskDB ProductionTask { get; set; }
     }
 }

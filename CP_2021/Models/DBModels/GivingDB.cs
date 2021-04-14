@@ -13,13 +13,21 @@ namespace CP_2021.Models.DBModels
     {
         [Column("G_State", TypeName ="bit")]
         public bool? State { get; set; }
+
         [Column("Bill", TypeName ="nvarchar(50)")]
         public string Bill { get; set; }
+
         [Column("Report", TypeName ="nvarchar(50)")]
         public string Report { get; set; }
+
         [Column("Return_Report", TypeName ="nvarchar(50)")]
         public string ReturnReport { get; set; }
+
         [Column("Receiving_Date", TypeName ="date")]
         public DateTime? ReceivingDate { get; set; }
+
+        [Column("Production_Task_Id")]
+        public int ProductionTaskId { get; set; }
+        public ProductionTaskDB ProductionTask { get; set; }
     }
 }

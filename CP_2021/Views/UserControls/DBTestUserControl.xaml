@@ -12,6 +12,16 @@
         <GridLength x:Key="TreeToggleWidth">30</GridLength>
         <convert:LevelConverter x:Key="LevelSpaceConverter" LevelWidth="{StaticResource TreeToggleWidth}"/>
         <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
+        
+        <Style TargetType="TextBox" x:Key="EditingDatagridCellStyle">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="AcceptsReturn" Value="true" />
+        </Style>
+        <Style TargetType="TextBlock" x:Key="DatagridCellStyle">
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="MaxWidth" Value="300"/>
+        </Style>
+       
     </UserControl.Resources>
     <UserControl.DataContext>
         <vm:DBTestUserControlViewModel/>
@@ -28,8 +38,13 @@
                   Margin="5"
                   CanUserReorderColumns="False">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Должность" Binding="{Binding Position}" CanUserSort="False" MaxWidth="300">
-                    <DataGridTextColumn.ElementStyle>
+                <DataGridTextColumn Header="Должность" 
+                                    Binding="{Binding Position}" 
+                                    CanUserSort="False" 
+                                    MaxWidth="300"
+                                    ElementStyle="{StaticResource EditingDatagridCellStyle}"
+                                    EditingElementStyle="{StaticResource DatagridCellStyle}">
+                    <!--<DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="TextWrapping" Value="Wrap" />
                             <Setter Property="MaxWidth" Value="300"/>
@@ -40,7 +55,7 @@
                             <Setter Property="TextWrapping" Value="Wrap" />
                             <Setter Property="AcceptsReturn" Value="true" />
                         </Style>
-                    </DataGridTextColumn.EditingElementStyle>
+                    </DataGridTextColumn.EditingElementStyle>-->
                 </DataGridTextColumn>
                 <DataGridTemplateColumn Header="Имя" 
                                         CanUserSort="False">
@@ -61,7 +76,6 @@
                                 <TextBox  Text="{Binding Name}" Grid.Column="2" AcceptsReturn="True" TextWrapping="Wrap" MaxWidth="300"/>
 
                             </Grid>
-
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

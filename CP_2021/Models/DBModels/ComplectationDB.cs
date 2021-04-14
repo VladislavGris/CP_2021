@@ -13,9 +13,15 @@ namespace CP_2021.Models.DBModels
     {
         [Column("Complectation", TypeName = "nvarchar(100)")]
         public string Complectation { get; set; }
+
         [Column("C_Date", TypeName = "date")]
         public DateTime? ComplectationDate { get; set; }
+
         [Column("Comp_Percentage", TypeName = "float")]
         public float? Percentage { get; set; }
+
+        [Column("Production_Task_Id")]
+        public int ProductionTaskId { get; set; }
+        public ProductionTaskDB ProductionTask { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CP_2021.Models.Base;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -25,6 +26,9 @@ namespace CP_2021.Models.DBModels
         [Column("P_Count")]
         public int? Count { get; set; }
 
+        [Column("Specification_Cost")]
+        public decimal? SpecCost { get; set; }
+
         [Column("P_Vish_Date", TypeName = "date")]
         public DateTime? VishDate { get; set; }
 
@@ -39,27 +43,15 @@ namespace CP_2021.Models.DBModels
 
         [Column("Parent_ID")]
         public int? ParentId { get; set; }
-        public ProductionTaskDB ParentProdTask { get; set; }
+        public ProductionTaskDB Parent { get; set; }
 
         [Required]
         [Column("Completion", TypeName = "bit")]
         public bool Completion { get; set; }
 
-        [Column("In_Production_Id")]
-        public int? InProductionId { get; set; }
-        public InProductionDB InProduction { get; set; }
-
-        [Column("Manufacture_Id")]
-        public int? ManufactureId { get; set; }
-        public ManufactureDB Manufacture { get; set; }
-
-        [Column("Giving_Id")]
-        public int? GivingId { get; set; }
-        public GivingDB Giving { get; set; }
-
-        [Column("Complectation_Id")]
-        public int? ComplectationId { get; set; }
         public ComplectationDB Complectation { get; set; }
-
+        public GivingDB Giving { get; set; }
+        public InProductionDB InProduction { get; set; }
+        public ManufactureDB Manufacture { get; set; }
     }
 }

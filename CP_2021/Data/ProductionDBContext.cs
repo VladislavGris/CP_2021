@@ -24,18 +24,33 @@ namespace CP_2021.Data
 
         public DbSet<ManufactureDB> Manufactures { get; set; }
 
+        //public DbSet<UserDB> Users { get; set; }
+
+        //public DbSet<TaskDB> Tasks { get; set; }
+
+        //public DbSet<ReportDB> Reports { get; set; }
+
         #endregion
 
         public ProductionDBContext() {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region HasDefaultValue
             modelBuilder.Entity<ProductionTaskDB>().Property(t => t.Completion).HasDefaultValue(false);
             modelBuilder.Entity<GivingDB>().Property(g => g.State).HasDefaultValue(false);
             modelBuilder.Entity<ComplectationDB>().Property(c => c.Percentage).HasDefaultValue(0f);
+            #endregion
+            #region IsUnique
+            modelBuilder.Entity<ComplectationDB>().HasIndex(c => c.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<GivingDB>().HasIndex(g => g.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
+            #endregion
+
         }
 
         //public ProductionDBContext(DbContextOptions<TestDBContext> options) : base(options) { }
