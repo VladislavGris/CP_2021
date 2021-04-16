@@ -53,5 +53,15 @@ namespace CP_2021.Models.DBModels
         public GivingDB Giving { get; set; }
         public InProductionDB InProduction { get; set; }
         public ManufactureDB Manufacture { get; set; }
+
+        public ProductionTaskDB(string name, int? parentId)
+        {
+            Name = name;
+            ParentId = parentId;
+            Complectation = new ComplectationDB();
+            Giving = new GivingDB();
+            InProduction = new InProductionDB();
+            Manufacture = new ManufactureDB();
+        }
     }
 }

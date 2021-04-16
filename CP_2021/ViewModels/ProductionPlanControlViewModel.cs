@@ -103,6 +103,30 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        #region AddProductionTaskCommand
+
+        public ICommand AddProductionTaskCommand { get; }
+
+        private bool CanAddProductionTaskCommandExecute(object p) => SelectedTask!=null;
+
+        private void OnAddProductionTaskCommandExecuted(object p)
+        {
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
+            //Unit.Tasks.Insert(dbTask);
+            //Unit.Commit();
+            if (SelectedTask.Task.ParentId == null)
+            {
+                ProductionTask.AddRoot(Model, dbTask);
+            }
+            else
+            {
+                ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Методы
@@ -159,6 +183,7 @@ namespace CP_2021.ViewModels
 
             ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
             RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
+            AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
 
             #endregion
             Unit = new ProductionTaskUnitOfWork(new ApplicationContext());

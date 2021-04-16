@@ -12,8 +12,14 @@
     <UserControl.DataContext>
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
-    <StackPanel Background="SkyBlue">
-        <Grid Height="100" Background="#FF31577E">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Height="100" Background="#FF31577E"
+              Grid.Row="0">
             <Grid Width="300"
                   HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
@@ -28,7 +34,8 @@
                 <Button Grid.Column="0"
                         Grid.Row="0"
                         Style="{StaticResource ControlPannelButton}"
-                        Content="Добавить задачу"/>
+                        Content="Добавить задачу"
+                        Command="{Binding AddProductionTaskCommand}"/>
                 <Button Grid.Column="0"
                         Grid.Row="1"
                         Style="{StaticResource ControlPannelButton}"
@@ -57,7 +64,8 @@
                   ItemsSource="{Binding Model.FlatModel}"
                   Style="{StaticResource DatagridStyle}"
                   ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                  SelectedItem="{Binding SelectedTask}">
+                  SelectedItem="{Binding SelectedTask}"
+                  Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Вып."
                                         CanUserResize="False">
@@ -190,6 +198,5 @@
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Grid Height="100"/>
-    </StackPanel>
+    </Grid>
 </UserControl>
