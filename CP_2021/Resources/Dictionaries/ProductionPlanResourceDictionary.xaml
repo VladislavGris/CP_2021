@@ -7,7 +7,7 @@
     <GridLength x:Key="TreeToggleWidth">30</GridLength>
     <convert:LevelConverter x:Key="LevelSpaceConverter" LevelWidth="{StaticResource TreeToggleWidth}"/>
     <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
-    
+
     <!--Styles-->
     
     <!--For Datagrid Cells-->
@@ -41,13 +41,23 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Padding" Value="2"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
+                    <GradientStop Color="#315CE8" Offset="0.25"/>
+                    <GradientStop Color="#5176EF" Offset="0.65"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
     </Style>
     <Style TargetType="DataGrid" x:Key="DatagridStyle">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="CanUserResizeRows" Value="False"/>
         <Setter Property="AlternationCount" Value="2"/>
         <Setter Property="AlternatingRowBackground" Value="LightGray"/>
-        <Setter Property="Margin" Value="5"/>
+        <!--<Setter Property="Margin" Value="5"/>-->
         <Setter Property="CanUserReorderColumns" Value="False"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
@@ -74,6 +84,20 @@
             </Setter.Value>
         </Setter>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background" Value="LightBlue"/>
+        <Setter Property="Background">
+            <Setter.Value>
+                <LinearGradientBrush StartPoint="0,1" EndPoint="-0.1,0">
+                    <GradientStop Color="#315CE8" Offset="0.25"/>
+                    <GradientStop Color="#5176EF" Offset="0.5"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="3"/>
+        <Setter Property="Foreground" Value="#E5FFCC"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#23609E"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 </ResourceDictionary>

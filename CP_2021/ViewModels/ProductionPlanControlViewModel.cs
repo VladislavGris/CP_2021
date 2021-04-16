@@ -9,6 +9,8 @@ using CP_2021.Models.DBModels;
 using Microsoft.EntityFrameworkCore;
 using Common.Wpf.Data;
 using CP_2021.Models.Classes;
+using System.Windows.Input;
+using CP_2021.Infrastructure.Commands;
 
 namespace CP_2021.ViewModels
 {
@@ -29,6 +31,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region SelectedTask
+
+        private ProductionTask _SelectedTask;
+
+        public ProductionTask SelectedTask
+        {
+            get => _SelectedTask;
+            set => Set(ref _SelectedTask, value);
+        }
+
+        #endregion
+
         #region Model
 
         private TreeGridModel _Model;
@@ -45,9 +59,64 @@ namespace CP_2021.ViewModels
 
         #region Команды
 
+        #region ExpandAllCommand
+
+        public ICommand ExpandAllCommand { get; }
+
+        private bool CanExpandAllCommandExecute(object p) => true;
+
+        private void OnExpandAllCommandExecuted(object p)
+        {
+            foreach(ProductionTask t in Model)
+            {
+                Expand(t);
+            }
+        }
+
+        #endregion
+
+        #region RollUpAllCommand
+
+        public ICommand RollUpAllCommand { get; }
+
+        private bool CanRollUpAllCommandExecute(object p) => true;
+
+        private void OnRollUpAllCommandExecuted(object p)
+        {
+            foreach (ProductionTask t in Model)
+            {
+                RollUp(t);
+            }
+        }
+
+        #endregion
         #endregion
 
         #region Методы
+
+        private void Expand(ProductionTask task)
+        {
+            task.IsExpanded = true;
+            if (task.HasChildren)
+            {
+                foreach(ProductionTask t in task.Children)
+                {
+                    Expand(t);
+                }
+            }
+        }
+
+        private void RollUp(ProductionTask task)
+        {
+            task.IsExpanded = false;
+            if (task.HasChildren)
+            {
+                foreach (ProductionTask t in task.Children)
+                {
+                    RollUp(t);
+                }
+            }
+        }
 
         private void InitEnities()
         {
@@ -121,6 +190,9 @@ namespace CP_2021.ViewModels
         public ProductionPlanControlViewModel()
         {
             #region Команды
+
+            ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
+            RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
 
             #endregion
             InitEnities();

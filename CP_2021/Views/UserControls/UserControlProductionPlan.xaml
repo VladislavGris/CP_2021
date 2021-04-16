@@ -44,23 +44,27 @@
                 <Button Grid.Column="2"
                         Grid.Row="0"
                         Style="{StaticResource ControlPannelButton}"
-                        Content=""/>
+                        Content="Свернуть все"
+                        Command="{Binding RollUpAllCommand}"/>
                 <Button Grid.Column="2"
                         Grid.Row="1"
                         Style="{StaticResource ControlPannelButton}"
-                        Content=""/>
+                        Content="Развернуть все"
+                        Command="{Binding ExpandAllCommand}"/>
             </Grid>
         </Grid>
         <DataGrid Name="Grid"
                   ItemsSource="{Binding Model.FlatModel}"
                   Style="{StaticResource DatagridStyle}"
-                  ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}">
+                  ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
+                  SelectedItem="{Binding SelectedTask}">
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Вып."
                                         CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Task.Completion}"/>
+                            <CheckBox IsChecked="{Binding Task.Completion}"
+                                      HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -81,7 +85,6 @@
                                 <Expander Grid.Column="1"
                                           IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
-                                          Margin="-55 -10 -10 -10"
                                           Background="Transparent"
                                           Height="48"/>
                                 <TextBlock Text="{Binding Task.Name}"
@@ -127,7 +130,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding VishDate}"/>
+                            <DatePicker SelectedDate="{Binding Task.VishDate}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -141,7 +144,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding RealDate}"/>
+                            <DatePicker SelectedDate="{Binding Task.RealDate}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -187,5 +190,6 @@
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Height="100"/>
     </StackPanel>
 </UserControl>
