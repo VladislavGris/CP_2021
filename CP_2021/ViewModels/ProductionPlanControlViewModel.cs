@@ -11,6 +11,7 @@ using Common.Wpf.Data;
 using CP_2021.Models.Classes;
 using System.Windows.Input;
 using CP_2021.Infrastructure.Commands;
+using CP_2021.Infrastructure.Units;
 
 namespace CP_2021.ViewModels
 {
@@ -19,38 +20,50 @@ namespace CP_2021.ViewModels
 
         #region Свойства
 
+        #region UnitOfWork
+
+        private ProductionTaskUnitOfWork _unit;
+
+        public ProductionTaskUnitOfWork Unit
+        {
+            get => _unit;
+            set => Set(ref _unit, value);
+        }
+
+        #endregion
+
         #region ProductionTasks
 
-        private List<ProductionTaskDB> _ProductionTasks;
+        private List<ProductionTaskDB> _productionTasks;
 
         public List<ProductionTaskDB> ProductionTasks
         {
-            get => _ProductionTasks;
-            set => Set(ref _ProductionTasks, value);
+            get => _productionTasks;
+            set => Set(ref _productionTasks, value);
         }
 
         #endregion
 
         #region SelectedTask
 
-        private ProductionTask _SelectedTask;
+        private ProductionTask _selectedTask;
 
         public ProductionTask SelectedTask
         {
-            get => _SelectedTask;
-            set => Set(ref _SelectedTask, value);
+            get => _selectedTask;
+            set => Set(ref _selectedTask, value);
         }
 
         #endregion
 
         #region Model
 
-        private TreeGridModel _Model;
+        private TreeGridModel _model;
 
         public TreeGridModel Model
         {
-            get => _Model;
-            set => Set(ref _Model, value);
+            get => _model;
+            set => Set(ref _model, value);
         }
 
         #endregion
@@ -118,18 +131,6 @@ namespace CP_2021.ViewModels
             }
         }
 
-        private void InitEnities()
-        {
-            using (ProductionDBContext context = new ProductionDBContext())
-            {
-                ProductionTasks = context.ProductionTasks.
-                                    Include(t => t.Complectation).
-                                    Include(t=>t.Giving).
-                                    Include(t => t.Manufacture).
-                                    Include(t => t.InProduction).ToList();
-            }
-        }
-
         private void InitModel()
         {
             Model = new TreeGridModel();
@@ -139,48 +140,13 @@ namespace CP_2021.ViewModels
                 // Выборка корневых элементов
                 if(p.ParentId == null)
                 {
-                    ProductionTask root = new ProductionTask
+                    ProductionTask root = new ProductionTask(p);
+                    if (root.TaskHasChildren(ProductionTasks))
                     {
-                        Task = p
-                    };
-                    if (HasChildren(root))
-                    {
-                        root.HasChildren = true;
-                        AddChilderen(root);
+                        root.AddChildren(ProductionTasks);
+                        //AddChilderen(root);
                     }
                     Model.Add(root);
-                }
-            }
-        }
-
-        private bool HasChildren(ProductionTask task)
-        {
-            foreach(ProductionTaskDB t in ProductionTasks)
-            {
-                if(task.Task.Id == t.ParentId)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private void AddChilderen(ProductionTask task)
-        {
-            foreach(ProductionTaskDB p in ProductionTasks)
-            {
-                if(task.Task.Id == p.ParentId)
-                {
-                    ProductionTask child = new ProductionTask
-                    {
-                        Task = p
-                    };
-                    if (HasChildren(child))
-                    {
-                        child.HasChildren = true;
-                        AddChilderen(child);
-                    }
-                    task.Children.Add(child);
                 }
             }
         }
@@ -195,7 +161,8 @@ namespace CP_2021.ViewModels
             RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
 
             #endregion
-            InitEnities();
+            Unit = new ProductionTaskUnitOfWork(new ApplicationContext());
+            ProductionTasks = Unit.Tasks.Get().ToList();
             InitModel();
         }
     }

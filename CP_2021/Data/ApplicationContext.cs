@@ -10,19 +10,19 @@ using System.Threading.Tasks;
 
 namespace CP_2021.Data
 {
-    class ProductionDBContext : DbContext
+    class ApplicationContext : DbContext
     {
         #region DBSets
 
-        public DbSet<GivingDB> Givings { get; set; }
+        //public DbSet<GivingDB> Givings { get; set; }
 
-        public DbSet<ProductionTaskDB> ProductionTasks { get; set; }
+        //public DbSet<ProductionTaskDB> ProductionTasks { get; set; }
 
-        public DbSet<ComplectationDB> Complectations { get; set; }
+        //public DbSet<ComplectationDB> Complectations { get; set; }
 
-        public DbSet<InProductionDB> InProductions { get; set; }
+        //public DbSet<InProductionDB> InProductions { get; set; }
 
-        public DbSet<ManufactureDB> Manufactures { get; set; }
+        //public DbSet<ManufactureDB> Manufactures { get; set; }
 
         //public DbSet<UserDB> Users { get; set; }
 
@@ -32,8 +32,7 @@ namespace CP_2021.Data
 
         #endregion
 
-        public ProductionDBContext() {
-            //Database.EnsureDeleted();
+        public ApplicationContext() {
             Database.EnsureCreated();
         }
 
@@ -52,8 +51,6 @@ namespace CP_2021.Data
             #endregion
 
         }
-
-        //public ProductionDBContext(DbContextOptions<TestDBContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

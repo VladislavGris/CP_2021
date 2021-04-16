@@ -129,7 +129,7 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
-                    
+
                 </ListView>
             </StackPanel>
         </Grid>
@@ -137,5 +137,4 @@
                         Grid.Column="1"
                         Content="{Binding ContentContainerContent}"/>
     </Grid>
-
 </Window>
