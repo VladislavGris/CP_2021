@@ -47,15 +47,28 @@ namespace CP_2021.Models.Classes
             }
         }
 
-        public void AddChildren(ProductionTaskDB child)
+        public ProductionTask AddChildren(ProductionTaskDB child)
         {
-            this.Children.Add(new ProductionTask(child));
+            ProductionTask task = new ProductionTask(child);
+            this.Children.Add(task);
+            return task;
         }
 
-        public static void AddRoot(TreeGridModel model, ProductionTaskDB task)
+        public void RemoveRoot(TreeGridModel model)
+        {
+            this.Model.Remove(this);
+        }
+
+        public void RemoveChildren()
+        {
+            this.Parent.Children.Remove(this);
+        }
+
+        public static ProductionTask AddRoot(TreeGridModel model, ProductionTaskDB task)
         {
             ProductionTask newRoot = new ProductionTask(task);
             model.Add(newRoot);
+            return newRoot;
         }
     }
 }

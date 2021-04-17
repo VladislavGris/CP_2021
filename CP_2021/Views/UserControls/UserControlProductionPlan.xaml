@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
              xmlns:vm="clr-namespace:CP_2021.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              xmlns:convert="clr-namespace:CP_2021.Infrastructure.Converters"
              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
@@ -12,13 +13,21 @@
     <UserControl.DataContext>
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
-
+    <UserControl.Resources>
+        <Style TargetType="ListViewItem" x:Key="RemoveSelectionHighlight">
+            <Setter Property="BorderBrush" Value="Transparent"/>
+        </Style>
+    </UserControl.Resources>
     <Grid>
+        <!--<Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="60"/>
+        </Grid.ColumnDefinitions>-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="100"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Grid Height="100" Background="#FF31577E"
+        <!--<Grid Height="100" Background="#FF31577E"
               Grid.Row="0">
             <Grid Width="300"
                   HorizontalAlignment="Left">
@@ -39,7 +48,8 @@
                 <Button Grid.Column="0"
                         Grid.Row="1"
                         Style="{StaticResource ControlPannelButton}"
-                        Content="Удалить задачу"/>
+                        Content="Удалить задачу"
+                        Command="{Binding DeleteProductionTaskCommand}"/>
                 <Button Grid.Column="1"
                         Grid.Row="0"
                         Style="{StaticResource ControlPannelButton}"
@@ -59,7 +69,7 @@
                         Content="Развернуть все"
                         Command="{Binding ExpandAllCommand}"/>
             </Grid>
-        </Grid>
+        </Grid>-->
         <DataGrid Name="Grid"
                   ItemsSource="{Binding Model.FlatModel}"
                   Style="{StaticResource DatagridStyle}"
@@ -198,5 +208,64 @@
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="0"
+              Background="#FF31577E">
+            <ListView x:Name="ListViewMenu" 
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                          Background="Transparent"
+                          BorderBrush="Transparent"
+                          Foreground="#FF5C99D6">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListViewItem x:Name="AddTaskItem" Width="60"
+                              ToolTip="Добавить задачу">
+                    <Menu Background="Transparent">
+                        <MenuItem>
+                            <MenuItem.Header>
+                                <fa:ImageAwesome Icon="Solid_Plus"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                            </MenuItem.Header>
+                            <MenuItem Header="На текущий уровень" Command="{Binding AddProductionTaskCommand}"/>
+                            <MenuItem Header="На уровень ниже" Command="{Binding AddChildCommand}"/>
+                        </MenuItem>
+                    </Menu>
+                </ListViewItem>
+                <ListViewItem x:Name="RemoveTaskItem" Width="60"
+                              ToolTip="Удалить задачу">
+                    <fa:ImageAwesome Icon="Solid_Minus"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                </ListViewItem>
+                <ListViewItem x:Name="LevelUpItem" Width="60"
+                              ToolTip="Повысить уровень">
+                    <fa:ImageAwesome Icon="Solid_LevelUpAlt"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                </ListViewItem>
+                <ListViewItem x:Name="LevelDownItem" Width="60"
+                              ToolTip="Понизить уровень">
+                    <fa:ImageAwesome Icon="Solid_LevelDownAlt"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                </ListViewItem>
+                <ListViewItem x:Name="ExpandAllItem" Width="60"
+                              ToolTip="Развернуть все">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding ExpandAllCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
+                    <fa:ImageAwesome Icon="Regular_ArrowAltCircleDown"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                </ListViewItem>
+                <ListViewItem x:Name="HideAllItem" Width="60"
+                              ToolTip="Свернуть все">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding RollUpAllCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
+                    <fa:ImageAwesome Icon="Regular_ArrowAltCircleUp"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                </ListViewItem>
+            </ListView>
+        </Grid>
     </Grid>
 </UserControl>

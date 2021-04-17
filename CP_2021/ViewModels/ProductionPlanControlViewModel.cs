@@ -113,16 +113,52 @@ namespace CP_2021.ViewModels
         private void OnAddProductionTaskCommandExecuted(object p)
         {
             ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
-            //Unit.Tasks.Insert(dbTask);
-            //Unit.Commit();
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+            ProductionTasks = Unit.Tasks.Get().ToList();
             if (SelectedTask.Task.ParentId == null)
             {
-                ProductionTask.AddRoot(Model, dbTask);
+                SelectedTask = ProductionTask.AddRoot(Model, dbTask);
             }
             else
             {
-                ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
+                SelectedTask = ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
             }
+        }
+
+        #endregion
+
+        #region AddChildCommand
+
+        public ICommand AddChildCommand { get; }
+
+        private bool CanAddChildCommandExecute(object p) => SelectedTask != null;
+
+        private void OnAddChildCommandExecuted(object p)
+        {
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.Id);
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+            ProductionTasks = Unit.Tasks.Get().ToList();
+            ProductionTask task = new ProductionTask(dbTask);
+            SelectedTask.Children.Add(task);
+            SelectedTask = task;
+        }
+
+        #endregion
+
+        #region DeleteProductionTaskCommand
+
+        public ICommand DeleteProductionTaskCommand { get; }
+
+        private bool CanDeleteProductionTaskCommandExecute(object p) => SelectedTask != null;
+
+        private void OnDeleteProductionTaskCommandExecuted(object p)
+        {
+            Unit.Tasks.Delete(SelectedTask.Task);
+            Unit.Commit();
+            ProductionTasks = Unit.Tasks.Get().ToList();
+            InitModel();
         }
 
         #endregion
@@ -184,6 +220,8 @@ namespace CP_2021.ViewModels
             ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
             RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
             AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
+            AddChildCommand = new LambdaCommand(OnAddChildCommandExecuted, CanAddChildCommandExecute);
+            DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
 
             #endregion
             Unit = new ProductionTaskUnitOfWork(new ApplicationContext());
