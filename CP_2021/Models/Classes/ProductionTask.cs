@@ -64,6 +64,18 @@ namespace CP_2021.Models.Classes
             this.Parent.Children.Remove(this);
         }
 
+        public bool IsRootElement(TreeGridModel model)
+        {
+            foreach(TreeGridElement t in model)
+            {
+                if (t.Equals(this))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static ProductionTask AddRoot(TreeGridModel model, ProductionTaskDB task)
         {
             ProductionTask newRoot = new ProductionTask(task);

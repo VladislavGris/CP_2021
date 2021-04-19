@@ -12,6 +12,7 @@ using CP_2021.Models.Classes;
 using System.Windows.Input;
 using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Units;
+using System.Diagnostics;
 
 namespace CP_2021.ViewModels
 {
@@ -142,6 +143,8 @@ namespace CP_2021.ViewModels
             ProductionTasks = Unit.Tasks.Get().ToList();
             ProductionTask task = new ProductionTask(dbTask);
             SelectedTask.Children.Add(task);
+            task.Parent.HasChildren = true;
+            task.Parent.IsExpanded = true;
             SelectedTask = task;
         }
 
@@ -158,7 +161,22 @@ namespace CP_2021.ViewModels
             Unit.Tasks.Delete(SelectedTask.Task);
             Unit.Commit();
             ProductionTasks = Unit.Tasks.Get().ToList();
-            InitModel();
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            if (SelectedTask.IsRootElement(Model))
+            {
+                Model.Remove(SelectedTask);
+                SelectedTask = (ProductionTask)Model.Last();
+            }
+            else
+            {
+                parent.Children.Remove(SelectedTask);
+                SelectedTask = parent;
+            }
+            if(parent.Children.Count == 0)
+            {
+                parent.HasChildren = false;
+                parent.IsExpanded = false;
+            }
         }
 
         #endregion

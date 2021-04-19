@@ -49,7 +49,7 @@ namespace CP_2021.Data
             modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             #endregion
-
+            modelBuilder.Entity<ProductionTaskDB>().HasOne(t => t.Parent).WithOne().OnDelete(DeleteBehavior.Cascade);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
