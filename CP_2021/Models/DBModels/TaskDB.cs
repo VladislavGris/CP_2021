@@ -26,5 +26,7 @@ namespace CP_2021.Models.DBModels
         public DateTime? CompleteDate { get; set; }
         [Column(TypeName = "nvarchar(MAX)")]
         public string Description { get; set; }
+        [Column(TypeName = "bit")]
+        public bool Completion { get; set; }
     }
 }

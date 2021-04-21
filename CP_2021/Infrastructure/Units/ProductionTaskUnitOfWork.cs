@@ -18,6 +18,10 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<GivingDB> _givings;
         private BaseRepository<InProductionDB> _productions;
         private BaseRepository<ComplectationDB> _complectations;
+        private BaseRepository<UserDB> _dbUsers;
+        private BaseRepository<TaskDB> _userTasks;
+        private BaseRepository<ReportDB> _reports;
+
 
         public ProductionTaskUnitOfWork(ApplicationContext context)
         {
@@ -27,6 +31,9 @@ namespace CP_2021.Infrastructure.Units
             Givings.Get();
             Productions.Get();
             Complectations.Get();
+            DBUsers.Get();
+            UserTasks.Get();
+            Reports.Get();
         }
 
         public IRepository<ProductionTaskDB> Tasks
@@ -66,6 +73,30 @@ namespace CP_2021.Infrastructure.Units
             get
             {
                 return _complectations ?? (_complectations = new BaseRepository<ComplectationDB>(_context));
+            }
+        }
+
+        public IRepository<UserDB> DBUsers
+        {
+            get
+            {
+                return _dbUsers ?? (_dbUsers = new BaseRepository<UserDB>(_context));
+            }
+        }
+
+        public IRepository<TaskDB> UserTasks
+        {
+            get
+            {
+                return _userTasks ?? (_userTasks = new BaseRepository<TaskDB>(_context));
+            }
+        }
+
+        public IRepository<ReportDB> Reports
+        {
+            get
+            {
+                return _reports ?? (_reports = new BaseRepository<ReportDB>(_context));
             }
         }
 

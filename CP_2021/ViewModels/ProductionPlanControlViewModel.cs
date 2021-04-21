@@ -109,15 +109,15 @@ namespace CP_2021.ViewModels
 
         public ICommand AddProductionTaskCommand { get; }
 
-        private bool CanAddProductionTaskCommandExecute(object p) => SelectedTask!=null;
+        private bool CanAddProductionTaskCommandExecute(object p) =>true;
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask?.Task.ParentId);
             Unit.Tasks.Insert(dbTask);
             Unit.Commit();
             ProductionTasks = Unit.Tasks.Get().ToList();
-            if (SelectedTask.Task.ParentId == null)
+            if (SelectedTask?.Task.ParentId == null || SelectedTask==null)
             {
                 SelectedTask = ProductionTask.AddRoot(Model, dbTask);
             }
@@ -125,6 +125,19 @@ namespace CP_2021.ViewModels
             {
                 SelectedTask = ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
             }
+        }
+
+        #endregion
+
+        #region RowEditingEndingCommand
+
+        public ICommand RowEditingEndingCommand { get; }
+
+        private bool CanRowEditingEndingCommandExecute(object p) => true;
+
+        private void OnRowEditingEndingCommandExecuted(object p)
+        {
+            Unit.Commit();
         }
 
         #endregion
@@ -138,6 +151,7 @@ namespace CP_2021.ViewModels
         private void OnAddChildCommandExecuted(object p)
         {
             ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.Id);
+            var guid = Guid.NewGuid();
             Unit.Tasks.Insert(dbTask);
             Unit.Commit();
             ProductionTasks = Unit.Tasks.Get().ToList();
@@ -172,7 +186,7 @@ namespace CP_2021.ViewModels
                 parent.Children.Remove(SelectedTask);
                 SelectedTask = parent;
             }
-            if(parent.Children.Count == 0)
+            if(parent?.Children.Count == 0 /*&& parent!=null*/)
             {
                 parent.HasChildren = false;
                 parent.IsExpanded = false;
@@ -240,7 +254,7 @@ namespace CP_2021.ViewModels
             AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
             AddChildCommand = new LambdaCommand(OnAddChildCommandExecuted, CanAddChildCommandExecute);
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
-
+            RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
             #endregion
             Unit = new ProductionTaskUnitOfWork(new ApplicationContext());
             ProductionTasks = Unit.Tasks.Get().ToList();

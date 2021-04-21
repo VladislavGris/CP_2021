@@ -15,7 +15,9 @@ namespace CP_2021.Infrastructure.Units.Base
         IRepository<GivingDB> Givings { get; }
         IRepository<InProductionDB> Productions { get; }
         IRepository<ComplectationDB> Complectations { get; }
-
+        IRepository<UserDB> DBUsers { get; }
+        IRepository<TaskDB> UserTasks { get; }
+        IRepository<ReportDB> Reports { get; }
         void Commit();
     }
 }

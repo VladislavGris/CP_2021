@@ -19,10 +19,6 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <!--<Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="60"/>
-        </Grid.ColumnDefinitions>-->
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
@@ -38,13 +34,25 @@
                                         CanUserResize="False">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Task.Completion}"
-                                      HorizontalAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Center">
+                                <!--<CheckBox.DataContext>
+                                    <vm:ProductionPlanControlViewModel/>
+                                </CheckBox.DataContext>-->
+                                <ie:Interaction.Triggers>
+                                    <ie:EventTrigger EventName="Checked">
+                                        <ie:InvokeCommandAction Command="{Binding RowEditingEndingCommand}"/>
+                                    </ie:EventTrigger>
+                                    <ie:EventTrigger EventName="Unchecked">
+                                        <ie:InvokeCommandAction Command="{Binding RowEditingEndingCommand}"/>
+                                    </ie:EventTrigger>
+                                </ie:Interaction.Triggers>
+                            </CheckBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Распорядительный документ"
-                                    Binding="{Binding Task.ManagDoc}"
+                                    Binding="{Binding Task.ManagDoc, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="140"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
@@ -72,7 +80,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Task.Name}"
+                            <TextBox Text="{Binding Task.Name, UpdateSourceTrigger=PropertyChanged}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MaxWidth="200"/>
@@ -80,17 +88,17 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Количество"
-                                    Binding="{Binding Task.Count}"
+                                    Binding="{Binding Task.Count, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="145"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
                 <DataGridTextColumn Header="Стоимость спецификации"
-                                    Binding="{Binding Task.SpecCost}"
+                                    Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="110"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
                 <DataGridTextColumn Header="Приходный документ"
-                                    Binding="{Binding Task.IncDoc}"
+                                    Binding="{Binding Task.IncDoc, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="120"
                                     MinWidth="100"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
@@ -105,7 +113,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding Task.VishDate}"/>
+                            <DatePicker SelectedDate="{Binding Task.VishDate, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -119,7 +127,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <DatePicker SelectedDate="{Binding Task.RealDate}"/>
+                            <DatePicker SelectedDate="{Binding Task.RealDate, UpdateSourceTrigger=PropertyChanged}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
@@ -148,22 +156,27 @@
                 <DataGridTemplateColumn Header="Давальческая">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Task.Giving.State}"
+                            <CheckBox IsChecked="{Binding Task.Giving.State, UpdateSourceTrigger=PropertyChanged}"
                                       HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Номер и дата акта расходования"
-                                    Binding="{Binding Task.ExpendNum}"
+                                    Binding="{Binding Task.ExpendNum, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="135"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
                 <DataGridTextColumn Header="Примечания"
-                                    Binding="{Binding Task.Note}"
+                                    Binding="{Binding Task.Note, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="300"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
             </DataGrid.Columns>
+            <ie:Interaction.Triggers>
+                <ie:EventTrigger EventName="CellEditEnding">
+                    <ie:InvokeCommandAction Command="{Binding RowEditingEndingCommand}"/>
+                </ie:EventTrigger>
+            </ie:Interaction.Triggers>
         </DataGrid>
         <Grid Grid.Row="0"
               Background="#FF31577E">

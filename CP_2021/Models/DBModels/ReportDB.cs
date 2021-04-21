@@ -13,7 +13,9 @@ namespace CP_2021.Models.DBModels
     {
         [Column(TypeName ="nvarchar(MAX)")]
         public string Description { get; set; }
+        [Column(TypeName ="bit")]
         public bool State { get; set; }
+
         public int TaskId { get; set; }
         public TaskDB Task { get; set; }
     }

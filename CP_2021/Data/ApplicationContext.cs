@@ -32,7 +32,7 @@ namespace CP_2021.Data
 
         #endregion
 
-        public ApplicationContext() {
+        public ApplicationContext() : base() {
             Database.EnsureCreated();
         }
 
@@ -42,6 +42,8 @@ namespace CP_2021.Data
             modelBuilder.Entity<ProductionTaskDB>().Property(t => t.Completion).HasDefaultValue(false);
             modelBuilder.Entity<GivingDB>().Property(g => g.State).HasDefaultValue(false);
             modelBuilder.Entity<ComplectationDB>().Property(c => c.Percentage).HasDefaultValue(0f);
+            modelBuilder.Entity<TaskDB>().Property(c => c.Completion).HasDefaultValue(false);
+            modelBuilder.Entity<ReportDB>().Property(p => p.State).HasDefaultValue(false);
             #endregion
             #region IsUnique
             modelBuilder.Entity<ComplectationDB>().HasIndex(c => c.ProductionTaskId).IsUnique();
@@ -49,7 +51,8 @@ namespace CP_2021.Data
             modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             #endregion
-            modelBuilder.Entity<ProductionTaskDB>().HasOne(t => t.Parent).WithOne().OnDelete(DeleteBehavior.Cascade);
+            //modelBuilder.Entity<ProductionTaskDB>().HasOne(t => t.Parent).WithOne().OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TaskDB>().HasOne(t => t.From).WithOne().OnDelete(DeleteBehavior.NoAction);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
