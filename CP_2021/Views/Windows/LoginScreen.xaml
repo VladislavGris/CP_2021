@@ -1,0 +1,57 @@
+﻿<Window x:Class="CP_2021.Views.Windows.LoginScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CP_2021.Views.Windows"
+        xmlns:fa="http://schemas.fontawesome.com/icons/"
+        xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
+        xmlns:vm="clr-namespace:CP_2021.ViewModels"
+        mc:Ignorable="d"
+        Title="LoginScreen" 
+        Height="350"
+        WindowStartupLocation="CenterScreen"
+        x:Name="LoginScreenWindow"
+        Style="{StaticResource WindowStyle}">
+    <Window.DataContext>
+        <vm:LoginViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <ContentControl Style="{StaticResource TopPannelStyle}"/>
+        </Grid>
+        <Border Style="{StaticResource BorderStyle}" Grid.Row="1">
+            <StackPanel Grid.Row="1" Margin="20">
+                <Label Content="Вход"
+                   Style="{StaticResource Header}"/>
+                <Separator></Separator>
+                <Label Content="Логин"
+                       Style="{StaticResource LabelStyle}"></Label>
+                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <Label Content="Пароль"
+                       Style="{StaticResource LabelStyle}"></Label>
+                <PasswordBox Style="{StaticResource PasswordBoxStyle}"/>
+                <Button Content="Вход"
+                        Style="{StaticResource EnterButton}"></Button>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Label Content="Не зарегестрированы?"
+                           Style="{StaticResource SmallTextStyle}"/>
+                    <Button Style="{StaticResource NotRegisteredButton}"
+                            Command="{Binding OpenRegistrationWindowCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                        <Button.Content>
+                            <TextBlock Text="Регистрация"
+                                       Style="{StaticResource SmallButtonTextStyle}"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

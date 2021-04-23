@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CP_2021.Infrastructure.Units
 {
-    class ProductionTaskUnitOfWork : IUnitOfWork
+    class ApplicationUnit : IUnitOfWork
     {
         private ApplicationContext _context;
         private BaseRepository<ProductionTaskDB> _tasks;
@@ -23,7 +23,7 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<ReportDB> _reports;
 
 
-        public ProductionTaskUnitOfWork(ApplicationContext context)
+        public ApplicationUnit(ApplicationContext context)
         {
             _context = context;
             Tasks.Get();

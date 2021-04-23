@@ -1,0 +1,61 @@
+﻿<Window x:Class="CP_2021.Views.Windows.RegistrationScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CP_2021.Views.Windows"
+        xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
+        xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:vm="clr-namespace:CP_2021.ViewModels"
+        mc:Ignorable="d"
+        Title="RegistrationScreen" Height="470"
+        Style="{StaticResource WindowStyle}"
+        WindowStartupLocation="CenterScreen"
+        x:Name="LoginWindow">
+    <Window.DataContext>
+        <vm:RegistrationViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <ContentControl Style="{StaticResource TopPannelStyle}"/>
+        </Grid>
+        <Border Style="{StaticResource BorderStyle}" Grid.Row="1">
+            <StackPanel Grid.Row="1" Margin="20">
+                <Label Content="Регистрация"
+                   Style="{StaticResource Header}"/>
+                <Separator></Separator>
+                <Label Content="Логин"
+                       Style="{StaticResource LabelStyle}"></Label>
+                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <Label Content="Пароль"
+                       Style="{StaticResource LabelStyle}"></Label>
+                <PasswordBox Style="{StaticResource PasswordBoxStyle}"/>
+                <Label Content="Имя"
+                       Style="{StaticResource LabelStyle}"></Label>
+                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <Label Content="Фамилия"
+                       Style="{StaticResource LabelStyle}"></Label>
+                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <Button Content="Регистрация"
+                        Style="{StaticResource RegisterButton}"></Button>
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Center">
+                    <Label Content="Уже зарегистрированы?"
+                           Style="{StaticResource SmallTextStyle}"/>
+                    <Button Style="{StaticResource NotRegisteredButton}"
+                            Command="{Binding OpenLoginWindowCommand}"
+                            CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                        <Button.Content>
+                            <TextBlock Text="Вход"
+                                       Style="{StaticResource SmallButtonTextStyle}"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

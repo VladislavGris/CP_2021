@@ -23,9 +23,9 @@ namespace CP_2021.ViewModels
 
         #region UnitOfWork
 
-        private ProductionTaskUnitOfWork _unit;
+        private ApplicationUnit _unit;
 
-        public ProductionTaskUnitOfWork Unit
+        public ApplicationUnit Unit
         {
             get => _unit;
             set => Set(ref _unit, value);
@@ -256,7 +256,7 @@ namespace CP_2021.ViewModels
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
             RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
             #endregion
-            Unit = new ProductionTaskUnitOfWork(new ApplicationContext());
+            Unit = new ApplicationUnit(new ApplicationContext());
             ProductionTasks = Unit.Tasks.Get().ToList();
             InitModel();
         }

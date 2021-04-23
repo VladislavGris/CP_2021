@@ -6,6 +6,7 @@
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:fa="http://schemas.fontawesome.com/icons/"
+        xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         x:Class="CP_2WPFTests.MainWindow"
         mc:Ignorable="d"
         Title="Company Planner" Height="720" Width="1280" MinHeight="450" MinWidth="500" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow">
