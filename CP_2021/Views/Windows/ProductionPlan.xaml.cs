@@ -1,9 +1,9 @@
 ﻿using System.Windows;
-namespace CP_2WPFTests
+namespace CP_2021.Views.Windows
 {
-    public partial class MainWindow : Window
+    public partial class ProductionPlan : Window
     {
-        public MainWindow()
+        public ProductionPlan()
         {
             InitializeComponent();
         }

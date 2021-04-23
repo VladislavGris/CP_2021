@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using CP_2021.ViewModels.Base;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ using CP_2021.Views.Windows;
 
 namespace CP_2021.ViewModels
 {
-    class RegistrationViewModel
+    class RegistrationViewModel : ViewModelBase
     {
         #region Команды
 

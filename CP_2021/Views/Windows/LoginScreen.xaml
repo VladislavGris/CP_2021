@@ -7,6 +7,8 @@
         xmlns:fa="http://schemas.fontawesome.com/icons/"
         xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
+        xmlns:valid="clr-namespace:CP_2021.Infrastructure.Validators"
+        xmlns:b="clr-namespace:CP_2021.Infrastructure.Behaviors"
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         mc:Ignorable="d"
         Title="LoginScreen" 
@@ -32,12 +34,19 @@
                 <Separator></Separator>
                 <Label Content="Логин"
                        Style="{StaticResource LabelStyle}"></Label>
-                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Login, Mode=TwoWay}"/>
                 <Label Content="Пароль"
                        Style="{StaticResource LabelStyle}"></Label>
-                <PasswordBox Style="{StaticResource PasswordBoxStyle}"/>
+                <PasswordBox Style="{StaticResource PasswordBoxStyle}">
+                    <ie:Interaction.Behaviors>
+                        <b:PasswordBoxBehavior Password="{Binding Password, Mode=TwoWay}"/>
+                    </ie:Interaction.Behaviors>
+                </PasswordBox>
                 <Button Content="Вход"
-                        Style="{StaticResource EnterButton}"></Button>
+                        Style="{StaticResource EnterButton}"
+                        Command="{Binding SubmitCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"></Button>
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <Label Content="Не зарегестрированы?"
