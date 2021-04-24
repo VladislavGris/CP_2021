@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CP_2021.Views.Windows"
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
+        xmlns:b="clr-namespace:CP_2021.Infrastructure.Behaviors"
         xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         mc:Ignorable="d"
@@ -30,18 +31,27 @@
                 <Separator></Separator>
                 <Label Content="Логин"
                        Style="{StaticResource LabelStyle}"></Label>
-                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Login, Mode=TwoWay}"/>
                 <Label Content="Пароль"
                        Style="{StaticResource LabelStyle}"></Label>
-                <PasswordBox Style="{StaticResource PasswordBoxStyle}"/>
+                <PasswordBox Style="{StaticResource PasswordBoxStyle}">
+                    <ie:Interaction.Behaviors>
+                        <b:PasswordBoxBehavior Password="{Binding Password, Mode=TwoWay}"/>
+                    </ie:Interaction.Behaviors>
+                </PasswordBox>
                 <Label Content="Имя"
                        Style="{StaticResource LabelStyle}"></Label>
-                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Name, Mode=TwoWay}"/>
                 <Label Content="Фамилия"
                        Style="{StaticResource LabelStyle}"></Label>
-                <TextBox Style="{StaticResource TextBoxStyle}"/>
+                <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Surname, Mode=TwoWay}"/>
                 <Button Content="Регистрация"
-                        Style="{StaticResource RegisterButton}"></Button>
+                        Style="{StaticResource RegisterButton}"
+                        Command="{Binding SubmitCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"></Button>
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <Label Content="Уже зарегистрированы?"

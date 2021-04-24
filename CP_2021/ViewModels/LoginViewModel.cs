@@ -78,12 +78,20 @@ namespace CP_2021.ViewModels
 
         private void OnSubmitCommandExecuted(object p)
         {
+            if((Login.Length < 4 || Login.Length > 15)||(Password.Length < 4 || Password.Length > 15))
+            {
+                MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
+                return;
+            }
             SqlParameter loginParam = new SqlParameter("@login", Login);
             SqlParameter passwordParam = new SqlParameter("@password", Password);
             var user = _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam, passwordParam);
             if (user.ToList().Count != 0)
             {
                 ProductionPlan plan = new ProductionPlan();
+                plan.DataContext = new ProductionPlanViewModel();
+                ((ProductionPlanViewModel)plan.DataContext).User = user.ToList().ElementAt(0);
+                ((ProductionPlanViewModel)plan.DataContext).Unit = _unit;
                 ((LoginScreen)p).Close();
                 plan.Show();
             }

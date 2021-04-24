@@ -31,5 +31,13 @@ namespace CP_2021.Models.DBModels
 
         [Column(TypeName = "nvarchar(50)")]
         public string Position { get; set; }
+
+        public UserDB(string login, string password, string name, string surname)
+        {
+            Login = login;
+            Password = password;
+            Name = name;
+            Surname = surname;
+        }
     }
 }

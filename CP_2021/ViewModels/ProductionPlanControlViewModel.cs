@@ -69,6 +69,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region User
+
+        private UserDB _user;
+
+        public UserDB User
+        {
+            get => _user;
+            set => Set(ref _user, value);
+        }
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -247,6 +259,22 @@ namespace CP_2021.ViewModels
 
         public ProductionPlanControlViewModel()
         {
+            //#region Команды
+
+            //ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
+            //RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
+            //AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
+            //AddChildCommand = new LambdaCommand(OnAddChildCommandExecuted, CanAddChildCommandExecute);
+            //DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
+            //RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
+            //#endregion
+            //Unit = new ApplicationUnit(new ApplicationContext());
+            //ProductionTasks = Unit.Tasks.Get().ToList();
+            //InitModel();
+        }
+
+        public ProductionPlanControlViewModel(UserDB user)
+        {
             #region Команды
 
             ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
@@ -256,6 +284,7 @@ namespace CP_2021.ViewModels
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
             RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
             #endregion
+            User = user;
             Unit = new ApplicationUnit(new ApplicationContext());
             ProductionTasks = Unit.Tasks.Get().ToList();
             InitModel();

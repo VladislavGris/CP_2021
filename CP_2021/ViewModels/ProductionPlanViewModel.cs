@@ -4,6 +4,8 @@ using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
 using CP_2021.Views.UserControls;
+using CP_2021.Models.DBModels;
+using CP_2021.Infrastructure.Units;
 
 namespace CP_2021.ViewModels
 {
@@ -65,6 +67,29 @@ namespace CP_2021.ViewModels
             set => Set(ref _Title, value);
         }
         #endregion
+
+        #region User
+        private UserDB _user;
+
+        public UserDB User
+        {
+            get => _user;
+            set => Set(ref _user, value);
+        }
+        #endregion
+
+        #region Unit
+
+        private ApplicationUnit _unit;
+
+        public ApplicationUnit Unit
+        {
+            get => _unit;
+            set => Set(ref _unit, value);
+        }
+
+        #endregion
+
 
         #endregion
 
@@ -136,9 +161,8 @@ namespace CP_2021.ViewModels
             ButtonCloseMenuCommand = new LambdaCommand(OnButtonCloseMenuCommandExecuted, CanButtonCloseMenuCommandExecute);
             ButtonOpenMenuCommand = new LambdaCommand(OnButtonOpenMenuCommandExecuted, CanButtonOpenMenuCommandExecute);
             ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
-            
-            #endregion
 
+            #endregion
         }
     }
 }
