@@ -1,8 +1,11 @@
 ﻿using Common.Wpf.Data;
+using CP_2021.Infrastructure.Units;
 using CP_2021.Models.DBModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +13,7 @@ namespace CP_2021.Models.Classes
 {
     class ProductionTask : TreeGridElement
     {
+
         public ProductionTaskDB Task { get; set; }
 
         public ProductionTask(ProductionTaskDB task)
@@ -54,14 +58,24 @@ namespace CP_2021.Models.Classes
             return task;
         }
 
-        public void RemoveRoot(TreeGridModel model)
+        public void Remove(ApplicationUnit unit)
         {
-            this.Model.Remove(this);
-        }
-
-        public void RemoveChildren()
-        {
-            this.Parent.Children.Remove(this);
+            if (this.HasChildren)
+            {
+                while (this.Children.LastOrDefault() != null)
+                {
+                    ((ProductionTask)this.Children.LastOrDefault()).Remove(unit);
+                }
+            }
+            if (this.Parent == null)
+            {
+                this.Model.Remove(this);
+            }
+            else
+            {
+                this.Parent.Children.Remove(this);
+            }
+            unit.Tasks.Delete(this.Task);
         }
 
         public bool IsRootElement(TreeGridModel model)

@@ -10,14 +10,14 @@
              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <vm:ProductionPlanControlViewModel/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <Style TargetType="ListViewItem" x:Key="RemoveSelectionHighlight">
             <Setter Property="BorderBrush" Value="Transparent"/>
         </Style>
     </UserControl.Resources>
+    <UserControl.DataContext>
+        <vm:ProductionPlanControlViewModel/>
+    </UserControl.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
@@ -35,18 +35,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
-                                      HorizontalAlignment="Center">
-                                <!--<CheckBox.DataContext>
-                                    <vm:ProductionPlanControlViewModel/>
-                                </CheckBox.DataContext>-->
-                                <ie:Interaction.Triggers>
-                                    <ie:EventTrigger EventName="Checked">
-                                        <ie:InvokeCommandAction Command="{Binding RowEditingEndingCommand}"/>
-                                    </ie:EventTrigger>
-                                    <ie:EventTrigger EventName="Unchecked">
-                                        <ie:InvokeCommandAction Command="{Binding RowEditingEndingCommand}"/>
-                                    </ie:EventTrigger>
-                                </ie:Interaction.Triggers>
+                                      HorizontalAlignment="Center"
+                                      Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
                             </CheckBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -157,7 +147,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <CheckBox IsChecked="{Binding Task.Giving.State, UpdateSourceTrigger=PropertyChanged}"
-                                      HorizontalAlignment="Center"/>
+                                      HorizontalAlignment="Center"
+                                      Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

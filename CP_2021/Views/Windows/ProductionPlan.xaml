@@ -11,6 +11,7 @@
         mc:Ignorable="d"
         Title="Company Planner" Height="720" Width="1280" MinHeight="450" MinWidth="500" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
         WindowState="Maximized">
+    
     <Window.DataContext>
         <vm:ProductionPlanViewModel/>
     </Window.DataContext>
@@ -50,6 +51,11 @@
             <BeginStoryboard Storyboard="{StaticResource CloseMenu}"/>
         </EventTrigger>
     </Window.Triggers>
+    <ie:Interaction.Triggers>
+        <ie:EventTrigger EventName="Loaded">
+            <ie:InvokeCommandAction Command="{Binding WindowLoadedCommand}"/>
+        </ie:EventTrigger>
+    </ie:Interaction.Triggers>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Name="MenuColumn" Width="Auto" MinWidth="70"/>

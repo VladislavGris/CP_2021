@@ -34,7 +34,7 @@ namespace CP_2021.ViewModels
         #endregion
 
         #region ProductionTasks
-
+        // TODO: Возможно стоит убрать
         private List<ProductionTaskDB> _productionTasks;
 
         public List<ProductionTaskDB> ProductionTasks
@@ -46,7 +46,7 @@ namespace CP_2021.ViewModels
         #endregion
 
         #region SelectedTask
-
+        // TODO: Сделать листом
         private ProductionTask _selectedTask;
 
         public ProductionTask SelectedTask
@@ -65,18 +65,6 @@ namespace CP_2021.ViewModels
         {
             get => _model;
             set => Set(ref _model, value);
-        }
-
-        #endregion
-
-        #region User
-
-        private UserDB _user;
-
-        public UserDB User
-        {
-            get => _user;
-            set => Set(ref _user, value);
         }
 
         #endregion
@@ -129,7 +117,7 @@ namespace CP_2021.ViewModels
             Unit.Tasks.Insert(dbTask);
             Unit.Commit();
             ProductionTasks = Unit.Tasks.Get().ToList();
-            if (SelectedTask?.Task.ParentId == null || SelectedTask==null)
+            if (SelectedTask?.Task.ParentId == null || SelectedTask == null)
             {
                 SelectedTask = ProductionTask.AddRoot(Model, dbTask);
             }
@@ -184,21 +172,22 @@ namespace CP_2021.ViewModels
 
         private void OnDeleteProductionTaskCommandExecuted(object p)
         {
-            Unit.Tasks.Delete(SelectedTask.Task);
-            Unit.Commit();
-            ProductionTasks = Unit.Tasks.Get().ToList();
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            if (SelectedTask.IsRootElement(Model))
+            SelectedTask.Remove(Unit);
+            if (parent!=null)
             {
-                Model.Remove(SelectedTask);
+                SelectedTask = parent;
+            }
+            else if(Model.Count!=0)
+            {
                 SelectedTask = (ProductionTask)Model.Last();
             }
             else
             {
-                parent.Children.Remove(SelectedTask);
-                SelectedTask = parent;
+                SelectedTask = null;
             }
-            if(parent?.Children.Count == 0 /*&& parent!=null*/)
+            Unit.Commit();
+            if (parent?.Children.Count == 0)
             {
                 parent.HasChildren = false;
                 parent.IsExpanded = false;
@@ -259,21 +248,9 @@ namespace CP_2021.ViewModels
 
         public ProductionPlanControlViewModel()
         {
-            //#region Команды
-
-            //ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
-            //RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
-            //AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
-            //AddChildCommand = new LambdaCommand(OnAddChildCommandExecuted, CanAddChildCommandExecute);
-            //DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
-            //RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
-            //#endregion
-            //Unit = new ApplicationUnit(new ApplicationContext());
-            //ProductionTasks = Unit.Tasks.Get().ToList();
-            //InitModel();
         }
 
-        public ProductionPlanControlViewModel(UserDB user)
+        public ProductionPlanControlViewModel(ApplicationUnit unit)
         {
             #region Команды
 
@@ -284,8 +261,7 @@ namespace CP_2021.ViewModels
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
             RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
             #endregion
-            User = user;
-            Unit = new ApplicationUnit(new ApplicationContext());
+            Unit = unit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             InitModel();
         }

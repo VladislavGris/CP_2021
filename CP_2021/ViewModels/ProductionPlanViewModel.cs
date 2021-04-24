@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using CP_2021.Views.UserControls;
 using CP_2021.Models.DBModels;
 using CP_2021.Infrastructure.Units;
+using System.Diagnostics;
 
 namespace CP_2021.ViewModels
 {
@@ -15,7 +16,7 @@ namespace CP_2021.ViewModels
 
         #region ContentContainerContent
 
-        private UserControl _ContentContainerContent = new UserControlProductionPlan();
+        private UserControl _ContentContainerContent;
 
         public UserControl ContentContainerContent
         {
@@ -134,7 +135,7 @@ namespace CP_2021.ViewModels
             switch (((ListViewItem)p).Name)
             {
                 case "ItemProductionPlan":
-                    ContentContainerContent = new UserControlProductionPlan();
+                    InitProductionPlanControl();
                     break;
                 case "ItemReports":
                     ContentContainerContent = new UserControlReports();
@@ -152,6 +153,30 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region WindowLoadedCommand
+
+        public ICommand WindowLoadedCommand { get; }
+
+        private bool CanWindowLoadedCommandExecute(object p) => true;
+
+        private void OnWindowLoadedCommandExecuted(object p)
+        {
+            InitProductionPlanControl();
+        }
+
+        #endregion
+
+        #endregion
+
+        #region Методы
+
+        private void InitProductionPlanControl()
+        {
+            UserControlProductionPlan control = new UserControlProductionPlan();
+            control.DataContext = new ProductionPlanControlViewModel(Unit);
+            ContentContainerContent = control;
+        }
+
         #endregion
 
         public ProductionPlanViewModel()
@@ -161,7 +186,7 @@ namespace CP_2021.ViewModels
             ButtonCloseMenuCommand = new LambdaCommand(OnButtonCloseMenuCommandExecuted, CanButtonCloseMenuCommandExecute);
             ButtonOpenMenuCommand = new LambdaCommand(OnButtonOpenMenuCommandExecuted, CanButtonOpenMenuCommandExecute);
             ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
-
+            WindowLoadedCommand = new LambdaCommand(OnWindowLoadedCommandExecuted, CanWindowLoadedCommandExecute);
             #endregion
         }
     }
