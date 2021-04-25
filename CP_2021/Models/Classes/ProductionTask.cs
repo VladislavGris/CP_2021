@@ -81,23 +81,28 @@ namespace CP_2021.Models.Classes
             unit.Tasks.Delete(this.Task);
         }
 
-        public void AddTasksToDatabase(ApplicationUnit unit, ProductionTask parent)
+        public void AddTasksToDatabase(ApplicationUnit unit, TreeGridModel model, ProductionTask parent)
         {
             ProductionTaskDB dbTask = this.Task.Clone();
+            ProductionTask task = new ProductionTask(dbTask);
             if(parent == null)
             {
                 dbTask.ParentId = null;
+                model.Add(task);
             }
             else
             {
                 dbTask.ParentId = parent.Task.Id;
+                parent.Children.Add(task);
             }
             unit.Tasks.Insert(dbTask);
+            unit.Commit();
             if (this.HasChildren)
             {
+                task.HasChildren = true;
                 foreach(ProductionTask child in this.Children)
                 {
-                    child.AddTasksToDatabase(unit, this);
+                    child.AddTasksToDatabase(unit,model, task);
                 }
             }
         }
