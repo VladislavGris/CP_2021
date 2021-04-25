@@ -54,6 +54,8 @@ namespace CP_2021.Models.DBModels
         public InProductionDB InProduction { get; set; }
         public ManufactureDB Manufacture { get; set; }
 
+        public ProductionTaskDB() { }
+
         public ProductionTaskDB(string name, int? parentId)
         {
             Name = name;
@@ -62,6 +64,26 @@ namespace CP_2021.Models.DBModels
             Giving = new GivingDB();
             InProduction = new InProductionDB();
             Manufacture = new ManufactureDB();
+        }
+
+        public ProductionTaskDB Clone()
+        {
+            ProductionTaskDB taskDB = new ProductionTaskDB();
+            taskDB.IncDoc = this.IncDoc;
+            taskDB.ManagDoc = this.ManagDoc;
+            taskDB.Name = this.Name;
+            taskDB.Count = this.Count;
+            taskDB.SpecCost = this.SpecCost;
+            taskDB.VishDate = this.VishDate;
+            taskDB.RealDate = this.RealDate;
+            taskDB.ExpendNum = this.ExpendNum;
+            taskDB.Complectation = this.Complectation.Clone();
+            taskDB.Giving = this.Giving.Clone();
+            taskDB.InProduction = this.InProduction.Clone();
+            taskDB.Manufacture = this.Manufacture.Clone();
+            //taskDB.ParentId = this.ParentId;
+
+            return taskDB;
         }
     }
 }

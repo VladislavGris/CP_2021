@@ -23,5 +23,14 @@ namespace CP_2021.Models.DBModels
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
         public ProductionTaskDB ProductionTask { get; set; }
+
+        public ComplectationDB Clone()
+        {
+            ComplectationDB complectation = new ComplectationDB();
+            complectation.Complectation = this.Complectation;
+            complectation.ComplectationDate = this.ComplectationDate;
+            complectation.Percentage = this.Percentage;
+            return complectation;
+        }
     }
 }

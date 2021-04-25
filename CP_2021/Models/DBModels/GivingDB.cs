@@ -29,5 +29,16 @@ namespace CP_2021.Models.DBModels
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
         public ProductionTaskDB ProductionTask { get; set; }
+
+        public GivingDB Clone()
+        {
+            GivingDB giving = new GivingDB();
+            giving.State = this.State;
+            giving.Bill = this.Bill;
+            giving.Report = this.Report;
+            giving.ReturnReport = this.ReturnReport;
+            giving.ReceivingDate = this.ReceivingDate;
+            return giving;
+        }
     }
 }

@@ -81,6 +81,27 @@ namespace CP_2021.Models.Classes
             unit.Tasks.Delete(this.Task);
         }
 
+        public void AddTasksToDatabase(ApplicationUnit unit, ProductionTask parent)
+        {
+            ProductionTaskDB dbTask = this.Task.Clone();
+            if(parent == null)
+            {
+                dbTask.ParentId = null;
+            }
+            else
+            {
+                dbTask.ParentId = parent.Task.Id;
+            }
+            unit.Tasks.Insert(dbTask);
+            if (this.HasChildren)
+            {
+                foreach(ProductionTask child in this.Children)
+                {
+                    child.AddTasksToDatabase(unit, this);
+                }
+            }
+        }
+
         public bool IsRootElement(TreeGridModel model)
         {
             foreach(TreeGridElement t in model)

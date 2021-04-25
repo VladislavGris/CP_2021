@@ -33,6 +33,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region TaskToCopy
+
+        private ProductionTask _taskToCopy;
+
+        public ProductionTask TaskToCopy
+        {
+            get => _taskToCopy;
+            set => Set(ref _taskToCopy, value);
+        }
+
+        #endregion
+
         #region ProductionTasks
         // TODO: Возможно стоит убрать
         private List<ProductionTaskDB> _productionTasks;
@@ -266,6 +278,47 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region UpdateModelCommand
+
+        public ICommand UpdateModelCommand { get; }
+
+        private bool CanUpdateModelCommandExecute(object p) => true;
+
+        private void OnUpdateModelCommandExecuted(object p)
+        {
+            ProductionTasks = Unit.Tasks.Get().ToList();
+            InitModel();
+        }
+
+        #endregion
+
+        #region CopyTaskCommand
+
+        public ICommand CopyTaskCommand { get; }
+
+        private bool CanCopyTaskCommandExecute(object p) => true;
+
+        private void OnCopyTaskCommandExecuted(object p)
+        {
+            TaskToCopy = SelectedTask.Clone();
+        }
+
+        #endregion
+
+        #region PasteTaskCommand
+
+        public ICommand PasteTaskCommand { get; }
+
+        private bool CanPasteTaskCommandExecute(object p) => TaskToCopy != null;
+
+        private void OnPasteTaskCommandExecuted(object p)
+        {
+            TaskToCopy.AddTasksToDatabase(Unit, (ProductionTask)SelectedTask.Parent);
+            Unit.Commit();
+        }
+
+        #endregion
+
         #endregion
 
         #region Методы
@@ -332,6 +385,9 @@ namespace CP_2021.ViewModels
             RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
             LevelUpCommand = new LambdaCommand(OnLevelUpCommandExecuted, CanLevelUpCommandExecute);
             LevelDownCommand = new LambdaCommand(OnLevelDownCommandExecuted, CanLevelDownCommandExecute);
+            UpdateModelCommand = new LambdaCommand(OnUpdateModelCommandExecuted, CanUpdateModelCommandExecute);
+            CopyTaskCommand = new LambdaCommand(OnCopyTaskCommandExecuted, CanCopyTaskCommandExecute);
+            PasteTaskCommand = new LambdaCommand(OnPasteTaskCommandExecuted, CanPasteTaskCommandExecute);
 
             #endregion
 

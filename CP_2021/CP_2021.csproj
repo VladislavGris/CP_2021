@@ -13,6 +13,7 @@
     <None Remove="Resources\Images\close.png" />
     <None Remove="Resources\Images\icon.png" />
     <None Remove="Resources\Images\minimize.png" />
+    <None Remove="Resources\Images\refresh.png" />
     <None Remove="Views\Windows\CPIcon.png" />
     <None Remove="Views\Windows\favicon.ico" />
     <None Remove="Views\Windows\icon.png" />
@@ -37,6 +38,7 @@
     <Resource Include="Resources\Images\close.png" />
     <Resource Include="Resources\Images\icon.png" />
     <Resource Include="Resources\Images\minimize.png" />
+    <Resource Include="Resources\Images\refresh.png" />
     <Resource Include="Views\Windows\icon.png" />
   </ItemGroup>
 

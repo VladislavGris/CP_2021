@@ -26,5 +26,15 @@ namespace CP_2021.Models.DBModels
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
         public ProductionTaskDB ProductionTask { get; set; }
+
+        public InProductionDB Clone()
+        {
+            InProductionDB prod = new InProductionDB();
+            prod.Number = this.Number;
+            prod.GivingDate = this.GivingDate;
+            prod.ExecutorName = this.ExecutorName;
+            prod.CompletionDate = this.CompletionDate;
+            return prod;
+        }
     }
 }

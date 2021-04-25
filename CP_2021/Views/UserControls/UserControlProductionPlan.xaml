@@ -30,6 +30,24 @@
                   ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
                   SelectedItem="{Binding SelectedTask}"
                   Grid.Row="1">
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Копировать"
+                              Command="{Binding CopyTaskCommand}">
+                        <MenuItem.Icon>
+                            <fa:ImageAwesome Icon="Regular_Copy"
+                                             Foreground="{StaticResource ForegroundBrush}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Вставить"
+                              Command="{Binding PasteTaskCommand}">
+                        <MenuItem.Icon>
+                            <fa:ImageAwesome Icon="Solid_Paste"
+                                             Foreground="{StaticResource ForegroundBrush}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Вып."
                                         CanUserResize="False">
@@ -189,7 +207,8 @@
                     <ListViewItem.InputBindings>
                         <MouseBinding Command="{Binding AddProductionTaskCommand}" MouseAction="LeftClick"/>
                     </ListViewItem.InputBindings>
-                    <Image>
+                    <Image Width="40"                                              Height="40"
+                           Margin="5">
                         <Image.Source>
                             <BitmapImage UriSource="/Resources/Images/add_root.png"/>
                         </Image.Source>
@@ -200,7 +219,9 @@
                     <ListViewItem.InputBindings>
                         <MouseBinding Command="{Binding AddChildCommand}" MouseAction="LeftClick"/>
                     </ListViewItem.InputBindings>
-                    <Image>
+                    <Image Width="40"
+                           Height="40"
+                           Margin="5">
                         <Image.Source>
                             <BitmapImage UriSource="/Resources/Images/add_child.png"/>
                         </Image.Source>
@@ -245,6 +266,17 @@
                     </ListViewItem.InputBindings>
                     <fa:ImageAwesome Icon="Regular_ArrowAltCircleUp"
                                      Style="{StaticResource TooltipIconStyle}"/>
+                </ListViewItem>
+                <ListViewItem x:Name="UpdateModel" Width="60"
+                              ToolTip="Обновить">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding UpdateModelCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
+                    <Image Style="{StaticResource PannelImageStyle}">
+                        <Image.Source>
+                            <BitmapImage UriSource="/Resources/Images/refresh.png"/>
+                        </Image.Source>
+                    </Image>
                 </ListViewItem>
             </ListView>
         </Grid>

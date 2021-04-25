@@ -26,5 +26,14 @@ namespace CP_2021.Models.DBModels
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
         public ProductionTaskDB ProductionTask { get; set; }
+
+        public ManufactureDB Clone()
+        {
+            ManufactureDB manuf = new ManufactureDB();
+            manuf.Name = this.Name;
+            manuf.LetterNum = this.LetterNum;
+            manuf.SpecNum = this.SpecNum;
+            return manuf;
+        }
     }
 }
