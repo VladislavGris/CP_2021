@@ -196,6 +196,39 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region LevelUpCommand
+
+        public ICommand LevelUpCommand { get; }
+
+        private bool CanLevelUpCommandExecute(object p) => SelectedTask != null && SelectedTask?.Task.ParentId != null;
+
+        private void OnLevelUpCommandExecuted(object p)
+        {
+            SelectedTask.Task.ParentId = ((ProductionTask)SelectedTask.Parent).Task.ParentId;
+            Unit.Tasks.Update(SelectedTask.Task);
+            Unit.Commit();
+            SelectedTask.IsExpanded = false;
+            ProductionTask task = SelectedTask.Clone();
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            if(((ProductionTask)SelectedTask.Parent).Task.ParentId == null)
+            {
+                SelectedTask.Parent.Children.Remove(SelectedTask);
+                Model.Add(task);
+            }
+            else
+            {
+                SelectedTask.Parent.Children.Remove(SelectedTask);
+                SelectedTask.Parent.Parent.Children.Add(task);
+            }
+            if (parent.Children.Count == 0)
+            {
+                parent.HasChildren = false;
+                parent.IsExpanded = false;
+            }
+        }
+
+        #endregion
+
         #endregion
 
         #region Методы
@@ -260,7 +293,10 @@ namespace CP_2021.ViewModels
             AddChildCommand = new LambdaCommand(OnAddChildCommandExecuted, CanAddChildCommandExecute);
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
             RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
+            LevelUpCommand = new LambdaCommand(OnLevelUpCommandExecuted, CanLevelUpCommandExecute);
+
             #endregion
+
             Unit = unit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             InitModel();

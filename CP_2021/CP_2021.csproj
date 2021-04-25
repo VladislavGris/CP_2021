@@ -7,6 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Images\add_child.png" />
+    <None Remove="Resources\Images\add_children.png" />
+    <None Remove="Resources\Images\add_root.png" />
     <None Remove="Resources\Images\close.png" />
     <None Remove="Resources\Images\icon.png" />
     <None Remove="Resources\Images\minimize.png" />
@@ -29,6 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Images\add_child.png" />
+    <Resource Include="Resources\Images\add_root.png" />
     <Resource Include="Resources\Images\close.png" />
     <Resource Include="Resources\Images\icon.png" />
     <Resource Include="Resources\Images\minimize.png" />

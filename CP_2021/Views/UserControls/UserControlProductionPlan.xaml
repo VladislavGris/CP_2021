@@ -23,9 +23,10 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        
         <DataGrid Name="Grid"
                   ItemsSource="{Binding Model.FlatModel}"
-                  Style="{StaticResource DatagridStyle}"
+                  Style="{StaticResource ExampleStyle}"
                   ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
                   SelectedItem="{Binding SelectedTask}"
                   Grid.Row="1">
@@ -169,6 +170,7 @@
                 </ie:EventTrigger>
             </ie:Interaction.Triggers>
         </DataGrid>
+        
         <Grid Grid.Row="0"
               Background="#FF31577E">
             <ListView x:Name="ListViewMenu" 
@@ -182,18 +184,27 @@
                         <StackPanel Orientation="Horizontal"></StackPanel>
                     </ItemsPanelTemplate>
                 </ListView.ItemsPanel>
-                <ListViewItem x:Name="AddTaskItem" Width="60"
-                              ToolTip="Добавить задачу">
-                    <Menu Background="Transparent">
-                        <MenuItem>
-                            <MenuItem.Header>
-                                <fa:ImageAwesome Icon="Solid_Plus"
-                                     Style="{StaticResource TooltipIconStyle}"/>
-                            </MenuItem.Header>
-                            <MenuItem Header="На текущий уровень" Command="{Binding AddProductionTaskCommand}"/>
-                            <MenuItem Header="На уровень ниже" Command="{Binding AddChildCommand}"/>
-                        </MenuItem>
-                    </Menu>
+                <ListViewItem Width="60"
+                              ToolTip="Добавить на тот же уровень">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding AddProductionTaskCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
+                    <Image>
+                        <Image.Source>
+                            <BitmapImage UriSource="/Resources/Images/add_root.png"/>
+                        </Image.Source>
+                    </Image>
+                </ListViewItem>
+                <ListViewItem Width="60"
+                              ToolTip="Добавить на уровень ниже">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding AddChildCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
+                    <Image>
+                        <Image.Source>
+                            <BitmapImage UriSource="/Resources/Images/add_child.png"/>
+                        </Image.Source>
+                    </Image>
                 </ListViewItem>
                 <ListViewItem x:Name="RemoveTaskItem" Width="60"
                               ToolTip="Удалить задачу">
@@ -205,6 +216,9 @@
                 </ListViewItem>
                 <ListViewItem x:Name="LevelUpItem" Width="60"
                               ToolTip="Повысить уровень">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding LevelUpCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
                     <fa:ImageAwesome Icon="Solid_LevelUpAlt"
                                      Style="{StaticResource TooltipIconStyle}"/>
                 </ListViewItem>

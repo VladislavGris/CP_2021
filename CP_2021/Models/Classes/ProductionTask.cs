@@ -4,8 +4,10 @@ using CP_2021.Models.DBModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -60,6 +62,7 @@ namespace CP_2021.Models.Classes
 
         public void Remove(ApplicationUnit unit)
         {
+            this.IsExpanded = false;
             if (this.HasChildren)
             {
                 while (this.Children.LastOrDefault() != null)
@@ -88,6 +91,11 @@ namespace CP_2021.Models.Classes
                 }
             }
             return false;
+        }
+
+        public ProductionTask Clone()
+        {
+            return (ProductionTask) this.MemberwiseClone();
         }
 
         public static ProductionTask AddRoot(TreeGridModel model, ProductionTaskDB task)

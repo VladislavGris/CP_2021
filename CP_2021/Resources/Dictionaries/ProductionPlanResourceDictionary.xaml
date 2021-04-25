@@ -10,55 +10,58 @@
     <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
 
     <!--Styles-->
-    
+
+    <SolidColorBrush x:Key="ForegroundBrush" Color="#6393C2" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#31577e" />
+    <SolidColorBrush x:Key="DatagridHeaderBrush" Color="White"/>
+    <SolidColorBrush x:Key="FontColor" Color="#575757"/>
+
     <!--For Datagrid Cells-->
-    <Style TargetType="TextBox" x:Key="EditingDatagridCellStyle">
+    <Style x:Key="EditingDatagridCellStyle"
+           TargetType="TextBox">
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="AcceptsReturn" Value="true" />
     </Style>
-    <Style TargetType="TextBlock" x:Key="DatagridCellStyle">
+    <Style x:Key="DatagridCellStyle"
+           TargetType="TextBlock">
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="MaxWidth" Value="300"/>
     </Style>
-    <Style TargetType="TextBox" x:Key="EditingDatagridCenterCellStyle">
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="AcceptsReturn" Value="true" />
+    <Style x:Key="EditingDatagridCenterCellStyle" 
+           TargetType="TextBox"
+           BasedOn="{StaticResource EditingDatagridCellStyle}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
-    <Style TargetType="TextBlock" x:Key="DatagridCenterCellStyle">
-        <Setter Property="TextWrapping" Value="Wrap" />
-        <Setter Property="MaxWidth" Value="300"/>
+    <Style x:Key="DatagridCenterCellStyle"
+           TargetType="TextBlock"
+           BasedOn="{StaticResource DatagridCellStyle}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
     
     <!--For Datagrid-->
-    <Style TargetType="DataGridColumnHeader" x:Key="DatagridHeaderTextWrapping">
+    <Style x:Key="DatagridHeaderTextWrapping" 
+           TargetType="DataGridColumnHeader" >
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>
                     <TextBlock TextWrapping="Wrap"
                                Text="{Binding}"
-                               Foreground="Black"/>
+                               Foreground="{StaticResource FontColor}"/>
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}"/>
         <Setter Property="Padding" Value="2"/>
-        <Setter Property="Background">
-            <Setter.Value>
-                <LinearGradientBrush StartPoint="0,1" EndPoint="0,0">
-                    <GradientStop Color="#315CE8" Offset="0.25"/>
-                    <GradientStop Color="#5176EF" Offset="0.65"/>
-                </LinearGradientBrush>
-            </Setter.Value>
-        </Setter>
+        <Setter Property="Background" Value="{StaticResource DatagridHeaderBrush}"/>
     </Style>
-    <Style TargetType="DataGrid" x:Key="DatagridStyle">
+    <Style TargetType="DataGrid"
+           x:Key="ExampleStyle">
+        <Setter Property="BorderBrush" Value="{StaticResource BackgroundBrush}" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="CanUserResizeRows" Value="False"/>
-        <Setter Property="AlternationCount" Value="2"/>
-        <Setter Property="AlternatingRowBackground" Value="LightGray"/>
-        <!--<Setter Property="Margin" Value="5"/>-->
         <Setter Property="CanUserReorderColumns" Value="False"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
@@ -66,45 +69,68 @@
         <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
-        <Setter Property="Background" Value="SkyBlue"/>
-    </Style>
-    
-    <!--For Buttons-->
-    <Style x:Key="ControlPannelButton" TargetType="Button">
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="ContentTemplate">
+        <Setter Property="SelectionMode" Value="Single"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColor}"/>
+        <Setter Property="RowStyle">
             <Setter.Value>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}"
-                                   FontSize="14"
-                                   FontFamily="Arial"
-                                   TextWrapping="Wrap"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                </DataTemplate>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <!-- Highlight a grid row as the mouse passes over -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="LightCyan" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
             </Setter.Value>
         </Setter>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Background">
+        <Setter Property="CellStyle">
             <Setter.Value>
-                <LinearGradientBrush StartPoint="0,1" EndPoint="-0.1,0">
-                    <GradientStop Color="#315CE8" Offset="0.25"/>
-                    <GradientStop Color="#5176EF" Offset="0.5"/>
-                </LinearGradientBrush>
+                <Style TargetType="DataGridCell">
+                    <Style.Triggers>
+                        <!-- Highlight selected rows -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="#ff66ccff" />
+                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="#ff66ccff" />
+                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}" />
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="Foreground" Value="{StaticResource FontColor}" />
+                        </Trigger>
+                    </Style.Triggers>
+                    <!-- Add some padding around the contents of a cell -->
+                    <Setter Property="Padding" Value="4,3,4,3" />
+                    <Setter Property="BorderBrush" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="DataGridCell">
+                                <Border Padding="{TemplateBinding Padding}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="{TemplateBinding BorderThickness}"
+                                            Background="{TemplateBinding Background}">
+                                    <ContentPresenter />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="FocusVisualStyle">
+                        <Setter.Value>
+                            <Style TargetType="Control">
+                                <Setter Property="BorderBrush" Value="Transparent" />
+                            </Style>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
             </Setter.Value>
         </Setter>
-        <Setter Property="Margin" Value="3"/>
-        <Setter Property="Foreground" Value="#E5FFCC"/>
-        <!--<Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#23609E"/>
-            </Trigger>
-        </Style.Triggers>-->
     </Style>
-    
+
     <!--For Icons-->
-    <Style TargetType="fa:ImageAwesome" x:Key="TooltipIconStyle">
+    <Style x:Key="TooltipIconStyle" 
+           TargetType="fa:ImageAwesome">
         <Setter Property="Height" Value="25"/>
         <Setter Property="Width" Value="25"/>
         <Setter Property="Margin" Value="10"/>
