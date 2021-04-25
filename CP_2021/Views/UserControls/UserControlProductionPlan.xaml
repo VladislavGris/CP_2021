@@ -224,6 +224,9 @@
                 </ListViewItem>
                 <ListViewItem x:Name="LevelDownItem" Width="60"
                               ToolTip="Понизить уровень">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding LevelDownCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
                     <fa:ImageAwesome Icon="Solid_LevelDownAlt"
                                      Style="{StaticResource TooltipIconStyle}"/>
                 </ListViewItem>

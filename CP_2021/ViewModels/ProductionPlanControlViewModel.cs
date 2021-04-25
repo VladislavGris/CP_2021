@@ -207,6 +207,7 @@ namespace CP_2021.ViewModels
             SelectedTask.Task.ParentId = ((ProductionTask)SelectedTask.Parent).Task.ParentId;
             Unit.Tasks.Update(SelectedTask.Task);
             Unit.Commit();
+
             SelectedTask.IsExpanded = false;
             ProductionTask task = SelectedTask.Clone();
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
@@ -225,6 +226,42 @@ namespace CP_2021.ViewModels
                 parent.HasChildren = false;
                 parent.IsExpanded = false;
             }
+        }
+
+        #endregion
+
+        #region LevelDownCommand
+
+        public ICommand LevelDownCommand { get; }
+
+        private bool CanLevelDownCommandExecute(object p) => SelectedTask != null;
+
+        private void OnLevelDownCommandExecuted(object p)
+        {
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+
+            SelectedTask.Task.ParentId = dbTask.Id;
+            Unit.Tasks.Update(SelectedTask.Task);
+            Unit.Commit();
+
+            ProductionTask task = new ProductionTask(dbTask);
+            ProductionTask childTask = SelectedTask.Clone();
+
+            if (dbTask.ParentId == null)
+            {
+                Model.Add(task);
+                Model.Remove(SelectedTask);
+            }
+            else
+            {
+                SelectedTask.Parent.Children.Add(task);
+                SelectedTask.Parent.Children.Remove(SelectedTask);
+            }
+            task.Children.Add(childTask);
+            task.HasChildren = true;
+            task.IsExpanded = false;
         }
 
         #endregion
@@ -294,6 +331,7 @@ namespace CP_2021.ViewModels
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
             RowEditingEndingCommand = new LambdaCommand(OnRowEditingEndingCommandExecuted, CanRowEditingEndingCommandExecute);
             LevelUpCommand = new LambdaCommand(OnLevelUpCommandExecuted, CanLevelUpCommandExecute);
+            LevelDownCommand = new LambdaCommand(OnLevelDownCommandExecuted, CanLevelDownCommandExecute);
 
             #endregion
 
