@@ -48,6 +48,74 @@
                     </MenuItem>
                 </ContextMenu>
             </DataGrid.ContextMenu>
+            <!--<DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <StackPanel>
+                            <Label Content="Ведомость комплектации"
+                                   HorizontalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Дата комплектации"/>
+                                <DatePicker SelectedDate="{Binding Task.Complectation.ComplectationDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Процент получения"/>
+                                <TextBox Text="{Binding Task.Complectation.Percentage, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Предприятие изготовитель"
+                                   HorizontalAlignment="Center"/>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Номер письма"/>
+                                <TextBox Text="{Binding Task.Manufacture.LetterNum, UpdateSourceTrigger=PropertyChanged}"
+                                         MinWidth="50"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="Номер спецификации"/>
+                                <TextBox Text="{Binding Task.Manufacture.SpecNum, UpdateSourceTrigger=PropertyChanged}"
+                                         MinWidth="50"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel>
+                            <Label Content="Выдача в производство"
+                                   HorizontalAlignment="Center"/>
+                            <StackPanel>
+                                <Label Content="Номер МСЛ"/>
+                                <TextBox Text="{Binding Task.InProduction.Number, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Content="Исполнитель"/>
+                                <TextBox Text="{Binding Task.InProduction.ExecutorName, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Content="Дата готовности"/>
+                                <DatePicker SelectedDate="{Binding Task.InProduction.CompletionDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </StackPanel>
+                        <StackPanel Visibility="{Binding Task.Giving.State, Converter={StaticResource TreeToggleConverter}}">
+                            <Label Content="Давальческое"
+                                   HorizontalAlignment="Center"/>
+                            <StackPanel>
+                                <Label Content="Накладная"/>
+                                <TextBox Text="{Binding Task.Giving.Bill, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Content="Отчёт"/>
+                                <TextBox Text="{Binding Task.Giving.Report, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Content="Накладная возврата"/>
+                                <TextBox Text="{Binding Task.Giving.ReturnReport, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                            <StackPanel>
+                                <Label Content="Поступление на склад"/>
+                                <DatePicker SelectedDate="{Binding Task.Giving.ReceivingDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>-->
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Вып."
                                         CanUserResize="False">
@@ -101,7 +169,7 @@
                                     MaxWidth="145"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
-                <DataGridTextColumn Header="Стоимость спецификации"
+                <DataGridTextColumn Header="Стоимость по спецификации"
                                     Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="110"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
@@ -146,6 +214,18 @@
                             <TextBlock Text="{Binding Task.Complectation.Complectation}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="Ведомость комплектации"/>
+                                <TextBox Text="{Binding Task.Complectation.Complectation, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Дата комплектации"/>
+                                <DatePicker SelectedDate="{Binding Task.Complectation.ComplectationDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Процент получения"/>
+                                <TextBox Text="{Binding Task.Complectation.Percentage, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Выдача в производство"
                                         MaxWidth="110">
@@ -154,6 +234,11 @@
                             <TextBlock Text="{Binding Task.InProduction.GivingDate, Converter={StaticResource DateConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <DatePicker SelectedDate="{Binding Task.InProduction.GivingDate, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Изготовитель">
                     <DataGridTemplateColumn.CellTemplate>
@@ -161,6 +246,14 @@
                             <TextBlock Text="{Binding Task.Manufacture.Name}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding Task.Manufacture.Name, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MaxWidth="200"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Давальческая">
                     <DataGridTemplateColumn.CellTemplate>
