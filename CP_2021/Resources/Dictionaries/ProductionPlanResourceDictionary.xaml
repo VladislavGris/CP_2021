@@ -8,6 +8,9 @@
     <GridLength x:Key="TreeToggleWidth">30</GridLength>
     <convert:LevelConverter x:Key="LevelSpaceConverter" LevelWidth="{StaticResource TreeToggleWidth}"/>
     <convert:VisibilityConverter x:Key="TreeToggleConverter"/>
+    <convert:CanRoleEditConverter x:Key="EditableRole"/>
+    <convert:PannelVisibilityConverter x:Key="PannelVisibilityConverter"/>
+    <convert:CanRoleEditCheckboxConverter x:Key="EditCheckboxConverter"/>
 
     <!--Styles-->
 
@@ -26,11 +29,13 @@
            TargetType="TextBlock">
         <Setter Property="TextWrapping" Value="Wrap" />
         <Setter Property="MaxWidth" Value="300"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
     <Style x:Key="EditingDatagridCenterCellStyle" 
            TargetType="TextBox"
            BasedOn="{StaticResource EditingDatagridCellStyle}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="MinWidth" Value="20"/>
     </Style>
     <Style x:Key="DatagridCenterCellStyle"
            TargetType="TextBlock"
@@ -53,6 +58,7 @@
         <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Background" Value="{StaticResource DatagridHeaderBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
     </Style>
     <Style TargetType="DataGrid"
            x:Key="ExampleStyle">
@@ -71,6 +77,7 @@
         <Setter Property="RowHeaderWidth" Value="0"/>
         <Setter Property="SelectionMode" Value="Single"/>
         <Setter Property="Foreground" Value="{StaticResource FontColor}"/>
+        <Setter Property="Background" Value="{StaticResource DatagridHeaderBrush}"/>
         <Setter Property="RowStyle">
             <Setter.Value>
                 <Style TargetType="DataGridRow">

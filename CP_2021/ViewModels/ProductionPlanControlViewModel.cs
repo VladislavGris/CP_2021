@@ -33,6 +33,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region User
+
+        private UserDB _user;
+
+        public UserDB User
+        {
+            get => _user;
+            set => Set(ref _user, value);
+        }
+
+        #endregion
+
         #region TaskToCopy
 
         private ProductionTask _taskToCopy;
@@ -373,7 +385,7 @@ namespace CP_2021.ViewModels
         {
         }
 
-        public ProductionPlanControlViewModel(ApplicationUnit unit)
+        public ProductionPlanControlViewModel(ApplicationUnit unit, UserDB user)
         {
             #region Команды
 
@@ -391,6 +403,7 @@ namespace CP_2021.ViewModels
 
             #endregion
 
+            User = user;
             Unit = unit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             InitModel();

@@ -173,7 +173,7 @@ namespace CP_2021.ViewModels
         private void InitProductionPlanControl()
         {
             UserControlProductionPlan control = new UserControlProductionPlan();
-            control.DataContext = new ProductionPlanControlViewModel(Unit);
+            control.DataContext = new ProductionPlanControlViewModel(Unit, User);
             ContentContainerContent = control;
         }
 

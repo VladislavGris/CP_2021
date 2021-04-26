@@ -26,11 +26,11 @@ namespace CP_2021.Models.DBModels
         [Column(TypeName = "nvarchar(50)")]
         public string Surname { get; set; }
 
-        [Column(TypeName = "date")]
-        public DateTime? Birthday { get; set; }
+        //[Column(TypeName = "date")]
+        //public DateTime? Birthday { get; set; }
 
-        [Column(TypeName = "nvarchar(50)")]
-        public string Position { get; set; }
+        [Column(TypeName = "smallint")]
+        public short Position { get; set; }
 
         public UserDB(string login, string password, string name, string surname)
         {

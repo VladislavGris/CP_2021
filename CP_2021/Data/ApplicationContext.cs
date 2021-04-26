@@ -33,6 +33,7 @@ namespace CP_2021.Data
         #endregion
 
         public ApplicationContext() : base() {
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -44,6 +45,7 @@ namespace CP_2021.Data
             modelBuilder.Entity<ComplectationDB>().Property(c => c.Percentage).HasDefaultValue(0f);
             modelBuilder.Entity<TaskDB>().Property(c => c.Completion).HasDefaultValue(false);
             modelBuilder.Entity<ReportDB>().Property(p => p.State).HasDefaultValue(false);
+            modelBuilder.Entity<UserDB>().Property(u => u.Position).HasDefaultValue(0);
             #endregion
             #region IsUnique
             modelBuilder.Entity<ComplectationDB>().HasIndex(c => c.ProductionTaskId).IsUnique();

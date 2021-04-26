@@ -20,9 +20,6 @@ namespace CP_2021.Models.DBModels
         [Column("Specification_Num", TypeName = "nvarchar(50)")]
         public string SpecNum { get; set; }
 
-        //[Column("Specification_Cost", TypeName = "decimal(18,3)")]
-        //public decimal? SpecCost { get; set; }
-
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
         public ProductionTaskDB ProductionTask { get; set; }
