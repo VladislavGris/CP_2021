@@ -12,9 +12,11 @@ namespace CP_2021.Models.DBModels
     [Table("Tasks")]
     class TaskDB : Entity
     {
+        [Required]
         [Column("From_Id")]
         public int FromId { get; set; }
         public UserDB From { get; set; }
+        [Required]
         [Column("To_Id")]
         public int ToId { get; set; }
         public UserDB To { get; set; }
