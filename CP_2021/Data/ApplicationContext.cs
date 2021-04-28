@@ -33,7 +33,7 @@ namespace CP_2021.Data
         #endregion
 
         public ApplicationContext() : base() {
-            //Database.EnsureDeleted();
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
@@ -53,10 +53,6 @@ namespace CP_2021.Data
             modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             #endregion
-            //modelBuilder.Entity<UserDB>().HasMany(p => p.Tasks).WithOne();
-            //modelBuilder.Entity<UserDB>().HasMany(p => p.MyTasks).WithOne();
-            //modelBuilder.Entity<ProductionTaskDB>().HasOne(t => t.Parent).WithOne().OnDelete(DeleteBehavior.Cascade);
-            modelBuilder.Entity<TaskDB>().HasOne(t => t.From).WithOne().OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<UserDB>().HasData(new UserDB("vlad", "1337", "Владислав", "Гришкевич") { Id = -1, Position = 2 });
         }
 

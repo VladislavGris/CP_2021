@@ -28,9 +28,9 @@ namespace CP_2021.Models.DBModels
 
         [Column(TypeName = "smallint")]
         public short Position { get; set; }
-        
-        //public List<TaskDB> Tasks { get; set; } = new List<TaskDB>();
-        //public List<TaskDB> MyTasks { get; set; } = new List<TaskDB>();
+
+        public ICollection<TaskDB> Tasks { get; set; }
+        public ICollection<ReportDB> Reports { get; set; }
 
 
         public UserDB(string login, string password, string name, string surname)

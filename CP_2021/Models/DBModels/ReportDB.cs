@@ -18,5 +18,7 @@ namespace CP_2021.Models.DBModels
 
         public int TaskId { get; set; }
         public TaskDB Task { get; set; }
+
+        //public UserDB To { get; set; }
     }
 }
