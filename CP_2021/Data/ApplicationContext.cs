@@ -33,7 +33,7 @@ namespace CP_2021.Data
         #endregion
 
         public ApplicationContext() : base() {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
