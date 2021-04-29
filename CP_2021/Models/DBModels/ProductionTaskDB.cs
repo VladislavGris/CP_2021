@@ -41,7 +41,7 @@ namespace CP_2021.Models.DBModels
         [Column("Note", TypeName = "nvarchar(MAX)")]
         public string Note { get; set; }
 
-        public ICollection<HierarchyDB> Children { get; set; }
+        public HierarchyDB MyParent { get; set; }
         public ICollection<HierarchyDB> ParentTo { get; set; }
         [Required]
         [Column("Completion", TypeName = "bit")]
