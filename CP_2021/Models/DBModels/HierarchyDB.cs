@@ -14,7 +14,6 @@ namespace CP_2021.Models.DBModels
         public int ParentId { get; set; }
         public ProductionTaskDB Parent { get; set; }
 
-        [Required]
         public int ChildId { get; set; }
         public ProductionTaskDB Child { get; set; }
 

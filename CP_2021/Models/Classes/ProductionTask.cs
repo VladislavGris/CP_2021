@@ -31,7 +31,7 @@ namespace CP_2021.Models.Classes
                 if(task.MyParent == null)
                 {
                     ProductionTask root = new ProductionTask(task);
-                    if(task.ParentTo != null)
+                    if(task.ParentTo!=null && task.ParentTo?.Count != 0)
                     {
                         root.HasChildren = true;
                         root.AddChildren(task);
@@ -42,46 +42,12 @@ namespace CP_2021.Models.Classes
             return model;
         }
 
-        public bool TaskHasChildren(List<ProductionTaskDB> tasks)
-        {
-            //foreach (ProductionTaskDB t in tasks)
-            //{
-            //    if (this.Task.Id == t.ParentId)
-            //    {
-            //        this.HasChildren = true;
-            //        return true;
-            //    }
-            //}
-            //this.HasChildren = false;
-            //return false;
-            var task = tasks.Where(t => t.Id == this.Task.Id);
-            if (task.First().ParentTo != null)
-                return this.HasChildren = true;
-            return this.HasChildren = false;
-        }
-
-        public void AddChildren(List<ProductionTaskDB> tasks)
-        {
-            foreach (ProductionTaskDB p in tasks) 
-            {
-                if (this.Task.Id == p.MyParent.ParentId)
-                {
-                    ProductionTask child = new ProductionTask(p);
-                    if (child.TaskHasChildren(tasks))
-                    {
-                        child.AddChildren(tasks);
-                    }
-                    this.Children.Add(child);
-                }
-            }
-        }
-
         public void AddChildren(ProductionTaskDB task)
         {
             foreach(var child in task.ParentTo)
             {
                 ProductionTask cTask = new ProductionTask(child.Child);
-                if(child.Child.ParentTo != null)
+                if(child.Child.ParentTo?.Count != 0 && child.Child.ParentTo != null)
                 {
                     cTask.HasChildren = true;
                     cTask.AddChildren(child.Child);
@@ -90,24 +56,17 @@ namespace CP_2021.Models.Classes
             }
         }
 
-        //public ProductionTask AddChildren(ProductionTaskDB child)
-        //{
-        //    ProductionTask task = new ProductionTask(child);
-        //    this.Children.Add(task);
-        //    return task;
-        //}
-
         public void Remove(ApplicationUnit unit)
         {
             this.IsExpanded = false;
-            if (this.HasChildren)
+            if(this.Task.ParentTo != null)
             {
-                while (this.Children.LastOrDefault() != null)
+                while(this.Children.LastOrDefault() != null)
                 {
-                    ((ProductionTask)this.Children.LastOrDefault()).Remove(unit);
+                    ((ProductionTask)this.Children.Last()).Remove(unit);
                 }
             }
-            if (this.Parent == null)
+            if(this.Parent == null)
             {
                 this.Model.Remove(this);
             }

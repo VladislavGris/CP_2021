@@ -197,26 +197,28 @@ namespace CP_2021.ViewModels
 
         private void OnDeleteProductionTaskCommandExecuted(object p)
         {
-            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            //SelectedTask.Remove(Unit);
-            //if (parent!=null)
-            //{
-            //    SelectedTask = parent;
-            //}
-            //else if(Model.Count!=0)
-            //{
-            //    SelectedTask = (ProductionTask)Model.Last();
-            //}
-            //else
-            //{
-            //    SelectedTask = null;
-            //}
-            //Unit.Commit();
-            //if (parent?.Children.Count == 0)
-            //{
-            //    parent.HasChildren = false;
-            //    parent.IsExpanded = false;
-            //}
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            SelectedTask.Remove(Unit);
+            Unit.Commit();
+            if(parent == null)
+            {
+                if (Model.Count != 0)
+                    SelectedTask = (ProductionTask)Model.Last();
+                else
+                    SelectedTask = null;
+            }
+            else
+            {
+                if (parent.Children.Count != 0)
+                    SelectedTask = (ProductionTask)parent.Children.Last();
+                else
+                    SelectedTask = parent;
+            }
+            if (parent?.Children.Count == 0)
+            {
+                parent.HasChildren = false;
+                parent.IsExpanded = false;
+            }
         }
 
         #endregion
@@ -356,26 +358,6 @@ namespace CP_2021.ViewModels
                 foreach (ProductionTask t in task.Children)
                 {
                     RollUp(t);
-                }
-            }
-        }
-
-        private void InitModel()
-        {
-            Model = new TreeGridModel();
-
-            foreach (ProductionTaskDB p in ProductionTasks)
-            {
-                // Выборка корневых элементов
-                if (p.MyParent == null)
-                {
-                    ProductionTask root = new ProductionTask(p);
-                    if (root.TaskHasChildren(ProductionTasks))
-                    {
-                        root.AddChildren(ProductionTasks);
-                        //AddChilderen(root);
-                    }
-                    Model.Add(root);
                 }
             }
         }
