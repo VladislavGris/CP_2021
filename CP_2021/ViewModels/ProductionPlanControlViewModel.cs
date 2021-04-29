@@ -227,32 +227,39 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelUpCommand { get; }
 
-        private bool CanLevelUpCommandExecute(object p) => SelectedTask != null /*&& SelectedTask?.Task.ParentId != null*/;
+        private bool CanLevelUpCommandExecute(object p) => SelectedTask != null && SelectedTask?.Task.MyParent != null;
 
         private void OnLevelUpCommandExecuted(object p)
         {
-            //SelectedTask.Task.ParentId = ((ProductionTask)SelectedTask.Parent).Task.ParentId;
-            //Unit.Tasks.Update(SelectedTask.Task);
-            //Unit.Commit();
+            SelectedTask.Task.MyParent.Parent = SelectedTask.Task.MyParent.Parent.MyParent?.Parent;
+            if (SelectedTask.Task.MyParent.Parent == null)
+            {
+                HierarchyDB hierarchyNode = SelectedTask.Task.MyParent;
+                SelectedTask.Task.MyParent = null;
+                Unit.Hierarchy.Delete(hierarchyNode);
+            }
+            Unit.Tasks.Update(SelectedTask.Task);
+            Unit.Commit();
 
-            //SelectedTask.IsExpanded = false;
-            //ProductionTask task = SelectedTask.Clone();
-            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            //if(((ProductionTask)SelectedTask.Parent).Task.ParentId == null)
-            //{
-            //    SelectedTask.Parent.Children.Remove(SelectedTask);
-            //    Model.Add(task);
-            //}
-            //else
-            //{
-            //    SelectedTask.Parent.Children.Remove(SelectedTask);
-            //    SelectedTask.Parent.Parent.Children.Add(task);
-            //}
-            //if (parent.Children.Count == 0)
-            //{
-            //    parent.HasChildren = false;
-            //    parent.IsExpanded = false;
-            //}
+            SelectedTask.IsExpanded = false;
+            ProductionTask task = SelectedTask.Clone();
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            if (((ProductionTask)SelectedTask.Parent).Task.MyParent == null)
+            {
+                SelectedTask.Parent.Children.Remove(SelectedTask);
+                Model.Add(task);
+            }
+            else
+            {
+                SelectedTask.Parent.Children.Remove(SelectedTask);
+                parent.Parent.Children.Add(task);
+            }
+            if (parent.Children.Count == 0)
+            {
+                parent.HasChildren = false;
+                parent.IsExpanded = false;
+            }
+            SelectedTask = task;
         }
 
         #endregion
