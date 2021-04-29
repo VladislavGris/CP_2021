@@ -299,7 +299,7 @@ namespace CP_2021.ViewModels
         private void OnUpdateModelCommandExecuted(object p)
         {
             ProductionTasks = Unit.Tasks.Get().ToList();
-            InitModel();
+            Model = ProductionTask.InitModel(ProductionTasks);
         }
 
         #endregion
@@ -361,22 +361,22 @@ namespace CP_2021.ViewModels
 
         private void InitModel()
         {
-            //Model = new TreeGridModel();
+            Model = new TreeGridModel();
 
-            //foreach(ProductionTaskDB p in ProductionTasks)
-            //{
-            //    // Выборка корневых элементов
-            //    if(p.ParentId == null)
-            //    {
-            //        ProductionTask root = new ProductionTask(p);
-            //        if (root.TaskHasChildren(ProductionTasks))
-            //        {
-            //            root.AddChildren(ProductionTasks);
-            //            //AddChilderen(root);
-            //        }
-            //        Model.Add(root);
-            //    }
-            //}
+            foreach (ProductionTaskDB p in ProductionTasks)
+            {
+                // Выборка корневых элементов
+                if (p.MyParent == null)
+                {
+                    ProductionTask root = new ProductionTask(p);
+                    if (root.TaskHasChildren(ProductionTasks))
+                    {
+                        root.AddChildren(ProductionTasks);
+                        //AddChilderen(root);
+                    }
+                    Model.Add(root);
+                }
+            }
         }
 
         #endregion
@@ -406,7 +406,7 @@ namespace CP_2021.ViewModels
             User = user;
             Unit = unit;
             ProductionTasks = Unit.Tasks.Get().ToList();
-            InitModel();
+            Model = ProductionTask.InitModel(ProductionTasks);
         }
     }
 }

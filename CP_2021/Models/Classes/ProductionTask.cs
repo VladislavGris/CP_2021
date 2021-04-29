@@ -23,42 +23,79 @@ namespace CP_2021.Models.Classes
             this.Task = task;
         }
 
+        public static TreeGridModel InitModel(List<ProductionTaskDB> tasks)
+        {
+            TreeGridModel model = new TreeGridModel();
+            foreach(ProductionTaskDB task in tasks)
+            {
+                if(task.MyParent == null)
+                {
+                    ProductionTask root = new ProductionTask(task);
+                    if(task.ParentTo != null)
+                    {
+                        root.HasChildren = true;
+                        root.AddChildren(task);
+                    }
+                    model.Add(root);
+                }
+            }
+            return model;
+        }
+
         public bool TaskHasChildren(List<ProductionTaskDB> tasks)
         {
-            foreach (ProductionTaskDB t in tasks)
-            {
-                //if (this.Task.Id == t.ParentId)
-                //{
-                //    this.HasChildren = true;
-                //    return true;
-                //}
-            }
-            this.HasChildren = false;
-            return false;
+            //foreach (ProductionTaskDB t in tasks)
+            //{
+            //    if (this.Task.Id == t.ParentId)
+            //    {
+            //        this.HasChildren = true;
+            //        return true;
+            //    }
+            //}
+            //this.HasChildren = false;
+            //return false;
+            var task = tasks.Where(t => t.Id == this.Task.Id);
+            if (task.First().ParentTo != null)
+                return this.HasChildren = true;
+            return this.HasChildren = false;
         }
 
         public void AddChildren(List<ProductionTaskDB> tasks)
         {
-            foreach (ProductionTaskDB p in tasks)
+            foreach (ProductionTaskDB p in tasks) 
             {
-                //if (this.Task.Id == p.ParentId)
-                //{
-                //    ProductionTask child = new ProductionTask(p);
-                //    if (child.TaskHasChildren(tasks))
-                //    {
-                //        child.AddChildren(tasks);
-                //    }
-                //    this.Children.Add(child);
-                //}
+                if (this.Task.Id == p.MyParent.ParentId)
+                {
+                    ProductionTask child = new ProductionTask(p);
+                    if (child.TaskHasChildren(tasks))
+                    {
+                        child.AddChildren(tasks);
+                    }
+                    this.Children.Add(child);
+                }
             }
         }
 
-        public ProductionTask AddChildren(ProductionTaskDB child)
+        public void AddChildren(ProductionTaskDB task)
         {
-            ProductionTask task = new ProductionTask(child);
-            this.Children.Add(task);
-            return task;
+            foreach(var child in task.ParentTo)
+            {
+                ProductionTask cTask = new ProductionTask(child.Child);
+                if(child.Child.ParentTo != null)
+                {
+                    cTask.HasChildren = true;
+                    cTask.AddChildren(child.Child);
+                }
+                this.Children.Add(cTask);
+            }
         }
+
+        //public ProductionTask AddChildren(ProductionTaskDB child)
+        //{
+        //    ProductionTask task = new ProductionTask(child);
+        //    this.Children.Add(task);
+        //    return task;
+        //}
 
         public void Remove(ApplicationUnit unit)
         {
