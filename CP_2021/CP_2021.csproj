@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\ApplicationContext.cs~RFa197bc.TMP" />
     <None Remove="Resources\Images\add_child.png" />
     <None Remove="Resources\Images\add_children.png" />
     <None Remove="Resources\Images\add_root.png" />

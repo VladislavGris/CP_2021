@@ -21,6 +21,7 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<UserDB> _dbUsers;
         private BaseRepository<TaskDB> _userTasks;
         private BaseRepository<ReportDB> _reports;
+        private BaseRepository<HierarchyDB> _hierarchy;
 
 
         public ApplicationUnit(ApplicationContext context)
@@ -34,6 +35,7 @@ namespace CP_2021.Infrastructure.Units
             DBUsers.Get();
             UserTasks.Get();
             Reports.Get();
+            Hierarchy.Get();
         }
 
         public IRepository<ProductionTaskDB> Tasks
@@ -100,6 +102,15 @@ namespace CP_2021.Infrastructure.Units
             }
         }
 
+        public IRepository<HierarchyDB> Hierarchy
+        {
+            get
+            {
+                return _hierarchy ?? (_hierarchy = new BaseRepository<HierarchyDB>(_context));
+            }
+        }
+
+        
         public void Commit()
         {
             _context.SaveChanges();

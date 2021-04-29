@@ -18,6 +18,7 @@ namespace CP_2021.Infrastructure.Units.Base
         IRepository<UserDB> DBUsers { get; }
         IRepository<TaskDB> UserTasks { get; }
         IRepository<ReportDB> Reports { get; }
+        IRepository<HierarchyDB> Hierarchy { get; }
         void Commit();
     }
 }

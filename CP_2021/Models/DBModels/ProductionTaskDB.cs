@@ -41,10 +41,8 @@ namespace CP_2021.Models.DBModels
         [Column("Note", TypeName = "nvarchar(MAX)")]
         public string Note { get; set; }
 
-        [Column("Parent_ID")]
-        public int? ParentId { get; set; }
-        public ProductionTaskDB Parent { get; set; }
-
+        public ICollection<HierarchyDB> Children { get; set; }
+        public ICollection<HierarchyDB> ParentTo { get; set; }
         [Required]
         [Column("Completion", TypeName = "bit")]
         public bool Completion { get; set; }
@@ -59,7 +57,7 @@ namespace CP_2021.Models.DBModels
         public ProductionTaskDB(string name, int? parentId)
         {
             Name = name;
-            ParentId = parentId;
+            //ParentId = parentId;
             Complectation = new ComplectationDB();
             Giving = new GivingDB();
             InProduction = new InProductionDB();

@@ -12,25 +12,6 @@ namespace CP_2021.Data
 {
     class ApplicationContext : DbContext
     {
-        #region DBSets
-
-        //public DbSet<GivingDB> Givings { get; set; }
-
-        //public DbSet<ProductionTaskDB> ProductionTasks { get; set; }
-
-        //public DbSet<ComplectationDB> Complectations { get; set; }
-
-        //public DbSet<InProductionDB> InProductions { get; set; }
-
-        //public DbSet<ManufactureDB> Manufactures { get; set; }
-
-        //public DbSet<UserDB> Users { get; set; }
-
-        //public DbSet<TaskDB> Tasks { get; set; }
-
-        //public DbSet<ReportDB> Reports { get; set; }
-
-        #endregion
 
         public ApplicationContext() : base() {
             //Database.EnsureDeleted();
@@ -53,7 +34,9 @@ namespace CP_2021.Data
             modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             #endregion
+            modelBuilder.Entity<HierarchyDB>();
             modelBuilder.Entity<UserDB>().HasData(new UserDB("vlad", "1337", "Владислав", "Гришкевич") { Id = -1, Position = 2 });
+            modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Parent).WithMany(t => t.ParentTo).HasForeignKey(h => h.ParentId).OnDelete(DeleteBehavior.NoAction);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

@@ -27,11 +27,11 @@ namespace CP_2021.Models.Classes
         {
             foreach (ProductionTaskDB t in tasks)
             {
-                if (this.Task.Id == t.ParentId)
-                {
-                    this.HasChildren = true;
-                    return true;
-                }
+                //if (this.Task.Id == t.ParentId)
+                //{
+                //    this.HasChildren = true;
+                //    return true;
+                //}
             }
             this.HasChildren = false;
             return false;
@@ -41,15 +41,15 @@ namespace CP_2021.Models.Classes
         {
             foreach (ProductionTaskDB p in tasks)
             {
-                if (this.Task.Id == p.ParentId)
-                {
-                    ProductionTask child = new ProductionTask(p);
-                    if (child.TaskHasChildren(tasks))
-                    {
-                        child.AddChildren(tasks);
-                    }
-                    this.Children.Add(child);
-                }
+                //if (this.Task.Id == p.ParentId)
+                //{
+                //    ProductionTask child = new ProductionTask(p);
+                //    if (child.TaskHasChildren(tasks))
+                //    {
+                //        child.AddChildren(tasks);
+                //    }
+                //    this.Children.Add(child);
+                //}
             }
         }
 
@@ -87,12 +87,12 @@ namespace CP_2021.Models.Classes
             ProductionTask task = new ProductionTask(dbTask);
             if(parent == null)
             {
-                dbTask.ParentId = null;
+                //dbTask.ParentId = null;
                 model.Add(task);
             }
             else
             {
-                dbTask.ParentId = parent.Task.Id;
+                //dbTask.ParentId = parent.Task.Id;
                 parent.Children.Add(task);
             }
             unit.Tasks.Insert(dbTask);

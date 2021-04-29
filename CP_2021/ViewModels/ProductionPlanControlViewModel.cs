@@ -101,7 +101,7 @@ namespace CP_2021.ViewModels
 
         public ICommand ExpandAllCommand { get; }
 
-        private bool CanExpandAllCommandExecute(object p) => true;
+        private bool CanExpandAllCommandExecute(object p) => Model!=null;
 
         private void OnExpandAllCommandExecuted(object p)
         {
@@ -117,7 +117,7 @@ namespace CP_2021.ViewModels
 
         public ICommand RollUpAllCommand { get; }
 
-        private bool CanRollUpAllCommandExecute(object p) => true;
+        private bool CanRollUpAllCommandExecute(object p) => Model != null;
 
         private void OnRollUpAllCommandExecuted(object p)
         {
@@ -137,18 +137,18 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask?.Task.ParentId);
-            Unit.Tasks.Insert(dbTask);
-            Unit.Commit();
-            ProductionTasks = Unit.Tasks.Get().ToList();
-            if (SelectedTask?.Task.ParentId == null || SelectedTask == null)
-            {
-                SelectedTask = ProductionTask.AddRoot(Model, dbTask);
-            }
-            else
-            {
-                SelectedTask = ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
-            }
+            //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask?.Task.ParentId);
+            //Unit.Tasks.Insert(dbTask);
+            //Unit.Commit();
+            //ProductionTasks = Unit.Tasks.Get().ToList();
+            //if (SelectedTask?.Task.ParentId == null || SelectedTask == null)
+            //{
+            //    SelectedTask = ProductionTask.AddRoot(Model, dbTask);
+            //}
+            //else
+            //{
+            //    SelectedTask = ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
+            //}
         }
 
         #endregion
@@ -174,16 +174,16 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.Id);
-            var guid = Guid.NewGuid();
-            Unit.Tasks.Insert(dbTask);
-            Unit.Commit();
-            ProductionTasks = Unit.Tasks.Get().ToList();
-            ProductionTask task = new ProductionTask(dbTask);
-            SelectedTask.Children.Add(task);
-            task.Parent.HasChildren = true;
-            task.Parent.IsExpanded = true;
-            SelectedTask = task;
+            //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.Id);
+            //var guid = Guid.NewGuid();
+            //Unit.Tasks.Insert(dbTask);
+            //Unit.Commit();
+            //ProductionTasks = Unit.Tasks.Get().ToList();
+            //ProductionTask task = new ProductionTask(dbTask);
+            //SelectedTask.Children.Add(task);
+            //task.Parent.HasChildren = true;
+            //task.Parent.IsExpanded = true;
+            //SelectedTask = task;
         }
 
         #endregion
@@ -196,26 +196,26 @@ namespace CP_2021.ViewModels
 
         private void OnDeleteProductionTaskCommandExecuted(object p)
         {
-            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            SelectedTask.Remove(Unit);
-            if (parent!=null)
-            {
-                SelectedTask = parent;
-            }
-            else if(Model.Count!=0)
-            {
-                SelectedTask = (ProductionTask)Model.Last();
-            }
-            else
-            {
-                SelectedTask = null;
-            }
-            Unit.Commit();
-            if (parent?.Children.Count == 0)
-            {
-                parent.HasChildren = false;
-                parent.IsExpanded = false;
-            }
+            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            //SelectedTask.Remove(Unit);
+            //if (parent!=null)
+            //{
+            //    SelectedTask = parent;
+            //}
+            //else if(Model.Count!=0)
+            //{
+            //    SelectedTask = (ProductionTask)Model.Last();
+            //}
+            //else
+            //{
+            //    SelectedTask = null;
+            //}
+            //Unit.Commit();
+            //if (parent?.Children.Count == 0)
+            //{
+            //    parent.HasChildren = false;
+            //    parent.IsExpanded = false;
+            //}
         }
 
         #endregion
@@ -224,32 +224,32 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelUpCommand { get; }
 
-        private bool CanLevelUpCommandExecute(object p) => SelectedTask != null && SelectedTask?.Task.ParentId != null;
+        private bool CanLevelUpCommandExecute(object p) => SelectedTask != null /*&& SelectedTask?.Task.ParentId != null*/;
 
         private void OnLevelUpCommandExecuted(object p)
         {
-            SelectedTask.Task.ParentId = ((ProductionTask)SelectedTask.Parent).Task.ParentId;
-            Unit.Tasks.Update(SelectedTask.Task);
-            Unit.Commit();
+            //SelectedTask.Task.ParentId = ((ProductionTask)SelectedTask.Parent).Task.ParentId;
+            //Unit.Tasks.Update(SelectedTask.Task);
+            //Unit.Commit();
 
-            SelectedTask.IsExpanded = false;
-            ProductionTask task = SelectedTask.Clone();
-            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            if(((ProductionTask)SelectedTask.Parent).Task.ParentId == null)
-            {
-                SelectedTask.Parent.Children.Remove(SelectedTask);
-                Model.Add(task);
-            }
-            else
-            {
-                SelectedTask.Parent.Children.Remove(SelectedTask);
-                SelectedTask.Parent.Parent.Children.Add(task);
-            }
-            if (parent.Children.Count == 0)
-            {
-                parent.HasChildren = false;
-                parent.IsExpanded = false;
-            }
+            //SelectedTask.IsExpanded = false;
+            //ProductionTask task = SelectedTask.Clone();
+            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            //if(((ProductionTask)SelectedTask.Parent).Task.ParentId == null)
+            //{
+            //    SelectedTask.Parent.Children.Remove(SelectedTask);
+            //    Model.Add(task);
+            //}
+            //else
+            //{
+            //    SelectedTask.Parent.Children.Remove(SelectedTask);
+            //    SelectedTask.Parent.Parent.Children.Add(task);
+            //}
+            //if (parent.Children.Count == 0)
+            //{
+            //    parent.HasChildren = false;
+            //    parent.IsExpanded = false;
+            //}
         }
 
         #endregion
@@ -262,30 +262,30 @@ namespace CP_2021.ViewModels
 
         private void OnLevelDownCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
-            Unit.Tasks.Insert(dbTask);
-            Unit.Commit();
+            //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
+            //Unit.Tasks.Insert(dbTask);
+            //Unit.Commit();
 
-            SelectedTask.Task.ParentId = dbTask.Id;
-            Unit.Tasks.Update(SelectedTask.Task);
-            Unit.Commit();
+            //SelectedTask.Task.ParentId = dbTask.Id;
+            //Unit.Tasks.Update(SelectedTask.Task);
+            //Unit.Commit();
 
-            ProductionTask task = new ProductionTask(dbTask);
-            ProductionTask childTask = SelectedTask.Clone();
+            //ProductionTask task = new ProductionTask(dbTask);
+            //ProductionTask childTask = SelectedTask.Clone();
 
-            if (dbTask.ParentId == null)
-            {
-                Model.Add(task);
-                Model.Remove(SelectedTask);
-            }
-            else
-            {
-                SelectedTask.Parent.Children.Add(task);
-                SelectedTask.Parent.Children.Remove(SelectedTask);
-            }
-            task.Children.Add(childTask);
-            task.HasChildren = true;
-            task.IsExpanded = false;
+            //if (dbTask.ParentId == null)
+            //{
+            //    Model.Add(task);
+            //    Model.Remove(SelectedTask);
+            //}
+            //else
+            //{
+            //    SelectedTask.Parent.Children.Add(task);
+            //    SelectedTask.Parent.Children.Remove(SelectedTask);
+            //}
+            //task.Children.Add(childTask);
+            //task.HasChildren = true;
+            //task.IsExpanded = false;
         }
 
         #endregion
@@ -325,8 +325,8 @@ namespace CP_2021.ViewModels
 
         private void OnPasteTaskCommandExecuted(object p)
         {
-            TaskToCopy.AddTasksToDatabase(Unit,Model, (ProductionTask)SelectedTask.Parent);
-            Unit.Commit();
+            //TaskToCopy.AddTasksToDatabase(Unit,Model, (ProductionTask)SelectedTask.Parent);
+            //Unit.Commit();
         }
 
         #endregion
@@ -361,22 +361,22 @@ namespace CP_2021.ViewModels
 
         private void InitModel()
         {
-            Model = new TreeGridModel();
+            //Model = new TreeGridModel();
 
-            foreach(ProductionTaskDB p in ProductionTasks)
-            {
-                // Выборка корневых элементов
-                if(p.ParentId == null)
-                {
-                    ProductionTask root = new ProductionTask(p);
-                    if (root.TaskHasChildren(ProductionTasks))
-                    {
-                        root.AddChildren(ProductionTasks);
-                        //AddChilderen(root);
-                    }
-                    Model.Add(root);
-                }
-            }
+            //foreach(ProductionTaskDB p in ProductionTasks)
+            //{
+            //    // Выборка корневых элементов
+            //    if(p.ParentId == null)
+            //    {
+            //        ProductionTask root = new ProductionTask(p);
+            //        if (root.TaskHasChildren(ProductionTasks))
+            //        {
+            //            root.AddChildren(ProductionTasks);
+            //            //AddChilderen(root);
+            //        }
+            //        Model.Add(root);
+            //    }
+            //}
         }
 
         #endregion
