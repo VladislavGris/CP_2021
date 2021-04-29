@@ -137,18 +137,20 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask?.Task.ParentId);
-            //Unit.Tasks.Insert(dbTask);
-            //Unit.Commit();
-            //ProductionTasks = Unit.Tasks.Get().ToList();
-            //if (SelectedTask?.Task.ParentId == null || SelectedTask == null)
-            //{
-            //    SelectedTask = ProductionTask.AddRoot(Model, dbTask);
-            //}
-            //else
-            //{
-            //    SelectedTask = ((ProductionTask)SelectedTask.Parent).AddChildren(dbTask);
-            //}
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            ProductionTask task = new ProductionTask(dbTask);
+            if (SelectedTask?.Task.MyParent != null)
+            {
+                dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
+                SelectedTask.Parent.Children.Add(task);
+            }
+            else
+            {
+                Model.Add(task);
+            }
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+            SelectedTask = task;
         }
 
         #endregion
@@ -174,16 +176,15 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
-            //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.Id);
-            //var guid = Guid.NewGuid();
-            //Unit.Tasks.Insert(dbTask);
-            //Unit.Commit();
-            //ProductionTasks = Unit.Tasks.Get().ToList();
-            //ProductionTask task = new ProductionTask(dbTask);
-            //SelectedTask.Children.Add(task);
-            //task.Parent.HasChildren = true;
-            //task.Parent.IsExpanded = true;
-            //SelectedTask = task;
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            dbTask.MyParent = new HierarchyDB(SelectedTask.Task, dbTask);
+            ProductionTask task = new ProductionTask(dbTask);
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+            SelectedTask.Children.Add(task);
+            SelectedTask.HasChildren = true;
+            SelectedTask.IsExpanded = true;
+            SelectedTask = task;
         }
 
         #endregion

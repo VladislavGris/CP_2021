@@ -42,7 +42,7 @@ namespace CP_2021.Models.DBModels
         public string Note { get; set; }
 
         public HierarchyDB MyParent { get; set; }
-        public ICollection<HierarchyDB> ParentTo { get; set; }
+        public List<HierarchyDB> ParentTo { get; set; }
         [Required]
         [Column("Completion", TypeName = "bit")]
         public bool Completion { get; set; }
@@ -54,10 +54,9 @@ namespace CP_2021.Models.DBModels
 
         public ProductionTaskDB() { }
 
-        public ProductionTaskDB(string name, int? parentId)
+        public ProductionTaskDB(string name)
         {
             Name = name;
-            //ParentId = parentId;
             Complectation = new ComplectationDB();
             Giving = new GivingDB();
             InProduction = new InProductionDB();

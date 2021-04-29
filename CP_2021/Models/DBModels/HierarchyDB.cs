@@ -17,5 +17,13 @@ namespace CP_2021.Models.DBModels
         [Required]
         public int ChildId { get; set; }
         public ProductionTaskDB Child { get; set; }
+
+        public HierarchyDB() { }
+
+        public HierarchyDB(ProductionTaskDB parent, ProductionTaskDB child)
+        {
+            Parent = parent;
+            Child = child;
+        }
     }
 }
