@@ -42,6 +42,17 @@ namespace CP_2021.Models.Classes
             return model;
         }
 
+        public static ProductionTask InitTask(ProductionTaskDB dbTask)
+        {
+            ProductionTask root = new ProductionTask(dbTask);
+            if(dbTask.ParentTo!=null && dbTask.ParentTo?.Count != 0)
+            {
+                root.HasChildren = true;
+                root.AddChildren(dbTask);
+            }
+            return root;
+        }
+
         public void AddChildren(ProductionTaskDB task)
         {
             foreach(var child in task.ParentTo)

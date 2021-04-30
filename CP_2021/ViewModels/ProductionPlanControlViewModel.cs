@@ -231,35 +231,26 @@ namespace CP_2021.ViewModels
 
         private void OnLevelUpCommandExecuted(object p)
         {
-            SelectedTask.Task.MyParent.Parent = SelectedTask.Task.MyParent.Parent.MyParent?.Parent;
-            if (SelectedTask.Task.MyParent.Parent == null)
-            {
-                HierarchyDB hierarchyNode = SelectedTask.Task.MyParent;
-                SelectedTask.Task.MyParent = null;
-                Unit.Hierarchy.Delete(hierarchyNode);
-            }
-            Unit.Tasks.Update(SelectedTask.Task);
-            Unit.Commit();
-
-            SelectedTask.IsExpanded = false;
-            ProductionTask task = SelectedTask.Clone();
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            if (((ProductionTask)SelectedTask.Parent).Task.MyParent == null)
+            ProductionTask task = ProductionTask.InitTask(SelectedTask.Task);
+            SelectedTask.IsExpanded = false;
+            parent.Children.Remove(SelectedTask);
+            if (parent.Parent == null)
             {
-                SelectedTask.Parent.Children.Remove(SelectedTask);
                 Model.Add(task);
+                task.Task.MyParent = null;
             }
             else
             {
-                SelectedTask.Parent.Children.Remove(SelectedTask);
                 parent.Parent.Children.Add(task);
+                task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
             }
-            if (parent.Children.Count == 0)
+            if(parent.Children.Count == 0)
             {
-                parent.HasChildren = false;
                 parent.IsExpanded = false;
+                parent.HasChildren = false;
             }
-            SelectedTask = task;
+            Unit.Commit();
         }
 
         #endregion
@@ -272,6 +263,23 @@ namespace CP_2021.ViewModels
 
         private void OnLevelDownCommandExecuted(object p)
         {
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            if (SelectedTask.Task.MyParent != null)
+            {
+                dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
+            }
+            if(SelectedTask.Task.MyParent == null)
+            {
+                SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
+            }
+            else
+            {
+                SelectedTask.Task.MyParent.Parent = dbTask;
+            }
+            
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+
             //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
             //Unit.Tasks.Insert(dbTask);
             //Unit.Commit();
