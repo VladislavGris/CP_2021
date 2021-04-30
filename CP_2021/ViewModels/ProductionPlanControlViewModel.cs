@@ -251,6 +251,7 @@ namespace CP_2021.ViewModels
                 parent.HasChildren = false;
             }
             Unit.Commit();
+            SelectedTask = task;
         }
 
         #endregion
@@ -264,46 +265,29 @@ namespace CP_2021.ViewModels
         private void OnLevelDownCommandExecuted(object p)
         {
             ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            ProductionTask task = new ProductionTask(dbTask);
+            ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+
             if (SelectedTask.Task.MyParent != null)
             {
                 dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
-            }
-            if(SelectedTask.Task.MyParent == null)
-            {
-                SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
+                SelectedTask.Task.MyParent.Parent = dbTask;
+                parent.Children.Add(task);
+                parent.Children.Remove(SelectedTask);
             }
             else
             {
-                SelectedTask.Task.MyParent.Parent = dbTask;
+                SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
+                Model.Add(task);
+                Model.Remove(SelectedTask);
             }
-            
+            task.Children.Add(downTask);
+            task.HasChildren = true;
+            task.IsExpanded = true;
             Unit.Tasks.Insert(dbTask);
             Unit.Commit();
-
-            //ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача", SelectedTask.Task.ParentId);
-            //Unit.Tasks.Insert(dbTask);
-            //Unit.Commit();
-
-            //SelectedTask.Task.ParentId = dbTask.Id;
-            //Unit.Tasks.Update(SelectedTask.Task);
-            //Unit.Commit();
-
-            //ProductionTask task = new ProductionTask(dbTask);
-            //ProductionTask childTask = SelectedTask.Clone();
-
-            //if (dbTask.ParentId == null)
-            //{
-            //    Model.Add(task);
-            //    Model.Remove(SelectedTask);
-            //}
-            //else
-            //{
-            //    SelectedTask.Parent.Children.Add(task);
-            //    SelectedTask.Parent.Children.Remove(SelectedTask);
-            //}
-            //task.Children.Add(childTask);
-            //task.HasChildren = true;
-            //task.IsExpanded = false;
+            SelectedTask = downTask;
         }
 
         #endregion
