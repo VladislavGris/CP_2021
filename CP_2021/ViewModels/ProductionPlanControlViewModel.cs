@@ -327,8 +327,7 @@ namespace CP_2021.ViewModels
 
         private void OnPasteTaskCommandExecuted(object p)
         {
-            //TaskToCopy.AddTasksToDatabase(Unit,Model, (ProductionTask)SelectedTask.Parent);
-            //Unit.Commit();
+            TaskToCopy.AddTasksToDatabase(Unit, Model, (ProductionTask)SelectedTask.Parent);
         }
 
         #endregion

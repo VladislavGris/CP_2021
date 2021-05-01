@@ -94,13 +94,12 @@ namespace CP_2021.Models.Classes
             ProductionTask task = new ProductionTask(dbTask);
             if(parent == null)
             {
-                //dbTask.ParentId = null;
-                model.Add(task);
+                Model.Add(task);
             }
             else
             {
-                //dbTask.ParentId = parent.Task.Id;
                 parent.Children.Add(task);
+                dbTask.MyParent = new HierarchyDB(parent.Task, dbTask);
             }
             unit.Tasks.Insert(dbTask);
             unit.Commit();
@@ -109,33 +108,14 @@ namespace CP_2021.Models.Classes
                 task.HasChildren = true;
                 foreach(ProductionTask child in this.Children)
                 {
-                    child.AddTasksToDatabase(unit,model, task);
+                    child.AddTasksToDatabase(unit, model, task);
                 }
             }
-        }
-
-        public bool IsRootElement(TreeGridModel model)
-        {
-            foreach(TreeGridElement t in model)
-            {
-                if (t.Equals(this))
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public ProductionTask Clone()
         {
             return (ProductionTask) this.MemberwiseClone();
-        }
-
-        public static ProductionTask AddRoot(TreeGridModel model, ProductionTaskDB task)
-        {
-            ProductionTask newRoot = new ProductionTask(task);
-            model.Add(newRoot);
-            return newRoot;
         }
     }
 }
