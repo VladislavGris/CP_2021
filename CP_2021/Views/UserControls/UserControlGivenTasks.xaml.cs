@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CP_2021.Views.UserControls
 {
     /// <summary>
-    /// Логика взаимодействия для UserControlMyTasks.xaml
+    /// Логика взаимодействия для UserControlGivenTasks.xaml
     /// </summary>
-    public partial class UserControlMyTasks : UserControl
+    public partial class UserControlGivenTasks : UserControl
     {
-        public UserControlMyTasks()
+        public UserControlGivenTasks()
         {
             InitializeComponent();
         }

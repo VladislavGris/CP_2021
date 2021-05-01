@@ -146,6 +146,12 @@ namespace CP_2021.ViewModels
                 case "ItemSettings":
                     ContentContainerContent = new UserControlSettings();
                     break;
+                case "ItemGivenTasks":
+                    ContentContainerContent = new UserControlGivenTasks();
+                    break;
+                case "ItemAdministrativePannel":
+                    ContentContainerContent = new UserControlAdministrativePannel();
+                    break;
                 default:
                     break;
             }

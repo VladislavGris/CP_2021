@@ -115,7 +115,7 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemPersonalTasks" Height="60"
+                    <ListViewItem x:Name="ItemGivenTasks" Height="60"
                                   Visibility="{Binding User.Position, Converter={StaticResource GivenTaskConverter}}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_Thumbtack"
