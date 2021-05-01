@@ -11,6 +11,9 @@
     <convert:CanRoleEditConverter x:Key="EditableRole"/>
     <convert:PannelVisibilityConverter x:Key="PannelVisibilityConverter"/>
     <convert:CanRoleEditCheckboxConverter x:Key="EditCheckboxConverter"/>
+    <convert:AdministrativePannelVisibilityConverter x:Key="AdministrativeConverter"/>
+    <convert:GivenTasksVisibilityConverter x:Key="GivenTaskConverter"/>
+    <convert:MyTasksVisibilityConverter x:Key="MyTasksConverter"/>
 
     <!--Styles-->
 

@@ -9,7 +9,7 @@
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         x:Class="CP_2021.Views.Windows.ProductionPlan"
         mc:Ignorable="d"
-        Title="Company Planner" Height="720" Width="1280" MinHeight="450" MinWidth="500" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
+        Title="Company Planner" Height="720" Width="1280" MinHeight="550" MinWidth="570" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
         WindowState="Maximized">
     
     <Window.DataContext>
@@ -115,11 +115,30 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemTasks" Height="60">
+                    <ListViewItem x:Name="ItemPersonalTasks" Height="60"
+                                  Visibility="{Binding User.Position, Converter={StaticResource GivenTaskConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="Solid_Thumbtack"
+                                             Style="{StaticResource TooltipIconStyle}"/>
+                            <TextBlock Text="Выданные задачи"
+                                       Style="{StaticResource TooltipTextblockStyle}"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="ItemTasks" Height="60"
+                                  Visibility="{Binding User.Position, Converter={StaticResource MyTasksConverter}}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_CheckSquare"
                                              Style="{StaticResource TooltipIconStyle}"/>
-                            <TextBlock Text="Задачи"
+                            <TextBlock Text="Мои задачи"
+                                       Style="{StaticResource TooltipTextblockStyle}"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem x:Name="ItemAdministrativePannel" Height="60"
+                                  Visibility="{Binding User.Position, Converter={StaticResource AdministrativeConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="Solid_PeopleArrows"
+                                             Style="{StaticResource TooltipIconStyle}"/>
+                            <TextBlock Text="Администрирование"
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
