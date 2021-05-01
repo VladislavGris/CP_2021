@@ -150,7 +150,7 @@ namespace CP_2021.ViewModels
                     ContentContainerContent = new UserControlGivenTasks();
                     break;
                 case "ItemAdministrativePannel":
-                    ContentContainerContent = new UserControlAdministrativePannel();
+                    InitAdministrativePannelControl();
                     break;
                 default:
                     break;
@@ -181,6 +181,13 @@ namespace CP_2021.ViewModels
             UserControlProductionPlan control = new UserControlProductionPlan();
             control.DataContext = new ProductionPlanControlViewModel(Unit, User);
             ContentContainerContent = control;
+        }
+
+        private void InitAdministrativePannelControl()
+        {
+            UserControlAdministrativePannel pannel = new UserControlAdministrativePannel();
+            pannel.DataContext = new AdministrationPannelViewModel(Unit, User);
+            ContentContainerContent = pannel;
         }
 
         #endregion

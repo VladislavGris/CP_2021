@@ -14,6 +14,7 @@
     <convert:AdministrativePannelVisibilityConverter x:Key="AdministrativeConverter"/>
     <convert:GivenTasksVisibilityConverter x:Key="GivenTaskConverter"/>
     <convert:MyTasksVisibilityConverter x:Key="MyTasksConverter"/>
+    <convert:PositionConverter x:Key="PositionConverter"/>
 
     <!--Styles-->
 
@@ -74,7 +75,6 @@
         <Setter Property="CanUserReorderColumns" Value="False"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
-        <Setter Property="CanUserResizeColumns" Value="False"/>
         <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
@@ -137,7 +137,17 @@
             </Setter.Value>
         </Setter>
     </Style>
-
+    
+    <!-- DatagirdView -->
+    <Style x:Key="GridViewHeaderStyle"
+           TargetType="GridViewColumnHeader">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+    <Style TargetType="ListViewItem">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    </Style>
+    
     <!--For Icons-->
     <Style x:Key="TooltipIconStyle" 
            TargetType="fa:ImageAwesome">

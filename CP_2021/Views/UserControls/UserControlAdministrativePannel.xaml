@@ -4,9 +4,55 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
+             xmlns:vm="clr-namespace:CP_2021.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="Gray">
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:AdministrationPannelViewModel/>
+    </UserControl.DataContext>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"
+              Background="{StaticResource BackgroundBrush}">
+            <TextBlock Text="Зарегистрированные пользователи"
+                       Foreground="{StaticResource ForegroundBrush}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="20"/>
+        </Grid>
+        <ListView ItemsSource="{Binding Users}"
+                  Grid.Row="1"
+                  SelectedItem="{Binding SelectedItem}">
+            <ListView.View>
+                <GridView AllowsColumnReorder="False"
+                          ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
+                    <GridViewColumn DisplayMemberBinding="{Binding Name}">Имя</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Surname}">Фамилия</GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding Position, Converter={StaticResource PositionConverter}}">Права</GridViewColumn>
+                </GridView>
+            </ListView.View>
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Расширить права"
+                              Command="{Binding RisePositionCommand, UpdateSourceTrigger=PropertyChanged}">
+                        <MenuItem.Icon>
+                            <fa:ImageAwesome Icon="Solid_ArrowUp"
+                                             Foreground="{StaticResource ForegroundBrush}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Ограничить права"
+                              Command="{Binding DownPositionCommand, UpdateSourceTrigger=PropertyChanged}">
+                        <MenuItem.Icon>
+                            <fa:ImageAwesome Icon="Solid_ArrowDown"
+                                             Foreground="{StaticResource ForegroundBrush}"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
     </Grid>
 </UserControl>
