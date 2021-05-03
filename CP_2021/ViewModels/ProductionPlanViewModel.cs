@@ -147,7 +147,7 @@ namespace CP_2021.ViewModels
                     ContentContainerContent = new UserControlSettings();
                     break;
                 case "ItemGivenTasks":
-                    ContentContainerContent = new UserControlGivenTasks();
+                    InitGivenTasksControl();
                     break;
                 case "ItemAdministrativePannel":
                     InitAdministrativePannelControl();
@@ -188,6 +188,13 @@ namespace CP_2021.ViewModels
             UserControlAdministrativePannel pannel = new UserControlAdministrativePannel();
             pannel.DataContext = new AdministrationPannelViewModel(Unit, User);
             ContentContainerContent = pannel;
+        }
+
+        private void InitGivenTasksControl()
+        {
+            UserControlGivenTasks tasks = new UserControlGivenTasks();
+            tasks.DataContext = new GivenTasksViewModel(Unit, User);
+            ContentContainerContent = tasks;
         }
 
         #endregion

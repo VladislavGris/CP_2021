@@ -54,6 +54,15 @@ namespace CP_2021.Infrastructure.Repositories.Base
             dbSet.Add(entity);
         }
 
+        public void Refresh()
+        {
+            foreach(var entity in dbSet)
+            {
+                //context.Entry<T>(entity).Reload();
+                
+            }
+        }
+
         public virtual void Update(T entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);

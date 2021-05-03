@@ -4,9 +4,41 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
+             xmlns:vm="clr-namespace:CP_2021.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="Blue">
-            
+    <UserControl.DataContext>
+        <vm:MyTasksViewModel/>
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"
+              Background="{StaticResource BackgroundBrush}">
+            <TextBlock Text="Мои задачи"
+                       Foreground="{StaticResource ForegroundBrush}"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="24"/>
+        </Grid>
+        <ListView Grid.Row="1"
+                  Foreground="White"
+                  Background="{StaticResource ForegroundBrush}"
+                  ItemsSource="{Binding Tasks}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding Header}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding CompleteDate}"/>
+                            <TextBlock Text="{Binding Report.To.Surname}"/>
+                            <TextBlock Text="{Binding Report.To.Name}"/>
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </UserControl>

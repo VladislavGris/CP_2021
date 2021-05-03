@@ -55,6 +55,7 @@
         <Setter Property="Background" Value="#6393C2"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Margin" Value="60 10"/>
+        <Setter Property="Cursor" Value="Hand"/>
     </Style>
     <Style x:Key="RegisterButton"
            TargetType="Button"
@@ -86,7 +87,8 @@
                         BorderBrush="Transparent"
                         WindowChrome.IsHitTestVisibleInChrome="True"
                         Height="30"
-                        Width="30">
+                        Width="20"
+                                    Cursor="Hand">
                                 <Button.Content>
                                     <Image>
                                         <Image.Source>
@@ -104,13 +106,13 @@
                             <Button Margin="0 2 2 0"
                         WindowChrome.IsHitTestVisibleInChrome="True"
                         Height="30"
-                        Width="30"
-                        Style="{StaticResource ExitButton}">
+                        Width="20"
+                        Style="{StaticResource ExitButton}"
+                                    Cursor="Hand">
                                 <Button.Command>
                                     <commands:CloseApplicationCommand/>
                                 </Button.Command>
                                 <Button.Content>
-                                    <!--<fa:ImageAwesome Icon="Regular_WindowClose"/>-->
                                     <Image>
                                         <Image.Source>
                                             <BitmapImage UriSource="/Resources/Images/close.png"/>

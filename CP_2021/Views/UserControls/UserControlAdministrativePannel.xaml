@@ -22,11 +22,13 @@
                        Foreground="{StaticResource ForegroundBrush}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       FontSize="20"/>
+                       FontSize="24"/>
         </Grid>
         <ListView ItemsSource="{Binding Users}"
                   Grid.Row="1"
-                  SelectedItem="{Binding SelectedItem}">
+                  SelectedItem="{Binding SelectedItem}"
+                  Background="{StaticResource ForegroundBrush}"
+                  Foreground="White">
             <ListView.View>
                 <GridView AllowsColumnReorder="False"
                           ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">

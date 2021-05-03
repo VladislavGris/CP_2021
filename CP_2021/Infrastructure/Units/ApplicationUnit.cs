@@ -115,5 +115,10 @@ namespace CP_2021.Infrastructure.Units
         {
             _context.SaveChanges();
         }
+
+        public void Refresh()
+        {
+            
+        }
     }
 }

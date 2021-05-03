@@ -4,9 +4,92 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
+             xmlns:vm="clr-namespace:CP_2021.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="Black">
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:GivenTasksViewModel/>
+    </UserControl.DataContext>
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0"
+              Background="{StaticResource BackgroundBrush}">
+            <TextBlock Foreground="{StaticResource ForegroundBrush}"
+                       Text="Порученные задачи"
+                       FontSize="24"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
+        </Grid>
+        <ListView ItemsSource="{Binding Tasks}"
+                  Grid.Row="1"
+                  Background="{StaticResource ForegroundBrush}"
+                  Foreground="White">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Header}"/>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <Button Panel.ZIndex="1"
+                Grid.Row="1"
+                Width="50"
+                Height="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0 0 20 85"
+                ToolTip="Добавить задачу"
+                Command="{Binding OpenAddTaskWindow}">
+            <Button.Content >
+                <fa:ImageAwesome Icon="Solid_Plus"
+                                 Foreground="{StaticResource ForegroundBrush}"
+                                 Width="30"/>
+            </Button.Content>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse Stroke="White">
+                            <Ellipse.Fill>
+                                <SolidColorBrush Color="#31577e"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <ContentPresenter x:Name="content"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
+        <Button Panel.ZIndex="1"
+                Grid.Row="1"
+                Width="50"
+                Height="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0 0 20 30"
+                ToolTip="Удалить задачу">
+            <Button.Content >
+                <fa:ImageAwesome Icon="Solid_Minus"
+                                 Foreground="{StaticResource ForegroundBrush}"
+                                 Width="30"/>
+            </Button.Content>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse Stroke="White">
+                            <Ellipse.Fill>
+                                <SolidColorBrush Color="#31577e"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <ContentPresenter x:Name="content"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
     </Grid>
 </UserControl>

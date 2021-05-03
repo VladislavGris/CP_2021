@@ -300,6 +300,7 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateModelCommandExecuted(object p)
         {
+            Unit.Refresh();
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
         }

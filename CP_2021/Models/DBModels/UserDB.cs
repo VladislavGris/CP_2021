@@ -40,5 +40,10 @@ namespace CP_2021.Models.DBModels
             Name = name;
             Surname = surname;
         }
+
+        public override string ToString()
+        {
+            return $"{Surname} {Name}";
+        }
     }
 }

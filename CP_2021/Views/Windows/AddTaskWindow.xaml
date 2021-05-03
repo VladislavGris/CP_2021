@@ -1,0 +1,84 @@
+﻿<Window x:Class="CP_2021.Views.Windows.AddTaskWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CP_2021.Views.Windows"
+        xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
+        xmlns:vm="clr-namespace:CP_2021.ViewModels"
+        mc:Ignorable="d"
+        Title="AddTaskWindow" Height="370" Width="300" WindowStyle="None"
+        ResizeMode="NoResize"
+        Style="{StaticResource WindowStyle}"
+        Background="{StaticResource BackgroundBrush}"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <vm:AddTaskWindowViewModel/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock Foreground="White"
+                       Text="Добавить задачу"
+                       HorizontalAlignment="Center"
+                       FontSize="20"/>
+            <Button Margin="0 2 2 0"
+                        WindowChrome.IsHitTestVisibleInChrome="True"
+                        Height="30"
+                        Width="20"
+                        Style="{StaticResource ExitButton}"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                <Button.Content>
+                    <Image>
+                        <Image.Source>
+                            <BitmapImage UriSource="/Resources/Images/close.png"/>
+                        </Image.Source>
+                    </Image>
+                </Button.Content>
+            </Button>
+        </Grid>
+        <StackPanel Background="{StaticResource BackgroundBrush}"
+                    Grid.Row="1"
+                    Margin="10">
+            <Label Content="Название"
+                       Style="{StaticResource LabelStyle}"></Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Task.Header, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Исполнитель"
+                       Style="{StaticResource LabelStyle}"></Label>
+            <ComboBox ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Дата выполнения"
+                       Style="{StaticResource LabelStyle}"></Label>
+            <DatePicker SelectedDate="{Binding Task.CompleteDate, UpdateSourceTrigger=PropertyChanged}"/>
+            <Label Content="Описание"
+                       Style="{StaticResource LabelStyle}"></Label>
+            <TextBox Style="{StaticResource TextBoxStyle}"
+                         Text="{Binding Task.Description, UpdateSourceTrigger=PropertyChanged}"
+                 TextWrapping="Wrap"
+                 Height="70"/>
+            <Grid>
+                <Button Content="Подтвердить"
+                    Style="{StaticResource RegisterButton}"
+                    Margin="0 10 0 0"
+                    HorizontalAlignment="Left"
+                    Command="{Binding AddTaskCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                        Width="120"/>
+                <Button Content="Отмена"
+                    Style="{StaticResource RegisterButton}"
+                    Margin="0 10 0 0"
+                    HorizontalAlignment="Right"
+                    Command="{Binding CancelCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
+                        Width="120"/>
+            </Grid>
+        </StackPanel>
+    </Grid>
+    
+</Window>

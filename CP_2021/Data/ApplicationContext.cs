@@ -33,9 +33,11 @@ namespace CP_2021.Data
             modelBuilder.Entity<GivingDB>().HasIndex(g => g.ProductionTaskId).IsUnique();
             modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<ReportDB>().HasIndex(r => r.TaskId).IsUnique();
             #endregion
-            modelBuilder.Entity<UserDB>().HasData(new UserDB("vlad", "1337", "Владислав", "Гришкевич") { Id = -1, Position = 2 });
+            modelBuilder.Entity<UserDB>().HasData(new UserDB("vlad", "1337", "Владислав", "Гришкевич") { Id = 1, Position = 2 });
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Parent).WithMany(t => t.ParentTo).HasForeignKey(h => h.ParentId).OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Child).WithOne(t => t.MyParent);
         }
 

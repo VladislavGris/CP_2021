@@ -21,6 +21,7 @@
     <SolidColorBrush x:Key="ForegroundBrush" Color="#6393C2" />
     <SolidColorBrush x:Key="BackgroundBrush" Color="#31577e" />
     <SolidColorBrush x:Key="DatagridHeaderBrush" Color="White"/>
+    <SolidColorBrush x:Key="AdditionalColor" Color="#9161C2"/>
     <SolidColorBrush x:Key="FontColor" Color="#575757"/>
 
     <!--For Datagrid Cells-->

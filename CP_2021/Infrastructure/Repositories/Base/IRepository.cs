@@ -15,5 +15,6 @@ namespace CP_2021.Infrastructure.Repositories.Base
         IEnumerable<T> GetWithRawSql(string query, params object[] parameters);
         void Insert(T entity);
         void Update(T entityToUpdate);
+        void Refresh();
     }
 }
