@@ -52,8 +52,16 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="True">
-                            <Setter Property="Background" Value="#99DF9B"/>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="1">
+                            <Setter Property="Background" Value="#72AE3B"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="2">
+                            <Setter Property="Background" Value="#065C3F"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="3">
+                            <Setter Property="Background" Value="#F5E6BD"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -62,12 +70,14 @@
                 <DataGridTemplateColumn Header="Выполнение">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"/>
+                            <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"
+                                       HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}">
+                            <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
+                                      Background="Transparent">
                                 <ComboBoxItem Content="Не задано"/>
                                 <ComboBoxItem Content="Склад"/>
                                 <ComboBoxItem Content="Формирование актов"/>
