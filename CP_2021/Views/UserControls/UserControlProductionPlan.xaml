@@ -200,8 +200,6 @@
                                 <TextBox Text="{Binding Task.Complectation.Complectation, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Дата комплектации"/>
                                 <DatePicker SelectedDate="{Binding Task.Complectation.ComplectationDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                
-                                <!--<TextBox Text="{Binding Task.Complectation.Percentage, UpdateSourceTrigger=PropertyChanged}"/>-->
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Процент получения: "/>
                                     <TextBlock Text="{Binding Task.Complectation.Percentage}"/>
@@ -243,10 +241,14 @@
                             <StackPanel>
                                 <TextBlock Text="Номер МСЛ"/>
                                 <TextBox Text="{Binding Task.InProduction.Number, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Исполнитель"/>
+                                <TextBlock Text="Сборка"/>
                                 <TextBox Text="{Binding Task.InProduction.ExecutorName, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Электромонтаж"/>
+                                <TextBox Text="{Binding Task.InProduction.ExecutorName2, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Дата выдачи"/>
                                 <DatePicker SelectedDate="{Binding Task.InProduction.GivingDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Дата готовности(п)"/>
+                                <DatePicker SelectedDate="{Binding Task.InProduction.ProjectedDate, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Дата готовности"/>
                                 <DatePicker SelectedDate="{Binding Task.InProduction.CompletionDate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>

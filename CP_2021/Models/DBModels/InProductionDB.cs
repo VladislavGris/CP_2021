@@ -25,7 +25,10 @@ namespace CP_2021.Models.DBModels
 
         [Column("Completion_Date", TypeName="date")]
         public DateTime? CompletionDate { get; set; }
-        
+
+        [Column("Projected_Date", TypeName = "date")]
+        public DateTime? ProjectedDate { get; set; }
+
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
@@ -36,7 +39,9 @@ namespace CP_2021.Models.DBModels
             prod.Number = this.Number;
             prod.GivingDate = this.GivingDate;
             prod.ExecutorName = this.ExecutorName;
+            prod.ExecutorName2 = this.ExecutorName2;
             prod.CompletionDate = this.CompletionDate;
+            prod.ProjectedDate = this.ProjectedDate;
             return prod;
         }
     }
