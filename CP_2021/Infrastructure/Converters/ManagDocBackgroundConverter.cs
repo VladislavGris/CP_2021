@@ -4,22 +4,21 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace CP_2021.Infrastructure.Converters
 {
-    class CanRoleEditCheckboxConverter : IValueConverter
+    class ManagDocBackgroundConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((short)value == 2)
+            if ((string)value != null && (string)value != "")
             {
-                return true;
+                return new SolidColorBrush(Color.FromRgb(255,255,0));
             }
-            else
-            {
-                return false;
-            }
+            return Brushes.White;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

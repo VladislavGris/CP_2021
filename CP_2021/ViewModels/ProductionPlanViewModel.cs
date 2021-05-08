@@ -141,7 +141,7 @@ namespace CP_2021.ViewModels
                     ContentContainerContent = new UserControlReports();
                     break;
                 case "ItemTasks":
-                    ContentContainerContent = new UserControlTasks();
+                    InitMyTasks();
                     break;
                 case "ItemSettings":
                     ContentContainerContent = new UserControlSettings();
@@ -197,6 +197,12 @@ namespace CP_2021.ViewModels
             ContentContainerContent = tasks;
         }
 
+        private void InitMyTasks()
+        {
+            UserControlTasks tasks = new UserControlTasks();
+            tasks.DataContext = new MyTasksViewModel(Unit, User);
+            ContentContainerContent = tasks;
+        }
         #endregion
 
         public ProductionPlanViewModel()

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Users")]
-    class UserDB : Entity
+    internal class UserDB : Entity
     {
         [Required]
         [Column(TypeName ="nvarchar(15)")]
@@ -29,8 +29,8 @@ namespace CP_2021.Models.DBModels
         [Column(TypeName = "smallint")]
         public short Position { get; set; }
 
-        public ICollection<TaskDB> Tasks { get; set; }
-        public ICollection<ReportDB> Reports { get; set; }
+        public virtual ICollection<TaskDB> Tasks { get; set; }
+        public virtual ICollection<ReportDB> Reports { get; set; }
 
 
         public UserDB(string login, string password, string name, string surname)

@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Tasks")]
-    class TaskDB : Entity
+    internal class TaskDB : Entity
     {
         [Column("To_Id")]
         public int ToId { get; set; }
-        public UserDB To { get; set; }
+        public virtual UserDB To { get; set; }
 
         [Required]
         [Column(TypeName = "nvarchar(30)")]
@@ -26,6 +26,6 @@ namespace CP_2021.Models.DBModels
         [Column(TypeName = "bit")]
         public bool Completion { get; set; }
 
-        public ReportDB Report { get; set; }
+        public virtual ReportDB Report { get; set; }
     }
 }

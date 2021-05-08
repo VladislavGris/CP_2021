@@ -118,7 +118,15 @@ namespace CP_2021.Infrastructure.Units
 
         public void Refresh()
         {
-            
+            Tasks.Refresh();
+            Manufactures.Refresh();
+            Givings.Refresh();
+            Productions.Refresh();
+            Complectations.Refresh();
+            DBUsers.Refresh();
+            UserTasks.Refresh();
+            Reports.Refresh();
+            Hierarchy.Refresh();
         }
     }
 }

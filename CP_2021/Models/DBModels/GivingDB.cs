@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Giving")]
-    class GivingDB : Entity
+    internal class GivingDB : Entity
     {
         [Column("G_State", TypeName ="bit")]
         public bool? State { get; set; }
@@ -28,7 +28,7 @@ namespace CP_2021.Models.DBModels
 
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
-        public ProductionTaskDB ProductionTask { get; set; }
+        public virtual ProductionTaskDB ProductionTask { get; set; }
 
         public GivingDB Clone()
         {

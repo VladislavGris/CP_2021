@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Reports")]
-    class ReportDB :Entity
+    internal class ReportDB :Entity
     {
         [Column(TypeName ="nvarchar(MAX)")]
         public string Description { get; set; }
@@ -17,9 +17,9 @@ namespace CP_2021.Models.DBModels
         public bool State { get; set; }
 
         public int TaskId { get; set; }
-        public TaskDB Task { get; set; }
+        public virtual TaskDB Task { get; set; }
 
-        public UserDB To { get; set; }
+        public virtual UserDB To { get; set; }
 
         public ReportDB() { }
 

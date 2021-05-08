@@ -15,6 +15,10 @@
     <convert:GivenTasksVisibilityConverter x:Key="GivenTaskConverter"/>
     <convert:MyTasksVisibilityConverter x:Key="MyTasksConverter"/>
     <convert:PositionConverter x:Key="PositionConverter"/>
+    <convert:ExecutorConverter x:Key="ExecutorConverter"/>
+    <convert:ReportAvailabilityConverter x:Key="ReportConverter"/>
+    <convert:ManagDocBackgroundConverter x:Key="ManagDocConverter"/>
+    <convert:CompletionConverter x:Key="CompletionConverter"/>
 
     <!--Styles-->
 

@@ -8,18 +8,11 @@ using System.Windows.Data;
 
 namespace CP_2021.Infrastructure.Converters
 {
-    class CanRoleEditCheckboxConverter : IValueConverter
+    class ReportAvailabilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((short)value == 2)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

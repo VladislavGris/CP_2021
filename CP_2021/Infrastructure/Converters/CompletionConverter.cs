@@ -8,17 +8,22 @@ using System.Windows.Data;
 
 namespace CP_2021.Infrastructure.Converters
 {
-    class CanRoleEditCheckboxConverter : IValueConverter
+    class CompletionConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if ((short)value == 2)
+            switch ((short)value)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                case 0:
+                    return "Не задано";
+                case 1:
+                    return "Склад";
+                case 2:
+                    return "Формирование актов";
+                case 3:
+                    return "Склад ОЭЦ";
+                default:
+                    return "Не задано";
             }
         }
 

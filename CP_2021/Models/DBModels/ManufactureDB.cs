@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Manufacture")]
-    class ManufactureDB : Entity
+    internal class ManufactureDB : Entity
     {
         [Column("M_Name", TypeName ="nvarchar(80)")]
         public string Name { get; set; }
@@ -22,7 +22,7 @@ namespace CP_2021.Models.DBModels
 
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
-        public ProductionTaskDB ProductionTask { get; set; }
+        public virtual ProductionTaskDB ProductionTask { get; set; }
 
         public ManufactureDB Clone()
         {

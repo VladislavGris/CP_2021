@@ -59,25 +59,31 @@
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Вып."
-                                        CanUserResize="False">
+                <DataGridTemplateColumn Header="Выполнение">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox IsChecked="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
-                                      HorizontalAlignment="Center"
-                                      Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      IsHitTestVisible="{Binding DataContext.User.Position, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource EditCheckboxConverter}}">
-                            </CheckBox>
+                            <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}">
+                                <ComboBoxItem Content="Не задано"/>
+                                <ComboBoxItem Content="Склад"/>
+                                <ComboBoxItem Content="Формирование актов"/>
+                                <ComboBoxItem Content="Склад ОЭЦ"/>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
                 
                 <DataGridTextColumn Header="Распорядительный документ"
                                     Binding="{Binding Task.ManagDoc, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="140"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
-                
+                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}">
+                </DataGridTextColumn>
+
                 <DataGridTemplateColumn Header="Название">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -184,8 +190,20 @@
                                 <TextBox Text="{Binding Task.Complectation.Complectation, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Дата комплектации"/>
                                 <DatePicker SelectedDate="{Binding Task.Complectation.ComplectationDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Процент получения"/>
-                                <TextBox Text="{Binding Task.Complectation.Percentage, UpdateSourceTrigger=PropertyChanged}"/>
+                                
+                                <!--<TextBox Text="{Binding Task.Complectation.Percentage, UpdateSourceTrigger=PropertyChanged}"/>-->
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Процент получения: "/>
+                                    <TextBlock Text="{Binding Task.Complectation.Percentage}"/>
+                                    
+                                </StackPanel>
+                                <Slider Minimum="0" Maximum="100" Value="{Binding Task.Complectation.Percentage, UpdateSourceTrigger=PropertyChanged}" Width="Auto" TickFrequency="1" IsSnapToTickEnabled="True">
+                                    <ie:Interaction.Triggers>
+                                        <ie:EventTrigger EventName="ValueChanged">
+                                            <ie:InvokeCommandAction Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                        </ie:EventTrigger>
+                                    </ie:Interaction.Triggers>
+                                </Slider>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>

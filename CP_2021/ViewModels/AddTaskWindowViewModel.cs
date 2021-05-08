@@ -77,7 +77,6 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-
         #endregion
 
         #region Команды

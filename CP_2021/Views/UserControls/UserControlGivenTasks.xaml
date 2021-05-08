@@ -27,13 +27,59 @@
         <ListView ItemsSource="{Binding Tasks}"
                   Grid.Row="1"
                   Background="{StaticResource ForegroundBrush}"
-                  Foreground="White">
+                  Foreground="White"
+                  SelectedItem="{Binding SelectedTask, UpdateSourceTrigger=PropertyChanged}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}"/>
+                    <Grid>
+                        <Expander>
+                            <Grid>
+                                <TextBlock Text="{Binding Description}"/>
+                            </Grid>
+                        </Expander>
+                        <TextBlock Text="{Binding Header}"
+                                   Margin="30 0 0 0"/>
+                        <TextBlock Text="{Binding CompleteDate, Converter={StaticResource DateConverter}}"
+                                   Margin="90 0 0 0"/>
+                        <TextBlock Text="{Binding To,Converter={StaticResource ExecutorConverter}}"
+                                   Margin="180 0 0 0"/>
+                        <Button Content="Отчет"
+                                IsEnabled="{Binding Report.State, Converter={StaticResource ReportConverter}}"
+                                HorizontalAlignment="Right"
+                                Width="50"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button Panel.ZIndex="1"
+                Grid.Row="1"
+                Width="50"
+                Height="50"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0 0 20 140"
+                ToolTip="Добавить задачу"
+                Command="{Binding UpdateCollectionCommand}">
+            <Button.Content >
+                <fa:ImageAwesome Icon="Solid_Sync"
+                                 Foreground="{StaticResource ForegroundBrush}"
+                                 Width="30"/>
+            </Button.Content>
+            <Button.Template>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Ellipse Stroke="White">
+                            <Ellipse.Fill>
+                                <SolidColorBrush Color="#31577e"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        <ContentPresenter x:Name="content"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+                </ControlTemplate>
+            </Button.Template>
+        </Button>
         <Button Panel.ZIndex="1"
                 Grid.Row="1"
                 Width="50"
@@ -70,7 +116,8 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="0 0 20 30"
-                ToolTip="Удалить задачу">
+                ToolTip="Удалить задачу"
+                Command="{Binding RemoveTaskCommand}">
             <Button.Content >
                 <fa:ImageAwesome Icon="Solid_Minus"
                                  Foreground="{StaticResource ForegroundBrush}"

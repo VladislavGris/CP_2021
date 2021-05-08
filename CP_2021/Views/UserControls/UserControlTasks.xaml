@@ -32,9 +32,8 @@
                     <StackPanel>
                         <TextBlock Text="{Binding Header}"/>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding CompleteDate}"/>
-                            <TextBlock Text="{Binding Report.To.Surname}"/>
-                            <TextBlock Text="{Binding Report.To.Name}"/>
+                            <TextBlock Text="{Binding CompleteDate, Converter={StaticResource DateConverter}}"/>
+                            <TextBlock Text="{Binding To, Converter={StaticResource ExecutorConverter}}"/>
                         </StackPanel>
                     </StackPanel>
                 </DataTemplate>

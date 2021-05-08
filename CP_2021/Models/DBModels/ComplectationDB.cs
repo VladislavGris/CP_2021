@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Complectation")]
-    class ComplectationDB : Entity
+    internal class ComplectationDB : Entity
     {
         [Column("Complectation", TypeName = "nvarchar(100)")]
         public string Complectation { get; set; }
@@ -22,7 +22,7 @@ namespace CP_2021.Models.DBModels
 
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
-        public ProductionTaskDB ProductionTask { get; set; }
+        public virtual ProductionTaskDB ProductionTask { get; set; }
 
         public ComplectationDB Clone()
         {

@@ -56,11 +56,12 @@ namespace CP_2021.Infrastructure.Repositories.Base
 
         public void Refresh()
         {
-            foreach(var entity in dbSet)
+            foreach (var entity in dbSet.ToList())
             {
-                //context.Entry<T>(entity).Reload();
-                
+                context.Entry(entity).Reload();
+
             }
+
         }
 
         public virtual void Update(T entityToUpdate)

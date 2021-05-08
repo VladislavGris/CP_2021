@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("Production_Plan")]
-    class ProductionTaskDB : Entity
+    internal class ProductionTaskDB : Entity
     {
         [Column("Inc_Doc", TypeName = "nvarchar(100)")]
         public string IncDoc { get; set; }
@@ -41,16 +41,16 @@ namespace CP_2021.Models.DBModels
         [Column("Note", TypeName = "nvarchar(MAX)")]
         public string Note { get; set; }
 
-        public HierarchyDB MyParent { get; set; }
-        public List<HierarchyDB> ParentTo { get; set; }
+        public virtual HierarchyDB MyParent { get; set; }
+        public virtual List<HierarchyDB> ParentTo { get; set; }
         [Required]
-        [Column("Completion", TypeName = "bit")]
-        public bool Completion { get; set; }
+        [Column("Completion", TypeName = "smallint")]
+        public short Completion { get; set; }
 
-        public ComplectationDB Complectation { get; set; }
-        public GivingDB Giving { get; set; }
-        public InProductionDB InProduction { get; set; }
-        public ManufactureDB Manufacture { get; set; }
+        public virtual ComplectationDB Complectation { get; set; }
+        public virtual GivingDB Giving { get; set; }
+        public virtual InProductionDB InProduction { get; set; }
+        public virtual ManufactureDB Manufacture { get; set; }
 
         public ProductionTaskDB() { }
 

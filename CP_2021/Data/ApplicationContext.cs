@@ -21,7 +21,7 @@ namespace CP_2021.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region HasDefaultValue
-            modelBuilder.Entity<ProductionTaskDB>().Property(t => t.Completion).HasDefaultValue(false);
+            modelBuilder.Entity<ProductionTaskDB>().Property(t => t.Completion).HasDefaultValue(0);
             modelBuilder.Entity<GivingDB>().Property(g => g.State).HasDefaultValue(false);
             modelBuilder.Entity<ComplectationDB>().Property(c => c.Percentage).HasDefaultValue(0f);
             modelBuilder.Entity<TaskDB>().Property(c => c.Completion).HasDefaultValue(false);
@@ -47,7 +47,7 @@ namespace CP_2021.Data
             builder.SetBasePath(Directory.GetCurrentDirectory() + "\\Data\\Configs");
             builder.AddJsonFile("appsettings.json");
             var config = builder.Build();
-            optionsBuilder.UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            optionsBuilder.UseLazyLoadingProxies().UseSqlServer(config.GetConnectionString("DefaultConnection"));
         }
     }
 }

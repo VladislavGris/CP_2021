@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace CP_2021.Models.DBModels
 {
-    class HierarchyDB : Entity
+    internal class HierarchyDB : Entity
     {
         public int ParentId { get; set; }
-        public ProductionTaskDB Parent { get; set; }
+        public virtual ProductionTaskDB Parent { get; set; }
 
         public int ChildId { get; set; }
-        public ProductionTaskDB Child { get; set; }
+        public virtual ProductionTaskDB Child { get; set; }
 
         public HierarchyDB() { }
 

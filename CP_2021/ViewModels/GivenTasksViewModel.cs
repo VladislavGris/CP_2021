@@ -54,6 +54,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region SelectedTask
+
+        private TaskDB _selectedTask;
+
+        public TaskDB SelectedTask
+        {
+            get => _selectedTask;
+            set => Set(ref _selectedTask, value);
+        }
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -73,6 +85,35 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region RemoveTaskCommand
+
+        public ICommand RemoveTaskCommand { get; }
+
+        private bool CanRemoveTaskCommandExecute(object p) => SelectedTask!=null;
+
+        private void OnRemoveTaskCommandExecuted(object p)
+        {
+            Unit.UserTasks.Delete(SelectedTask);
+            Unit.Commit();
+            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+        }
+
+        #endregion
+
+        #region UpdateCollectionCommand
+
+        public ICommand UpdateCollectionCommand { get; }
+
+        private bool CanUpdateCollectionCommandExecute(object p) => true;
+
+        private void OnUpdateCollectionCommandExecuted(object p)
+        {
+            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+        }
+
+        #endregion
+
+
         #endregion
 
         public GivenTasksViewModel() { }
@@ -81,6 +122,8 @@ namespace CP_2021.ViewModels
             #region Команды
 
             OpenAddTaskWindow = new LambdaCommand(OnOpenAddTaskWindowExecuted, CanOpenAddTaskWindowExecute);
+            RemoveTaskCommand = new LambdaCommand(OnRemoveTaskCommandExecuted, CanRemoveTaskCommandExecute);
+            UpdateCollectionCommand = new LambdaCommand(OnUpdateCollectionCommandExecuted, CanUpdateCollectionCommandExecute);
 
             #endregion
 

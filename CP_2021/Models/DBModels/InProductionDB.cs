@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace CP_2021.Models.DBModels
 {
     [Table("In_Production")]
-    class InProductionDB : Entity
+    internal class InProductionDB : Entity
     {
         [Column("Number", TypeName ="nvarchar(30)")]
         public string Number { get; set; }
@@ -20,12 +20,15 @@ namespace CP_2021.Models.DBModels
         [Column("Executor_Name", TypeName ="nvarchar(80)")]
         public string ExecutorName { get; set; }
 
+        [Column("Install_Executor_Name", TypeName ="nvarchar(80)")]
+        public string ExecutorName2 { get; set; }
+
         [Column("Completion_Date", TypeName="date")]
         public DateTime? CompletionDate { get; set; }
         
         [Column("Production_Task_Id")]
         public int ProductionTaskId { get; set; }
-        public ProductionTaskDB ProductionTask { get; set; }
+        public virtual ProductionTaskDB ProductionTask { get; set; }
 
         public InProductionDB Clone()
         {
