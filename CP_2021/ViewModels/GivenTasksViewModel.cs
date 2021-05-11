@@ -93,8 +93,9 @@ namespace CP_2021.ViewModels
 
         private void OnOpenAddTaskWindowExecuted(object p)
         {
+               
             AddTaskWindow window = new AddTaskWindow();
-            window.DataContext = new AddTaskWindowViewModel(Unit, User);
+            window.DataContext = new AddTaskWindowViewModel(Unit, User, (GivenTasksViewModel)p);
             window.Show();
         }
 
@@ -104,11 +105,11 @@ namespace CP_2021.ViewModels
 
         public ICommand RemoveTaskCommand { get; }
 
-        private bool CanRemoveTaskCommandExecute(object p) => SelectedTask!=null;
+        private bool CanRemoveTaskCommandExecute(object p) => true;
 
         private void OnRemoveTaskCommandExecuted(object p)
         {
-            Unit.UserTasks.Delete(SelectedTask);
+            Unit.UserTasks.Delete((TaskDB)p);
             Unit.Commit();
             Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
         }

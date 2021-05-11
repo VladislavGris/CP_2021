@@ -67,7 +67,7 @@ namespace CP_2021.ViewModels
         private void OnOpenSendReportWindowCommandExecuted(object p)
         {
             SendReportWindow window = new SendReportWindow();
-            window.DataContext = new SendReportViewModel(Unit, User, (ReportDB)p);
+            window.DataContext = new SendReportViewModel(Unit, User, (ReportDB)p, this);
             window.Show();
         }
 
@@ -88,28 +88,16 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region SendReportCommand
+        #region RefreshCommand
 
-        public ICommand SendReportCommand { get; }
+        public ICommand RefreshCommand { get; }
 
-        private bool CanSendReportCommandExecute(object p) => true;
+        private bool CanRefreshCommandExecute(object p) => true;
 
-        private void OnSendReportCommandExecuted(object p)
+        private void OnRefreshCommandExecuted(object p)
         {
-            
-        }
-
-        #endregion
-
-        #region ShowReportCommand
-
-        public ICommand ShowReportCommand { get; }
-
-        private bool CanShowReportCommandExecute(object p) => true;
-
-        private void OnShowReportCommandExecuted(object p)
-        {
-
+            Unit.Refresh();
+            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(u => u.To.Equals(User)));
         }
 
         #endregion
@@ -124,9 +112,7 @@ namespace CP_2021.ViewModels
 
             OpenSendReportWindowCommand = new LambdaCommand(OnOpenSendReportWindowCommandExecuted, CanOpenSendReportWindowCommandExecute);
             OpenShowReportWindowCommand = new LambdaCommand(OnOpenShowReportWindowCommandExecuted, CanOpenShowReportWindowCommandExecute);
-            SendReportCommand = new LambdaCommand(OnSendReportCommandExecuted, CanSendReportCommandExecute);
-            ShowReportCommand = new LambdaCommand(OnShowReportCommandExecuted, CanShowReportCommandExecute);
-
+            RefreshCommand = new LambdaCommand(OnRefreshCommandExecuted, CanRefreshCommandExecute);
 
             #endregion
 

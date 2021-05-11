@@ -4,6 +4,7 @@ using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,14 +29,14 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region User
+        #region MyTasksVM
 
-        private UserDB _user;
+        private MyTasksViewModel _myTasksVM;
 
-        public UserDB User
+        public MyTasksViewModel MyTasksVM
         {
-            get => _user;
-            set => Set(ref _user, value);
+            get => _myTasksVM;
+            set => Set(ref _myTasksVM, value);
         }
 
         #endregion
@@ -48,6 +49,18 @@ namespace CP_2021.ViewModels
         {
             get => _report;
             set => Set(ref _report, value);
+        }
+
+        #endregion
+
+        #region User
+
+        private UserDB _user;
+
+        public UserDB User
+        {
+            get => _user;
+            set => Set(ref _user, value);
         }
 
         #endregion
@@ -66,6 +79,8 @@ namespace CP_2021.ViewModels
         {
             Report.State = true;
             Unit.Commit();
+            Unit.Refresh();
+            MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(u => u.To.Equals(User)));
             ((Window)p).Close();
         }
 
@@ -75,7 +90,7 @@ namespace CP_2021.ViewModels
 
         public SendReportViewModel() { }
 
-        public SendReportViewModel(ApplicationUnit unit, UserDB user, ReportDB report)
+        public SendReportViewModel(ApplicationUnit unit, UserDB user, ReportDB report, MyTasksViewModel vm)
         {
             #region Команды
 
@@ -85,6 +100,7 @@ namespace CP_2021.ViewModels
             Unit = unit;
             User = user;
             Report = report;
+            MyTasksVM = vm;
         }
     }
 }

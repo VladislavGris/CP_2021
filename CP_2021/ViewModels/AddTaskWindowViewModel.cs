@@ -41,6 +41,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region GivenTasksVM
+
+        private GivenTasksViewModel _givenTasksVM;
+
+        public GivenTasksViewModel GivenTasksVM
+        {
+            get => _givenTasksVM;
+            set => Set(ref _givenTasksVM, value);
+        }
+
+        #endregion
+
         #region SelectedUser
 
         private UserDB _selectedUser;
@@ -107,16 +119,18 @@ namespace CP_2021.ViewModels
             Task.Report = report;
             Unit.UserTasks.Insert(Task);
             Unit.Commit();
+            Unit.Refresh();
+            GivenTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
             ((Window)p).Close();
         }
 
         #endregion
 
         #endregion
-
+        
         public AddTaskWindowViewModel() { }
 
-        public AddTaskWindowViewModel(ApplicationUnit unit, UserDB user)
+        public AddTaskWindowViewModel(ApplicationUnit unit, UserDB user, GivenTasksViewModel vm)
         {
             #region Команды
 
@@ -127,6 +141,7 @@ namespace CP_2021.ViewModels
 
             Unit = unit;
             User = user;
+            GivenTasksVM = vm;
             Users = new ObservableCollection<UserDB>(unit.DBUsers.Get().Where(u => !u.Equals(user) && u.Position != 2));
             Task = new TaskDB();
         }

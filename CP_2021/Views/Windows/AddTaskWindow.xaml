@@ -7,7 +7,7 @@
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         mc:Ignorable="d"
-        Title="AddTaskWindow" Height="370" Width="300" WindowStyle="None"
+        Title="AddTaskWindow" Height="390" Width="300" WindowStyle="None"
         ResizeMode="NoResize"
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
@@ -43,44 +43,51 @@
                     </Image>
                 </Button.Content>
             </Button>
+            <Separator Height="2"
+                       Foreground="White"
+                       VerticalAlignment="Bottom"/>
         </Grid>
-        <StackPanel Background="{StaticResource BackgroundBrush}"
-                    Grid.Row="1"
+        <Border CornerRadius="20"
+                Background="{StaticResource LightBackgroundBrush}"
+                Margin="10"
+                Grid.Row="1">
+            <StackPanel 
                     Margin="10">
-            <Label Content="Название"
+                <Label Content="Название"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBox Style="{StaticResource TextBoxStyle}"
+                <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding Task.Header, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Исполнитель"
+                <Label Content="Исполнитель"
                        Style="{StaticResource LabelStyle}"></Label>
-            <ComboBox ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}"
+                <ComboBox ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Дата выполнения"
+                <Label Content="Дата выполнения"
                        Style="{StaticResource LabelStyle}"></Label>
-            <DatePicker SelectedDate="{Binding Task.CompleteDate, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Описание"
+                <DatePicker SelectedDate="{Binding Task.CompleteDate, UpdateSourceTrigger=PropertyChanged}"/>
+                <Label Content="Описание"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBox Style="{StaticResource TextBoxStyle}"
+                <TextBox Style="{StaticResource TextBoxStyle}"
                          Text="{Binding Task.Description, UpdateSourceTrigger=PropertyChanged}"
                  TextWrapping="Wrap"
                  Height="70"/>
-            <Grid>
-                <Button Content="Подтвердить"
+                <Grid>
+                    <Button Content="Подтвердить"
                     Style="{StaticResource RegisterButton}"
                     Margin="0 10 0 0"
                     HorizontalAlignment="Left"
                     Command="{Binding AddTaskCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                         Width="120"/>
-                <Button Content="Отмена"
+                    <Button Content="Отмена"
                     Style="{StaticResource RegisterButton}"
                     Margin="0 10 0 0"
                     HorizontalAlignment="Right"
                     Command="{Binding CancelCommand}"
                     CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
                         Width="120"/>
-            </Grid>
-        </StackPanel>
+                </Grid>
+            </StackPanel>
+        </Border>
     </Grid>
     
 </Window>

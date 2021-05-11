@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:CP_2021.Views.Windows"
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         mc:Ignorable="d"
-        Title="ViewReportWindow" Height="370" Width="300" ResizeMode="NoResize" WindowStyle="None"
+        Title="ViewReportWindow" Height="320" Width="400" ResizeMode="NoResize" WindowStyle="None"
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen">
@@ -18,7 +18,7 @@
         <Grid Grid.Row="0">
             <TextBlock Foreground="White"
                        Text="Отчет о выполнении задачи"
-                       HorizontalAlignment="Left"
+                       HorizontalAlignment="Center"
                        FontSize="20"/>
             <Button Margin="0 2 2 0"
                         WindowChrome.IsHitTestVisibleInChrome="True"
@@ -38,34 +38,60 @@
                     </Image>
                 </Button.Content>
             </Button>
+            <Separator Height="2"
+                       Foreground="White"
+                       VerticalAlignment="Bottom"/>
         </Grid>
-        <StackPanel Background="{StaticResource BackgroundBrush}"
-                    Grid.Row="1"
-                    Margin="10">
-            <Label Content="Задача"
+        <Border CornerRadius="20"
+                Background="{StaticResource LightBackgroundBrush}"
+                Grid.Row="1"
+                Margin="10">
+            <StackPanel Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Задача"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBlock Text="{Binding Report.Task.Header}"
+                    <TextBlock Text="{Binding Report.Task.Header}"
                        FontSize="18"
-                       Margin="10 0 0 0"
                        Foreground="White"
-                       TextWrapping="Wrap"/>
-            <Label Content="Отправитель отчета"
+                       TextWrapping="Wrap"
+                               VerticalAlignment="Center"
+                               TextDecorations="Underline"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Отправитель отчета"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBlock Text="{Binding Report.Task.To, Converter={StaticResource ExecutorConverter}}"
+                    <TextBlock Text="{Binding Report.Task.To, Converter={StaticResource ExecutorConverter}}"
                        FontSize="18"
-                       Margin="10 0 0 0"
+                               VerticalAlignment="Center"
                        Foreground="White"
-                       TextWrapping="Wrap"/>
-            <Label Content="Содержание отчета"
+                       TextWrapping="Wrap"
+                               TextDecorations="Underline"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Срок выполнения"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBlock FontSize="18"
-                     Background="Transparent"
+                    <TextBlock Text="{Binding Report.Task.CompleteDate, Converter={StaticResource DateConverter}}"
+                       FontSize="18"
+                               VerticalAlignment="Center"
+                       Foreground="White"
+                       TextWrapping="Wrap"
+                               TextDecorations="Underline"/>
+                </StackPanel>
+                <Label Content="Содержание отчета"
+                       Style="{StaticResource LabelStyle}"
+                       HorizontalAlignment="Center"/>
+                <Border BorderBrush="White"
+                        Margin="5"
+                        BorderThickness="1">
+                    <TextBlock FontSize="18"
+                     Background="{StaticResource ForegroundBrush}"
                      Foreground="White"
                      Text="{Binding Report.Description, UpdateSourceTrigger=PropertyChanged}"
-                     Height="160"
-                     TextWrapping="Wrap"
-                       Margin="10 0 10 0"/>
-        </StackPanel>
+                     Height="100"
+                     TextWrapping="Wrap"/>
+                </Border>
+            </StackPanel>
+        </Border>
                     
     </Grid>
 </Window>

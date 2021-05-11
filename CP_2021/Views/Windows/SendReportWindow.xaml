@@ -7,7 +7,7 @@
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         mc:Ignorable="d"
-        Title="SendReportWindow" Height="370" Width="300" WindowStyle="None"
+        Title="SendReportWindow" Height="320" Width="380" WindowStyle="None"
         ResizeMode="NoResize"
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
@@ -43,53 +43,77 @@
                     </Image>
                 </Button.Content>
             </Button>
+            <Separator Height="2"
+                       Foreground="White"
+                       VerticalAlignment="Bottom"/>
         </Grid>
-        <StackPanel Background="{StaticResource BackgroundBrush}"
-                    Grid.Row="1"
-                    Margin="10">
-            <Label Content="Задача"
+        <Border Background="{StaticResource LightBackgroundBrush}"
+                CornerRadius="20"
+                Grid.Row="1"
+                Margin="10">
+            <StackPanel Grid.Row="1">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Задача"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBlock Text="{Binding Report.Task.Header}"
+                    <TextBlock Text="{Binding Report.Task.Header}"
+                               VerticalAlignment="Center"
+                                FontSize="18"
+                                TextDecorations="Underline"
+                                Foreground="White"
+                                TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Получатель отчета"
+                       Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Text="{Binding Report.To, Converter={StaticResource ExecutorConverter}}"
                        FontSize="18"
-                       Margin="10 0 0 0"
+                               VerticalAlignment="Center"
                        Foreground="White"
-                       TextWrapping="Wrap"/>
-            <Label Content="Получатель отчета"
-                       Style="{StaticResource LabelStyle}"></Label>
-            <TextBlock Text="{Binding Report.To, Converter={StaticResource ExecutorConverter}}"
+                       TextWrapping="Wrap"
+                               TextDecorations="Underline"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Срок выполнения"
+                       Style="{StaticResource LabelStyle}"/>
+                    <TextBlock Text="{Binding Report.Task.CompleteDate, Converter={StaticResource DateConverter}}"
                        FontSize="18"
-                       Margin="10 0 0 0"
                        Foreground="White"
-                       TextWrapping="Wrap"/>
-            <Label Content="Содержание отчета"
-                       Style="{StaticResource LabelStyle}"></Label>
-            <TextBox FontSize="18"
-                     Background="Transparent"
+                               VerticalAlignment="Center"
+                       TextWrapping="Wrap"
+                               TextDecorations="Underline"/>
+                </StackPanel>
+                <Label Content="Содержание отчета"
+                       Style="{StaticResource LabelStyle}"
+                       HorizontalAlignment="Center"></Label>
+                <TextBox FontSize="18"
+                         Margin="5"
+                     Background="{StaticResource ForegroundBrush}"
                      BorderBrush="White"
                      Foreground="White"
                      Text="{Binding Report.Description, UpdateSourceTrigger=PropertyChanged}"
-                     Height="125"
+                     Height="70"
                      TextWrapping="Wrap"/>
-            <Grid>
-                <Button Content="Подтвердить"
+                <Grid>
+                    <Button Content="Подтвердить"
                     Style="{StaticResource RegisterButton}"
-                    Margin="0 10 0 0"
+                    Margin="10"
                     HorizontalAlignment="Left"
                         Width="120"
                         Command="{Binding SubmitCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
-                <Button Content="Отмена"
+                    <Button Content="Отмена"
                     Style="{StaticResource RegisterButton}"
-                    Margin="0 10 0 0"
+                    Margin="10"
                     HorizontalAlignment="Right"
                         Width="120"
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
-                    <Button.Command>
-                        <commands:CloseWindowCommand/>
-                    </Button.Command>
+                        <Button.Command>
+                            <commands:CloseWindowCommand/>
+                        </Button.Command>
 
-                </Button>
-            </Grid>
-        </StackPanel>
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

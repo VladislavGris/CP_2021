@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
              xmlns:vm="clr-namespace:CP_2021.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -29,33 +30,106 @@
                   ItemsSource="{Binding Tasks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Expander>
-                            <Grid>
-                                <TextBlock Text="{Binding Description}"/>
+                    <Border BorderThickness="2"
+                            CornerRadius="5"
+                            BorderBrush="White"
+                            Background="{StaticResource LightBackgroundBrush}">
+                        <Grid Margin="7">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="0.225*"/>
+                                <ColumnDefinition Width="0.68*"/>
+                                <ColumnDefinition Width="0.05*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="{Binding Header}"
+                                           TextWrapping="Wrap"
+                                           FontSize="18"
+                                           Margin="10 0 0 0"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0">
+                                    <TextBlock Text="Поручил "
+                                               FontSize="16"/>
+                                    <TextBlock Text="{Binding Report.To, Converter={StaticResource ExecutorConverter}}"
+                                               FontSize="16"
+                                               TextDecorations="Underline"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="10 0 0 0">
+                                    <TextBlock Text="Срок выполнения "
+                                               FontSize="16"/>
+                                    <TextBlock Text="{Binding CompleteDate, Converter={StaticResource DateConverter}}"
+                                               FontSize="16"
+                                               TextDecorations="Underline"/>
+                                </StackPanel>
+                            </StackPanel>
+                            <Grid Grid.Column="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="0.25*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Описание задачи"
+                                           FontSize="18"
+                                           HorizontalAlignment="Center"
+                                       Grid.Row="0"/>
+                                <Border BorderThickness="1"
+                                        BorderBrush="White"
+                                        Grid.Row="1">
+                                    <TextBlock Text="{Binding Description}"
+                                           FontSize="16"
+                                               TextWrapping="Wrap"
+                                               Margin="5 0 5 0"
+                                       Grid.Row="1"/>
+                                </Border>
                             </Grid>
-                        </Expander>
-                        <TextBlock Text="{Binding Header}"
-                                   Margin="30 0 0 0"/>
-                        <TextBlock Text="{Binding CompleteDate, Converter={StaticResource DateConverter}}"
-                                   Margin="90 0 0 0"/>
-                        <TextBlock Text="{Binding Report.To,Converter={StaticResource ExecutorConverter}}"
-                                   Margin="180 0 0 0"/>
-                        <Button Content="Отправить отчет"
-                                Visibility="{Binding Report.State, Converter={StaticResource SendReportConverter}}"
-                                Command="{Binding DataContext.OpenSendReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding Report}"
-                                HorizontalAlignment="Right"
-                                Width="120"/>
-                        <Button Content="Просмотреть отчет"
-                                Visibility="{Binding Report.State, Converter={StaticResource ShowReportConverter}}"
-                                HorizontalAlignment="Right"
-                                Width="120"
-                                Command="{Binding DataContext.OpenShowReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                CommandParameter="{Binding Report}"/>
-                    </Grid>
+                            <StackPanel Orientation="Horizontal"
+                                        Grid.Column="2"
+                                        HorizontalAlignment="Center">
+                                <Button Style="{StaticResource CircleButton}"
+                                        ToolTip="Отправить отчет"
+                                        Visibility="{Binding Report.State, Converter={StaticResource SendReportConverter}}"
+                                        Command="{Binding DataContext.OpenSendReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding Report}"
+                                        Height="30"
+                                        Width="30">
+                                    <Button.Content>
+                                        <fa:ImageAwesome Icon="Solid_Share"
+                                                         Height="20"
+                                                         Width="20"
+                                                         Foreground="{StaticResource ForegroundBrush}"/>
+                                    </Button.Content>
+                                </Button>
+                                <Button Visibility="{Binding Report.State, Converter={StaticResource ShowReportConverter}}"
+                                        Command="{Binding DataContext.OpenShowReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                        CommandParameter="{Binding Report}"
+                                        Width="30"
+                                        Height="30"
+                                        ToolTip="Просмотреть отчет"
+                                        Style="{StaticResource CircleButton}">
+                                    <Button.Content>
+                                        <fa:ImageAwesome Icon="Regular_Eye"
+                                                         Height="20"
+                                                         Width="20"
+                                                         Foreground="{StaticResource ForegroundBrush}"/>
+                                    </Button.Content>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        <Button Grid.Row="1"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0 0 20 30"
+                ToolTip="Обновить"
+                Command="{Binding RefreshCommand}"
+                Style="{StaticResource CircleButton}">
+            <Button.Content>
+                <fa:ImageAwesome Icon="Solid_Sync"
+                                 Foreground="{StaticResource ForegroundBrush}"
+                                 Width="30"/>
+            </Button.Content>
+        </Button>
     </Grid>
 </UserControl>
