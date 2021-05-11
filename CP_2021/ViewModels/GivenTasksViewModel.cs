@@ -70,6 +70,21 @@ namespace CP_2021.ViewModels
 
         #region Команды
 
+        #region OpenShowReportWindowCommand
+
+        public ICommand OpenShowReportWindowCommand { get; }
+
+        private bool CanOpenShowReportWindowCommandExecute(object p) => true;
+
+        private void OnOpenShowReportWindowCommandExecuted(object p)
+        {
+            ViewReportWindow window = new ViewReportWindow();
+            window.DataContext = new ViewReportViewModel(Unit, User, (ReportDB)p);
+            window.Show();
+        }
+
+        #endregion
+
         #region OpenAddTaskWindow
 
         public ICommand OpenAddTaskWindow { get; }
@@ -108,6 +123,7 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateCollectionCommandExecuted(object p)
         {
+            Unit.Refresh();
             Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
         }
 
@@ -120,7 +136,7 @@ namespace CP_2021.ViewModels
         public GivenTasksViewModel(ApplicationUnit unit, UserDB user)
         {
             #region Команды
-
+            OpenShowReportWindowCommand = new LambdaCommand(OnOpenShowReportWindowCommandExecuted, CanOpenShowReportWindowCommandExecute);
             OpenAddTaskWindow = new LambdaCommand(OnOpenAddTaskWindowExecuted, CanOpenAddTaskWindowExecute);
             RemoveTaskCommand = new LambdaCommand(OnRemoveTaskCommandExecuted, CanRemoveTaskCommandExecute);
             UpdateCollectionCommand = new LambdaCommand(OnUpdateCollectionCommandExecuted, CanUpdateCollectionCommandExecute);
@@ -130,6 +146,7 @@ namespace CP_2021.ViewModels
             Unit = unit;
             User = user;
             Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+            
         }
     }
 }

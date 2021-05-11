@@ -1,19 +1,19 @@
-﻿<Window x:Class="CP_2021.Views.Windows.AddTaskWindow"
+﻿<Window x:Class="CP_2021.Views.Windows.SendReportWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CP_2021.Views.Windows"
-        xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         xmlns:vm="clr-namespace:CP_2021.ViewModels"
+        xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         mc:Ignorable="d"
-        Title="AddTaskWindow" Height="370" Width="300" WindowStyle="None"
+        Title="SendReportWindow" Height="370" Width="300" WindowStyle="None"
         ResizeMode="NoResize"
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:AddTaskWindowViewModel/>
+        <vm:SendReportViewModel/>
     </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <TextBlock Foreground="White"
-                       Text="Добавить задачу"
+                       Text="Отправить отчет"
                        HorizontalAlignment="Center"
                        FontSize="20"/>
             <Button Margin="0 2 2 0"
@@ -47,40 +47,49 @@
         <StackPanel Background="{StaticResource BackgroundBrush}"
                     Grid.Row="1"
                     Margin="10">
-            <Label Content="Название"
+            <Label Content="Задача"
                        Style="{StaticResource LabelStyle}"></Label>
-            <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding Task.Header, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Исполнитель"
+            <TextBlock Text="{Binding Report.Task.Header}"
+                       FontSize="18"
+                       Margin="10 0 0 0"
+                       Foreground="White"
+                       TextWrapping="Wrap"/>
+            <Label Content="Получатель отчета"
                        Style="{StaticResource LabelStyle}"></Label>
-            <ComboBox ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Дата выполнения"
+            <TextBlock Text="{Binding Report.To, Converter={StaticResource ExecutorConverter}}"
+                       FontSize="18"
+                       Margin="10 0 0 0"
+                       Foreground="White"
+                       TextWrapping="Wrap"/>
+            <Label Content="Содержание отчета"
                        Style="{StaticResource LabelStyle}"></Label>
-            <DatePicker SelectedDate="{Binding Task.CompleteDate, UpdateSourceTrigger=PropertyChanged}"/>
-            <Label Content="Описание"
-                       Style="{StaticResource LabelStyle}"></Label>
-            <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding Task.Description, UpdateSourceTrigger=PropertyChanged}"
-                 TextWrapping="Wrap"
-                 Height="70"/>
+            <TextBox FontSize="18"
+                     Background="Transparent"
+                     BorderBrush="White"
+                     Foreground="White"
+                     Text="{Binding Report.Description, UpdateSourceTrigger=PropertyChanged}"
+                     Height="125"
+                     TextWrapping="Wrap"/>
             <Grid>
                 <Button Content="Подтвердить"
                     Style="{StaticResource RegisterButton}"
                     Margin="0 10 0 0"
                     HorizontalAlignment="Left"
-                    Command="{Binding AddTaskCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
-                        Width="120"/>
+                        Width="120"
+                        Command="{Binding SubmitCommand}"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
                 <Button Content="Отмена"
                     Style="{StaticResource RegisterButton}"
                     Margin="0 10 0 0"
                     HorizontalAlignment="Right"
-                    Command="{Binding CancelCommand}"
-                    CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"
-                        Width="120"/>
+                        Width="120"
+                        CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                    <Button.Command>
+                        <commands:CloseWindowCommand/>
+                    </Button.Command>
+
+                </Button>
             </Grid>
         </StackPanel>
     </Grid>
-    
 </Window>

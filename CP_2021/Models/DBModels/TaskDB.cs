@@ -17,7 +17,7 @@ namespace CP_2021.Models.DBModels
         public virtual UserDB To { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(30)")]
+        [Column(TypeName = "nvarchar(60)")]
         public string Header { get; set; }
         [Column(TypeName = "date")]
         public DateTime? CompleteDate { get; set; }

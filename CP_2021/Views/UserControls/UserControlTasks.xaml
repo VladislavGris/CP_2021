@@ -29,13 +29,31 @@
                   ItemsSource="{Binding Tasks}">
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Header}"/>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding CompleteDate, Converter={StaticResource DateConverter}}"/>
-                            <TextBlock Text="{Binding To, Converter={StaticResource ExecutorConverter}}"/>
-                        </StackPanel>
-                    </StackPanel>
+                    <Grid>
+                        <Expander>
+                            <Grid>
+                                <TextBlock Text="{Binding Description}"/>
+                            </Grid>
+                        </Expander>
+                        <TextBlock Text="{Binding Header}"
+                                   Margin="30 0 0 0"/>
+                        <TextBlock Text="{Binding CompleteDate, Converter={StaticResource DateConverter}}"
+                                   Margin="90 0 0 0"/>
+                        <TextBlock Text="{Binding Report.To,Converter={StaticResource ExecutorConverter}}"
+                                   Margin="180 0 0 0"/>
+                        <Button Content="Отправить отчет"
+                                Visibility="{Binding Report.State, Converter={StaticResource SendReportConverter}}"
+                                Command="{Binding DataContext.OpenSendReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Report}"
+                                HorizontalAlignment="Right"
+                                Width="120"/>
+                        <Button Content="Просмотреть отчет"
+                                Visibility="{Binding Report.State, Converter={StaticResource ShowReportConverter}}"
+                                HorizontalAlignment="Right"
+                                Width="120"
+                                Command="{Binding DataContext.OpenShowReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Report}"/>
+                    </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

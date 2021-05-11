@@ -19,8 +19,14 @@ namespace CP_2021.Infrastructure.Converters
                 case 1:
                     return "Склад";
                 case 2:
-                    return "Формирование актов";
+                    return "Отработка документации";
                 case 3:
+                    return "ВК на склад";
+                case 4:
+                    return "В работе";
+                case 5:
+                    return "Формирование актов";
+                case 6:
                     return "Склад ОЭЦ";
                 default:
                     return "Не задано";

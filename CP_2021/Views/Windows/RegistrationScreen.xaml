@@ -16,6 +16,9 @@
     <Window.DataContext>
         <vm:RegistrationViewModel/>
     </Window.DataContext>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SubmitCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}" Key="Enter"/>
+    </Window.InputBindings>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"></RowDefinition>
@@ -32,22 +35,22 @@
                 <Label Content="Логин"
                        Style="{StaticResource LabelStyle}"></Label>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding Login, Mode=TwoWay}"/>
+                         Text="{Binding Login, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Пароль"
                        Style="{StaticResource LabelStyle}"></Label>
                 <PasswordBox Style="{StaticResource PasswordBoxStyle}">
                     <ie:Interaction.Behaviors>
-                        <b:PasswordBoxBehavior Password="{Binding Password, Mode=TwoWay}"/>
+                        <b:PasswordBoxBehavior Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </ie:Interaction.Behaviors>
                 </PasswordBox>
                 <Label Content="Имя"
                        Style="{StaticResource LabelStyle}"></Label>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding Name, Mode=TwoWay}"/>
+                         Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Фамилия"
                        Style="{StaticResource LabelStyle}"></Label>
                 <TextBox Style="{StaticResource TextBoxStyle}"
-                         Text="{Binding Surname, Mode=TwoWay}"/>
+                         Text="{Binding Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Content="Регистрация"
                         Style="{StaticResource RegisterButton}"
                         Command="{Binding SubmitCommand}"

@@ -1,5 +1,6 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.ViewModels.Base;
+using CP_2021.ViewModels;
 using System.Windows.Input;
 using System.Windows;
 using System.Windows.Controls;
@@ -138,7 +139,7 @@ namespace CP_2021.ViewModels
                     InitProductionPlanControl();
                     break;
                 case "ItemReports":
-                    ContentContainerContent = new UserControlReports();
+                    InitReports();
                     break;
                 case "ItemTasks":
                     InitMyTasks();
@@ -203,6 +204,14 @@ namespace CP_2021.ViewModels
             tasks.DataContext = new MyTasksViewModel(Unit, User);
             ContentContainerContent = tasks;
         }
+
+        private void InitReports()
+        {
+            UserControlReports reports = new UserControlReports();
+            reports.DataContext = new ReportsViewModel(Unit);
+            ContentContainerContent = reports;
+        }
+
         #endregion
 
         public ProductionPlanViewModel()

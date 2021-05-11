@@ -18,6 +18,8 @@ namespace CP_2021.Models.Classes
 
         public ProductionTaskDB Task { get; set; }
 
+        public ProductionTask() { }
+
         public ProductionTask(ProductionTaskDB task)
         {
             this.Task = task;

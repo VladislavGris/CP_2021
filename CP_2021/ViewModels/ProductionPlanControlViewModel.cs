@@ -58,7 +58,6 @@ namespace CP_2021.ViewModels
         #endregion
 
         #region ProductionTasks
-        // TODO: Возможно стоит убрать
         private List<ProductionTaskDB> _productionTasks;
 
         public List<ProductionTaskDB> ProductionTasks
@@ -137,7 +136,7 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             ProductionTask task = new ProductionTask(dbTask);
             if (SelectedTask?.Task.MyParent != null)
             {
@@ -176,7 +175,7 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             dbTask.MyParent = new HierarchyDB(SelectedTask.Task, dbTask);
             ProductionTask task = new ProductionTask(dbTask);
             Unit.Tasks.Insert(dbTask);
@@ -264,7 +263,7 @@ namespace CP_2021.ViewModels
 
         private void OnLevelDownCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новая задача");
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             ProductionTask task = new ProductionTask(dbTask);
             ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;

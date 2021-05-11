@@ -97,7 +97,7 @@ namespace CP_2021.ViewModels
 
         public ICommand SubmitCommand { get; }
 
-        private bool CanSubmitCommandExecute(object p) => true;
+        private bool CanSubmitCommandExecute(object p) => Login != null && Password != null && Name != null && Surname != null;
 
         private void OnSubmitCommandExecuted(object p)
         {

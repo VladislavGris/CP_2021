@@ -46,97 +46,51 @@
                         <Button Content="Отчет"
                                 IsEnabled="{Binding Report.State, Converter={StaticResource ReportConverter}}"
                                 HorizontalAlignment="Right"
-                                Width="50"/>
+                                Width="50"
+                                Command="{Binding DataContext.OpenShowReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                CommandParameter="{Binding Report}"/>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <Button Panel.ZIndex="1"
-                Grid.Row="1"
-                Width="50"
-                Height="50"
+        <Button Grid.Row="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="0 0 20 140"
-                ToolTip="Добавить задачу"
-                Command="{Binding UpdateCollectionCommand}">
+                ToolTip="Обновить"
+                Command="{Binding UpdateCollectionCommand}"
+                Style="{StaticResource CircleButton}">
             <Button.Content >
                 <fa:ImageAwesome Icon="Solid_Sync"
                                  Foreground="{StaticResource ForegroundBrush}"
                                  Width="30"/>
             </Button.Content>
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <Ellipse Stroke="White">
-                            <Ellipse.Fill>
-                                <SolidColorBrush Color="#31577e"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <ContentPresenter x:Name="content"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-                </ControlTemplate>
-            </Button.Template>
         </Button>
-        <Button Panel.ZIndex="1"
-                Grid.Row="1"
-                Width="50"
-                Height="50"
+        <Button Grid.Row="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="0 0 20 85"
                 ToolTip="Добавить задачу"
-                Command="{Binding OpenAddTaskWindow}">
+                Command="{Binding OpenAddTaskWindow}"
+                Style="{StaticResource CircleButton}">
             <Button.Content >
                 <fa:ImageAwesome Icon="Solid_Plus"
                                  Foreground="{StaticResource ForegroundBrush}"
                                  Width="30"/>
             </Button.Content>
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <Ellipse Stroke="White">
-                            <Ellipse.Fill>
-                                <SolidColorBrush Color="#31577e"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <ContentPresenter x:Name="content"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-                </ControlTemplate>
-            </Button.Template>
         </Button>
-        <Button Panel.ZIndex="1"
-                Grid.Row="1"
-                Width="50"
-                Height="50"
+        <Button Grid.Row="1"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Margin="0 0 20 30"
                 ToolTip="Удалить задачу"
-                Command="{Binding RemoveTaskCommand}">
+                Command="{Binding RemoveTaskCommand}"
+                Style="{StaticResource CircleButton}">
             <Button.Content >
                 <fa:ImageAwesome Icon="Solid_Minus"
                                  Foreground="{StaticResource ForegroundBrush}"
                                  Width="30"/>
             </Button.Content>
-            <Button.Template>
-                <ControlTemplate TargetType="Button">
-                    <Grid>
-                        <Ellipse Stroke="White">
-                            <Ellipse.Fill>
-                                <SolidColorBrush Color="#31577e"/>
-                            </Ellipse.Fill>
-                        </Ellipse>
-                        <ContentPresenter x:Name="content"
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
-                    </Grid>
-                </ControlTemplate>
-            </Button.Template>
         </Button>
     </Grid>
 </UserControl>
