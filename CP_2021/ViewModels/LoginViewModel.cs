@@ -13,6 +13,7 @@ using CP_2021.Data;
 using System.Windows.Data;
 using Microsoft.Data.SqlClient;
 using System.Windows;
+using CP_2021.Infrastructure;
 
 namespace CP_2021.ViewModels
 {
@@ -20,7 +21,7 @@ namespace CP_2021.ViewModels
     {
         #region Поля
 
-        private readonly string FIND_USER = "SELECT * FROM Users WHERE Login=@login AND Password=@password";
+        private readonly string FIND_USER = "SELECT * FROM Users WHERE Login=@login";
         private ApplicationUnit _unit;
 
         #endregion
@@ -84,16 +85,15 @@ namespace CP_2021.ViewModels
                 return;
             }
             SqlParameter loginParam = new SqlParameter("@login", Login);
-            SqlParameter passwordParam = new SqlParameter("@password", Password);
-            var user = _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam, passwordParam);
-            if (user.ToList().Count != 0)
+            var user = _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
+            if (user.ToList().Count != 0 && PasswordHashing.ValidatePassword(Password, user.ToList().ElementAt(0).Password))
             {
-                ProductionPlan plan = new ProductionPlan();
-                plan.DataContext = new ProductionPlanViewModel();
-                ((ProductionPlanViewModel)plan.DataContext).User = user.ToList().ElementAt(0);
-                ((ProductionPlanViewModel)plan.DataContext).Unit = _unit;
-                ((LoginScreen)p).Close();
-                plan.Show();
+                    ProductionPlan plan = new ProductionPlan();
+                    plan.DataContext = new ProductionPlanViewModel();
+                    ((ProductionPlanViewModel)plan.DataContext).User = user.ToList().ElementAt(0);
+                    ((ProductionPlanViewModel)plan.DataContext).Unit = _unit;
+                    ((LoginScreen)p).Close();
+                    plan.Show();
             }
             else
             {

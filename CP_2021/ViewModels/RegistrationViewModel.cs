@@ -13,6 +13,7 @@ using System.Windows;
 using CP_2021.Data;
 using Microsoft.Data.SqlClient;
 using CP_2021.Models.DBModels;
+using CP_2021.Infrastructure;
 
 namespace CP_2021.ViewModels
 {
@@ -123,7 +124,8 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Такой логин уже существует");
                 return;
             }
-            UserDB newUser = new UserDB(Login, Password, Name, Surname);
+            string passwordHash = PasswordHashing.CreateHash(Password);
+            UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
             _unit.DBUsers.Insert(newUser);
             _unit.Commit();
             ProductionPlan plan = new ProductionPlan();

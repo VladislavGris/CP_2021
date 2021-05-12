@@ -17,7 +17,7 @@ namespace CP_2021.Models.DBModels
         public string Login { get; set; }
 
         [Required]
-        [Column(TypeName = "nvarchar(15)")]
+        [Column(TypeName = "nvarchar(70)")]
         public string Password { get; set; }
 
         [Column(TypeName = "nvarchar(50)")]
