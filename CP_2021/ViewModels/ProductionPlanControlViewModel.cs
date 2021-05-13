@@ -269,27 +269,33 @@ namespace CP_2021.ViewModels
 
         private void OnDeleteProductionTaskCommandExecuted(object p)
         {
-            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            SelectedTask.Remove(Unit);
-            Unit.Commit();
-            if(parent == null)
+            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить элемент {SelectedTask.Task.Name}?", "Удаление", MessageBoxButton.YesNo);
+            switch (result)
             {
-                if (Model.Count != 0)
-                    SelectedTask = (ProductionTask)Model.Last();
-                else
-                    SelectedTask = null;
-            }
-            else
-            {
-                if (parent.Children.Count != 0)
-                    SelectedTask = (ProductionTask)parent.Children.Last();
-                else
-                    SelectedTask = parent;
-            }
-            if (parent?.Children.Count == 0)
-            {
-                parent.HasChildren = false;
-                parent.IsExpanded = false;
+                case MessageBoxResult.Yes:
+                    ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+                    SelectedTask.Remove(Unit);
+                    Unit.Commit();
+                    if (parent == null)
+                    {
+                        if (Model.Count != 0)
+                            SelectedTask = (ProductionTask)Model.Last();
+                        else
+                            SelectedTask = null;
+                    }
+                    else
+                    {
+                        if (parent.Children.Count != 0)
+                            SelectedTask = (ProductionTask)parent.Children.Last();
+                        else
+                            SelectedTask = parent;
+                    }
+                    if (parent?.Children.Count == 0)
+                    {
+                        parent.HasChildren = false;
+                        parent.IsExpanded = false;
+                    }
+                    break;
             }
         }
 
