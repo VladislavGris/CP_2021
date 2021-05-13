@@ -8,6 +8,7 @@ using CP_2021.Views.UserControls;
 using CP_2021.Models.DBModels;
 using CP_2021.Infrastructure.Units;
 using System.Diagnostics;
+using CP_2021.Views.Windows;
 
 namespace CP_2021.ViewModels
 {
@@ -133,7 +134,10 @@ namespace CP_2021.ViewModels
 
         private void OnChangeContentCommandExecuted(object p)
         {
-            switch (((ListViewItem)p).Name)
+            var parameters = (object[])p;
+            var list = (ListViewItem)parameters[0];
+            var window = (Window)parameters[1];
+            switch (list.Name)
             {
                 case "ItemProductionPlan":
                     InitProductionPlanControl();
@@ -152,6 +156,17 @@ namespace CP_2021.ViewModels
                     break;
                 case "ItemAdministrativePannel":
                     InitAdministrativePannelControl();
+                    break;
+                case "ItemLogOut":
+                    MessageBoxResult result = MessageBox.Show("Вы действительно хотите выйти", "Выход", MessageBoxButton.YesNo);
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes:
+                            LoginScreen login = new LoginScreen();
+                            window.Close();
+                            login.Show();
+                            break;
+                    }
                     break;
                 default:
                     break;

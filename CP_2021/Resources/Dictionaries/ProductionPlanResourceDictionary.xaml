@@ -21,6 +21,7 @@
     <convert:CompletionConverter x:Key="CompletionConverter"/>
     <convert:ShowReportButtonVisibilityConverter x:Key="ShowReportConverter"/>
     <convert:SendReportButtonVisibilityConverter x:Key="SendReportConverter"/>
+    <convert:MultiParameterConverter x:Key="MultiParameterConverter"/>
 
     <!--Brushes #575757 -->
     <SolidColorBrush x:Key="ForegroundBrush" Color="#6393C2" />

@@ -9,6 +9,7 @@
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         x:Class="CP_2021.Views.Windows.ProductionPlan"
         mc:Ignorable="d"
+    x:Name="ProductionPlanWindow"
         Title="{Binding Title}" Height="720" Width="1280" MinHeight="550" MinWidth="630" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
         WindowState="Maximized">
     
@@ -228,7 +229,14 @@
                     </ListView.Resources>
                     <ie:Interaction.Triggers>
                         <ie:EventTrigger EventName="SelectionChanged">
-                            <ie:InvokeCommandAction Command="{Binding ChangeContentCommand}" CommandParameter="{Binding ElementName=ListViewMenu, Path=SelectedItem}"/>
+                            <ie:InvokeCommandAction Command="{Binding ChangeContentCommand}">
+                                <ie:InvokeCommandAction.CommandParameter>
+                                    <MultiBinding Converter="{StaticResource MultiParameterConverter}">
+                                        <Binding Path="SelectedItem" ElementName="ListViewMenu"/>
+                                        <Binding Path="." ElementName="ProductionPlanWindow"/>
+                                    </MultiBinding>
+                                </ie:InvokeCommandAction.CommandParameter>
+                            </ie:InvokeCommandAction>
                         </ie:EventTrigger>
                     </ie:Interaction.Triggers>
                     <ListViewItem x:Name="ItemProductionPlan" Height="60">
@@ -282,7 +290,14 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>-->
-
+                    <ListViewItem x:Name="ItemLogOut" Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:ImageAwesome Icon="Solid_SignOutAlt"
+                                             Style="{StaticResource TooltipIconStyle}"/>
+                            <TextBlock Text="Администрирование"
+                                       Style="{StaticResource TooltipTextblockStyle}"/>
+                        </StackPanel>
+                    </ListViewItem>
                 </ListView>
             </StackPanel>
         </Grid>
