@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace CP_2021.ViewModels
@@ -121,9 +122,15 @@ namespace CP_2021.ViewModels
 
         private void OnRemoveTaskCommandExecuted(object p)
         {
-            Unit.UserTasks.Delete((TaskDB)p);
-            Unit.Commit();
-            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить задачу {((TaskDB)p).Header}?", "Удаление", MessageBoxButton.YesNo);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    Unit.UserTasks.Delete((TaskDB)p);
+                    Unit.Commit();
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+                    break;
+            }
         }
 
         #endregion
