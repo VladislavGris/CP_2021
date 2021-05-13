@@ -54,6 +54,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region FilterSelection
+
+        private int _filterSelection = 0;
+
+        public int FilterSelection
+        {
+            get => _filterSelection;
+            set => Set(ref _filterSelection, value);
+        }
+
+        #endregion
+
         #endregion
 
         #region Команды
@@ -97,7 +109,47 @@ namespace CP_2021.ViewModels
         private void OnRefreshCommandExecuted(object p)
         {
             Unit.Refresh();
-            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(u => u.To.Equals(User)));
+            switch (FilterSelection)
+            {
+                case 0:
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
+                    break;
+                case 1:
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
+                    break;
+                case 2:
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
+        #region FilterSelectionChanged
+
+        public ICommand FilterSelectionChanged { get; }
+
+        private bool CanFilterSelectionChangedExecute(object p) => true;
+
+        private void OnFilterSelectionChangedExecuted(object p)
+        {
+            Unit.Refresh();
+            switch (FilterSelection)
+            {
+                case 0:
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
+                    break;
+                case 1:
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
+                    break;
+                case 2:
+                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion
@@ -113,6 +165,7 @@ namespace CP_2021.ViewModels
             OpenSendReportWindowCommand = new LambdaCommand(OnOpenSendReportWindowCommandExecuted, CanOpenSendReportWindowCommandExecute);
             OpenShowReportWindowCommand = new LambdaCommand(OnOpenShowReportWindowCommandExecuted, CanOpenShowReportWindowCommandExecute);
             RefreshCommand = new LambdaCommand(OnRefreshCommandExecuted, CanRefreshCommandExecute);
+            FilterSelectionChanged = new LambdaCommand(OnFilterSelectionChangedExecuted, CanFilterSelectionChangedExecute);
 
             #endregion
 

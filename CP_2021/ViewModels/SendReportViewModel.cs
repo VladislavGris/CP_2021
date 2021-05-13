@@ -80,7 +80,20 @@ namespace CP_2021.ViewModels
             Report.State = true;
             Unit.Commit();
             Unit.Refresh();
-            MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(u => u.To.Equals(User)));
+            switch (MyTasksVM.FilterSelection)
+            {
+                case 0:
+                    MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
+                    break;
+                case 1:
+                    MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
+                    break;
+                case 2:
+                    MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
+                    break;
+                default:
+                    break;
+            }
             ((Window)p).Close();
         }
 

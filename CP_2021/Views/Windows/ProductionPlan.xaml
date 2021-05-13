@@ -9,7 +9,7 @@
         xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands"
         x:Class="CP_2021.Views.Windows.ProductionPlan"
         mc:Ignorable="d"
-        Title="Company Planner" Height="720" Width="1280" MinHeight="550" MinWidth="585" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
+        Title="Company Planner" Height="720" Width="1280" MinHeight="550" MinWidth="630" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
         WindowState="Maximized">
     
     <Window.DataContext>
