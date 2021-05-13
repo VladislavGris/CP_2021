@@ -60,7 +60,7 @@ namespace CP_2021.ViewModels
         #endregion
 
         #region Title
-        private string _Title = "Production Plan";
+        private string _Title = "Company Planner";
 
         /// <summary>Заголовок окна</summary>
         public string Title
@@ -223,6 +223,21 @@ namespace CP_2021.ViewModels
             ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
             WindowLoadedCommand = new LambdaCommand(OnWindowLoadedCommandExecuted, CanWindowLoadedCommandExecute);
             #endregion
+        }
+
+        public ProductionPlanViewModel(UserDB user, ApplicationUnit unit)
+        {
+            #region Команды
+
+            ButtonCloseMenuCommand = new LambdaCommand(OnButtonCloseMenuCommandExecuted, CanButtonCloseMenuCommandExecute);
+            ButtonOpenMenuCommand = new LambdaCommand(OnButtonOpenMenuCommandExecuted, CanButtonOpenMenuCommandExecute);
+            ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
+            WindowLoadedCommand = new LambdaCommand(OnWindowLoadedCommandExecuted, CanWindowLoadedCommandExecute);
+            #endregion
+
+            User = user;
+            Unit = unit;
+            Title = $"Company Planner Пользователь: {User.Surname} {User.Name}";
         }
     }
 }

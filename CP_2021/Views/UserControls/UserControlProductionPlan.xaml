@@ -15,6 +15,9 @@
             <Setter Property="BorderBrush" Value="Transparent"/>
         </Style>
     </UserControl.Resources>
+    <UserControl.InputBindings>
+        <KeyBinding Key="F5" Command="{Binding UpdateModelCommand}"/>
+    </UserControl.InputBindings>
     <UserControl.DataContext>
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>

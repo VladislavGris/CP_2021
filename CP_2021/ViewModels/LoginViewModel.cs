@@ -89,9 +89,9 @@ namespace CP_2021.ViewModels
             if (user.ToList().Count != 0 && PasswordHashing.ValidatePassword(Password, user.ToList().ElementAt(0).Password))
             {
                     ProductionPlan plan = new ProductionPlan();
-                    plan.DataContext = new ProductionPlanViewModel();
-                    ((ProductionPlanViewModel)plan.DataContext).User = user.ToList().ElementAt(0);
-                    ((ProductionPlanViewModel)plan.DataContext).Unit = _unit;
+                    plan.DataContext = new ProductionPlanViewModel(user.ToList().ElementAt(0), _unit);
+                    //((ProductionPlanViewModel)plan.DataContext).User = user.ToList().ElementAt(0);
+                    //((ProductionPlanViewModel)plan.DataContext).Unit = _unit;
                     ((LoginScreen)p).Close();
                     plan.Show();
             }
