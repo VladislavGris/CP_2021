@@ -59,7 +59,6 @@ namespace CP_2021.Infrastructure.Repositories.Base
             foreach (var entity in dbSet.ToList())
             {
                 context.Entry(entity).Reload();
-
             }
 
         }

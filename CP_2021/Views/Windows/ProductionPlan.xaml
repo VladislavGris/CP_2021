@@ -294,7 +294,7 @@
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_SignOutAlt"
                                              Style="{StaticResource TooltipIconStyle}"/>
-                            <TextBlock Text="Администрирование"
+                            <TextBlock Text="Выход"
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>

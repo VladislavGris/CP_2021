@@ -107,7 +107,15 @@ namespace CP_2021.ViewModels
         {
             OpenRegistrationWindowCommand = new LambdaCommand(OnOpenRegistrationWindowCommandExecuted, CanOpenRegistrationWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
-            _unit = new ApplicationUnit(new ApplicationContext());
+            try
+            {
+                _unit = new ApplicationUnit(new ApplicationContext());
+            }
+            catch (SqlException e)
+            {
+                MessageBox.Show(e.Message);
+                Application.Current.Shutdown();
+            }
         }
     }
 }

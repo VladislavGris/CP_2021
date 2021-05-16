@@ -11,7 +11,7 @@
         ResizeMode="NoResize"
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png">
     <Window.DataContext>
         <vm:SendReportViewModel/>
     </Window.DataContext>

@@ -12,7 +12,7 @@
         Title="RegistrationScreen" Height="470"
         Style="{StaticResource WindowStyle}"
         WindowStartupLocation="CenterScreen"
-        x:Name="LoginWindow">
+        x:Name="LoginWindow" Icon="/Views/Windows/icon.png">
     <Window.DataContext>
         <vm:RegistrationViewModel/>
     </Window.DataContext>

@@ -9,7 +9,7 @@
         Title="ViewReportWindow" Height="320" Width="400" ResizeMode="NoResize" WindowStyle="None"
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>

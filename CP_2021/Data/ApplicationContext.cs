@@ -1,5 +1,6 @@
 ﻿using CP_2021.Infrastructure;
 using CP_2021.Models.DBModels;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace CP_2021.Data
 {
@@ -36,8 +38,8 @@ namespace CP_2021.Data
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ReportDB>().HasIndex(r => r.TaskId).IsUnique();
             #endregion
-            string passwordHash = PasswordHashing.CreateHash("1337");
-            modelBuilder.Entity<UserDB>().HasData(new UserDB("vlad", passwordHash, "Владислав", "Гришкевич") { Id = 1, Position = 2 });
+            string passwordHash = PasswordHashing.CreateHash("8558286");
+            modelBuilder.Entity<UserDB>().HasData(new UserDB("grishkevichai", passwordHash, "Алексей", "Гришкевич") { Id = 1, Position = 2 });
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Parent).WithMany(t => t.ParentTo).HasForeignKey(h => h.ParentId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Child).WithOne(t => t.MyParent);

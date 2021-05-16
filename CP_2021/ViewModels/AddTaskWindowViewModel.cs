@@ -114,6 +114,11 @@ namespace CP_2021.ViewModels
 
         private void OnAddTaskCommandExecuted(object p)
         {
+            if (SelectedUser == null || Task.Description == null || Task.CompleteDate == null || Task.Header == null)
+            { 
+                MessageBox.Show("Все поля должны быть заполнены");
+                return;
+            }
             Task.To = SelectedUser;
             ReportDB report = new ReportDB(User, Task);
             Task.Report = report;

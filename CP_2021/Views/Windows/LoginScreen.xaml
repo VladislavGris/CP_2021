@@ -15,7 +15,7 @@
         Height="350"
         WindowStartupLocation="CenterScreen"
         x:Name="LoginScreenWindow"
-        Style="{StaticResource WindowStyle}">
+        Style="{StaticResource WindowStyle}" Icon="/Views/Windows/icon.png">
     <Window.DataContext>
         <vm:LoginViewModel/>
     </Window.DataContext>
