@@ -11,16 +11,16 @@ namespace CP_2021.Models.DBModels
     [Table("In_Production")]
     internal class InProductionDB : Entity
     {
-        [Column("Number", TypeName ="nvarchar(30)")]
+        [Column("Number", TypeName = "nvarchar(MAX)")]
         public string Number { get; set; }
 
         [Column("Giving_Date", TypeName ="date")]
         public DateTime? GivingDate { get; set; }
 
-        [Column("Executor_Name", TypeName ="nvarchar(80)")]
+        [Column("Executor_Name", TypeName = "nvarchar(MAX)")]
         public string ExecutorName { get; set; }
 
-        [Column("Install_Executor_Name", TypeName ="nvarchar(80)")]
+        [Column("Install_Executor_Name", TypeName = "nvarchar(MAX)")]
         public string ExecutorName2 { get; set; }
 
         [Column("Completion_Date", TypeName="date")]

@@ -14,13 +14,13 @@ namespace CP_2021.Models.DBModels
         [Column("G_State", TypeName ="bit")]
         public bool? State { get; set; }
 
-        [Column("Bill", TypeName ="nvarchar(50)")]
+        [Column("Bill", TypeName = "nvarchar(MAX)")]
         public string Bill { get; set; }
 
-        [Column("Report", TypeName ="nvarchar(50)")]
+        [Column("Report", TypeName = "nvarchar(MAX)")]
         public string Report { get; set; }
 
-        [Column("Return_Report", TypeName ="nvarchar(50)")]
+        [Column("Return_Report", TypeName = "nvarchar(MAX)")]
         public string ReturnReport { get; set; }
 
         [Column("Receiving_Date", TypeName ="date")]

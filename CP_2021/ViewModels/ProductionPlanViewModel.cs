@@ -10,7 +10,6 @@ using CP_2021.Infrastructure.Units;
 using System.Diagnostics;
 using CP_2021.Views.Windows;
 using System;
-using Notifications.Wpf;
 
 namespace CP_2021.ViewModels
 {
@@ -255,14 +254,6 @@ namespace CP_2021.ViewModels
             User = user;
             Unit = unit;
             Title = $"Company Planner Пользователь: {User.Surname} {User.Name}";
-
-            //var notificationManager = new NotificationManager();
-            //notificationManager.Show(new NotificationContent
-            //{
-            //    Title = "Sample notification",
-            //    Message = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            //    Type = NotificationType.Information
-            //});
         }
     }
 }

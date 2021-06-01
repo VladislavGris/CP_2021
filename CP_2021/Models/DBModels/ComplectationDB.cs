@@ -11,7 +11,7 @@ namespace CP_2021.Models.DBModels
     [Table("Complectation")]
     internal class ComplectationDB : Entity
     {
-        [Column("Complectation", TypeName = "nvarchar(100)")]
+        [Column("Complectation", TypeName = "nvarchar(MAX)")]
         public string Complectation { get; set; }
 
         [Column("C_Date", TypeName = "date")]

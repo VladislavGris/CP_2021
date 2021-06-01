@@ -11,13 +11,13 @@ namespace CP_2021.Models.DBModels
     [Table("Manufacture")]
     internal class ManufactureDB : Entity
     {
-        [Column("M_Name", TypeName ="nvarchar(80)")]
+        [Column("M_Name", TypeName = "nvarchar(MAX)")]
         public string Name { get; set; }
 
-        [Column("Letter_Num", TypeName = "nvarchar(50)")]
+        [Column("Letter_Num", TypeName = "nvarchar(MAX)")]
         public string LetterNum { get; set; }
 
-        [Column("Specification_Num", TypeName = "nvarchar(50)")]
+        [Column("Specification_Num", TypeName = "nvarchar(MAX)")]
         public string SpecNum { get; set; }
 
         [Column("Production_Task_Id")]

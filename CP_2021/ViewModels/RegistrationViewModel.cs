@@ -129,9 +129,7 @@ namespace CP_2021.ViewModels
             _unit.DBUsers.Insert(newUser);
             _unit.Commit();
             ProductionPlan plan = new ProductionPlan();
-            plan.DataContext = new ProductionPlanViewModel();
-            ((ProductionPlanViewModel)plan.DataContext).User = newUser;
-            ((ProductionPlanViewModel)plan.DataContext).Unit = _unit;
+            plan.DataContext = new ProductionPlanViewModel(newUser, _unit);
             ((RegistrationScreen)p).Close();
             plan.Show();
         }

@@ -1,89 +1,56 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="CP_2021.Models.DBModels.ComplectationDB">
-    <Position X="10.25" Y="1" Width="1.5" />
+    <Position X="2.5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>CAAAAAAAAAAAAAAAAABAAAAAABgAAAAAAQAAAAAAABA=</HashCode>
       <FileName>Models\DBModels\ComplectationDB.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CP_2021.Models.DBModels.GivingDB">
-    <Position X="12.25" Y="0.75" Width="2.75" />
+    <Position X="6" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAIAAAAAAAAAAAAAAAAAAABAAAAABAQAABQAABBA=</HashCode>
       <FileName>Models\DBModels\GivingDB.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CP_2021.Models.DBModels.HierarchyDB">
-    <Position X="8.5" Y="1" Width="1.5" />
+    <Position X="11.25" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAAAAAAQAAAAAAAAAAAAgAAAAAAAAg=</HashCode>
       <FileName>Models\DBModels\HierarchyDB.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CP_2021.Models.DBModels.InProductionDB">
-    <Position X="6.5" Y="0.75" Width="1.5" />
+    <Position X="7.75" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAAAAAAABAAEAAAAAAABEAAAAAAQAAAgAAABA=</HashCode>
       <FileName>Models\DBModels\InProductionDB.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CP_2021.Models.DBModels.ManufactureDB">
-    <Position X="1.25" Y="0.75" Width="1.5" />
+    <Position X="9.5" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAIAAAAAAAAAAQAABACAAAAAQAAAAAAABA=</HashCode>
       <FileName>Models\DBModels\ManufactureDB.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="CP_2021.Models.DBModels.ProductionTaskDB">
-    <Position X="3" Y="0.75" Width="1.5" />
+    <Position X="4.25" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>EAgAAAAAgAAAEAEAAADAAAQCACAAACAAAAAABAEEARA=</HashCode>
       <FileName>Models\DBModels\ProductionTaskDB.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="CP_2021.Models.DBModels.ReportDB">
-    <Position X="4.75" Y="0.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAgAAAAAAAAAAAAAAgIAAAAAEAABAAAAAA=</HashCode>
-      <FileName>Models\DBModels\ReportDB.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CP_2021.Models.DBModels.TaskDB">
-    <Position X="1.25" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>BAAAAIAAAAAgAAAAAAAAAAACAAAIAAAAAAAAAAAEBAA=</HashCode>
-      <FileName>Models\DBModels\TaskDB.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="CP_2021.Models.DBModels.UserDB">
-    <Position X="4.75" Y="3.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>IAAAAAAAAAAAAAAkAAAAAAQABAAAAAACAAAYAAAAAAA=</HashCode>
-      <FileName>Models\DBModels\UserDB.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="CP_2021.Models.Classes.ProductionTask">
-    <Position X="6.5" Y="4.25" Width="1.5" />
+    <Position X="0.75" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAEgAAAAAAAAAAAAABAAAAAAAAAAAAEAAAAAIABA=</HashCode>
       <FileName>Models\Classes\ProductionTask.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Common.Wpf.Data.TreeGridElement">
-    <Position X="8.75" Y="3.75" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
-  <Class Name="Common.Wpf.Data.TreeGridFlatModel">
-    <Position X="12.75" Y="5" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
-  <Class Name="Common.Wpf.Data.TreeGridModel">
-    <Position X="11" Y="4.75" Width="1.5" />
-    <TypeIdentifier />
-  </Class>
   <Class Name="CP_2021.Models.Base.Entity">
-    <Position X="3" Y="7.25" Width="1.5" />
+    <Position X="4.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Models\Base\Entity.cs</FileName>

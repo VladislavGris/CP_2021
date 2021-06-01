@@ -753,27 +753,17 @@ namespace CP_2021.ViewModels
 
         private void SearchBySpecificationCost(ProductionTask task)
         {
-            ErrorMessage = null;
-            decimal cost;
-            if (decimal.TryParse(SearchString, out cost))
+            if (task.Task.SpecCost.ToLower().Equals(SearchString.ToLower()))
             {
-                if (task.Task.SpecCost == cost)
+                SearchResults.Add(task);
+            }
+            if (task.HasChildren)
+            {
+                foreach (ProductionTask child in task.Children)
                 {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchBySpecificationCost(child);
-                    }
+                    SearchBySpecificationCost(child);
                 }
             }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно";
-            }
-
         }
 
         private void SearchByIncDoc(ProductionTask task)

@@ -3,6 +3,7 @@ using CP_2021.Infrastructure.Units;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using CP_2021.Views.Windows;
+using Notifications.Wpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -109,15 +110,43 @@ namespace CP_2021.ViewModels
         private void OnRefreshCommandExecuted(object p)
         {
             Unit.Refresh();
+            var notificationManager = new NotificationManager();
             switch (FilterSelection)
             {
                 case 0:
+                    if(Tasks.ToList().Count < Unit.UserTasks.Get().Where(t => t.To.Equals(User)).ToList().Count)
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Задачи",
+                            Message = "У вас появились новые задачи",
+                            Type = NotificationType.Information
+                        });
+                    }
                     Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
                     break;
                 case 1:
+                    if (Tasks.ToList().Count < Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true).ToList().Count)
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Задачи",
+                            Message = "У вас появились новые задачи",
+                            Type = NotificationType.Information
+                        });
+                    }
                     Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
                     break;
                 case 2:
+                    if (Tasks.ToList().Count < Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false).ToList().Count)
+                    {
+                        notificationManager.Show(new NotificationContent
+                        {
+                            Title = "Задачи",
+                            Message = "У вас появились новые задачи",
+                            Type = NotificationType.Information
+                        });
+                    }
                     Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
                     break;
                 default:

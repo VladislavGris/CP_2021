@@ -13,21 +13,21 @@ namespace CP_2021.Models.DBModels
     [Table("Production_Plan")]
     internal class ProductionTaskDB : Entity
     {
-        [Column("Inc_Doc", TypeName = "nvarchar(100)")]
+        [Column("Inc_Doc", TypeName = "nvarchar(MAX)")]
         public string IncDoc { get; set; }
 
-        [Column("Manag_Doc", TypeName = "nvarchar(100)")]
+        [Column("Manag_Doc", TypeName = "nvarchar(MAX)")]
         public string ManagDoc { get; set; }
 
         [Required]
-        [Column("Task_Name", TypeName = "nvarchar(300)")]
+        [Column("Task_Name", TypeName = "nvarchar(MAX)")]
         public string Name { get; set; }
 
         [Column("P_Count")]
         public int? Count { get; set; }
 
-        [Column("Specification_Cost")]
-        public decimal? SpecCost { get; set; }
+        [Column("Specification_Cost", TypeName = "nvarchar(MAX)")]
+        public String SpecCost { get; set; }
 
         [Column("P_Vish_Date", TypeName = "date")]
         public DateTime? VishDate { get; set; }
@@ -35,7 +35,7 @@ namespace CP_2021.Models.DBModels
         [Column("P_Real_Date", TypeName = "date")]
         public DateTime? RealDate { get; set; }
 
-        [Column("Expend_Num", TypeName = "nvarchar(30)")]
+        [Column("Expend_Num", TypeName = "nvarchar(MAX)")]
         public string ExpendNum { get; set; }
 
         [Column("Note", TypeName = "nvarchar(MAX)")]
@@ -82,5 +82,7 @@ namespace CP_2021.Models.DBModels
 
             return taskDB;
         }
+
+
     }
 }

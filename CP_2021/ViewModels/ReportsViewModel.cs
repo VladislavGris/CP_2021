@@ -178,6 +178,7 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateGivingAvailabilityCommandExecuted(object p)
         {
+            GivingAvailability = new TreeGridModel();
             foreach (var task in Unit.Tasks.Get().ToList())
             {
                 if (task.Giving.State.HasValue && task.Giving.State.Value == true && task.Giving.ReceivingDate.HasValue && task.Giving.ReceivingDate > DateFrom && task.Giving.ReceivingDate < DateTo)
@@ -213,8 +214,10 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateInProductionCommandExecuted(object p)
         {
+            InProduction = new TreeGridModel();
             foreach (var task in Unit.Tasks.Get().ToList())
             {
+
                 if (task.Completion == 4)
                 {
                     ProductionTask selectedTask = new ProductionTask(task);
@@ -247,7 +250,8 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateExecutorInProductionCommandExecuted(object p)
         {
-            var tasks = Unit.Tasks.Get().Where(t => (String.Equals(t.InProduction.ExecutorName, ExecutorName) || String.Equals(t.InProduction.ExecutorName2, ExecutorName)) && t.InProduction.CompletionDate == null && t.InProduction.GivingDate!=null &&t.InProduction.GivingDate > DateFrom && t.InProduction.GivingDate < DateTo);
+            var tasks = Unit.Tasks.Get().Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && t.InProduction.CompletionDate == null && t.InProduction.GivingDate!=null &&t.InProduction.GivingDate > DateFrom && t.InProduction.GivingDate < DateTo);
+            ExecutorInProduction = new TreeGridModel();
             foreach(var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
@@ -275,7 +279,7 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateExecutorCompletedCommandExecuted(object p)
         {
-            var tasks = Unit.Tasks.Get().Where(t => (String.Equals(t.InProduction.ExecutorName, ExecutorName) || String.Equals(t.InProduction.ExecutorName2, ExecutorName)) && t.InProduction.CompletionDate != null &&t.InProduction.CompletionDate > DateFrom && t.InProduction.CompletionDate < DateTo);
+            var tasks = Unit.Tasks.Get().Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && t.InProduction.CompletionDate != null &&t.InProduction.CompletionDate > DateFrom && t.InProduction.CompletionDate < DateTo);
             foreach(var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
