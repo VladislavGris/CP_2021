@@ -14,6 +14,7 @@ using System.Windows.Data;
 using Microsoft.Data.SqlClient;
 using System.Windows;
 using CP_2021.Infrastructure;
+using CP_2021.Infrastructure.Singletons;
 
 namespace CP_2021.ViewModels
 {
@@ -75,7 +76,7 @@ namespace CP_2021.ViewModels
 
         public ICommand SubmitCommand { get; }
 
-        private bool CanSubmitCommandExecute(object p) => Login != null && Login != "" && Password != null && Password != "";
+        private bool CanSubmitCommandExecute(object p) => !String.IsNullOrEmpty(Login) || !String.IsNullOrEmpty(Password);
 
         private void OnSubmitCommandExecuted(object p)
         {
@@ -109,7 +110,7 @@ namespace CP_2021.ViewModels
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
             try
             {
-                _unit = new ApplicationUnit(new ApplicationContext());
+                _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             }
             catch (SqlException e)
             {

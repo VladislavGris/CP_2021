@@ -32,7 +32,7 @@ namespace CP_2021.Models.DBModels
         public virtual ICollection<TaskDB> Tasks { get; set; }
         public virtual ICollection<ReportDB> Reports { get; set; }
 
-
+        public UserDB() { }
         public UserDB(string login, string password, string name, string surname)
         {
             Login = login;

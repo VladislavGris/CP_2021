@@ -144,6 +144,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
         #region ErrorMessage
 
         private string _errorMessage;
