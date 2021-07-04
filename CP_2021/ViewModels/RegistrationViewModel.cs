@@ -14,6 +14,7 @@ using CP_2021.Data;
 using Microsoft.Data.SqlClient;
 using CP_2021.Models.DBModels;
 using CP_2021.Infrastructure;
+using CP_2021.Infrastructure.Singletons;
 
 namespace CP_2021.ViewModels
 {
@@ -25,6 +26,7 @@ namespace CP_2021.ViewModels
         private readonly string FIND_USER = "SELECT * FROM Users WHERE Login=@login";
 
         #endregion
+
         #region Свойства
 
         #region Login
@@ -98,38 +100,30 @@ namespace CP_2021.ViewModels
 
         public ICommand SubmitCommand { get; }
 
-        private bool CanSubmitCommandExecute(object p) => Login != null && Password != null && Name != null && Surname != null;
+        private bool CanSubmitCommandExecute(object p) =>   !string.IsNullOrEmpty(Login) &&
+                                                            !string.IsNullOrEmpty(Password) &&
+                                                            !string.IsNullOrEmpty(Name) && 
+                                                            !string.IsNullOrEmpty(Surname);
 
         private void OnSubmitCommandExecuted(object p)
         {
-            if ((Login.Length < 4 || Login.Length > 15) || (Password.Length < 4 || Password.Length > 15))
-            {
-                MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
-                return;
-            }
-            if(Name.Length == 0 || Surname.Length == 0)
-            {
-                MessageBox.Show("Поля Имя или Фамилия не должны быть пустыми");
-                return;
-            }
-            if(Name.Length > 50 || Surname.Length > 50)
-            {
-                MessageBox.Show("Максимальная длина имени или фамилии - 50 символов");
-                return;
-            }
-            SqlParameter loginParam = new SqlParameter("@login", Login);
-            var user = _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
-            if(user.ToList().Count > 0)
+            CheckLoginPasswordLength();
+            CheckNameSurnameLength();
+
+            var user = GetUsersByLoginFromDB();
+            if (user.ToList().Count > 0)
             {
                 MessageBox.Show("Такой логин уже существует");
                 return;
             }
             string passwordHash = PasswordHashing.CreateHash(Password);
             UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
+
             _unit.DBUsers.Insert(newUser);
             _unit.Commit();
+
+            UserDataSingleton.GetInstance().SetUser(newUser);
             ProductionPlan plan = new ProductionPlan();
-            plan.DataContext = new ProductionPlanViewModel(newUser, _unit);
             ((RegistrationScreen)p).Close();
             plan.Show();
         }
@@ -138,11 +132,39 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region Methods
+
+        private void CheckLoginPasswordLength()
+        {
+            if ((Login.Length < 4 || Login.Length > 15) || (Password.Length < 4 || Password.Length > 15))
+            {
+                MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
+                return;
+            }
+        }
+
+        private void CheckNameSurnameLength()
+        {
+            if (Name.Length > 50 || Surname.Length > 50)
+            {
+                MessageBox.Show("Максимальная длина имени или фамилии - 50 символов");
+                return;
+            }
+        }
+
+        private IEnumerable<UserDB> GetUsersByLoginFromDB()
+        {
+            SqlParameter loginParam = new SqlParameter("@login", Login);
+            return _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
+        }
+
+        #endregion
+
         public RegistrationViewModel()
         {
             OpenLoginWindowCommand = new LambdaCommand(OnOpenLoginWindowCommandExecuted, CanOpenLoginWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
-            _unit = new ApplicationUnit(new ApplicationContext());
+            _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
         }
     }
 }
