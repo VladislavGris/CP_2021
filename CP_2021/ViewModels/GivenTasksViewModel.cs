@@ -92,7 +92,7 @@ namespace CP_2021.ViewModels
         private void OnOpenShowReportWindowCommandExecuted(object p)
         {
             ViewReportWindow window = new ViewReportWindow();
-            window.DataContext = new ViewReportViewModel(Unit, User, (ReportDB)p);
+            window.DataContext = new ViewReportViewModel((ReportDB)p);
             window.Show();
         }
 

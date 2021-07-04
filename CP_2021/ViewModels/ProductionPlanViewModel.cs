@@ -218,7 +218,7 @@ namespace CP_2021.ViewModels
         private void InitMyTasks()
         {
             UserControlTasks tasks = new UserControlTasks();
-            tasks.DataContext = new MyTasksViewModel(Unit, User);
+            tasks.DataContext = new MyTasksViewModel();
             ContentContainerContent = tasks;
         }
 

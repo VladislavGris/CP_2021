@@ -1,4 +1,5 @@
 ﻿using CP_2021.Infrastructure.Commands;
+using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
@@ -17,17 +18,7 @@ namespace CP_2021.ViewModels
     {
         #region Свойства
 
-        #region Unit
-
-        private ApplicationUnit _unit;
-
-        public ApplicationUnit Unit
-        {
-            get => _unit;
-            set => Set(ref _unit, value);
-        }
-
-        #endregion
+        private ApplicationUnit Unit;
 
         #region MyTasksVM
 
@@ -73,7 +64,7 @@ namespace CP_2021.ViewModels
 
         public ICommand SubmitCommand { get; }
 
-        private bool CanSubmitCommandExecute(object p) => Report.Description!= null && Report.Description!="";
+        private bool CanSubmitCommandExecute(object p) => !String.IsNullOrEmpty(Report.Description);
 
         private void OnSubmitCommandExecuted(object p)
         {
@@ -103,15 +94,15 @@ namespace CP_2021.ViewModels
 
         public SendReportViewModel() { }
 
-        public SendReportViewModel(ApplicationUnit unit, UserDB user, ReportDB report, MyTasksViewModel vm)
+        public SendReportViewModel(ReportDB report, MyTasksViewModel vm)
         {
             #region Команды
 
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
 
             #endregion
-            Unit = unit;
-            User = user;
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            User = UserDataSingleton.GetInstance().user;
             Report = report;
             MyTasksVM = vm;
         }

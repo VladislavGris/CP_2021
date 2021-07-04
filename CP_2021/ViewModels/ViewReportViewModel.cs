@@ -1,4 +1,5 @@
-﻿using CP_2021.Infrastructure.Units;
+﻿using CP_2021.Infrastructure.Singletons;
+using CP_2021.Infrastructure.Units;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using System;
@@ -13,18 +14,7 @@ namespace CP_2021.ViewModels
     {
 
         #region Свойтсва
-
-        #region Unit
-
-        private ApplicationUnit _unit;
-
-        public ApplicationUnit Unit
-        {
-            get => _unit;
-            set => Set(ref _unit, value);
-        }
-
-        #endregion
+        private ApplicationUnit Unit;
 
         #region User
 
@@ -54,11 +44,11 @@ namespace CP_2021.ViewModels
 
         public ViewReportViewModel() { }
 
-        public ViewReportViewModel(ApplicationUnit unit, UserDB user, ReportDB report)
+        public ViewReportViewModel(ReportDB report)
         {
             Report = report;
-            Unit = unit;
-            User = user;
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            User = UserDataSingleton.GetInstance().user;
         }
     }
 }
