@@ -1,19 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30907.101
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31423.177
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CP_2021", "CP_2021\CP_2021.csproj", "{8E1BBAB3-7561-4B81-ADAF-A39EB706411A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{01B5F1E1-A977-4662-B641-256601CD7FD8}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CP_2021Console", "Tests\CP_2020Console\CP_2021Console.csproj", "{4B3B595A-94DA-4DFC-8972-D612665BB532}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CP_2WPFTests", "Tests\CP_2WPFTests\CP_2WPFTests.csproj", "{28FCE2D6-DC48-4BDE-9E57-A998DB73CBD6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Lib\Common\Common.csproj", "{E3C648A6-6E71-41B1-95B2-E432F241865D}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "CompanyPlannerSetup", "CompanyPlannerSetup\CompanyPlannerSetup.vdproj", "{81795D3A-7880-440C-A3C1-5B12C68D182E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,27 +17,13 @@ Global
 		{8E1BBAB3-7561-4B81-ADAF-A39EB706411A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E1BBAB3-7561-4B81-ADAF-A39EB706411A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E1BBAB3-7561-4B81-ADAF-A39EB706411A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4B3B595A-94DA-4DFC-8972-D612665BB532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4B3B595A-94DA-4DFC-8972-D612665BB532}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4B3B595A-94DA-4DFC-8972-D612665BB532}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4B3B595A-94DA-4DFC-8972-D612665BB532}.Release|Any CPU.Build.0 = Release|Any CPU
-		{28FCE2D6-DC48-4BDE-9E57-A998DB73CBD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{28FCE2D6-DC48-4BDE-9E57-A998DB73CBD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{28FCE2D6-DC48-4BDE-9E57-A998DB73CBD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{28FCE2D6-DC48-4BDE-9E57-A998DB73CBD6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E3C648A6-6E71-41B1-95B2-E432F241865D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E3C648A6-6E71-41B1-95B2-E432F241865D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E3C648A6-6E71-41B1-95B2-E432F241865D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E3C648A6-6E71-41B1-95B2-E432F241865D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{81795D3A-7880-440C-A3C1-5B12C68D182E}.Debug|Any CPU.ActiveCfg = Debug
-		{81795D3A-7880-440C-A3C1-5B12C68D182E}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{4B3B595A-94DA-4DFC-8972-D612665BB532} = {01B5F1E1-A977-4662-B641-256601CD7FD8}
-		{28FCE2D6-DC48-4BDE-9E57-A998DB73CBD6} = {01B5F1E1-A977-4662-B641-256601CD7FD8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E509646E-FB55-483C-81A2-2A5A8D7A3C31}
