@@ -1,4 +1,5 @@
 ﻿using Common.Wpf.Data;
+using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Models.Classes;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace CP_2021.Infrastructure.Search.SearchStrategies
             {
                 return task.Task.Count.Equals(count);
             }
-            return false;
+            throw  new IncorrectSearchValueException(SearchValueError);
         }
 
         public CountSearchStrategy(TreeGridModel source, string searchString) : base(source, searchString) { }

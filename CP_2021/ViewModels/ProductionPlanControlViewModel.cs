@@ -17,6 +17,7 @@ using System.Windows.Controls;
 using System.Windows;
 using CP_2021.Infrastructure.Search;
 using CP_2021.Infrastructure.Search.SearchStrategies;
+using CP_2021.Infrastructure.Exceptions;
 
 namespace CP_2021.ViewModels
 {
@@ -443,109 +444,117 @@ namespace CP_2021.ViewModels
 
         private void OnSearchCommandExecuted(object p)
         {
+            SearchResultString = null;
             SearchResults = new List<ProductionTask>();
             FieldNames fieldName = (FieldNames)SelectedSearchIndex;
-            switch (fieldName)
+            try
             {
-                case FieldNames.Name:
-                    searchManager.SetSearchStrategy(new NameSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ManagDoc:
-                    searchManager.SetSearchStrategy(new ManagDocSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Count:
-                    searchManager.SetSearchStrategy(new CountSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.SpecificationCost:
-                    searchManager.SetSearchStrategy(new SpecificationCostSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.IncDoc:
-                    searchManager.SetSearchStrategy(new IncDocSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.VishDate:
-                    searchManager.SetSearchStrategy(new VishDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.RealDate:
-                    searchManager.SetSearchStrategy(new RealDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Complectation:
-                    searchManager.SetSearchStrategy(new ComplectationSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ComplectationDate:
-                    searchManager.SetSearchStrategy(new ComplectationDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Percent:
-                    searchManager.SetSearchStrategy(new PercentSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.MSLNumber:
-                    searchManager.SetSearchStrategy(new MSLNumberSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Executor:
-                    searchManager.SetSearchStrategy(new FirstExecutorSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Executor2:
-                    searchManager.SetSearchStrategy(new SecondExecutorSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.GivingDate:
-                    searchManager.SetSearchStrategy(new GivingDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ProjectedDate:
-                    searchManager.SetSearchStrategy(new ProjectedDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ReadyDate:
-                    searchManager.SetSearchStrategy(new CompletionDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Manufacture:
-                    searchManager.SetSearchStrategy(new ManufactureSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.LetterNum:
-                    searchManager.SetSearchStrategy(new LetterNumSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.SpecNum:
-                    searchManager.SetSearchStrategy(new SpecNumSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Bill:
-                    searchManager.SetSearchStrategy(new BillSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Report:
-                    searchManager.SetSearchStrategy(new ReportSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ReturnReport:
-                    searchManager.SetSearchStrategy(new ReturnReportSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ReceivingDate:
-                    searchManager.SetSearchStrategy(new ReceivingDateSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.ExpendNum:
-                    searchManager.SetSearchStrategy(new ExpendNumSearchStrategy(Model, SearchString));
-                    break;
-                case FieldNames.Note:
-                    searchManager.SetSearchStrategy(new NoteSearchStrategy(Model, SearchString));
-                    break;
-                default:
-                    SearchResultString = "Параметр для поиска не задан";
-                    break;
+                switch (fieldName)
+                {
+                    case FieldNames.Name:
+                        searchManager.SetSearchStrategy(new NameSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ManagDoc:
+                        searchManager.SetSearchStrategy(new ManagDocSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Count:
+                        searchManager.SetSearchStrategy(new CountSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.SpecificationCost:
+                        searchManager.SetSearchStrategy(new SpecificationCostSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.IncDoc:
+                        searchManager.SetSearchStrategy(new IncDocSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.VishDate:
+                        searchManager.SetSearchStrategy(new VishDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.RealDate:
+                        searchManager.SetSearchStrategy(new RealDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Complectation:
+                        searchManager.SetSearchStrategy(new ComplectationSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ComplectationDate:
+                        searchManager.SetSearchStrategy(new ComplectationDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Percent:
+                        searchManager.SetSearchStrategy(new PercentSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.MSLNumber:
+                        searchManager.SetSearchStrategy(new MSLNumberSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Executor:
+                        searchManager.SetSearchStrategy(new FirstExecutorSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Executor2:
+                        searchManager.SetSearchStrategy(new SecondExecutorSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.GivingDate:
+                        searchManager.SetSearchStrategy(new GivingDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ProjectedDate:
+                        searchManager.SetSearchStrategy(new ProjectedDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ReadyDate:
+                        searchManager.SetSearchStrategy(new CompletionDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Manufacture:
+                        searchManager.SetSearchStrategy(new ManufactureSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.LetterNum:
+                        searchManager.SetSearchStrategy(new LetterNumSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.SpecNum:
+                        searchManager.SetSearchStrategy(new SpecNumSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Bill:
+                        searchManager.SetSearchStrategy(new BillSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Report:
+                        searchManager.SetSearchStrategy(new ReportSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ReturnReport:
+                        searchManager.SetSearchStrategy(new ReturnReportSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ReceivingDate:
+                        searchManager.SetSearchStrategy(new ReceivingDateSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.ExpendNum:
+                        searchManager.SetSearchStrategy(new ExpendNumSearchStrategy(Model, SearchString));
+                        break;
+                    case FieldNames.Note:
+                        searchManager.SetSearchStrategy(new NoteSearchStrategy(Model, SearchString));
+                        break;
+                    default:
+                        SearchResultString = "Параметр для поиска не задан";
+                        break;
 
+                }
+                searchManager.ExecuteSearchStrategy();
+                SearchResults = searchManager.GetSearchResults();
             }
-            searchManager.ExecuteSearchStrategy();
-            SearchResults = searchManager.GetSearchResults();
-            if (SearchResults.Count == 0)
+            catch(Exception ex)
             {
-                if(ErrorMessage == null)
+                if(ex is IncorrectDateFormatException or IncorrectSearchValueException)
+                {
+                    SearchResultString = ex.Message;
+                }
+            }
+            
+            if(SearchResultString==null)
+            {
+                if(SearchResults.Count == 0)
                 {
                     SearchResultString = "Совпадений не найдено";
                 }
                 else
                 {
-                    SearchResultString = ErrorMessage;
+                    SearchResultString = $"Количество совпадений: {SearchResults.Count}";
+                    SelectedTask = SearchResults.First();
+                    ((DataGrid)p).UpdateLayout();
+                    ((DataGrid)p).ScrollIntoView(SelectedTask);
                 }
-            }
-            else
-            {
-                SearchResultString = $"Количество совпадений: {SearchResults.Count}";
-                SelectedTask = SearchResults.First();
-                ((DataGrid)p).UpdateLayout();
-                ((DataGrid)p).ScrollIntoView(SelectedTask);
             }
         }
 

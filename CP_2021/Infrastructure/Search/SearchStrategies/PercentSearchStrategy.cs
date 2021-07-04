@@ -1,4 +1,5 @@
 ﻿using Common.Wpf.Data;
+using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Models.Classes;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace CP_2021.Infrastructure.Search.SearchStrategies
             {
                 return task.Task.Complectation.Percentage.Equals(percent);
             }
-            return false;
+            throw new IncorrectSearchValueException(SearchValueError);
         }
 
         public PercentSearchStrategy(TreeGridModel source, string searchString) : base(source, searchString) { }

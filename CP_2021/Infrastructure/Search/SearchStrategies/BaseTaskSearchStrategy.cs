@@ -10,6 +10,9 @@ namespace CP_2021.Infrastructure.Search.SearchStrategies
 {
     class BaseTaskSearchStrategy : ISearchStrategy<ProductionTask>
     {
+        protected string DateError = "Формат даты: дд.мм.гггг";
+        protected string SearchValueError = "Значение для поиска указано неверно";
+
         private List<ProductionTask> _searchResults;
         protected string _searchString;
         private TreeGridModel _searchSource;
