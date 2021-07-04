@@ -15,6 +15,8 @@ using CP_2021.Infrastructure.Units;
 using System.Diagnostics;
 using System.Windows.Controls;
 using System.Windows;
+using CP_2021.Infrastructure.Search;
+using CP_2021.Infrastructure.Search.SearchStrategies;
 
 namespace CP_2021.ViewModels
 {
@@ -165,6 +167,8 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        private SearchManager searchManager;
+
         #endregion
 
         #region Команды
@@ -179,7 +183,7 @@ namespace CP_2021.ViewModels
         {
             foreach(ProductionTask t in Model)
             {
-                Expand(t);
+                t.Expand();
             }
         }
 
@@ -195,7 +199,7 @@ namespace CP_2021.ViewModels
         {
             foreach (ProductionTask t in Model)
             {
-                RollUp(t);
+                t.RollUp();
             }
         }
 
@@ -440,164 +444,92 @@ namespace CP_2021.ViewModels
         private void OnSearchCommandExecuted(object p)
         {
             SearchResults = new List<ProductionTask>();
-            switch (SelectedSearchIndex)
+            FieldNames fieldName = (FieldNames)SelectedSearchIndex;
+            switch (fieldName)
             {
-                case 0:
-                    foreach(ProductionTask root in Model)
-                    {
-                        SearchByName(root);
-                    }
+                case FieldNames.Name:
+                    searchManager.SetSearchStrategy(new NameSearchStrategy(Model, SearchString));
                     break;
-                case 1:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByManagDoc(root);
-                    }
+                case FieldNames.ManagDoc:
+                    searchManager.SetSearchStrategy(new ManagDocSearchStrategy(Model, SearchString));
                     break;
-                case 2:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByCount(root);
-                    }
+                case FieldNames.Count:
+                    searchManager.SetSearchStrategy(new CountSearchStrategy(Model, SearchString));
                     break;
-                case 3:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchBySpecificationCost(root);
-                    }
+                case FieldNames.SpecificationCost:
+                    searchManager.SetSearchStrategy(new SpecificationCostSearchStrategy(Model, SearchString));
                     break;
-                case 4:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByIncDoc(root);
-                    }
+                case FieldNames.IncDoc:
+                    searchManager.SetSearchStrategy(new IncDocSearchStrategy(Model, SearchString));
                     break;
-                case 5:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByVishDate(root);
-                    }
+                case FieldNames.VishDate:
+                    searchManager.SetSearchStrategy(new VishDateSearchStrategy(Model, SearchString));
                     break;
-                case 6:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByRealDate(root);
-                    }
+                case FieldNames.RealDate:
+                    searchManager.SetSearchStrategy(new RealDateSearchStrategy(Model, SearchString));
                     break;
-                case 7:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByComplectation(root);
-                    }
+                case FieldNames.Complectation:
+                    searchManager.SetSearchStrategy(new ComplectationSearchStrategy(Model, SearchString));
                     break;
-                case 8:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByComplectationDate(root);
-                    }
+                case FieldNames.ComplectationDate:
+                    searchManager.SetSearchStrategy(new ComplectationDateSearchStrategy(Model, SearchString));
                     break;
-                case 9:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByPercent(root);
-                    }
+                case FieldNames.Percent:
+                    searchManager.SetSearchStrategy(new PercentSearchStrategy(Model, SearchString));
                     break;
-                case 10:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByMSLNumber(root);
-                    }
+                case FieldNames.MSLNumber:
+                    searchManager.SetSearchStrategy(new MSLNumberSearchStrategy(Model, SearchString));
                     break;
-                case 11:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByExecutor(root);
-                    }
+                case FieldNames.Executor:
+                    searchManager.SetSearchStrategy(new FirstExecutorSearchStrategy(Model, SearchString));
                     break;
-                case 12:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByExecutor2(root);
-                    }
+                case FieldNames.Executor2:
+                    searchManager.SetSearchStrategy(new SecondExecutorSearchStrategy(Model, SearchString));
                     break;
-                case 13:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByGivingDate(root);
-                    }
+                case FieldNames.GivingDate:
+                    searchManager.SetSearchStrategy(new GivingDateSearchStrategy(Model, SearchString));
                     break;
-                case 14:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByProjectedDate(root);
-                    }
+                case FieldNames.ProjectedDate:
+                    searchManager.SetSearchStrategy(new ProjectedDateSearchStrategy(Model, SearchString));
                     break;
-                case 15:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByComplectationDate(root);
-                    }
+                case FieldNames.ReadyDate:
+                    searchManager.SetSearchStrategy(new CompletionDateSearchStrategy(Model, SearchString));
                     break;
-                case 16:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByManufacture(root);
-                    }
+                case FieldNames.Manufacture:
+                    searchManager.SetSearchStrategy(new ManufactureSearchStrategy(Model, SearchString));
                     break;
-                case 17:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByLetterNum(root);
-                    }
+                case FieldNames.LetterNum:
+                    searchManager.SetSearchStrategy(new LetterNumSearchStrategy(Model, SearchString));
                     break;
-                case 18:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchBySpecNum(root);
-                    }
+                case FieldNames.SpecNum:
+                    searchManager.SetSearchStrategy(new SpecNumSearchStrategy(Model, SearchString));
                     break;
-                case 19:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByBill(root);
-                    }
+                case FieldNames.Bill:
+                    searchManager.SetSearchStrategy(new BillSearchStrategy(Model, SearchString));
                     break;
-                case 20:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByReport(root);
-                    }
+                case FieldNames.Report:
+                    searchManager.SetSearchStrategy(new ReportSearchStrategy(Model, SearchString));
                     break;
-                case 21:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByReturnReport(root);
-                    }
+                case FieldNames.ReturnReport:
+                    searchManager.SetSearchStrategy(new ReturnReportSearchStrategy(Model, SearchString));
                     break;
-                case 22:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByReceivingDate(root);
-                    }
+                case FieldNames.ReceivingDate:
+                    searchManager.SetSearchStrategy(new ReceivingDateSearchStrategy(Model, SearchString));
                     break;
-                case 23:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByExpendNum(root);
-                    }
+                case FieldNames.ExpendNum:
+                    searchManager.SetSearchStrategy(new ExpendNumSearchStrategy(Model, SearchString));
                     break;
-                case 24:
-                    foreach (ProductionTask root in Model)
-                    {
-                        SearchByNote(root);
-                    }
+                case FieldNames.Note:
+                    searchManager.SetSearchStrategy(new NoteSearchStrategy(Model, SearchString));
                     break;
                 default:
                     SearchResultString = "Параметр для поиска не задан";
                     break;
 
             }
-            if(SearchResults.Count == 0)
+            searchManager.ExecuteSearchStrategy();
+            SearchResults = searchManager.GetSearchResults();
+            if (SearchResults.Count == 0)
             {
                 if(ErrorMessage == null)
                 {
@@ -668,503 +600,6 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region Методы
-
-        private void Expand(ProductionTask task)
-        {
-            task.IsExpanded = true;
-            if (task.HasChildren)
-            {
-                foreach(ProductionTask t in task.Children)
-                {
-                    Expand(t);
-                }
-            }
-        }
-
-        private void RollUp(ProductionTask task)
-        {
-            task.IsExpanded = false;
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask t in task.Children)
-                {
-                    RollUp(t);
-                }
-            }
-        }
-
-        #region SearchFunctions
-
-        private void SearchByName(ProductionTask task)
-        {
-            if (task.Task.Name.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByName(child);
-                }
-            }
-        }
-
-        private void SearchByManagDoc(ProductionTask task)
-        {
-            if (task.Task.ManagDoc != null && task.Task.ManagDoc.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByManagDoc(child);
-                }
-            }
-        }
-
-        private void SearchByCount(ProductionTask task)
-        {
-            ErrorMessage = null;
-            int count;
-            if(Int32.TryParse(SearchString, out count))
-            {
-                if (task.Task.Count == count)
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByCount(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно";
-            }
-            
-        }
-
-        private void SearchBySpecificationCost(ProductionTask task)
-        {
-            if (task.Task.SpecCost.ToLower().Equals(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchBySpecificationCost(child);
-                }
-            }
-        }
-
-        private void SearchByIncDoc(ProductionTask task)
-        {
-            if (task.Task.IncDoc!=null&&task.Task.IncDoc.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByIncDoc(child);
-                }
-            }
-        }
-
-        private void SearchByVishDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if(DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.VishDate!=null && task.Task.VishDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByVishDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-            
-        }
-
-        private void SearchByRealDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if (DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.RealDate != null && task.Task.RealDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByRealDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-
-        }
-
-        private void SearchByComplectation(ProductionTask task)
-        {
-            if (task.Task.Complectation.Complectation!=null&&task.Task.Complectation.Complectation.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByComplectation(child);
-                }
-            }
-        }
-
-        private void SearchByComplectationDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if (DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.Complectation.ComplectationDate != null && task.Task.Complectation.ComplectationDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByComplectationDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-
-        }
-
-        private void SearchByPercent(ProductionTask task)
-        {
-            ErrorMessage = null;
-            float count;
-            if (float.TryParse(SearchString, out count))
-            {
-                if (task.Task.Complectation.Percentage == count)
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByPercent(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно";
-            }
-
-        }
-
-        private void SearchByMSLNumber(ProductionTask task)
-        {
-            if (task.Task.InProduction.Number != null && task.Task.InProduction.Number.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByMSLNumber(child);
-                }
-            }
-        }
-
-        private void SearchByExecutor(ProductionTask task)
-        {
-            if (task.Task.InProduction.ExecutorName != null && task.Task.InProduction.ExecutorName.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByExecutor(child);
-                }
-            }
-        }
-
-        private void SearchByExecutor2(ProductionTask task)
-        {
-            if (task.Task.InProduction.ExecutorName2 != null && task.Task.InProduction.ExecutorName2.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByExecutor2(child);
-                }
-            }
-        }
-
-        private void SearchByGivingDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if (DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.InProduction.GivingDate != null && task.Task.InProduction.GivingDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByGivingDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-
-        }
-
-        private void SearchByProjectedDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if (DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.InProduction.ProjectedDate != null && task.Task.InProduction.ProjectedDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByProjectedDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-
-        }
-
-        private void SearchByCompletionDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if (DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.InProduction.CompletionDate != null && task.Task.InProduction.CompletionDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByCompletionDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-
-        }
-
-        private void SearchByManufacture(ProductionTask task)
-        {
-            if (task.Task.Manufacture.Name != null && task.Task.Manufacture.Name.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByManufacture(child);
-                }
-            }
-        }
-
-        private void SearchByLetterNum(ProductionTask task)
-        {
-            if (task.Task.Manufacture.LetterNum != null && task.Task.Manufacture.LetterNum.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByLetterNum(child);
-                }
-            }
-        }
-
-        private void SearchBySpecNum(ProductionTask task)
-        {
-            if (task.Task.Manufacture.SpecNum != null && task.Task.Manufacture.SpecNum.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchBySpecNum(child);
-                }
-            }
-        }
-
-        private void SearchByBill(ProductionTask task)
-        {
-            if (task.Task.Giving.Bill != null && task.Task.Giving.Bill.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByBill(child);
-                }
-            }
-        }
-
-        private void SearchByReport(ProductionTask task)
-        {
-            if (task.Task.Giving.Report != null && task.Task.Giving.Report.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByReport(child);
-                }
-            }
-        }
-
-        private void SearchByReturnReport(ProductionTask task)
-        {
-            if (task.Task.Giving.ReturnReport != null && task.Task.Giving.ReturnReport.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByReturnReport(child);
-                }
-            }
-        }
-
-        private void SearchByReceivingDate(ProductionTask task)
-        {
-            ErrorMessage = null;
-            DateTime vishDate;
-            if (DateTime.TryParse(SearchString, out vishDate))
-            {
-                if (task.Task.Giving.ReceivingDate != null && task.Task.Giving.ReceivingDate.Equals(vishDate))
-                {
-                    SearchResults.Add(task);
-                }
-                if (task.HasChildren)
-                {
-                    foreach (ProductionTask child in task.Children)
-                    {
-                        SearchByReceivingDate(child);
-                    }
-                }
-            }
-            else
-            {
-                ErrorMessage = "Поисковые данные заданы неверно. Формат даты: дд.мм.гггг";
-            }
-
-        }
-
-        private void SearchByExpendNum(ProductionTask task)
-        {
-            if (task.Task.ExpendNum != null && task.Task.ExpendNum.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByExpendNum(child);
-                }
-            }
-        }
-
-        private void SearchByNote(ProductionTask task)
-        {
-            if (task.Task.Note != null && task.Task.Note.ToLower().Contains(SearchString.ToLower()))
-            {
-                SearchResults.Add(task);
-            }
-            if (task.HasChildren)
-            {
-                foreach (ProductionTask child in task.Children)
-                {
-                    SearchByNote(child);
-                }
-            }
-        }
-
-        #endregion
-
-        #endregion
-
         public ProductionPlanControlViewModel()
         {
         }
@@ -1195,6 +630,7 @@ namespace CP_2021.ViewModels
             Unit = unit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
+            searchManager = new SearchManager();
         }
     }
 }

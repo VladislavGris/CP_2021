@@ -115,6 +115,30 @@ namespace CP_2021.Models.Classes
             }
         }
 
+        public void Expand()
+        {
+            this.IsExpanded = true;
+            if (this.HasChildren)
+            {
+                foreach(ProductionTask child in this.Children)
+                {
+                    child.Expand();
+                }
+            }
+        }
+
+        public void RollUp()
+        {
+            this.IsExpanded = false;
+            if (this.HasChildren)
+            {
+                foreach(ProductionTask child in this.Children)
+                {
+                    child.RollUp();
+                }
+            }
+        }
+
         public ProductionTask Clone()
         {
             return (ProductionTask) this.MemberwiseClone();

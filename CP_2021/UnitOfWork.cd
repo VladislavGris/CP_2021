@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="CP_2021.Infrastructure.Units.ApplicationUnit">
+    <Position X="6.75" Y="2.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>IAgBAEAAAABMBAAAgAAiAAAAAAAECAAABAIoAAUAACA=</HashCode>
+      <FileName>Infrastructure\Units\ApplicationUnit.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="1.283" />
+  </Class>
+  <Class Name="CP_2021.Infrastructure.Repositories.Base.BaseRepository&lt;T&gt;">
+    <Position X="5" Y="5.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCAEAAAABAAABAAAAAAAAAAAEAAAAACAAAgAAABAA=</HashCode>
+      <FileName>Infrastructure\Repositories\Base\BaseRepository.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="CP_2021.Infrastructure.Units.Base.IUnitOfWork">
+    <Position X="8.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAgAAEAAAAAEAAAAAAAAAAAAAAAACAAAAAIoAAQAACA=</HashCode>
+      <FileName>Infrastructure\Units\Base\IUnitOfWork.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="CP_2021.Infrastructure.Repositories.Base.IRepository&lt;T&gt;">
+    <Position X="5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAEAAAABAAABAAAAAAAAAAAEAAAAAAAAAgAAABAA=</HashCode>
+      <FileName>Infrastructure\Repositories\Base\IRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

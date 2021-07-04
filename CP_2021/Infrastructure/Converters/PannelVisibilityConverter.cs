@@ -15,7 +15,7 @@ namespace CP_2021.Infrastructure.Converters
         {
             if((short) value == 1 || (short)value == 2)
             {
-                return 60;
+                return 80;
             }
             else
             {

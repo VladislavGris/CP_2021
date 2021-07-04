@@ -22,6 +22,7 @@
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
     <Grid>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding User.Position, Converter={StaticResource PannelVisibilityConverter}}"/>
             <RowDefinition Height="*"/>
@@ -32,7 +33,33 @@
         </Grid.InputBindings>
         <Grid Grid.Row="0"
               Background="#FF31577E">
-            <ListView x:Name="ListViewMenu" 
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListView x:Name="UndoRedoButtons"
+                      Grid.Row="0"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
+                      Background="Transparent"
+                      BorderBrush="Transparent"
+                      Foreground="#FF5C99D6">
+                <ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal"></StackPanel>
+                    </ItemsPanelTemplate>
+                </ListView.ItemsPanel>
+                <ListViewItem ToolTip="Отмена">
+                    <fa:ImageAwesome Icon="Solid_ArrowLeft"
+                                     Style="{StaticResource UndoRedoButtons}"/>
+                </ListViewItem>
+                <ListViewItem ToolTip="Вернуть">
+                    <fa:ImageAwesome Icon="Solid_ArrowRight"
+                                     Style="{StaticResource UndoRedoButtons}"/>
+                </ListViewItem>
+            </ListView>
+            <ListView x:Name="ListViewMenu"
+                      Grid.Row="1"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           Background="Transparent"
@@ -322,7 +349,7 @@
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn x:Name="Date">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
