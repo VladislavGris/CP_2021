@@ -33,5 +33,10 @@ namespace CP_2021.Infrastructure.Singletons
                 _instance.user = user;
             } 
         }
+
+        public void ClearUser()
+        {
+            user = new UserDB();
+        }
     }
 }

@@ -10,6 +10,7 @@ using CP_2021.Infrastructure.Units;
 using System.Diagnostics;
 using CP_2021.Views.Windows;
 using System;
+using CP_2021.Infrastructure.Singletons;
 
 namespace CP_2021.ViewModels
 {
@@ -239,6 +240,9 @@ namespace CP_2021.ViewModels
             ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
             WindowLoadedCommand = new LambdaCommand(OnWindowLoadedCommandExecuted, CanWindowLoadedCommandExecute);
             #endregion
+
+            User = UserDataSingleton.GetInstance().user;
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
         }
 
         public ProductionPlanViewModel(UserDB user, ApplicationUnit unit)
@@ -253,7 +257,6 @@ namespace CP_2021.ViewModels
 
             User = user;
             Unit = unit;
-            Title = $"Company Planner Пользователь: {User.Surname} {User.Name}";
         }
     }
 }

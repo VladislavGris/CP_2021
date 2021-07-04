@@ -15,6 +15,7 @@ using Microsoft.Data.SqlClient;
 using System.Windows;
 using CP_2021.Infrastructure;
 using CP_2021.Infrastructure.Singletons;
+using CP_2021.Models.DBModels;
 
 namespace CP_2021.ViewModels
 {
@@ -80,19 +81,18 @@ namespace CP_2021.ViewModels
 
         private void OnSubmitCommandExecuted(object p)
         {
-            if((Login.Length < 4 || Login.Length > 15)||(Password.Length < 4 || Password.Length > 15))
+            if(LoginOrPasswordHasIncorrectLength())
             {
                 MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
                 return;
             }
-            SqlParameter loginParam = new SqlParameter("@login", Login);
-            var user = _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
+            var user = GetUsersByLoginFormDB();
             if (user.ToList().Count != 0 && PasswordHashing.ValidatePassword(Password, user.ToList().ElementAt(0).Password))
             {
-                    ProductionPlan plan = new ProductionPlan();
-                    plan.DataContext = new ProductionPlanViewModel(user.ToList().ElementAt(0), _unit);
-                    ((LoginScreen)p).Close();
-                    plan.Show();
+                UserDataSingleton.GetInstance().SetUser(user.ToList().ElementAt(0));
+                ProductionPlan plan = new ProductionPlan();
+                ((LoginScreen)p).Close();
+                plan.Show();
             }
             else
             {
@@ -101,6 +101,21 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        #endregion
+
+        #region Methods
+
+        private bool LoginOrPasswordHasIncorrectLength()
+        {
+            return (Login.Length < 4 || Login.Length > 15) || (Password.Length < 4 || Password.Length > 15);
+        }
+
+        private IEnumerable<UserDB> GetUsersByLoginFormDB()
+        {
+            SqlParameter loginParam = new SqlParameter("@login", Login);
+            return _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
+        }
 
         #endregion
 
