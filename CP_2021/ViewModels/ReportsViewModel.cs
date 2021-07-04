@@ -1,5 +1,6 @@
 ﻿using Common.Wpf.Data;
 using CP_2021.Infrastructure.Commands;
+using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Models.Classes;
 using CP_2021.Models.DBModels;
@@ -20,17 +21,7 @@ namespace CP_2021.ViewModels
 
         #region Свойства
 
-        #region Unit
-
-        private ApplicationUnit _unit;
-
-        public ApplicationUnit Unit
-        {
-            get => _unit;
-            set => Set(ref _unit, value);
-        }
-
-        #endregion
+        private ApplicationUnit Unit;
 
         #region NoSpecification
 
@@ -152,7 +143,10 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateNoSpecificationReportCommandExecuted(object p)
         {
-            NoSpecification = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().Where(t => (t.Manufacture.SpecNum == null || t.Manufacture.SpecNum == "") && t.Manufacture.Name != null && t.Manufacture.Name != "" && t.Manufacture.LetterNum != null && t.Manufacture.LetterNum != ""));
+            NoSpecification = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().
+                Where(t =>  String.IsNullOrEmpty(t.Manufacture.SpecNum) && 
+                            !String.IsNullOrEmpty(t.Manufacture.Name) && 
+                            !String.IsNullOrEmpty(t.Manufacture.LetterNum)));
         }
 
         #endregion
@@ -165,7 +159,10 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateGivingReportsCommandExecuted(object p)
         {
-            GivingReports = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().Where(t => (t.Giving.Report == null || t.Giving.Report == "") && t.Giving.Bill != null && t.Giving.Bill != "" && t.Manufacture.SpecNum != null && t.Manufacture.SpecNum != ""));
+            GivingReports = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().
+                Where(t =>  String.IsNullOrEmpty(t.Giving.Report) && 
+                            !String.IsNullOrEmpty(t.Giving.Bill) && 
+                            !String.IsNullOrEmpty(t.Manufacture.SpecNum)));
         }
 
         #endregion
@@ -250,7 +247,13 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateExecutorInProductionCommandExecuted(object p)
         {
-            var tasks = Unit.Tasks.Get().Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && t.InProduction.CompletionDate == null && t.InProduction.GivingDate!=null &&t.InProduction.GivingDate > DateFrom && t.InProduction.GivingDate < DateTo);
+            var tasks = Unit.Tasks.Get().
+                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || 
+                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && 
+                            t.InProduction.CompletionDate == null && 
+                            t.InProduction.GivingDate!=null && 
+                            t.InProduction.GivingDate > DateFrom && 
+                            t.InProduction.GivingDate < DateTo);
             ExecutorInProduction = new TreeGridModel();
             foreach(var task in tasks)
             {
@@ -279,7 +282,12 @@ namespace CP_2021.ViewModels
 
         private void OnGenerateExecutorCompletedCommandExecuted(object p)
         {
-            var tasks = Unit.Tasks.Get().Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && t.InProduction.CompletionDate != null &&t.InProduction.CompletionDate > DateFrom && t.InProduction.CompletionDate < DateTo);
+            var tasks = Unit.Tasks.Get().
+                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || 
+                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && 
+                            t.InProduction.CompletionDate != null &&
+                            t.InProduction.CompletionDate > DateFrom && 
+                            t.InProduction.CompletionDate < DateTo);
             foreach(var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
@@ -301,12 +309,9 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        public ReportsViewModel() { }
-
-        public ReportsViewModel(ApplicationUnit unit)
+        public ReportsViewModel() 
         {
             #region Команды
-
             GenerateNoSpecificationReportCommand = new LambdaCommand(OnGenerateNoSpecificationReportCommandExecuted, CanGenerateNoSpecificationReportCommandExecute);
             GenerateGivingReportsCommand = new LambdaCommand(OnGenerateGivingReportsCommandExecuted, CanGenerateGivingReportsCommandExecute);
             GenerateGivingAvailabilityCommand = new LambdaCommand(OnGenerateGivingAvailabilityCommandExecuted, CanGenerateGivingAvailabilityCommandExecute);
@@ -315,7 +320,7 @@ namespace CP_2021.ViewModels
             GenerateExecutorCompletedCommand = new LambdaCommand(OnGenerateExecutorCompletedCommandExecuted, CanGenerateExecutorCompletedCommandExecute);
             #endregion
 
-            Unit = unit;
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
         }
     }
 }

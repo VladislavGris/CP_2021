@@ -225,7 +225,7 @@ namespace CP_2021.ViewModels
         private void InitReports()
         {
             UserControlReports reports = new UserControlReports();
-            reports.DataContext = new ReportsViewModel(Unit);
+            reports.DataContext = new ReportsViewModel();
             ContentContainerContent = reports;
         }
 
