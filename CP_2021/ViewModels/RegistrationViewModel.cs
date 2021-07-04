@@ -162,8 +162,10 @@ namespace CP_2021.ViewModels
 
         public RegistrationViewModel()
         {
+            #region Команды
             OpenLoginWindowCommand = new LambdaCommand(OnOpenLoginWindowCommandExecuted, CanOpenLoginWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
+            #endregion
             _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
         }
     }

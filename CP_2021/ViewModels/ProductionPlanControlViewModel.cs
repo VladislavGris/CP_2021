@@ -18,6 +18,7 @@ using System.Windows;
 using CP_2021.Infrastructure.Search;
 using CP_2021.Infrastructure.Search.SearchStrategies;
 using CP_2021.Infrastructure.Exceptions;
+using CP_2021.Infrastructure.Singletons;
 
 namespace CP_2021.ViewModels
 {
@@ -26,17 +27,7 @@ namespace CP_2021.ViewModels
 
         #region Свойства
 
-        #region UnitOfWork
-
-        private ApplicationUnit _unit;
-
-        public ApplicationUnit Unit
-        {
-            get => _unit;
-            set => Set(ref _unit, value);
-        }
-
-        #endregion
+        private ApplicationUnit Unit;
 
         #region User
 
@@ -141,18 +132,6 @@ namespace CP_2021.ViewModels
         {
             get => _searchResultString;
             set => Set(ref _searchResultString, value);
-        }
-
-        #endregion
-
-        #region ErrorMessage
-
-        private string _errorMessage;
-
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set => Set(ref _errorMessage, value);
         }
 
         #endregion
@@ -612,10 +591,6 @@ namespace CP_2021.ViewModels
 
         public ProductionPlanControlViewModel()
         {
-        }
-
-        public ProductionPlanControlViewModel(ApplicationUnit unit, UserDB user)
-        {
             #region Команды
 
             ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
@@ -636,8 +611,8 @@ namespace CP_2021.ViewModels
 
             #endregion
 
-            User = user;
-            Unit = unit;
+            User = UserDataSingleton.GetInstance().user;
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();

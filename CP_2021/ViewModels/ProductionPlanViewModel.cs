@@ -65,7 +65,6 @@ namespace CP_2021.ViewModels
         #region Title
         private string _Title = "Company Planner";
 
-        /// <summary>Заголовок окна</summary>
         public string Title
         {
             get => _Title;
@@ -165,6 +164,7 @@ namespace CP_2021.ViewModels
                     {
                         case MessageBoxResult.Yes:
                             LoginScreen login = new LoginScreen();
+                            UserDataSingleton.GetInstance().ClearUser();
                             window.Close();
                             login.Show();
                             break;
@@ -197,7 +197,7 @@ namespace CP_2021.ViewModels
         private void InitProductionPlanControl()
         {
             UserControlProductionPlan control = new UserControlProductionPlan();
-            control.DataContext = new ProductionPlanControlViewModel(Unit, User);
+            control.DataContext = new ProductionPlanControlViewModel();
             ContentContainerContent = control;
         }
 
@@ -243,20 +243,6 @@ namespace CP_2021.ViewModels
 
             User = UserDataSingleton.GetInstance().user;
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-        }
-
-        public ProductionPlanViewModel(UserDB user, ApplicationUnit unit)
-        {
-            #region Команды
-
-            ButtonCloseMenuCommand = new LambdaCommand(OnButtonCloseMenuCommandExecuted, CanButtonCloseMenuCommandExecute);
-            ButtonOpenMenuCommand = new LambdaCommand(OnButtonOpenMenuCommandExecuted, CanButtonOpenMenuCommandExecute);
-            ChangeContentCommand = new LambdaCommand(OnChangeContentCommandExecuted, CanChangeContentCommandExecute);
-            WindowLoadedCommand = new LambdaCommand(OnWindowLoadedCommandExecuted, CanWindowLoadedCommandExecute);
-            #endregion
-
-            User = user;
-            Unit = unit;
         }
     }
 }
