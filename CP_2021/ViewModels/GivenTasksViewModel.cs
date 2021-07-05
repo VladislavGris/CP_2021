@@ -99,7 +99,7 @@ namespace CP_2021.ViewModels
         {
                
             AddTaskWindow window = new AddTaskWindow();
-            window.DataContext = new AddTaskWindowViewModel(Unit, User, (GivenTasksViewModel)p);
+            window.DataContext = new AddTaskWindowViewModel((GivenTasksViewModel)p);
             window.Show();
         }
 
