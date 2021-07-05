@@ -191,21 +191,5 @@ namespace CP_2021.ViewModels
             User = UserDataSingleton.GetInstance().user;
             Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(u => u.To.Equals(User)));
         }
-
-        public MyTasksViewModel(ApplicationUnit unit, UserDB user)
-        {
-            #region Команды
-
-            OpenSendReportWindowCommand = new LambdaCommand(OnOpenSendReportWindowCommandExecuted, CanOpenSendReportWindowCommandExecute);
-            OpenShowReportWindowCommand = new LambdaCommand(OnOpenShowReportWindowCommandExecuted, CanOpenShowReportWindowCommandExecute);
-            RefreshCommand = new LambdaCommand(OnRefreshCommandExecuted, CanRefreshCommandExecute);
-            FilterSelectionChanged = new LambdaCommand(OnFilterSelectionChangedExecuted, CanFilterSelectionChangedExecute);
-
-            #endregion
-
-            Unit = unit;
-            User = user;
-            Tasks = new ObservableCollection<TaskDB>(unit.UserTasks.Get().Where(u => u.To.Equals(User)));
-        }
     }
 }
