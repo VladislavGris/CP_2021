@@ -162,10 +162,7 @@ namespace CP_2021.ViewModels
 
         private void OnExpandAllCommandExecuted(object p)
         {
-            foreach(ProductionTask t in Model)
-            {
-                t.Expand();
-            }
+            Model.ExpandAll();
         }
 
         #endregion
@@ -178,10 +175,7 @@ namespace CP_2021.ViewModels
 
         private void OnRollUpAllCommandExecuted(object p)
         {
-            foreach (ProductionTask t in Model)
-            {
-                t.RollUp();
-            }
+            Model.CollapseAll();
         }
 
         #endregion
