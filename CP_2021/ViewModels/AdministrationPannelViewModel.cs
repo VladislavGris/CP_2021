@@ -1,4 +1,5 @@
 ﻿using CP_2021.Infrastructure.Commands;
+using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
@@ -17,17 +18,7 @@ namespace CP_2021.ViewModels
 
         #region Свойства
 
-        #region Unit
-
-        private ApplicationUnit _unit;
-
-        public ApplicationUnit Unit
-        {
-            get => _unit;
-            set => Set(ref _unit, value);
-        }
-
-        #endregion
+        private ApplicationUnit Unit;
 
         #region User
 
@@ -101,9 +92,7 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        public AdministrationPannelViewModel() { }
-
-        public AdministrationPannelViewModel(ApplicationUnit unit, UserDB user)
+        public AdministrationPannelViewModel() 
         {
             #region Команды
 
@@ -112,8 +101,8 @@ namespace CP_2021.ViewModels
 
             #endregion
 
-            Unit = unit;
-            User = user;
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            User = UserDataSingleton.GetInstance().user;
             Users = new ObservableCollection<UserDB>(Unit.DBUsers.Get());
         }
     }

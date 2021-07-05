@@ -204,7 +204,7 @@ namespace CP_2021.ViewModels
         private void InitAdministrativePannelControl()
         {
             UserControlAdministrativePannel pannel = new UserControlAdministrativePannel();
-            pannel.DataContext = new AdministrationPannelViewModel(Unit, User);
+            pannel.DataContext = new AdministrationPannelViewModel();
             ContentContainerContent = pannel;
         }
 
