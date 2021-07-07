@@ -188,20 +188,14 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            ProductionTask task = new ProductionTask(dbTask);
-            if (SelectedTask?.Task.MyParent != null)
+            if (SelectedTask?.Task.MyParent.Parent != null)
             {
-                dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
-                SelectedTask.Parent.Children.Add(task);
+                SelectedTask = SelectedTask.AddAtTheSameLevel();
             }
             else
             {
-                Model.Add(task);
+                SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
             }
-            Unit.Tasks.Insert(dbTask);
-            Unit.Commit();
-            SelectedTask = task;
         }
 
         #endregion
@@ -227,15 +221,8 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            dbTask.MyParent = new HierarchyDB(SelectedTask.Task, dbTask);
-            ProductionTask task = new ProductionTask(dbTask);
-            Unit.Tasks.Insert(dbTask);
-            Unit.Commit();
-            SelectedTask.Children.Add(task);
-            SelectedTask.HasChildren = true;
             SelectedTask.IsExpanded = true;
-            SelectedTask = task;
+            SelectedTask = SelectedTask.AddEmptyChild(); 
         }
 
         #endregion
@@ -253,8 +240,7 @@ namespace CP_2021.ViewModels
             {
                 case MessageBoxResult.Yes:
                     ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                    SelectedTask.Remove(Unit);
-                    Unit.Commit();
+                    SelectedTask.Remove();
                     if (parent == null)
                     {
                         if (Model.Count != 0)
@@ -269,10 +255,9 @@ namespace CP_2021.ViewModels
                         else
                             SelectedTask = parent;
                     }
-                    if (parent?.Children.Count == 0)
+                    if (parent != null)
                     {
-                        parent.HasChildren = false;
-                        parent.IsExpanded = false;
+                        parent.CheckTaskHasChildren();
                     }
                     break;
             }
@@ -284,7 +269,7 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelUpCommand { get; }
 
-        private bool CanLevelUpCommandExecute(object p) => SelectedTask != null && SelectedTask?.Task.MyParent != null;
+        private bool CanLevelUpCommandExecute(object p) => SelectedTask?.Parent != null;
 
         private void OnLevelUpCommandExecuted(object p)
         {
@@ -295,18 +280,14 @@ namespace CP_2021.ViewModels
             if (parent.Parent == null)
             {
                 Model.Add(task);
-                task.Task.MyParent = null;
+                task.Task.MyParent.Parent = null;
             }
             else
             {
                 parent.Parent.Children.Add(task);
                 task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
             }
-            if(parent.Children.Count == 0)
-            {
-                parent.IsExpanded = false;
-                parent.HasChildren = false;
-            }
+            parent.CheckTaskHasChildren();
             Unit.Commit();
             SelectedTask = task;
         }
@@ -326,7 +307,7 @@ namespace CP_2021.ViewModels
             ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
 
-            if (SelectedTask.Task.MyParent != null)
+            if (SelectedTask.Parent != null)
             {
                 dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
                 SelectedTask.Task.MyParent.Parent = dbTask;
@@ -335,6 +316,7 @@ namespace CP_2021.ViewModels
             }
             else
             {
+                dbTask.MyParent = new HierarchyDB(dbTask);
                 SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
                 Model.Add(task);
                 Model.Remove(SelectedTask);

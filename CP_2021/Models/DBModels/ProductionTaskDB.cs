@@ -78,11 +78,10 @@ namespace CP_2021.Models.DBModels
             taskDB.Giving = this.Giving.Clone();
             taskDB.InProduction = this.InProduction.Clone();
             taskDB.Manufacture = this.Manufacture.Clone();
-            //taskDB.ParentId = this.ParentId;
-
+            taskDB.Completion = this.Completion;
+            taskDB.Note = this.Note;
             return taskDB;
         }
-
 
     }
 }

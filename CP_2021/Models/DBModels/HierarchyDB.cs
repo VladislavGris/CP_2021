@@ -11,7 +11,7 @@ namespace CP_2021.Models.DBModels
 {
     internal class HierarchyDB : Entity
     {
-        public int ParentId { get; set; }
+        public int? ParentId { get; set; }
         public virtual ProductionTaskDB Parent { get; set; }
 
         public int ChildId { get; set; }
@@ -22,6 +22,12 @@ namespace CP_2021.Models.DBModels
         public HierarchyDB(ProductionTaskDB parent, ProductionTaskDB child)
         {
             Parent = parent;
+            Child = child;
+        }
+
+        public HierarchyDB(ProductionTaskDB child)
+        {
+            Parent = null;
             Child = child;
         }
     }
