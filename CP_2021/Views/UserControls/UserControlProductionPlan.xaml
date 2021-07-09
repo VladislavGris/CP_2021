@@ -21,7 +21,7 @@
     <UserControl.DataContext>
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
-    <Grid>
+    <Grid x:Name="MainGrid">
         
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding User.Position, Converter={StaticResource PannelVisibilityConverter}}"/>
@@ -209,6 +209,14 @@
                             <BitmapImage UriSource="/Resources/Images/refresh.png"/>
                         </Image.Source>
                     </Image>
+                </ListViewItem>
+                <ListViewItem x:Name="ShowSearch" Width="60"
+                              ToolTip="Показать/скрыть панель поиска">
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding ShowSearchGridCommand}" MouseAction="LeftClick" CommandParameter="{Binding ., ElementName=MainGrid}"/>
+                    </ListViewItem.InputBindings>
+                    <fa:ImageAwesome Icon="Solid_Search"
+                                     Style="{StaticResource TooltipIconStyle}"/>
                 </ListViewItem>
             </ListView>
         </Grid>
@@ -555,7 +563,10 @@
                    VerticalAlignment="Center"/>
             <ComboBox Height="30"
                       SelectedIndex="{Binding SelectedSearchIndex, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding SearchComboBoxContent}">
+                      ItemsSource="{Binding SearchComboBoxContent}"
+                      IsTextSearchEnabled="True"
+                      IsTextSearchCaseSensitive="False"
+                      IsEditable="True">
                 <!--<ComboBoxItem Content="Изделие"/>
                 <ComboBoxItem Content="Распорядительный документ"/>
                 <ComboBoxItem Content="Количество"/>
