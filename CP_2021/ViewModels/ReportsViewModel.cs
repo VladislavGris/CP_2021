@@ -182,7 +182,7 @@ namespace CP_2021.ViewModels
                 {
                     ProductionTask selectedTask = new ProductionTask(task);
                     ProductionTask parent = new ProductionTask();
-                    if (task.MyParent != null)
+                    if (task.MyParent.Parent != null)
                     {
                         parent = new ProductionTask(task.MyParent.Parent);
                         if (!GivingAvailability.Contains(parent))
@@ -219,7 +219,7 @@ namespace CP_2021.ViewModels
                 {
                     ProductionTask selectedTask = new ProductionTask(task);
                     ProductionTask parent = new ProductionTask();
-                    if (task.MyParent != null)
+                    if (task.MyParent.Parent != null)
                     {
                         parent = new ProductionTask(task.MyParent.Parent);
                         if (!InProduction.Contains(parent))
@@ -258,7 +258,7 @@ namespace CP_2021.ViewModels
             foreach(var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
-                if(task.MyParent != null)
+                if(task.MyParent.Parent != null)
                 {
                     ProductionTask parent = new ProductionTask(task.MyParent.Parent);
                     ExecutorInProduction.Add(parent);
@@ -291,7 +291,7 @@ namespace CP_2021.ViewModels
             foreach(var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
-                if(task.MyParent != null)
+                if(task.MyParent.Parent != null)
                 {
                     ProductionTask parent = new ProductionTask(task.MyParent.Parent);
                     ExecutorCompleted.Add(parent);

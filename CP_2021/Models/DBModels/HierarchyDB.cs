@@ -16,6 +16,8 @@ namespace CP_2021.Models.DBModels
 
         public int ChildId { get; set; }
         public virtual ProductionTaskDB Child { get; set; }
+        
+        public int LineOrder { get; set; }
 
         public HierarchyDB() { }
 

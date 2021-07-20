@@ -562,7 +562,6 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-
         #endregion
 
         public ProductionPlanControlViewModel()
