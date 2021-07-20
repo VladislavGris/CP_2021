@@ -29,45 +29,46 @@ namespace CP_2021.Models.Classes
         public static TreeGridModel InitModel(List<ProductionTaskDB> tasks)
         {
             TreeGridModel model = new TreeGridModel();
-            foreach(ProductionTaskDB task in tasks)
+            IEnumerable<ProductionTaskDB> rootTasks = tasks.Where(t => t.MyParent.Parent == null)
+                                                            .OrderBy(t => t.MyParent.LineOrder);
+            foreach(ProductionTaskDB task in rootTasks)
             {
-                if(task.MyParent.Parent == null)
-                {
-                    ProductionTask root = new ProductionTask(task);
-                    if(task.ParentTo!=null && task.ParentTo?.Count != 0)
-                    {
-                        root.HasChildren = true;
-                        root.AddChildren(task);
-                    }
-                    model.Add(root);
-                }
+                ProductionTask root = new ProductionTask(task);
+                root.AddChildrenIfHas(task);
+                model.Add(root);
             }
             return model;
+        }
+
+        private void AddChildrenIfHas(ProductionTaskDB task)
+        {
+            if (task.ParentTo != null && task.ParentTo?.Count != 0)
+            {
+                this.HasChildren = true;
+                this.AddChildren(task);
+            }
+        }
+
+        private void AddChildren(ProductionTaskDB task)
+        {
+            var taskChildren = task.ParentTo.OrderBy(t => t.LineOrder);
+            foreach(var child in taskChildren)
+            {
+                ProductionTask cTask = new ProductionTask(child.Child);
+                cTask.AddChildrenIfHas(child.Child);
+                this.Children.Add(cTask);
+            }
         }
 
         public static ProductionTask InitTask(ProductionTaskDB dbTask)
         {
             ProductionTask root = new ProductionTask(dbTask);
-            if(dbTask.ParentTo!=null && dbTask.ParentTo?.Count != 0)
+            if (dbTask.ParentTo != null && dbTask.ParentTo?.Count != 0)
             {
                 root.HasChildren = true;
                 root.AddChildren(dbTask);
             }
             return root;
-        }
-
-        public void AddChildren(ProductionTaskDB task)
-        {
-            foreach(var child in task.ParentTo)
-            {
-                ProductionTask cTask = new ProductionTask(child.Child);
-                if(child.Child.ParentTo?.Count != 0 && child.Child.ParentTo != null)
-                {
-                    cTask.HasChildren = true;
-                    cTask.AddChildren(child.Child);
-                }
-                this.Children.Add(cTask);
-            }
         }
 
         public ProductionTask AddEmptyChild()
