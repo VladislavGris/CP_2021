@@ -178,7 +178,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
+        //TODO: AddProductionTask completed
         #region AddProductionTaskCommand
 
         public ICommand AddProductionTaskCommand { get; }

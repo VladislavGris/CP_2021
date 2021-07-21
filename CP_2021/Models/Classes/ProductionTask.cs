@@ -76,6 +76,7 @@ namespace CP_2021.Models.Classes
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             dbTask.MyParent = new HierarchyDB(this.Task, dbTask);
+            dbTask.MyParent.LineOrder = 1;
             ProductionTask task = new ProductionTask(dbTask);
             unit.Tasks.Insert(dbTask);
             unit.Commit();
