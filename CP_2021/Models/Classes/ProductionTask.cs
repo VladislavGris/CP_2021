@@ -103,7 +103,7 @@ namespace CP_2021.Models.Classes
             ProductionTask task = new ProductionTask(dbTask);
             unit.Tasks.Insert(dbTask);
             unit.Commit();
-            //this.Parent.Children.Add(task);
+            this.Parent.Children.Insert(dbTask.MyParent.LineOrder - 1, task);
             return task;
         }
 
@@ -114,7 +114,7 @@ namespace CP_2021.Models.Classes
             ProductionTask task = new ProductionTask(dbTask);
             dbTask.MyParent = new HierarchyDB(dbTask);
             dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder + 1;
-            //model.Add(task);
+            model.Insert(dbTask.MyParent.LineOrder - 1, task);
             var tasksWithNullParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == null).OrderBy(t=>t.MyParent.LineOrder);
             foreach(var pTask in tasksWithNullParent)
             {

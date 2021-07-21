@@ -319,7 +319,17 @@
                                           IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                           Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
                                           Background="Transparent"
-                                          Height="48"/>
+                                          
+                                          Height="48">
+                                    <ie:Interaction.Triggers>
+                                        <ie:EventTrigger EventName="Collapsed">
+                                            <ie:InvokeCommandAction Command="{Binding DataContext.OnCollapsingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding .}"/>
+                                        </ie:EventTrigger>
+                                        <ie:EventTrigger EventName="Expanded">
+                                            <ie:InvokeCommandAction Command="{Binding DataContext.OnExpandingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding .}"/>
+                                        </ie:EventTrigger>
+                                    </ie:Interaction.Triggers>
+                                </Expander>
                                 <TextBlock Text="{Binding Task.Name}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"

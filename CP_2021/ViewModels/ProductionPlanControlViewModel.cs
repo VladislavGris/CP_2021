@@ -195,8 +195,6 @@ namespace CP_2021.ViewModels
             {
                 SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
             }
-            Unit.Refresh();
-            Model = ProductionTask.InitModel(Unit.Tasks.Get().ToList());
         }
 
         #endregion
@@ -562,6 +560,41 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        //TODO: В случае необходимости реализовать функции и добавить столбец IsExpanded в БД
+        #region OnCollapsingCommand
+
+        public ICommand OnCollapsingCommand { get; }
+
+        private bool CanOnCollapsingCommandExecute(object p) => true;
+
+        private void OnOnCollapsingCommandExecuted(object p)
+        {
+            if(p is ProductionTask)
+            {
+                ProductionTask task = (ProductionTask)p;
+                Debug.WriteLine(task.Task.Name);
+            }
+            Debug.WriteLine("Collapsed");
+        }
+
+        #endregion
+        #region OnExpandingCommand
+
+        public ICommand OnExpandingCommand { get; }
+
+        private bool CanOnExpandingCommandExecute(object p) => true;
+
+        private void OnOnExpandingCommandExecuted(object p)
+        {
+            if (p is ProductionTask)
+            {
+                ProductionTask task = (ProductionTask)p;
+                Debug.WriteLine(task.Task.Name);
+            }
+            Debug.WriteLine("Expanded");
+        }
+
+        #endregion
 
         #endregion
 
@@ -584,6 +617,8 @@ namespace CP_2021.ViewModels
             ShowSearchGridCommand = new LambdaCommand(OnShowSearchGridCommandExecuted, CanShowSearchGridCommandExecute);
             MoveNextResultCommand = new LambdaCommand(OnMoveNextResultCommandExecuted, CanMoveNextResultCommandExecute);
             MovePreviousResultCommand = new LambdaCommand(OnMovePreviousResultCommandExecuted, CanMovePreviousResultCommandExecute);
+            OnCollapsingCommand = new LambdaCommand(OnOnCollapsingCommandExecuted, CanOnCollapsingCommandExecute);
+            OnExpandingCommand = new LambdaCommand(OnOnExpandingCommandExecuted, CanOnExpandingCommandExecute);
 
             #endregion
 
