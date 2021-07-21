@@ -65,7 +65,6 @@ namespace CP_2021.ViewModels
         #endregion
 
         #region SelectedTask
-        // TODO: Сделать листом
         private ProductionTask _selectedTask;
 
         public ProductionTask SelectedTask
@@ -196,6 +195,8 @@ namespace CP_2021.ViewModels
             {
                 SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
             }
+            Unit.Refresh();
+            Model = ProductionTask.InitModel(Unit.Tasks.Get().ToList());
         }
 
         #endregion
@@ -589,6 +590,7 @@ namespace CP_2021.ViewModels
             User = UserDataSingleton.GetInstance().user;
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
+            //TODO: InitModel ready
             Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();
         }

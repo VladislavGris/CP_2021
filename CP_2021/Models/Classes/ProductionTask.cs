@@ -87,22 +87,42 @@ namespace CP_2021.Models.Classes
         public ProductionTask AddAtTheSameLevel()
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             dbTask.MyParent = new HierarchyDB(this.Task.MyParent.Parent, dbTask);
+            dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder + 1;
+
+            var tasksByParents = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task.MyParent.Parent).OrderBy(t => t.MyParent.LineOrder);
+            foreach (var pTask in tasksByParents)
+            {
+                if(pTask.MyParent.LineOrder >= dbTask.MyParent.LineOrder)
+                {
+                    pTask.MyParent.LineOrder++;
+                }
+            }
             ProductionTask task = new ProductionTask(dbTask);
             unit.Tasks.Insert(dbTask);
             unit.Commit();
-            this.Parent.Children.Add(task);
+            //this.Parent.Children.Add(task);
             return task;
         }
 
         public ProductionTask AddEmptyRootToModel(TreeGridModel model)
         {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             ProductionTask task = new ProductionTask(dbTask);
             dbTask.MyParent = new HierarchyDB(dbTask);
-            model.Add(task);
-            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder + 1;
+            //model.Add(task);
+            var tasksWithNullParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == null).OrderBy(t=>t.MyParent.LineOrder);
+            foreach(var pTask in tasksWithNullParent)
+            {
+                if(pTask.MyParent.LineOrder >= dbTask.MyParent.LineOrder)
+                {
+                    pTask.MyParent.LineOrder++;
+                }
+            }
             unit.Tasks.Insert(dbTask);
             unit.Commit();
             return task;
