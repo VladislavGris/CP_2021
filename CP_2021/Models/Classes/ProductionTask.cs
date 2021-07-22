@@ -132,6 +132,14 @@ namespace CP_2021.Models.Classes
         public void Remove()
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task.MyParent.Parent).OrderBy(t => t.MyParent.LineOrder);
+            foreach(var pTask in tasksByParent)
+            {
+                if(pTask.MyParent.LineOrder > this.Task.MyParent.LineOrder)
+                {
+                    pTask.MyParent.LineOrder--;
+                }
+            }
             this.IsExpanded = false;
             if(this.Task.ParentTo != null)
             {

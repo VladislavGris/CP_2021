@@ -211,7 +211,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
+        //TODO: AddChildCommand completed
         #region AddChildCommand
 
         public ICommand AddChildCommand { get; }
