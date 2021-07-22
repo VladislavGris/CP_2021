@@ -10,7 +10,7 @@
         x:Class="CP_2021.Views.Windows.ProductionPlan"
         mc:Ignorable="d"
     x:Name="ProductionPlanWindow"
-        Title="{Binding Title}" Height="720" Width="1280" MinHeight="550" MinWidth="630" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
+        Title="{Binding Title}" Height="720" Width="1280" MinHeight="550" MinWidth="900" WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png" WindowStyle="ThreeDBorderWindow"
         WindowState="Maximized">
     
     <Window.DataContext>

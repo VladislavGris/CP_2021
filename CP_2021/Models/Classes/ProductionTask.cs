@@ -88,20 +88,11 @@ namespace CP_2021.Models.Classes
         public ProductionTask AddAtTheSameLevel()
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             dbTask.MyParent = new HierarchyDB(this.Task.MyParent.Parent, dbTask);
             dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder + 1;
-
-            var tasksByParents = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task.MyParent.Parent).OrderBy(t => t.MyParent.LineOrder);
-            foreach (var pTask in tasksByParents)
-            {
-                if(pTask.MyParent.LineOrder >= dbTask.MyParent.LineOrder)
-                {
-                    pTask.MyParent.LineOrder++;
-                }
-            }
             ProductionTask task = new ProductionTask(dbTask);
+            task.UpOrderBelow();
             unit.Tasks.Insert(dbTask);
             unit.Commit();
             this.Parent.Children.Insert(dbTask.MyParent.LineOrder - 1, task);
@@ -112,18 +103,11 @@ namespace CP_2021.Models.Classes
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            ProductionTask task = new ProductionTask(dbTask);
             dbTask.MyParent = new HierarchyDB(dbTask);
             dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder + 1;
+            ProductionTask task = new ProductionTask(dbTask);
             model.Insert(dbTask.MyParent.LineOrder - 1, task);
-            var tasksWithNullParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == null).OrderBy(t=>t.MyParent.LineOrder);
-            foreach(var pTask in tasksWithNullParent)
-            {
-                if(pTask.MyParent.LineOrder >= dbTask.MyParent.LineOrder)
-                {
-                    pTask.MyParent.LineOrder++;
-                }
-            }
+            task.UpOrderBelow();
             unit.Tasks.Insert(dbTask);
             unit.Commit();
             return task;
@@ -132,14 +116,7 @@ namespace CP_2021.Models.Classes
         public void Remove()
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task.MyParent.Parent).OrderBy(t => t.MyParent.LineOrder);
-            foreach(var pTask in tasksByParent)
-            {
-                if(pTask.MyParent.LineOrder > this.Task.MyParent.LineOrder)
-                {
-                    pTask.MyParent.LineOrder--;
-                }
-            }
+            this.DownOrderBelow();
             this.IsExpanded = false;
             if(this.Task.ParentTo != null)
             {
@@ -198,6 +175,32 @@ namespace CP_2021.Models.Classes
         public ProductionTask Clone()
         {
             return (ProductionTask) this.MemberwiseClone();
+        }
+
+        public void UpOrderBelow()
+        {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task.MyParent.Parent && t != this.Task).OrderBy(t => t.MyParent.LineOrder);
+            foreach(var task in tasksByParent)
+            {
+                if(task.MyParent.LineOrder >= this.Task.MyParent.LineOrder)
+                {
+                    task.MyParent.LineOrder++;
+                }
+            }
+        }
+
+        public void DownOrderBelow()
+        {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task.MyParent.Parent).OrderBy(t => t.MyParent.LineOrder);
+            foreach (var task in tasksByParent)
+            {
+                if (task.MyParent.LineOrder > this.Task.MyParent.LineOrder)
+                {
+                    task.MyParent.LineOrder--;
+                }
+            }
         }
     }
 }

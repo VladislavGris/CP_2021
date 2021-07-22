@@ -225,7 +225,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
+        //TODO: DeleteProductionTask completed
         #region DeleteProductionTaskCommand
 
         public ICommand DeleteProductionTaskCommand { get; }
@@ -263,7 +263,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
+        //TODO: LevelUpCommand completed
         #region LevelUpCommand
 
         public ICommand LevelUpCommand { get; }
@@ -275,17 +275,20 @@ namespace CP_2021.ViewModels
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
             ProductionTask task = ProductionTask.InitTask(SelectedTask.Task);
             SelectedTask.IsExpanded = false;
+            SelectedTask.DownOrderBelow();
             parent.Children.Remove(SelectedTask);
+            task.Task.MyParent.LineOrder = parent.Task.MyParent.LineOrder + 1;
             if (parent.Parent == null)
             {
-                Model.Add(task);
                 task.Task.MyParent.Parent = null;
+                Model.Insert(task.Task.MyParent.LineOrder - 1, task);
             }
             else
             {
-                parent.Parent.Children.Add(task);
                 task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
+                parent.Parent.Children.Insert(task.Task.MyParent.LineOrder - 1, task);
             }
+            task.UpOrderBelow();
             parent.CheckTaskHasChildren();
             Unit.Commit();
             SelectedTask = task;
