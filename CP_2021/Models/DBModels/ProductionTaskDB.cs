@@ -81,7 +81,14 @@ namespace CP_2021.Models.DBModels
             taskDB.Completion = this.Completion;
             taskDB.Note = this.Note;
             return taskDB;
+            //var newTask = new ProductionTaskDB();
+            //var task = (ProductionTaskDB)this.MemberwiseClone();
+            //task.Id = 0;
+            //task.Giving = (GivingDB)this.Giving.Clone();
+            //this.InProduction = (InProductionDB)this.InProduction.Clone();
+            //this.Manufacture = (ManufactureDB)this.Manufacture.Clone();
+            //this.Complectation = (ComplectationDB)this.Complectation.Clone();
+            //return (ProductionTaskDB)this.MemberwiseClone();
         }
-
     }
 }

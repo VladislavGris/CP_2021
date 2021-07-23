@@ -34,28 +34,28 @@ namespace CP_2021.Models.Classes
             foreach(ProductionTaskDB task in rootTasks)
             {
                 ProductionTask root = new ProductionTask(task);
-                root.AddChildrenIfHas(task);
+                root.AddChildrenIfHas();
                 model.Add(root);
             }
             return model;
         }
 
-        private void AddChildrenIfHas(ProductionTaskDB task)
+        private void AddChildrenIfHas()
         {
-            if (task.ParentTo != null && task.ParentTo?.Count != 0)
+            if (this.Task.ParentTo != null && this.Task.ParentTo?.Count != 0)
             {
                 this.HasChildren = true;
-                this.AddChildren(task);
+                this.AddChildren();
             }
         }
 
-        private void AddChildren(ProductionTaskDB task)
+        private void AddChildren()
         {
-            var taskChildren = task.ParentTo.OrderBy(t => t.LineOrder);
+            var taskChildren = this.Task.ParentTo.OrderBy(t => t.LineOrder);
             foreach(var child in taskChildren)
             {
                 ProductionTask cTask = new ProductionTask(child.Child);
-                cTask.AddChildrenIfHas(child.Child);
+                cTask.AddChildrenIfHas();
                 this.Children.Add(cTask);
             }
         }
@@ -66,7 +66,7 @@ namespace CP_2021.Models.Classes
             if (dbTask.ParentTo != null && dbTask.ParentTo?.Count != 0)
             {
                 root.HasChildren = true;
-                root.AddChildren(dbTask);
+                root.AddChildren();
             }
             return root;
         }
@@ -137,28 +137,24 @@ namespace CP_2021.Models.Classes
             unit.Commit();
         }
 
-        public void AddTasksToDatabase(ApplicationUnit unit, TreeGridModel model, ProductionTask parent)
+        public void AddChild(ProductionTask child)
         {
-            ProductionTaskDB dbTask = this.Task.Clone();
-            ProductionTask task = new ProductionTask(dbTask);
-            if(parent == null)
-            {
-                dbTask.MyParent = new HierarchyDB(dbTask);
-                Model.Add(task);
-            }
-            else
-            {
-                parent.Children.Add(task);
-                dbTask.MyParent = new HierarchyDB(parent.Task, dbTask);
-            }
-            unit.Tasks.Insert(dbTask);
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+
+            ProductionTaskDB dbChild = child.Task.Clone();
+            dbChild.MyParent = new HierarchyDB(this.Task, dbChild);
+            dbChild.MyParent.LineOrder = child.Task.MyParent.LineOrder;
+            ProductionTask childToAdd = new ProductionTask(dbChild);
+
+            this.Children.Add(childToAdd);
+            unit.Tasks.Insert(dbChild);
             unit.Commit();
-            if (this.HasChildren)
+
+            if (child.HasChildren)
             {
-                task.HasChildren = true;
-                foreach(ProductionTask child in this.Children)
+                foreach(ProductionTask item in child.Children)
                 {
-                    child.AddTasksToDatabase(unit, model, task);
+                    childToAdd.AddChild(item);
                 }
             }
         }

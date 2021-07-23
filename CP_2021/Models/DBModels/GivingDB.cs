@@ -39,6 +39,7 @@ namespace CP_2021.Models.DBModels
             giving.ReturnReport = this.ReturnReport;
             giving.ReceivingDate = this.ReceivingDate;
             return giving;
+            return (GivingDB)this.MemberwiseClone();
         }
     }
 }

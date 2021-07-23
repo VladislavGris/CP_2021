@@ -295,7 +295,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
+        //TODO: LevelDownCommand completed
         #region LevelDownCommand
 
         public ICommand LevelDownCommand { get; }
@@ -372,7 +372,33 @@ namespace CP_2021.ViewModels
 
         private void OnPasteTaskCommandExecuted(object p)
         {
-            TaskToCopy.AddTasksToDatabase(Unit, Model, (ProductionTask)SelectedTask.Parent);
+            ProductionTaskDB dbTask = TaskToCopy.Task.Clone();
+            ProductionTask task = new ProductionTask(dbTask);
+            SelectedTask.UpOrderBelow();
+
+            if(SelectedTask.Parent == null)
+            {
+                dbTask.MyParent = new HierarchyDB(dbTask);
+                Model.Insert(SelectedTask.Task.MyParent.LineOrder, task);
+            }
+            else
+            {
+                dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
+                ((ProductionTask)SelectedTask.Parent).Children.Insert(SelectedTask.Task.MyParent.LineOrder, task);
+            }
+            dbTask.MyParent.LineOrder = SelectedTask.Task.MyParent.LineOrder + 1;
+
+            Unit.Tasks.Insert(dbTask);
+            Unit.Commit();
+
+            if (TaskToCopy.HasChildren)
+            {
+                task.HasChildren = true;
+                foreach(ProductionTask child in TaskToCopy.Children)
+                {
+                    task.AddChild(child);
+                }
+            }
         }
 
         #endregion
