@@ -304,6 +304,7 @@ namespace CP_2021.ViewModels
 
         private void OnLevelDownCommandExecuted(object p)
         {
+            int selectedTaskOrder = SelectedTask.Task.MyParent.LineOrder;
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             ProductionTask task = new ProductionTask(dbTask);
             ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
@@ -313,16 +314,18 @@ namespace CP_2021.ViewModels
             {
                 dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
                 SelectedTask.Task.MyParent.Parent = dbTask;
-                parent.Children.Add(task);
+                parent.Children.Insert(selectedTaskOrder - 1, task);
                 parent.Children.Remove(SelectedTask);
             }
             else
             {
                 dbTask.MyParent = new HierarchyDB(dbTask);
                 SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
-                Model.Add(task);
+                Model.Insert(selectedTaskOrder - 1, task);
                 Model.Remove(SelectedTask);
             }
+            task.Task.MyParent.LineOrder = selectedTaskOrder;
+            downTask.Task.MyParent.LineOrder = 1;
             task.Children.Add(downTask);
             task.HasChildren = true;
             task.IsExpanded = true;
@@ -374,6 +377,7 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region SearchCommands
         #region ShowSearchGridCommand
 
         public ICommand ShowSearchGridCommand { get; }
@@ -382,7 +386,7 @@ namespace CP_2021.ViewModels
 
         private void OnShowSearchGridCommandExecuted(object p)
         {
-            if(((Grid)p).RowDefinitions.ElementAt(2).Height != new GridLength(0))
+            if (((Grid)p).RowDefinitions.ElementAt(2).Height != new GridLength(0))
             {
                 ((Grid)p).RowDefinitions.ElementAt(2).Height = new GridLength(0);
             }
@@ -492,17 +496,17 @@ namespace CP_2021.ViewModels
                 searchManager.ExecuteSearchStrategy();
                 SearchResults = searchManager.GetSearchResults();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                if(ex is IncorrectDateFormatException or IncorrectSearchValueException)
+                if (ex is IncorrectDateFormatException or IncorrectSearchValueException)
                 {
                     SearchResultString = ex.Message;
                 }
             }
-            
-            if(SearchResultString==null)
+
+            if (SearchResultString == null)
             {
-                if(SearchResults.Count == 0)
+                if (SearchResults.Count == 0)
                 {
                     SearchResultString = "Совпадений не найдено";
                 }
@@ -522,7 +526,7 @@ namespace CP_2021.ViewModels
 
         public ICommand MoveNextResultCommand { get; }
 
-        private bool CanMoveNextResultCommandExecute(object p) => SelectedTask != null && SearchResults != null && SearchResults.Count!=0 && SelectedTask != SearchResults.Last();
+        private bool CanMoveNextResultCommandExecute(object p) => SelectedTask != null && SearchResults != null && SearchResults.Count != 0 && SelectedTask != SearchResults.Last();
 
         private void OnMoveNextResultCommandExecuted(object p)
         {
@@ -563,6 +567,8 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #endregion
+
         //TODO: В случае необходимости реализовать функции и добавить столбец IsExpanded в БД
         #region OnCollapsingCommand
 
