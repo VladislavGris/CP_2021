@@ -137,6 +137,24 @@ namespace CP_2021.Models.Classes
             unit.Commit();
         }
 
+        public void CopyChild(ProductionTask child)
+        {
+            ProductionTaskDB dbChild = child.Task.Clone();
+            dbChild.MyParent = new HierarchyDB(this.Task, dbChild);
+            dbChild.MyParent.LineOrder = child.Task.MyParent.LineOrder;
+            ProductionTask childToAdd = new ProductionTask(dbChild);
+
+            this.Children.Add(childToAdd);
+
+            if (child.HasChildren)
+            {
+                foreach (ProductionTask item in child.Children)
+                {
+                    childToAdd.AddChild(item);
+                }
+            }
+        }
+
         public void AddChild(ProductionTask child)
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;

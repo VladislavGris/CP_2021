@@ -19,6 +19,7 @@ using CP_2021.Infrastructure.Search;
 using CP_2021.Infrastructure.Search.SearchStrategies;
 using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Infrastructure.Singletons;
+using System.Collections.ObjectModel;
 
 namespace CP_2021.ViewModels
 {
@@ -178,7 +179,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-        //TODO: AddProductionTask completed
+
         #region AddProductionTaskCommand
 
         public ICommand AddProductionTaskCommand { get; }
@@ -211,7 +212,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-        //TODO: AddChildCommand completed
+
         #region AddChildCommand
 
         public ICommand AddChildCommand { get; }
@@ -225,7 +226,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-        //TODO: DeleteProductionTask completed
+
         #region DeleteProductionTaskCommand
 
         public ICommand DeleteProductionTaskCommand { get; }
@@ -263,7 +264,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-        //TODO: LevelUpCommand completed
+
         #region LevelUpCommand
 
         public ICommand LevelUpCommand { get; }
@@ -295,7 +296,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-        //TODO: LevelDownCommand completed
+
         #region LevelDownCommand
 
         public ICommand LevelDownCommand { get; }
@@ -595,6 +596,123 @@ namespace CP_2021.ViewModels
         #endregion
         #endregion
 
+        #region UpTaskCommand
+
+        public ICommand UpTaskCommand { get; }
+
+        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.Task.MyParent.LineOrder != 1;
+
+        private void OnUpTaskCommandExecuted(object p)
+        {
+            int selectedOrderBase = SelectedTask.Task.MyParent.LineOrder;
+
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            ProductionTaskDB task = new ProductionTaskDB();
+
+            if(parent == null)
+            {
+                task = Unit.Tasks.Get().Where(t => t.MyParent.Parent == null && t.MyParent.LineOrder == selectedOrderBase - 1).SingleOrDefault();
+                Model.SwapItems(selectedOrderBase - 1, selectedOrderBase - 2);
+            }
+            else
+            {
+                task = Unit.Tasks.Get().Where(t => t.MyParent.Parent != null && t.MyParent.Parent.Equals(parent.Task) && t.MyParent.LineOrder == selectedOrderBase - 1).SingleOrDefault();
+            }
+            task.MyParent.LineOrder++;
+            SelectedTask.Task.MyParent.LineOrder--;
+
+            if(parent != null)
+            {
+                var taskToUp = SelectedTask.Clone();
+                parent.Children.Remove(SelectedTask);
+
+                ProductionTask taskToDown = new ProductionTask();
+                foreach (ProductionTask child in parent.Children)
+                {
+                    if (child.Task.Equals(task))
+                    {
+                        taskToDown = child.Clone();
+                        parent.Children.Remove(child);
+                        break;
+                    }
+                }
+
+                taskToDown.IsExpanded = false;
+                taskToUp.IsExpanded = false;
+
+                parent.Children.Insert(selectedOrderBase - 2, taskToUp);
+                parent.Children.Insert(selectedOrderBase - 1, taskToDown);
+            }
+            Unit.Commit();
+        }
+
+        #endregion
+
+        #region DownTaskCommand
+
+        public ICommand DownTaskCommand { get; }
+
+        private bool CanDownTaskCommandExecute(object p)
+        {
+            if (SelectedTask != null)
+            {
+                int selecetedTaskLineOrder = SelectedTask.Task.MyParent.LineOrder;
+                int maxLineOrderByParent = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent).Max(t => t.MyParent.LineOrder);
+                Debug.WriteLine("selected = " + selecetedTaskLineOrder + "; max = " + maxLineOrderByParent);
+                return selecetedTaskLineOrder != maxLineOrderByParent;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void OnDownTaskCommandExecuted(object p)
+        {
+            int selectedOrderBase = SelectedTask.Task.MyParent.LineOrder + 1;
+
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            ProductionTaskDB task = new ProductionTaskDB();
+
+            if (parent == null)
+            {
+                task = Unit.Tasks.Get().Where(t => t.MyParent.Parent == null && t.MyParent.LineOrder == selectedOrderBase).SingleOrDefault();
+                Model.SwapItems(selectedOrderBase - 1, selectedOrderBase - 2);
+            }
+            else
+            {
+                task = Unit.Tasks.Get().Where(t => t.MyParent.Parent != null && t.MyParent.Parent.Equals(parent.Task) && t.MyParent.LineOrder == selectedOrderBase).SingleOrDefault();
+            }
+            task.MyParent.LineOrder--;
+            SelectedTask.Task.MyParent.LineOrder++;
+
+            if (parent != null)
+            {
+                var taskToDown = SelectedTask.Clone();
+                parent.Children.Remove(SelectedTask);
+
+                ProductionTask taskToUp = new ProductionTask();
+                foreach (ProductionTask child in parent.Children)
+                {
+                    if (child.Task.Equals(task))
+                    {
+                        taskToUp = child.Clone();
+                        parent.Children.Remove(child);
+                        break;
+                    }
+                }
+
+                taskToDown.IsExpanded = false;
+                taskToUp.IsExpanded = false;
+
+                parent.Children.Insert(selectedOrderBase - 2, taskToUp);
+                parent.Children.Insert(selectedOrderBase - 1, taskToDown);
+            }
+            Unit.Commit();
+        }
+
+        #endregion
+
         //TODO: В случае необходимости реализовать функции и добавить столбец IsExpanded в БД
         #region OnCollapsingCommand
 
@@ -654,13 +772,14 @@ namespace CP_2021.ViewModels
             MovePreviousResultCommand = new LambdaCommand(OnMovePreviousResultCommandExecuted, CanMovePreviousResultCommandExecute);
             OnCollapsingCommand = new LambdaCommand(OnOnCollapsingCommandExecuted, CanOnCollapsingCommandExecute);
             OnExpandingCommand = new LambdaCommand(OnOnExpandingCommandExecuted, CanOnExpandingCommandExecute);
+            UpTaskCommand = new LambdaCommand(OnUpTaskCommandExecuted, CanUpTaskCommandExecute);
+            DownTaskCommand = new LambdaCommand(OnDownTaskCommandExecuted, CanDownTaskCommandExecute);
 
             #endregion
 
             User = UserDataSingleton.GetInstance().user;
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
-            //TODO: InitModel ready
             Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();
         }
