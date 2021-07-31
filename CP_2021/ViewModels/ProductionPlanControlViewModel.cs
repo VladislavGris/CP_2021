@@ -699,7 +699,7 @@ namespace CP_2021.ViewModels
             if (parent == null)
             {
                 task = Unit.Tasks.Get().Where(t => t.MyParent.Parent == null && t.MyParent.LineOrder == selectedOrderBase).SingleOrDefault();
-                Model.SwapItems(selectedOrderBase - 1, selectedOrderBase - 2);
+                //Model.SwapItems(selectedOrderBase - 1, selectedOrderBase - 2);
             }
             else
             {
@@ -729,6 +729,28 @@ namespace CP_2021.ViewModels
 
                 parent.Children.Insert(selectedOrderBase - 2, taskToUp);
                 parent.Children.Insert(selectedOrderBase - 1, taskToDown);
+            }
+            else
+            {
+                var taskToDown = SelectedTask.Clone();
+                Model.Remove(SelectedTask);
+
+                ProductionTask taskToUp = new ProductionTask();
+                foreach (ProductionTask root in Model)
+                {
+                    if (root.Task.Equals(task))
+                    {
+                        taskToUp = root.Clone();
+                        Model.Remove(root);
+                        break;
+                    }
+                }
+
+                taskToDown.IsExpanded = false;
+                taskToUp.IsExpanded = false;
+
+                Model.Insert(selectedOrderBase - 2, taskToUp);
+                Model.Insert(selectedOrderBase - 1, taskToDown);
             }
             Unit.Commit();
         }
