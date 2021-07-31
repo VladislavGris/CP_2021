@@ -1,10 +1,14 @@
 ﻿using Common.Wpf.Data;
 using CP_2021.Infrastructure.Commands;
+using CP_2021.Infrastructure.PDF;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Models.Classes;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.DocumentObjectModel.Tables;
+using MigraDoc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -135,6 +139,8 @@ namespace CP_2021.ViewModels
 
         #region Команды
 
+        #region Генерация отчетов в приложении
+
         #region GenerateNoSpecificationReportCommand
 
         public ICommand GenerateNoSpecificationReportCommand { get; }
@@ -144,8 +150,8 @@ namespace CP_2021.ViewModels
         private void OnGenerateNoSpecificationReportCommandExecuted(object p)
         {
             NoSpecification = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().
-                Where(t =>  String.IsNullOrEmpty(t.Manufacture.SpecNum) && 
-                            !String.IsNullOrEmpty(t.Manufacture.Name) && 
+                Where(t => String.IsNullOrEmpty(t.Manufacture.SpecNum) &&
+                            !String.IsNullOrEmpty(t.Manufacture.Name) &&
                             !String.IsNullOrEmpty(t.Manufacture.LetterNum)));
         }
 
@@ -160,8 +166,8 @@ namespace CP_2021.ViewModels
         private void OnGenerateGivingReportsCommandExecuted(object p)
         {
             GivingReports = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().
-                Where(t =>  String.IsNullOrEmpty(t.Giving.Report) && 
-                            !String.IsNullOrEmpty(t.Giving.Bill) && 
+                Where(t => String.IsNullOrEmpty(t.Giving.Report) &&
+                            !String.IsNullOrEmpty(t.Giving.Bill) &&
                             !String.IsNullOrEmpty(t.Manufacture.SpecNum)));
         }
 
@@ -248,17 +254,17 @@ namespace CP_2021.ViewModels
         private void OnGenerateExecutorInProductionCommandExecuted(object p)
         {
             var tasks = Unit.Tasks.Get().
-                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || 
-                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && 
-                            t.InProduction.CompletionDate == null && 
-                            t.InProduction.GivingDate!=null && 
-                            t.InProduction.GivingDate > DateFrom && 
+                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) ||
+                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) &&
+                            t.InProduction.CompletionDate == null &&
+                            t.InProduction.GivingDate != null &&
+                            t.InProduction.GivingDate > DateFrom &&
                             t.InProduction.GivingDate < DateTo);
             ExecutorInProduction = new TreeGridModel();
-            foreach(var task in tasks)
+            foreach (var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
-                if(task.MyParent.Parent != null)
+                if (task.MyParent.Parent != null)
                 {
                     ProductionTask parent = new ProductionTask(task.MyParent.Parent);
                     ExecutorInProduction.Add(parent);
@@ -283,15 +289,16 @@ namespace CP_2021.ViewModels
         private void OnGenerateExecutorCompletedCommandExecuted(object p)
         {
             var tasks = Unit.Tasks.Get().
-                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) || 
-                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) && 
+                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) ||
+                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) &&
                             t.InProduction.CompletionDate != null &&
-                            t.InProduction.CompletionDate > DateFrom && 
+                            t.InProduction.CompletionDate > DateFrom &&
                             t.InProduction.CompletionDate < DateTo);
-            foreach(var task in tasks)
+            ExecutorCompleted = new TreeGridModel();
+            foreach (var task in tasks)
             {
                 ProductionTask selectedTask = new ProductionTask(task);
-                if(task.MyParent.Parent != null)
+                if (task.MyParent.Parent != null)
                 {
                     ProductionTask parent = new ProductionTask(task.MyParent.Parent);
                     ExecutorCompleted.Add(parent);
@@ -309,6 +316,90 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region Генерация PDF отчетов
+
+        #region GenerateNoSpecPDFCommand
+
+        public ICommand GenerateNoSpecPDFCommand { get; }
+
+        private bool CanGenerateNoSpecPDFCommandExecute(object p) => NoSpecification != null;
+
+        private void OnGenerateNoSpecPDFCommandExecuted(object p)
+        {
+            PdfDocument.GenerateNoSpecificationReport(NoSpecification);
+        }
+
+        #endregion
+
+        #region GenerateGivingReportsPDFCommand
+
+        public ICommand GenerateGivingReportsPDFCommand { get; }
+
+        private bool CanGenerateGivingReportsPDFCommandExecute(object p) => GivingReports != null;
+
+        private void OnGenerateGivingReportsPDFCommandExecuted(object p)
+        {
+            PdfDocument.GenerateGivingReportsPDF(GivingReports);
+        }
+
+        #endregion
+
+        #region GenerateGivingAvailabilityPDFCommand
+
+        public ICommand GenerateGivingAvailabilityPDFCommand { get; }
+
+        private bool CanGenerateGivingAvailabilityPDFCommandExecute(object p) => GivingAvailability != null;
+
+        private void OnGenerateGivingAvailabilityPDFCommandExecuted(object p)
+        {
+            PdfDocument.GenerateGivingAvailabilityPDF(GivingAvailability, DateFrom, DateTo);
+        }
+
+        #endregion
+
+        #region GenerateInProductionPDFCommand
+
+        public ICommand GenerateInProductionPDFCommand { get; }
+
+        private bool CanGenerateInProductionPDFCommandExecute(object p) => InProduction != null;
+
+        private void OnGenerateInProductionPDFCommandExecuted(object p)
+        {
+            PdfDocument.GenerateInProductionPDF(InProduction);
+        }
+
+        #endregion
+
+        #region GenerateExecutorInProductionPDFCommand
+
+        public ICommand GenerateExecutorInProductionPDFCommand { get; }
+
+        private bool CanGenerateExecutorInProductionPDFCommandExecute(object p) => ExecutorInProduction != null;
+
+        private void OnGenerateExecutorInProductionPDFCommandExecuted(object p)
+        {
+            PdfDocument.GenerateExecutorInProductionPDF(ExecutorInProduction, DateFrom, DateTo, ExecutorName);
+        }
+
+        #endregion
+
+        #region GenerateExecutorCompletedPDFCommand
+
+        public ICommand GenerateExecutorCompletedPDFCommand { get; }
+
+        private bool CanGenerateExecutorCompletedPDFCommandExecute(object p) => ExecutorCompleted != null;
+
+        private void OnGenerateExecutorCompletedPDFCommandExecuted(object p)
+        {
+            PdfDocument.GenerateExecutorCompletedPDF(ExecutorCompleted, DateFrom, DateTo, ExecutorName);
+        }
+
+        #endregion
+
+        #endregion
+
+        #endregion
+
         public ReportsViewModel() 
         {
             #region Команды
@@ -318,6 +409,12 @@ namespace CP_2021.ViewModels
             GenerateInProductionCommand = new LambdaCommand(OnGenerateInProductionCommandExecuted, CanGenerateInProductionCommandExecute);
             GenerateExecutorInProductionCommand = new LambdaCommand(OnGenerateExecutorInProductionCommandExecuted, CanGenerateExecutorInProductionCommandExecute);
             GenerateExecutorCompletedCommand = new LambdaCommand(OnGenerateExecutorCompletedCommandExecuted, CanGenerateExecutorCompletedCommandExecute);
+            GenerateNoSpecPDFCommand = new LambdaCommand(OnGenerateNoSpecPDFCommandExecuted, CanGenerateNoSpecPDFCommandExecute);
+            GenerateGivingReportsPDFCommand = new LambdaCommand(OnGenerateGivingReportsPDFCommandExecuted, CanGenerateGivingReportsPDFCommandExecute);
+            GenerateGivingAvailabilityPDFCommand = new LambdaCommand(OnGenerateGivingAvailabilityPDFCommandExecuted, CanGenerateGivingAvailabilityPDFCommandExecute);
+            GenerateInProductionPDFCommand = new LambdaCommand(OnGenerateInProductionPDFCommandExecuted, CanGenerateInProductionPDFCommandExecute);
+            GenerateExecutorInProductionPDFCommand = new LambdaCommand(OnGenerateExecutorInProductionPDFCommandExecuted, CanGenerateExecutorInProductionPDFCommandExecute);
+            GenerateExecutorCompletedPDFCommand = new LambdaCommand(OnGenerateExecutorCompletedPDFCommandExecuted, CanGenerateExecutorCompletedPDFCommandExecute);
             #endregion
 
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;

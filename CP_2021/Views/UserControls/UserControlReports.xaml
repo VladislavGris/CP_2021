@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
              xmlns:vm="clr-namespace:CP_2021.ViewModels"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -17,7 +18,12 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               Background="{StaticResource BackgroundBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width=".03*"/>
+            </Grid.ColumnDefinitions>
             <TextBlock Text="Отчеты"
+                       Grid.Column="0"
                        Foreground="{StaticResource ForegroundBrush}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
@@ -62,6 +68,17 @@
                         <Label Content="Отчет отсутствия спецификации"
                                Style="{StaticResource LabelStyle}"
                                VerticalAlignment="Center"/>
+                        <Button ToolTip="Сохранить как PDF"
+                                Margin="0 3 200 3"
+                                Width="50"
+                                HorizontalAlignment="Right"
+                                Command="{Binding GenerateNoSpecPDFCommand}">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="Solid_Save"
+                                     Foreground="{StaticResource ForegroundBrush}"
+                                     Width="20"/>
+                            </Button.Content>
+                        </Button>
                         <Button Content="Сформировать очтет"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
@@ -104,6 +121,17 @@
                             <Label Content="Отчет о наличии на складе предприятия давальческого для передачи"
                                Style="{StaticResource LabelStyle}"
                                VerticalAlignment="Center"/>
+                            <Button ToolTip="Сохранить как PDF"
+                                Margin="0 3 200 3"
+                                Width="50"
+                                HorizontalAlignment="Right"
+                                Command="{Binding GenerateGivingAvailabilityPDFCommand}">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_Save"
+                                     Foreground="{StaticResource ForegroundBrush}"
+                                     Width="20"/>
+                                </Button.Content>
+                            </Button>
                             <Button Content="Сформировать очтет"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
@@ -180,6 +208,17 @@
                         <Label Content="О предоставлении давальческих отчетов"
                                Style="{StaticResource LabelStyle}"
                                VerticalAlignment="Center"/>
+                        <Button ToolTip="Сохранить как PDF"
+                                Margin="0 3 200 3"
+                                Width="50"
+                                HorizontalAlignment="Right"
+                                Command="{Binding GenerateGivingReportsPDFCommand}">
+                            <Button.Content>
+                                <fa:ImageAwesome Icon="Solid_Save"
+                                     Foreground="{StaticResource ForegroundBrush}"
+                                     Width="20"/>
+                            </Button.Content>
+                        </Button>
                         <Button Content="Сформировать очтет"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
@@ -222,6 +261,17 @@
                             <Label Content="Отчет о наличии изделий в работе"
                                Style="{StaticResource LabelStyle}"
                                VerticalAlignment="Center"/>
+                            <Button ToolTip="Сохранить как PDF"
+                                Margin="0 3 200 3"
+                                Width="50"
+                                HorizontalAlignment="Right"
+                                Command="{Binding GenerateInProductionPDFCommand}">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_Save"
+                                     Foreground="{StaticResource ForegroundBrush}"
+                                     Width="20"/>
+                                </Button.Content>
+                            </Button>
                             <Button Content="Сформировать очтет"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
@@ -295,6 +345,17 @@
                             <Label Content="Отчет по изделиям в работе у исполнителя"
                                Style="{StaticResource LabelStyle}"
                                VerticalAlignment="Center"/>
+                            <Button ToolTip="Сохранить как PDF"
+                                Margin="0 3 200 3"
+                                Width="50"
+                                HorizontalAlignment="Right"
+                                Command="{Binding GenerateExecutorInProductionPDFCommand}">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_Save"
+                                     Foreground="{StaticResource ForegroundBrush}"
+                                     Width="20"/>
+                                </Button.Content>
+                            </Button>
                             <Button Content="Сформировать очтет"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
@@ -359,7 +420,7 @@
                             <DataGridTextColumn Header="Сборка"
                                                 Binding="{Binding Task.InProduction.ExecutorName}"
                                                 Width="*"/>
-                            <DataGridTextColumn Header="Сборка"
+                            <DataGridTextColumn Header="Электромонтаж"
                                                 Binding="{Binding Task.InProduction.ExecutorName2}"
                                                 Width="*"/>
                             <DataGridTextColumn Header="Ведомость комплектации"
@@ -380,6 +441,17 @@
                             <Label Content="Отчет по готовым изделиям у исполнителя"
                                Style="{StaticResource LabelStyle}"
                                VerticalAlignment="Center"/>
+                            <Button ToolTip="Сохранить как PDF"
+                                Margin="0 3 200 3"
+                                Width="50"
+                                HorizontalAlignment="Right"
+                                Command="{Binding GenerateExecutorCompletedPDFCommand}">
+                                <Button.Content>
+                                    <fa:ImageAwesome Icon="Solid_Save"
+                                     Foreground="{StaticResource ForegroundBrush}"
+                                     Width="20"/>
+                                </Button.Content>
+                            </Button>
                             <Button Content="Сформировать очтет"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
