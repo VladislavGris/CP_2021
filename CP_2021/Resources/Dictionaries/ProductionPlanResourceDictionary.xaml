@@ -170,8 +170,10 @@
            TargetType="fa:ImageAwesome">
         <Setter Property="Height" Value="12"/>
         <Setter Property="Width" Value="12"/>
-        
         <Setter Property="Foreground" Value="#FF5C99D6"/>
+    </Style>
+    <Style x:Key="UndoButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
     </Style>
     <Style x:Key="PannelImageStyle"
            TargetType="{x:Type Image}">

@@ -76,7 +76,15 @@ namespace CP_2021.Models.Classes
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             dbTask.MyParent = new HierarchyDB(this.Task, dbTask);
-            dbTask.MyParent.LineOrder = 1;
+            if(unit.Tasks.Get().Where(t=>t.MyParent.Parent == this.Task).Count() != 0)
+            {
+                dbTask.MyParent.LineOrder = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.Task).Max(t => t.MyParent.LineOrder) + 1;
+            }
+            else
+            {
+                dbTask.MyParent.LineOrder = 1;
+            }
+            
             ProductionTask task = new ProductionTask(dbTask);
             unit.Tasks.Insert(dbTask);
             unit.Commit();
@@ -113,7 +121,7 @@ namespace CP_2021.Models.Classes
             return task;
         }
 
-        public void Remove()
+        public void Remove(TreeGridModel model)
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             this.DownOrderBelow();
@@ -122,38 +130,38 @@ namespace CP_2021.Models.Classes
             {
                 while(this.Children.LastOrDefault() != null)
                 {
-                    ((ProductionTask)this.Children.Last()).Remove();
+                    ((ProductionTask)this.Children.Last()).Remove(model);
                 }
             }
             if(this.Parent == null)
             {
-                this.Model.Remove(this);
+                model.Remove(this);
             }
             else
             {
                 this.Parent.Children.Remove(this);
             }
-            unit.Tasks.Delete(this.Task);
+            unit.Tasks.Delete(unit.Tasks.Get().Where(t => t.Id == this.Task.Id).First());
             unit.Commit();
         }
 
-        public void CopyChild(ProductionTask child)
-        {
-            ProductionTaskDB dbChild = child.Task.Clone();
-            dbChild.MyParent = new HierarchyDB(this.Task, dbChild);
-            dbChild.MyParent.LineOrder = child.Task.MyParent.LineOrder;
-            ProductionTask childToAdd = new ProductionTask(dbChild);
+        //public void CopyChild(ProductionTask child)
+        //{
+        //    ProductionTaskDB dbChild = child.Task.Clone();
+        //    dbChild.MyParent = new HierarchyDB(this.Task, dbChild);
+        //    dbChild.MyParent.LineOrder = child.Task.MyParent.LineOrder;
+        //    ProductionTask childToAdd = new ProductionTask(dbChild);
 
-            this.Children.Add(childToAdd);
+        //    this.Children.Add(childToAdd);
 
-            if (child.HasChildren)
-            {
-                foreach (ProductionTask item in child.Children)
-                {
-                    childToAdd.AddChild(item);
-                }
-            }
-        }
+        //    if (child.HasChildren)
+        //    {
+        //        foreach (ProductionTask item in child.Children)
+        //        {
+        //            childToAdd.AddChild(item);
+        //        }
+        //    }
+        //}
 
         public void AddChild(ProductionTask child)
         {
@@ -170,11 +178,57 @@ namespace CP_2021.Models.Classes
 
             if (child.HasChildren)
             {
+                childToAdd.HasChildren = true;
                 foreach(ProductionTask item in child.Children)
                 {
                     childToAdd.AddChild(item);
                 }
             }
+        }
+
+        public void CopyChild(ProductionTask child)
+        {
+            ProductionTaskDB dbChild = child.Task.Clone();
+            dbChild.MyParent = new HierarchyDB(this.Task, dbChild);
+            dbChild.MyParent.LineOrder = child.Task.MyParent.LineOrder;
+            ProductionTask childToAdd = new ProductionTask(dbChild);
+
+            this.Children.Add(childToAdd);
+
+            if (child.HasChildren)
+            {
+                childToAdd.HasChildren = true;
+                foreach(ProductionTask item in child.Children)
+                {
+                    childToAdd.CopyChild(item);
+                }
+            }
+        }
+
+        public ProductionTask CloneTask()
+        {
+            ProductionTaskDB dbTask = this.Task.Clone();
+            ProductionTask taskToClone = new ProductionTask(dbTask);
+
+            if(this.Parent == null)
+            {
+                dbTask.MyParent = new HierarchyDB(dbTask);
+            }
+            else
+            {
+                dbTask.MyParent = new HierarchyDB(this.Task.MyParent.Parent, dbTask);
+            }
+            dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder;
+
+            if (this.HasChildren)
+            {
+                taskToClone.HasChildren = true;
+                foreach (ProductionTask item in this.Children)
+                {
+                    taskToClone.CopyChild(item);
+                }
+            }
+            return taskToClone;
         }
 
         public void CheckTaskHasChildren()

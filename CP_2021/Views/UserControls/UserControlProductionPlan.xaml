@@ -37,7 +37,7 @@
                 <RowDefinition Height="20"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="UndoRedoButtons"
+            <!--<ListView x:Name="UndoRedoButtons"
                       Grid.Row="0"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
@@ -52,12 +52,36 @@
                 <ListViewItem ToolTip="Отмена">
                     <fa:ImageAwesome Icon="Solid_ArrowLeft"
                                      Style="{StaticResource UndoRedoButtons}"/>
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding UndoCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
                 </ListViewItem>
                 <ListViewItem ToolTip="Вернуть">
                     <fa:ImageAwesome Icon="Solid_ArrowRight"
                                      Style="{StaticResource UndoRedoButtons}"/>
+                    <ListViewItem.InputBindings>
+                        <MouseBinding Command="{Binding RedoCommand}" MouseAction="LeftClick"/>
+                    </ListViewItem.InputBindings>
                 </ListViewItem>
-            </ListView>
+            </ListView>-->
+            <StackPanel Grid.Row="0" Orientation="Horizontal">
+                <Button Command="{Binding UndoCommand}"
+                        Style="{StaticResource UndoRedoButton}"
+                        Margin="5 0 5 0">
+                    <Button.Content>
+                        <fa:ImageAwesome Icon="Solid_ArrowLeft"
+                                     Style="{StaticResource UndoRedoButtons}"/>
+                    </Button.Content>
+                </Button>
+                <Button Command="{Binding RedoCommand}"
+                        Style="{StaticResource UndoRedoButton}"
+                        Margin="5 0 0 0">
+                    <Button.Content>
+                        <fa:ImageAwesome Icon="Solid_ArrowRight"
+                                     Style="{StaticResource UndoRedoButtons}"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
             <ListView x:Name="ListViewMenu"
                       Grid.Row="1"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"

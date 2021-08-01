@@ -20,6 +20,8 @@ using CP_2021.Infrastructure.Search.SearchStrategies;
 using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Infrastructure.Singletons;
 using System.Collections.ObjectModel;
+using CP_2021.Infrastructure.UndoRedo;
+using CP_2021.Infrastructure.UndoRedo.UndoCommands;
 
 namespace CP_2021.ViewModels
 {
@@ -29,6 +31,7 @@ namespace CP_2021.ViewModels
         #region Свойства
 
         private ApplicationUnit Unit;
+        private UndoRedoManager _undoManager;
 
         #region User
 
@@ -190,11 +193,14 @@ namespace CP_2021.ViewModels
         {
             if (SelectedTask?.Task.MyParent.Parent != null)
             {
+                ProductionTask parent = (ProductionTask)SelectedTask.Parent;
                 SelectedTask = SelectedTask.AddAtTheSameLevel();
+                _undoManager.AddUndoCommand(new AddNewChildCommand(parent, SelectedTask));
             }
             else
             {
                 SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
+                _undoManager.AddUndoCommand(new AddNewRootCommand(Model, SelectedTask));
             }
         }
 
@@ -221,8 +227,10 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
+            ProductionTask parent = (ProductionTask)SelectedTask;
             SelectedTask.IsExpanded = true;
-            SelectedTask = SelectedTask.AddEmptyChild(); 
+            SelectedTask = SelectedTask.AddEmptyChild();
+            _undoManager.AddUndoCommand(new AddNewChildCommand(parent, SelectedTask));
         }
 
         #endregion
@@ -240,9 +248,12 @@ namespace CP_2021.ViewModels
             {
                 case MessageBoxResult.Yes:
                     ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                    SelectedTask.Remove();
+                    ProductionTask taskToUndo = SelectedTask.CloneTask();
+
+                    SelectedTask.Remove(Model);
                     if (parent == null)
                     {
+                        _undoManager.AddUndoCommand(new RemoveRootCommand(Model, taskToUndo));
                         if (Model.Count != 0)
                             SelectedTask = (ProductionTask)Model.Last();
                         else
@@ -250,6 +261,7 @@ namespace CP_2021.ViewModels
                     }
                     else
                     {
+                        _undoManager.AddUndoCommand(new RemoveChildCommand(parent, taskToUndo));
                         if (parent.Children.Count != 0)
                             SelectedTask = (ProductionTask)parent.Children.Last();
                         else
@@ -275,10 +287,16 @@ namespace CP_2021.ViewModels
         {
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
             ProductionTask task = ProductionTask.InitTask(SelectedTask.Task);
+
             SelectedTask.IsExpanded = false;
             SelectedTask.DownOrderBelow();
+
+            _undoManager.AddUndoCommand(new LevelUpCommand(Model, parent, task, task.Task.MyParent.LineOrder));
+
             parent.Children.Remove(SelectedTask);
+
             task.Task.MyParent.LineOrder = parent.Task.MyParent.LineOrder + 1;
+
             if (parent.Parent == null)
             {
                 task.Task.MyParent.Parent = null;
@@ -289,6 +307,7 @@ namespace CP_2021.ViewModels
                 task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
                 parent.Parent.Children.Insert(task.Task.MyParent.LineOrder - 1, task);
             }
+
             task.UpOrderBelow();
             parent.CheckTaskHasChildren();
             Unit.Commit();
@@ -310,6 +329,8 @@ namespace CP_2021.ViewModels
             ProductionTask task = new ProductionTask(dbTask);
             ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+
+            _undoManager.AddUndoCommand(new LevelDownCommand(Model, downTask, SelectedTask.Task.MyParent.LineOrder));
 
             if (SelectedTask.Parent != null)
             {
@@ -348,6 +369,7 @@ namespace CP_2021.ViewModels
             Unit.Refresh();
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
+            _undoManager = new UndoRedoManager();
         }
 
         #endregion
@@ -757,6 +779,32 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region UndoCommand
+
+        public ICommand UndoCommand { get; }
+
+        private bool CanUndoCommandExecute(object p) => _undoManager.UndoStackEmpty();
+
+        private void OnUndoCommandExecuted(object p)
+        {
+            _undoManager.ExecuteUndoCommand();
+        }
+
+        #endregion
+
+        #region RedoCommand
+
+        public ICommand RedoCommand { get; }
+
+        private bool CanRedoCommandExecute(object p) => _undoManager.RedoStackEmpty();
+
+        private void OnRedoCommandExecuted(object p)
+        {
+            _undoManager.ExecuteRedoCommand();
+        }
+
+        #endregion
+
         //TODO: В случае необходимости реализовать функции и добавить столбец IsExpanded в БД
         #region OnCollapsingCommand
 
@@ -818,7 +866,8 @@ namespace CP_2021.ViewModels
             OnExpandingCommand = new LambdaCommand(OnOnExpandingCommandExecuted, CanOnExpandingCommandExecute);
             UpTaskCommand = new LambdaCommand(OnUpTaskCommandExecuted, CanUpTaskCommandExecute);
             DownTaskCommand = new LambdaCommand(OnDownTaskCommandExecuted, CanDownTaskCommandExecute);
-
+            UndoCommand = new LambdaCommand(OnUndoCommandExecuted, CanUndoCommandExecute);
+            RedoCommand = new LambdaCommand(OnRedoCommandExecuted, CanRedoCommandExecute);
             #endregion
 
             User = UserDataSingleton.GetInstance().user;
@@ -826,6 +875,7 @@ namespace CP_2021.ViewModels
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();
+            _undoManager = new UndoRedoManager();
         }
     }
 }

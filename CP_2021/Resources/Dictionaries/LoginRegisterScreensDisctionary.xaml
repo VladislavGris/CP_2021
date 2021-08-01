@@ -41,6 +41,14 @@
         <Setter Property="Background" Value="Transparent"/>
         
     </Style>
+    <Style x:Key="UndoRedoButton" TargetType="Button" BasedOn="{StaticResource ButtonRestyling}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource AdditionalColor}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
     <Style x:Key="ExitButton" 
            TargetType="Button" 
            BasedOn="{StaticResource ButtonRestyling}">

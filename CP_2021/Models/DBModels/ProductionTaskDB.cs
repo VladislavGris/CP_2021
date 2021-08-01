@@ -90,5 +90,13 @@ namespace CP_2021.Models.DBModels
             //this.Complectation = (ComplectationDB)this.Complectation.Clone();
             //return (ProductionTaskDB)this.MemberwiseClone();
         }
+
+        public ProductionTaskDB CloneWithoutId()
+        {
+            ProductionTaskDB task = this.Clone();
+            task.MyParent = this.MyParent;
+            task.ParentTo = this.ParentTo;
+            return task;
+        }
     }
 }
