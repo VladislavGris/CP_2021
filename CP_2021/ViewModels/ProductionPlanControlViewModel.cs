@@ -22,6 +22,8 @@ using CP_2021.Infrastructure.Singletons;
 using System.Collections.ObjectModel;
 using CP_2021.Infrastructure.UndoRedo;
 using CP_2021.Infrastructure.UndoRedo.UndoCommands;
+using System.Threading;
+using CP_2021.Infrastructure.Threading;
 
 namespace CP_2021.ViewModels
 {
@@ -151,6 +153,18 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region UpdatingMessage
+
+        private string _updatingMessage;
+
+        public string UpdatingMessage
+        {
+            get => _updatingMessage;
+            set => Set(ref _updatingMessage, value);
+        }
+
+        #endregion
+
         private SearchManager searchManager;
 
         #endregion
@@ -191,16 +205,29 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            if (SelectedTask?.Task.MyParent.Parent != null)
+            if(Model.Count == 0)
             {
-                ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                SelectedTask = SelectedTask.AddAtTheSameLevel();
-                _undoManager.AddUndoCommand(new AddNewChildCommand(parent, SelectedTask));
+                ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
+                dbTask.MyParent = new HierarchyDB(dbTask);
+                dbTask.MyParent.LineOrder = 1;
+                ProductionTask task = new ProductionTask(dbTask);
+                Model.Add(task);
+                Unit.Tasks.Insert(dbTask);
+                Unit.Commit();
             }
             else
             {
-                SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
-                _undoManager.AddUndoCommand(new AddNewRootCommand(Model, SelectedTask));
+                if (SelectedTask?.Task.MyParent.Parent != null)
+                {
+                    ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+                    SelectedTask = SelectedTask.AddAtTheSameLevel();
+                    _undoManager.AddUndoCommand(new AddNewChildCommand(parent, SelectedTask));
+                }
+                else
+                {
+                    SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
+                    _undoManager.AddUndoCommand(new AddNewRootCommand(Model, SelectedTask));
+                }
             }
         }
 
@@ -817,7 +844,8 @@ namespace CP_2021.ViewModels
             if(p is ProductionTask)
             {
                 ProductionTask task = (ProductionTask)p;
-                Debug.WriteLine(task.Task.Name);
+                task.Task.Expanded = false;
+                Unit.Commit();
             }
             Debug.WriteLine("Collapsed");
         }
@@ -834,13 +862,13 @@ namespace CP_2021.ViewModels
             if (p is ProductionTask)
             {
                 ProductionTask task = (ProductionTask)p;
-                Debug.WriteLine(task.Task.Name);
+                task.Task.Expanded = true;
+                Unit.Commit();
             }
             Debug.WriteLine("Expanded");
         }
 
         #endregion
-
         #endregion
 
         public ProductionPlanControlViewModel()
@@ -876,6 +904,9 @@ namespace CP_2021.ViewModels
             Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();
             _undoManager = new UndoRedoManager();
+
+            //UpdatingThread updThread = new UpdatingThread(UpdatingMessage);
+            //updThread.StartThread();
         }
     }
 }

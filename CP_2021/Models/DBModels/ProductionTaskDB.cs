@@ -41,6 +41,8 @@ namespace CP_2021.Models.DBModels
         [Column("Note", TypeName = "nvarchar(MAX)")]
         public string Note { get; set; }
 
+        public bool Expanded { get; set; }
+
         public virtual HierarchyDB MyParent { get; set; }
         public virtual List<HierarchyDB> ParentTo { get; set; }
         [Required]

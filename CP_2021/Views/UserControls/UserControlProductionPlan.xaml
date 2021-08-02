@@ -82,167 +82,175 @@
                     </Button.Content>
                 </Button>
             </StackPanel>
-            <ListView x:Name="ListViewMenu"
-                      Grid.Row="1"
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <ListView x:Name="ListViewMenu"
+                      Grid.Column="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           Background="Transparent"
                           BorderBrush="Transparent"
                           Foreground="#FF5C99D6">
-                <ListView.Resources>
-                    <Style x:Key="FocusVisual">
-                        <Setter Property="Control.Template">
-                            <Setter.Value>
-                                <ControlTemplate>
-                                    <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#3D26A0DA"/>
-                    <SolidColorBrush x:Key="Item.MouseOver.Border" Color="Transparent"/>
-                    <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
-                    <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="Transparent"/>
-                    <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
-                    <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="Transparent"/>
-                    <Style TargetType="{x:Type ListViewItem}">
-                        <Setter Property="SnapsToDevicePixels" Value="True"/>
-                        <Setter Property="Padding" Value="4,1"/>
-                        <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                        <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Setter Property="BorderBrush" Value="Transparent"/>
-                        <Setter Property="BorderThickness" Value="1"/>
-                        <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                    <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                    </Border>
-                                    <ControlTemplate.Triggers>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="IsMouseOver" Value="True"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
-                                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
-                                        </MultiTrigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="Selector.IsSelectionActive" Value="False"/>
-                                                <Condition Property="IsSelected" Value="True"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
-                                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
-                                        </MultiTrigger>
-                                        <MultiTrigger>
-                                            <MultiTrigger.Conditions>
-                                                <Condition Property="Selector.IsSelectionActive" Value="True"/>
-                                                <Condition Property="IsSelected" Value="True"/>
-                                            </MultiTrigger.Conditions>
-                                            <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
-                                            <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
-                                        </MultiTrigger>
-                                        <Trigger Property="IsEnabled" Value="False">
-                                            <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                        </Trigger>
-                                    </ControlTemplate.Triggers>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                </ListView.Resources>
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListViewItem Width="60"
+                    <ListView.Resources>
+                        <Style x:Key="FocusVisual">
+                            <Setter Property="Control.Template">
+                                <Setter.Value>
+                                    <ControlTemplate>
+                                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#3D26A0DA"/>
+                        <SolidColorBrush x:Key="Item.MouseOver.Border" Color="Transparent"/>
+                        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
+                        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="Transparent"/>
+                        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
+                        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="Transparent"/>
+                        <Style TargetType="{x:Type ListViewItem}">
+                            <Setter Property="SnapsToDevicePixels" Value="True"/>
+                            <Setter Property="Padding" Value="4,1"/>
+                            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+                            <Setter Property="Background" Value="Transparent"/>
+                            <Setter Property="BorderBrush" Value="Transparent"/>
+                            <Setter Property="BorderThickness" Value="1"/>
+                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="IsMouseOver" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
+                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
+                                            </MultiTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                                    <Condition Property="IsSelected" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
+                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
+                                            </MultiTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
+                                                    <Condition Property="IsSelected" Value="True"/>
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
+                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
+                                            </MultiTrigger>
+                                            <Trigger Property="IsEnabled" Value="False">
+                                                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListView.Resources>
+                    <ListView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal"></StackPanel>
+                        </ItemsPanelTemplate>
+                    </ListView.ItemsPanel>
+                    <ListViewItem Width="60"
                               ToolTip="Добавить на тот же уровень">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding AddProductionTaskCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <Image Width="40"                                              Height="40"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding AddProductionTaskCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <Image Width="40"                                              Height="40"
                            Margin="5">
-                        <Image.Source>
-                            <BitmapImage UriSource="/Resources/Images/add_root.png"/>
-                        </Image.Source>
-                    </Image>
-                </ListViewItem>
-                <ListViewItem Width="60"
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/add_root.png"/>
+                            </Image.Source>
+                        </Image>
+                    </ListViewItem>
+                    <ListViewItem Width="60"
                               ToolTip="Добавить на уровень ниже">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding AddChildCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <Image Width="40"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding AddChildCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <Image Width="40"
                            Height="40"
                            Margin="5">
-                        <Image.Source>
-                            <BitmapImage UriSource="/Resources/Images/add_child.png"/>
-                        </Image.Source>
-                    </Image>
-                </ListViewItem>
-                <ListViewItem x:Name="RemoveTaskItem" Width="60"
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/add_child.png"/>
+                            </Image.Source>
+                        </Image>
+                    </ListViewItem>
+                    <ListViewItem x:Name="RemoveTaskItem" Width="60"
                               ToolTip="Удалить задачу">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding DeleteProductionTaskCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <fa:ImageAwesome Icon="Solid_Minus"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding DeleteProductionTaskCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_Minus"
                                      Style="{StaticResource TooltipIconStyle}"/>
-                </ListViewItem>
-                <ListViewItem x:Name="LevelUpItem" Width="60"
+                    </ListViewItem>
+                    <ListViewItem x:Name="LevelUpItem" Width="60"
                               ToolTip="Повысить уровень">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding LevelUpCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <fa:ImageAwesome Icon="Solid_LevelUpAlt"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding LevelUpCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_LevelUpAlt"
                                      Style="{StaticResource TooltipIconStyle}"/>
-                </ListViewItem>
-                <ListViewItem x:Name="LevelDownItem" Width="60"
+                    </ListViewItem>
+                    <ListViewItem x:Name="LevelDownItem" Width="60"
                               ToolTip="Понизить уровень">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding LevelDownCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <fa:ImageAwesome Icon="Solid_LevelDownAlt"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding LevelDownCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_LevelDownAlt"
                                      Style="{StaticResource TooltipIconStyle}"/>
-                </ListViewItem>
-                <ListViewItem x:Name="ExpandAllItem" Width="60"
+                    </ListViewItem>
+                    <ListViewItem x:Name="ExpandAllItem" Width="60"
                               ToolTip="Развернуть все">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding ExpandAllCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <fa:ImageAwesome Icon="Regular_ArrowAltCircleDown"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding ExpandAllCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Regular_ArrowAltCircleDown"
                                      Style="{StaticResource TooltipIconStyle}"/>
-                </ListViewItem>
-                <ListViewItem x:Name="HideAllItem" Width="60"
+                    </ListViewItem>
+                    <ListViewItem x:Name="HideAllItem" Width="60"
                               ToolTip="Свернуть все">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding RollUpAllCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <fa:ImageAwesome Icon="Regular_ArrowAltCircleUp"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding RollUpAllCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Regular_ArrowAltCircleUp"
                                      Style="{StaticResource TooltipIconStyle}"/>
-                </ListViewItem>
-                <ListViewItem x:Name="UpdateModel" Width="60"
+                    </ListViewItem>
+                    <ListViewItem x:Name="UpdateModel" Width="60"
                               ToolTip="Обновить">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding UpdateModelCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                    <Image Style="{StaticResource PannelImageStyle}">
-                        <Image.Source>
-                            <BitmapImage UriSource="/Resources/Images/refresh.png"/>
-                        </Image.Source>
-                    </Image>
-                </ListViewItem>
-                <ListViewItem x:Name="ShowSearch" Width="60"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding UpdateModelCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <Image Style="{StaticResource PannelImageStyle}">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/refresh.png"/>
+                            </Image.Source>
+                        </Image>
+                    </ListViewItem>
+                    <ListViewItem x:Name="ShowSearch" Width="60"
                               ToolTip="Показать/скрыть панель поиска">
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding ShowSearchGridCommand}" MouseAction="LeftClick" CommandParameter="{Binding ., ElementName=MainGrid}"/>
-                    </ListViewItem.InputBindings>
-                    <fa:ImageAwesome Icon="Solid_Search"
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding ShowSearchGridCommand}" MouseAction="LeftClick" CommandParameter="{Binding ., ElementName=MainGrid}"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_Search"
                                      Style="{StaticResource TooltipIconStyle}"/>
-                </ListViewItem>
-            </ListView>
+                    </ListViewItem>
+                </ListView>
+                <Label Grid.Column="1" Content="{Binding UpdatingMessage}" Foreground="{StaticResource ForegroundBrush}"/>
+            </Grid>
+            
         </Grid>
         <DataGrid Name="Grid"
                   Grid.Row="1"
