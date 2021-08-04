@@ -103,7 +103,7 @@ namespace CP_2021.Models.Classes
             task.UpOrderBelow();
             unit.Tasks.Insert(dbTask);
             unit.Commit();
-            this.Parent.Children.Insert(dbTask.MyParent.LineOrder - 1, task);
+            this.Parent.Children.Insert(this.Parent.Children.IndexOf(this) + 1, task);
             return task;
         }
 

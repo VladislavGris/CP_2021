@@ -217,6 +217,10 @@ namespace CP_2021.ViewModels
             }
             else
             {
+                if(SelectedTask == null)
+                {
+                    return;
+                }
                 if (SelectedTask?.Task.MyParent.Parent != null)
                 {
                     ProductionTask parent = (ProductionTask)SelectedTask.Parent;

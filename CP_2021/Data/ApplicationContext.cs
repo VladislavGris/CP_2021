@@ -39,7 +39,7 @@ namespace CP_2021.Data
             modelBuilder.Entity<ReportDB>().HasIndex(r => r.TaskId).IsUnique();
             #endregion
             string passwordHash = PasswordHashing.CreateHash("8558286");
-            modelBuilder.Entity<UserDB>().HasData(new UserDB("grishkevichai", passwordHash, "Алексей", "Гришкевич") { Id = 1, Position = 2 });
+            modelBuilder.Entity<UserDB>().HasData(new UserDB("grishkevichai", passwordHash, "Алексей", "Гришкевич") { Id = Guid.Empty, Position = 2 });
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Parent).WithMany(t => t.ParentTo).HasForeignKey(h => h.ParentId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Child).WithOne(t => t.MyParent);
