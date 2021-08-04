@@ -11,10 +11,10 @@ namespace CP_2021.Models.DBModels
 {
     internal class HierarchyDB : Entity
     {
-        public int? ParentId { get; set; }
+        public Guid? ParentId { get; set; }
         public virtual ProductionTaskDB Parent { get; set; }
 
-        public int ChildId { get; set; }
+        public Guid ChildId { get; set; }
         public virtual ProductionTaskDB Child { get; set; }
         
         public int LineOrder { get; set; }

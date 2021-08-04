@@ -13,7 +13,7 @@ namespace CP_2021.Models.DBModels
     internal class TaskDB : Entity
     {
         [Column("To_Id")]
-        public int ToId { get; set; }
+        public Guid ToId { get; set; }
         public virtual UserDB To { get; set; }
 
         [Required]

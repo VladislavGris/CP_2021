@@ -16,7 +16,7 @@ namespace CP_2021.Models.DBModels
         [Column(TypeName ="bit")]
         public bool State { get; set; }
 
-        public int TaskId { get; set; }
+        public Guid TaskId { get; set; }
         public virtual TaskDB Task { get; set; }
 
         public virtual UserDB To { get; set; }

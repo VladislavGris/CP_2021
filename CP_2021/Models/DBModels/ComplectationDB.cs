@@ -21,7 +21,7 @@ namespace CP_2021.Models.DBModels
         public float? Percentage { get; set; }
 
         [Column("Production_Task_Id")]
-        public int ProductionTaskId { get; set; }
+        public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
 
         public ComplectationDB Clone()

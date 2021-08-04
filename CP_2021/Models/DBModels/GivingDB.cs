@@ -27,7 +27,7 @@ namespace CP_2021.Models.DBModels
         public DateTime? ReceivingDate { get; set; }
 
         [Column("Production_Task_Id")]
-        public int ProductionTaskId { get; set; }
+        public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
 
         public GivingDB Clone()
