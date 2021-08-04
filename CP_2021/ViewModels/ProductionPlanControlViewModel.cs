@@ -2,6 +2,7 @@
 using CP_2021.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,9 @@ using CP_2021.Infrastructure.UndoRedo;
 using CP_2021.Infrastructure.UndoRedo.UndoCommands;
 using System.Threading;
 using CP_2021.Infrastructure.Threading;
+using log4net;
+using log4net.Config;
+using System.Reflection;
 
 namespace CP_2021.ViewModels
 {
@@ -34,6 +38,7 @@ namespace CP_2021.ViewModels
 
         private ApplicationUnit Unit;
         private UndoRedoManager _undoManager;
+        private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         #region User
 
@@ -908,6 +913,10 @@ namespace CP_2021.ViewModels
             Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();
             _undoManager = new UndoRedoManager();
+
+            var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
+            string filepath = Directory.GetCurrentDirectory() + "\\Data\\Configs\\log4net.config";
+            XmlConfigurator.Configure(logRepo, new FileInfo(filepath));
 
             //UpdatingThread updThread = new UpdatingThread(UpdatingMessage);
             //updThread.StartThread();
