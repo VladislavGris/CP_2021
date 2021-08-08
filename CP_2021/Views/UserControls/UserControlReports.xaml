@@ -139,7 +139,7 @@
                                 Command="{Binding GenerateGivingAvailabilityCommand}"/>
                         </Grid>
                         <StackPanel Orientation="Horizontal">
-                            <Label Content="Дата поступления на склад с "
+                            <Label Content="Срок закупки с "
                                    Style="{StaticResource LabelStyle}"/>
                             <DatePicker SelectedDate="{Binding DateFrom, UpdateSourceTrigger=PropertyChanged}"
                                         Width="110"
@@ -190,8 +190,8 @@
                             <DataGridTextColumn Header="Ведомость комплектации"
                                                 Binding="{Binding Task.Complectation.Complectation}"
                                                 Width="*"/>
-                            <DataGridTextColumn Header="Возвратная накладная, давальческий материал"
-                                                Binding="{Binding Task.Giving.ReturnReport, Mode=TwoWay}"
+                            <DataGridTextColumn Header="Срок закупки"
+                                                Binding="{Binding Task.Giving.ReceivingDate, Mode=TwoWay}"
                                                 Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -246,6 +246,9 @@
                             <DataGridTextColumn Header="Номер спецификации"
                                                 Binding="{Binding Manufacture.SpecNum}"
                                                 Width="0.1*"/>
+                            <DataGridTextColumn Header="Срок закупки"
+                                                Binding="{Binding Giving.ReceivingDate}"
+                                                Width="0.15*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>

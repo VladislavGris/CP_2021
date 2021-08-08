@@ -176,6 +176,9 @@ namespace CP_2021.Infrastructure.PDF
             column = table.AddColumn(MigraDoc.DocumentObjectModel.Unit.FromCentimeter(3));
             column.Format.Alignment = ParagraphAlignment.Center;
 
+            column = table.AddColumn(MigraDoc.DocumentObjectModel.Unit.FromCentimeter(3));
+            column.Format.Alignment = ParagraphAlignment.Center;
+
             Row row = table.AddRow();
 
             Cell cell = row.Cells[0];
@@ -198,6 +201,10 @@ namespace CP_2021.Infrastructure.PDF
             cell.AddParagraph("Номер спецификации");
             cell.Format.Font.Bold = true;
 
+            cell = row.Cells[5];
+            cell.AddParagraph("Срок закупки");
+            cell.Format.Font.Bold = true;
+
             foreach (ProductionTaskDB task in results)
             {
                 row = table.AddRow();
@@ -216,6 +223,9 @@ namespace CP_2021.Infrastructure.PDF
 
                 cell = row.Cells[4];
                 cell.AddParagraph(task.Manufacture.SpecNum == null ? "" : task.Manufacture.SpecNum);
+
+                cell = row.Cells[5];
+                cell.AddParagraph(task.Giving.ReceivingDate == null ? "" : task.Giving.ReceivingDate.Value.ToShortDateString());
             }
             document.LastSection.Add(table);
 
@@ -236,7 +246,7 @@ namespace CP_2021.Infrastructure.PDF
             Document document = new Document();
             Section section = document.AddSection();
 
-            GenerateHeaderWithDates(section, "Отчет о наличии на складе предприятия давальческого для передачи", "Дата поступления на склад", dateFrom, dateTo);
+            GenerateHeaderWithDates(section, "Отчет о наличии на складе предприятия давальческого для передачи", "Срок закупки", dateFrom, dateTo);
 
             Table table = new Table();
             table.Borders.Width = 0.5;
@@ -275,7 +285,7 @@ namespace CP_2021.Infrastructure.PDF
             cell.Format.Font.Bold = true;
 
             cell = row.Cells[4];
-            cell.AddParagraph("Накладная возврата");
+            cell.AddParagraph("Срок закупки");
             cell.Format.Font.Bold = true;
 
             foreach(ProductionTask root in results)
@@ -295,7 +305,7 @@ namespace CP_2021.Infrastructure.PDF
                 cell.AddParagraph(root.Task.Complectation.Complectation == null ? "" : root.Task.Complectation.Complectation);
 
                 cell = row.Cells[4];
-                cell.AddParagraph(root.Task.Giving.ReturnReport == null ? "" : root.Task.Giving.ReturnReport);
+                cell.AddParagraph(root.Task.Giving.ReceivingDate == null ? "" : root.Task.Giving.ReceivingDate.Value.ToShortDateString());
                 if (root.HasChildren)
                 {
                     ProductionTask child = (ProductionTask)root.Children[0];
@@ -315,7 +325,7 @@ namespace CP_2021.Infrastructure.PDF
                     cell.AddParagraph(child.Task.Complectation.Complectation == null ? "" : child.Task.Complectation.Complectation);
 
                     cell = row.Cells[4];
-                    cell.AddParagraph(child.Task.Giving.ReturnReport == null ? "" : child.Task.Giving.ReturnReport);
+                    cell.AddParagraph(root.Task.Giving.ReceivingDate == null ? "" : root.Task.Giving.ReceivingDate.Value.ToShortDateString());
                 }
             }
 

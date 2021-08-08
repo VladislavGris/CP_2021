@@ -571,7 +571,7 @@
                                 <TextBox Text="{Binding Task.Giving.Report, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Накладная возврата"/>
                                 <TextBox Text="{Binding Task.Giving.ReturnReport, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Поступление на склад"/>
+                                <TextBlock Text="Срок закупки"/>
                                 <DatePicker SelectedDate="{Binding Task.Giving.ReceivingDate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </DataTemplate>
