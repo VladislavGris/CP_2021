@@ -356,41 +356,10 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelDownCommand { get; }
 
-        private bool CanLevelDownCommandExecute(object p) => SelectedTask != null;
+        private bool CanLevelDownCommandExecute(object p) => SelectedTask != null && SelectedTask.Task.MyParent.LineOrder != 1;
 
         private void OnLevelDownCommandExecuted(object p)
         {
-            //int selectedTaskOrder = SelectedTask.Task.MyParent.LineOrder;
-            //ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            //ProductionTask task = new ProductionTask(dbTask);
-            //ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
-            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-
-            //_undoManager.AddUndoCommand(new LevelDownCommand(Model, downTask, SelectedTask.Task.MyParent.LineOrder));
-
-            //if (SelectedTask.Parent != null)
-            //{
-            //    dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
-            //    SelectedTask.Task.MyParent.Parent = dbTask;
-            //    parent.Children.Insert(selectedTaskOrder - 1, task);
-            //    parent.Children.Remove(SelectedTask);
-            //}
-            //else
-            //{
-            //    dbTask.MyParent = new HierarchyDB(dbTask);
-            //    SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
-            //    Model.Insert(selectedTaskOrder - 1, task);
-            //    Model.Remove(SelectedTask);
-            //}
-            //task.Task.MyParent.LineOrder = selectedTaskOrder;
-            //downTask.Task.MyParent.LineOrder = 1;
-            //task.Children.Add(downTask);
-            //task.HasChildren = true;
-            //task.IsExpanded = true;
-            //Unit.Tasks.Insert(dbTask);
-            //Unit.Commit();
-            //SelectedTask = downTask;
-
             ProductionTaskDB dbTask = SelectedTask.Task;
             ProductionTask task = ProductionTask.InitTask(dbTask);
             ProductionTaskDB topTask = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent && t.MyParent.LineOrder == SelectedTask.Task.MyParent.LineOrder - 1).FirstOrDefault();
@@ -912,7 +881,6 @@ namespace CP_2021.ViewModels
                 task.Task.Expanded = false;
                 Unit.Commit();
             }
-            Debug.WriteLine("Collapsed");
         }
 
         #endregion
@@ -930,7 +898,6 @@ namespace CP_2021.ViewModels
                 task.Task.Expanded = true;
                 Unit.Commit();
             }
-            Debug.WriteLine("Expanded");
         }
 
         #endregion
@@ -967,6 +934,7 @@ namespace CP_2021.ViewModels
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
+            
             searchManager = new SearchManager();
             _undoManager = new UndoRedoManager();
 

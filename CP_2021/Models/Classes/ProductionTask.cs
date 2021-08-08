@@ -37,7 +37,37 @@ namespace CP_2021.Models.Classes
                 root.AddChildrenIfHas();
                 model.Add(root);
             }
+
+            ExpandItems(model);
+
             return model;
+        }
+
+        public static void ExpandItems(TreeGridModel model)
+        {
+            foreach(ProductionTask task in model)
+            {
+                task.IsExpanded = task.Task.Expanded;
+                if (task.HasChildren)
+                {
+                    foreach(ProductionTask child in task.Children)
+                    {
+                        child.ExpandChild();
+                    }
+                }
+            }
+        }
+
+        public void ExpandChild()
+        {
+            this.IsExpanded = this.Task.Expanded;
+            if (this.HasChildren)
+            {
+                foreach(ProductionTask child in this.Children)
+                {
+                    child.ExpandChild();
+                }
+            }
         }
 
         private void AddChildrenIfHas()
