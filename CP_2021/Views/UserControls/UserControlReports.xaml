@@ -519,7 +519,7 @@
                             <DataGridTextColumn Header="Сборка"
                                                 Binding="{Binding Task.InProduction.ExecutorName}"
                                                 Width="*"/>
-                            <DataGridTextColumn Header="Сборка"
+                            <DataGridTextColumn Header="Электромонтаж"
                                                 Binding="{Binding Task.InProduction.ExecutorName2}"
                                                 Width="*"/>
                             <DataGridTextColumn Header="Ведомость комплектации"
