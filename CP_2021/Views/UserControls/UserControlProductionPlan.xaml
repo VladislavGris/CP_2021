@@ -33,62 +33,12 @@
         </Grid.InputBindings>
         <Grid Grid.Row="0"
               Background="#FF31577E">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="20"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <!--<ListView x:Name="UndoRedoButtons"
-                      Grid.Row="0"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                      Background="Transparent"
-                      BorderBrush="Transparent"
-                      Foreground="#FF5C99D6">
-                <ListView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"></StackPanel>
-                    </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListViewItem ToolTip="Отмена">
-                    <fa:ImageAwesome Icon="Solid_ArrowLeft"
-                                     Style="{StaticResource UndoRedoButtons}"/>
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding UndoCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                </ListViewItem>
-                <ListViewItem ToolTip="Вернуть">
-                    <fa:ImageAwesome Icon="Solid_ArrowRight"
-                                     Style="{StaticResource UndoRedoButtons}"/>
-                    <ListViewItem.InputBindings>
-                        <MouseBinding Command="{Binding RedoCommand}" MouseAction="LeftClick"/>
-                    </ListViewItem.InputBindings>
-                </ListViewItem>
-            </ListView>-->
-            <StackPanel Grid.Row="0" Orientation="Horizontal">
-                <Button Command="{Binding UndoCommand}"
-                        Style="{StaticResource UndoRedoButton}"
-                        Margin="5 0 5 0">
-                    <Button.Content>
-                        <fa:ImageAwesome Icon="Solid_ArrowLeft"
-                                     Style="{StaticResource UndoRedoButtons}"/>
-                    </Button.Content>
-                </Button>
-                <Button Command="{Binding RedoCommand}"
-                        Style="{StaticResource UndoRedoButton}"
-                        Margin="5 0 0 0">
-                    <Button.Content>
-                        <fa:ImageAwesome Icon="Solid_ArrowRight"
-                                     Style="{StaticResource UndoRedoButtons}"/>
-                    </Button.Content>
-                </Button>
-            </StackPanel>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
+            <Grid>
+                <!--<Grid.ColumnDefinitions>
                     <ColumnDefinition Width="7*"/>
                     <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>
+                </Grid.ColumnDefinitions>-->
                 <ListView x:Name="ListViewMenu"
-                      Grid.Column="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           Background="Transparent"
@@ -247,8 +197,24 @@
                         <fa:ImageAwesome Icon="Solid_Search"
                                      Style="{StaticResource TooltipIconStyle}"/>
                     </ListViewItem>
+                    <ListViewItem x:Name="Undo" Width="60"
+                              ToolTip="Отменить изменения">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding UndoCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_ArrowLeft"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                    </ListViewItem>
+                    <ListViewItem x:Name="Redo" Width="60"
+                              ToolTip="Вернуть изменения">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding RedoCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_ArrowRight"
+                                     Style="{StaticResource TooltipIconStyle}"/>
+                    </ListViewItem>
                 </ListView>
-                <Label Grid.Column="1" Content="{Binding UpdatingMessage}" Foreground="{StaticResource ForegroundBrush}"/>
+                <!--<Label Grid.Column="1" Content="{Binding UpdatingMessage}" Foreground="{StaticResource ForegroundBrush}"/>-->
             </Grid>
             
         </Grid>
