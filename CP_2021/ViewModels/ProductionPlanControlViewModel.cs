@@ -439,11 +439,30 @@ namespace CP_2021.ViewModels
 
         public ICommand CopyTaskCommand { get; }
 
-        private bool CanCopyTaskCommandExecute(object p) => true;
+        private bool CanCopyTaskCommandExecute(object p) => SelectedTask != null;
 
         private void OnCopyTaskCommandExecuted(object p)
         {
-            TaskToCopy = SelectedTask.Clone();
+            TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
+        }
+
+        #endregion
+
+        #region CutTaskCommand
+
+        public ICommand CutTaskCommand { get; }
+
+        private bool CanCutTaskCommandExecute(object p) => SelectedTask!=null;
+
+        private void OnCutTaskCommandExecuted(object p)
+        {
+            TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            SelectedTask.Remove(Model);
+            if (parent != null)
+            {
+                parent.CheckTaskHasChildren();
+            }
         }
 
         #endregion
@@ -917,6 +936,7 @@ namespace CP_2021.ViewModels
             LevelDownCommand = new LambdaCommand(OnLevelDownCommandExecuted, CanLevelDownCommandExecute);
             UpdateModelCommand = new LambdaCommand(OnUpdateModelCommandExecuted, CanUpdateModelCommandExecute);
             CopyTaskCommand = new LambdaCommand(OnCopyTaskCommandExecuted, CanCopyTaskCommandExecute);
+            CutTaskCommand = new LambdaCommand(OnCutTaskCommandExecuted, CanCutTaskCommandExecute);
             PasteTaskCommand = new LambdaCommand(OnPasteTaskCommandExecuted, CanPasteTaskCommandExecute);
             SearchCommand = new LambdaCommand(OnSearchCommandExecuted, CanSearchCommandExecute);
             ShowSearchGridCommand = new LambdaCommand(OnShowSearchGridCommandExecuted, CanShowSearchGridCommandExecute);
