@@ -197,6 +197,22 @@
                         <fa:ImageAwesome Icon="Solid_Search"
                                      Style="{StaticResource TooltipIconStyle}"/>
                     </ListViewItem>
+                    <ListViewItem x:Name="UpTask" Width="60"
+                              ToolTip="Поднять задачу">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding UpTaskCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_ArrowUp"
+                                             Style="{StaticResource TooltipIconStyle}"/>
+                    </ListViewItem>
+                    <ListViewItem x:Name="DownTask" Width="60"
+                              ToolTip="Опустить задачу">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding DownTaskCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <fa:ImageAwesome Icon="Solid_ArrowDown"
+                                             Style="{StaticResource TooltipIconStyle}"/>
+                    </ListViewItem>
                     <ListViewItem x:Name="Undo" Width="60"
                               ToolTip="Отменить изменения">
                         <ListViewItem.InputBindings>
@@ -242,20 +258,14 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem Header="Поднять вверх"
-                              Command="{Binding UpTaskCommand}">
+                    <MenuItem Header="Удалить"
+                              Command="{Binding DeleteProductionTaskCommand}">
                         <MenuItem.Icon>
-                            <fa:ImageAwesome Icon="Solid_ArrowUp"
+                            <fa:ImageAwesome Icon="Solid_Minus"
                                              Foreground="{StaticResource ForegroundBrush}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Опустить вниз"
-                              Command="{Binding DownTaskCommand}">
-                        <MenuItem.Icon>
-                            <fa:ImageAwesome Icon="Solid_ArrowDown"
-                                             Foreground="{StaticResource ForegroundBrush}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
+                    
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>
