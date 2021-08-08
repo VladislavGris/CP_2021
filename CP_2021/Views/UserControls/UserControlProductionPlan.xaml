@@ -30,6 +30,7 @@
         </Grid.RowDefinitions>
         <Grid.InputBindings>
             <KeyBinding Gesture="CTRL+F" Command="{Binding ShowSearchGridCommand}" CommandParameter="{Binding .,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}"/>
+            <!--<KeyBinding Key="Delete" Command="{Binding DeleteProductionTaskCommand}"/>-->
         </Grid.InputBindings>
         <Grid Grid.Row="0"
               Background="#FF31577E">
@@ -239,6 +240,7 @@
                   ItemsSource="{Binding Model.FlatModel}"
                   Style="{StaticResource ExampleStyle}"
                   ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
+                  CanUserDeleteRows="False"
                   SelectedItem="{Binding SelectedTask}"
                   IsReadOnly="{Binding User.Position, Converter={StaticResource EditableRole}}">
             <DataGrid.ContextMenu>

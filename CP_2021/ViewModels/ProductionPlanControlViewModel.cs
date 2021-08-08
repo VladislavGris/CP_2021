@@ -885,7 +885,6 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        //TODO: В случае необходимости реализовать функции и добавить столбец IsExpanded в БД
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
