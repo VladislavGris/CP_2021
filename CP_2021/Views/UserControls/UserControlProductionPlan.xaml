@@ -295,28 +295,27 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
+                        
                         <DataTrigger Binding="{Binding Task.Completion}" Value="1">
-                            <Setter Property="Background" Value="#72AE3B"/>
-                            <!--<Setter Property="Foreground" Value="White"/>-->
+                            <Setter Property="Background" Value="Pink"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="2">
-                            <Setter Property="Background" Value="Pink"/>
-                            <!--<Setter Property="Foreground" Value="White"/>-->
+                            <Setter Property="Background" Value="#8CA19A"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="3">
-                            <Setter Property="Background" Value="Gray"/>
-                            <!--<Setter Property="Foreground" Value="White"/>-->
-                        </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="4">
                             <Setter Property="Background" Value="Yellow"/>
                         </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="4">
+                            <Setter Property="Background" Value="#0DCA8B"/>
+                        </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="5">
-                            <Setter Property="Background" Value="#065C3F"/>
-                            <!--<Setter Property="Foreground" Value="White"/>-->
+                            <Setter Property="Background" Value="#E86DE7"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="6">
                             <Setter Property="Background" Value="#EED092"/>
-                            <!--<Setter Property="Foreground" Value="White"/>-->
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="7">
+                            <Setter Property="Background" Value="#72AE3B"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
@@ -327,36 +326,6 @@
                         <DataTemplate>
                             <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"
                                        HorizontalAlignment="Center"/>
-                            <!--<Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width=".3*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <StackPanel Grid.Column="0">
-                                    <Button ToolTip="Поднять выше" Command="{Binding DataContext.UpTaskCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
-                                        <Button.Content>
-                                            <fa:ImageAwesome Icon="Solid_ArrowUp"
-                                                         Foreground="{StaticResource ForegroundBrush}"
-                                                         Width="15"
-                                                         Height="20"/>
-                                        </Button.Content>
-                                    </Button>
-                                    <Button ToolTip="Опустить ниже" Command="{Binding DataContext.DownTaskCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}">
-                                        <Button.Content>
-                                            <fa:ImageAwesome Icon="Solid_ArrowDown"
-                                                         Foreground="{StaticResource ForegroundBrush}"
-                                                         Width="15"
-                                                         Height="20"/>
-                                        </Button.Content>
-                                    </Button>
-                                </StackPanel>
-                                <Grid Grid.Column="1">
-                                    <Image Width="10"/>
-                                    <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"
-                                       HorizontalAlignment="Center"/>
-                                </Grid>
-                                
-                            </Grid>-->
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -364,12 +333,14 @@
                             <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
                                       Background="Transparent">
                                 <ComboBoxItem Content="Не задано"/>
-                                <ComboBoxItem Content="Склад"/>
+                                
                                 <ComboBoxItem Content="Отработка документации"/>
                                 <ComboBoxItem Content="ВК на склад"/>
                                 <ComboBoxItem Content="В работе"/>
                                 <ComboBoxItem Content="Формирование актов"/>
+                                <ComboBoxItem Content="Проверка СКБ"/>
                                 <ComboBoxItem Content="Склад ОЭЦ"/>
+                                <ComboBoxItem Content="Склад"/>
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
