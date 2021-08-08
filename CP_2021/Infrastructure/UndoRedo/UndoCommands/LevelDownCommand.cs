@@ -16,13 +16,17 @@ namespace CP_2021.Infrastructure.UndoRedo.UndoCommands
     class LevelDownCommand : IUndoRedoCommand
     {
         private ProductionTask _task;
+        private ProductionTask _topTask;
+        private ProductionTask _parent;
         private int _baseLineOrder;
         private TreeGridModel _model;
         private ApplicationUnit _unit;
 
-        public LevelDownCommand(TreeGridModel model, ProductionTask task, int level)
+        public LevelDownCommand(TreeGridModel model, ProductionTask task, ProductionTask topTask, ProductionTask parent,  int level)
         {
             _task = task;
+            _topTask = topTask;
+            _parent = parent;
             _model = model;
             _baseLineOrder = level;
             _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
@@ -30,64 +34,55 @@ namespace CP_2021.Infrastructure.UndoRedo.UndoCommands
 
         public void Redo()
         {
-            _baseLineOrder = _task.Task.MyParent.LineOrder;
-
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            ProductionTask task = new ProductionTask(dbTask);
-
-            ProductionTask parent = (ProductionTask)_task.Parent;
-
-            if (parent != null)
+            _task.DownOrderBelow();
+            if(_parent == null)
             {
-                dbTask.MyParent = new HierarchyDB(_task.Task.MyParent.Parent, dbTask);
-                _task.Task.MyParent.Parent = dbTask;
-                parent.Children.Insert(_baseLineOrder - 1, task);
-                parent.Children.Remove(_task);
+                _model.Remove(_task);
+                
             }
             else
             {
-                dbTask.MyParent = new HierarchyDB(dbTask);
-                _task.Task.MyParent = new HierarchyDB(dbTask, _task.Task);
-                _model.Insert(_baseLineOrder - 1, task);
-                _model.Remove(_task);
+                _parent.Children.Remove(_task);
             }
 
-            task.Task.MyParent.LineOrder = _baseLineOrder;
+            _task.Task.MyParent = new HierarchyDB(_topTask.Task, _task.Task);
             _task.Task.MyParent.LineOrder = 1;
 
-            task.Children.Add(_task);
-            task.HasChildren = true;
-            task.IsExpanded = true;
+            _topTask.Children.Add(_task);
+            _topTask.HasChildren = true;
+            _topTask.IsExpanded = true;
 
-            _unit.Tasks.Insert(dbTask);
             _unit.Commit();
         }
 
         public void Undo()
         {
-            ProductionTask baseParent = (ProductionTask)_task.Parent;
-            ProductionTask newParent = (ProductionTask)baseParent.Parent;
-
-            _task.IsExpanded = false;
-            _task.Task.MyParent.LineOrder = _baseLineOrder;
-            baseParent.Children.Remove(_task);
-
-            if(newParent == null)
+            ProductionTask taskToDown = new ProductionTask();
+            if (_parent != null)
             {
-                _task.Task.MyParent.Parent = null;
-                _model.Insert(_baseLineOrder - 1, _task);
-                _model.Remove(baseParent);
+                taskToDown = (ProductionTask)_parent.Children.Cast<ProductionTask>().Where(t => t.Task.MyParent.LineOrder == _baseLineOrder - 1).FirstOrDefault();
             }
             else
             {
-                _task.Task.MyParent.Parent = newParent.Task;
-                newParent.Children.Insert(_baseLineOrder - 1, _task);
-                newParent.Children.Remove(baseParent);
-                newParent.CheckTaskHasChildren();
+                taskToDown = (ProductionTask)_model.Cast<ProductionTask>().Where(t => t.Task.MyParent.LineOrder == _baseLineOrder - 1).FirstOrDefault();
+            }
+            taskToDown.UpOrderBelow();
+
+            _topTask.Children.Remove(_task);
+            _topTask.CheckTaskHasChildren();
+            if (_parent != null)
+            {
+                _parent.Children.Insert(_baseLineOrder - 1, _task);
+                _task.Task.MyParent = new HierarchyDB(_parent.Task, _task.Task);
+                _parent.HasChildren = true;
+            }
+            else
+            {
+                _model.Insert(_baseLineOrder - 1, _task);
+                _task.Task.MyParent = new HierarchyDB(_task.Task);
             }
 
-            _task.UpOrderBelow();
-            _unit.Tasks.Delete(baseParent.Task);
+            _task.Task.MyParent.LineOrder = _baseLineOrder;
             _unit.Commit();
         }
     }

@@ -396,6 +396,8 @@ namespace CP_2021.ViewModels
             ProductionTaskDB topTask = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent && t.MyParent.LineOrder == SelectedTask.Task.MyParent.LineOrder - 1).FirstOrDefault();
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
 
+            
+
             SelectedTask.DownOrderBelow();
             SelectedTask.IsExpanded = false;
             
@@ -406,6 +408,7 @@ namespace CP_2021.ViewModels
                 {
                     if (child.Task.Equals(topTask))
                     {
+                        _undoManager.AddUndoCommand(new LevelDownCommand(Model, task, child, parent, dbTask.MyParent.LineOrder));
                         child.Children.Add(task);
                         child.HasChildren = true;
                         child.IsExpanded = true;
@@ -420,6 +423,7 @@ namespace CP_2021.ViewModels
                 {
                     if (child.Task.Equals(topTask))
                     {
+                        _undoManager.AddUndoCommand(new LevelDownCommand(Model, task, child, parent, dbTask.MyParent.LineOrder));
                         child.Children.Add(task);
                         child.HasChildren = true;
                         child.IsExpanded = true;
