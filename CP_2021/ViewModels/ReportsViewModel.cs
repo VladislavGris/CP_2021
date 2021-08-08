@@ -184,7 +184,9 @@ namespace CP_2021.ViewModels
             GivingAvailability = new TreeGridModel();
             foreach (var task in Unit.Tasks.Get().ToList())
             {
-                if (task.Giving.State.HasValue && task.Giving.State.Value == true && task.Giving.ReceivingDate.HasValue && task.Giving.ReceivingDate > DateFrom && task.Giving.ReceivingDate < DateTo)
+                if (task.Giving.State.HasValue && task.Giving.State.Value == true && 
+                    task.Giving.ReceivingDate.HasValue && task.Giving.ReceivingDate >= DateFrom && task.Giving.ReceivingDate <= DateTo &&
+                    String.IsNullOrEmpty(task.Giving.Report) && String.IsNullOrEmpty(task.Giving.Bill) &&  String.IsNullOrEmpty(task.Giving.ReturnReport))
                 {
                     ProductionTask selectedTask = new ProductionTask(task);
                     ProductionTask parent = new ProductionTask();
@@ -220,8 +222,7 @@ namespace CP_2021.ViewModels
             InProduction = new TreeGridModel();
             foreach (var task in Unit.Tasks.Get().ToList())
             {
-
-                if (task.Completion == 4)
+                if (task.Completion == 3)
                 {
                     ProductionTask selectedTask = new ProductionTask(task);
                     ProductionTask parent = new ProductionTask();
@@ -258,8 +259,8 @@ namespace CP_2021.ViewModels
                             String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) &&
                             t.InProduction.CompletionDate == null &&
                             t.InProduction.GivingDate != null &&
-                            t.InProduction.GivingDate > DateFrom &&
-                            t.InProduction.GivingDate < DateTo);
+                            t.InProduction.GivingDate >= DateFrom &&
+                            t.InProduction.GivingDate <= DateTo);
             ExecutorInProduction = new TreeGridModel();
             foreach (var task in tasks)
             {
@@ -292,8 +293,8 @@ namespace CP_2021.ViewModels
                 Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) ||
                             String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) &&
                             t.InProduction.CompletionDate != null &&
-                            t.InProduction.CompletionDate > DateFrom &&
-                            t.InProduction.CompletionDate < DateTo);
+                            t.InProduction.CompletionDate >= DateFrom &&
+                            t.InProduction.CompletionDate <= DateTo);
             ExecutorCompleted = new TreeGridModel();
             foreach (var task in tasks)
             {

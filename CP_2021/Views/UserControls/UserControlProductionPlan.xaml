@@ -537,6 +537,10 @@
                                 <TextBox Text="{Binding Task.Manufacture.LetterNum, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Номер спецификации"/>
                                 <TextBox Text="{Binding Task.Manufacture.SpecNum, UpdateSourceTrigger=PropertyChanged}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Спецификация на контроле"/>
+                                    <CheckBox IsChecked="{Binding Task.Manufacture.OnControl, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>

@@ -20,6 +20,8 @@ namespace CP_2021.Models.DBModels
         [Column("Specification_Num", TypeName = "nvarchar(MAX)")]
         public string SpecNum { get; set; }
 
+        public bool OnControl { get; set; }
+
         [Column("Production_Task_Id")]
         public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
