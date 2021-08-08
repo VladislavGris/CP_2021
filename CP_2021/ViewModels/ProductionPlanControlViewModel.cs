@@ -360,36 +360,88 @@ namespace CP_2021.ViewModels
 
         private void OnLevelDownCommandExecuted(object p)
         {
-            int selectedTaskOrder = SelectedTask.Task.MyParent.LineOrder;
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            ProductionTask task = new ProductionTask(dbTask);
-            ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
+            //int selectedTaskOrder = SelectedTask.Task.MyParent.LineOrder;
+            //ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
+            //ProductionTask task = new ProductionTask(dbTask);
+            //ProductionTask downTask = ProductionTask.InitTask(SelectedTask.Task);
+            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+
+            //_undoManager.AddUndoCommand(new LevelDownCommand(Model, downTask, SelectedTask.Task.MyParent.LineOrder));
+
+            //if (SelectedTask.Parent != null)
+            //{
+            //    dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
+            //    SelectedTask.Task.MyParent.Parent = dbTask;
+            //    parent.Children.Insert(selectedTaskOrder - 1, task);
+            //    parent.Children.Remove(SelectedTask);
+            //}
+            //else
+            //{
+            //    dbTask.MyParent = new HierarchyDB(dbTask);
+            //    SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
+            //    Model.Insert(selectedTaskOrder - 1, task);
+            //    Model.Remove(SelectedTask);
+            //}
+            //task.Task.MyParent.LineOrder = selectedTaskOrder;
+            //downTask.Task.MyParent.LineOrder = 1;
+            //task.Children.Add(downTask);
+            //task.HasChildren = true;
+            //task.IsExpanded = true;
+            //Unit.Tasks.Insert(dbTask);
+            //Unit.Commit();
+            //SelectedTask = downTask;
+
+            ProductionTaskDB dbTask = SelectedTask.Task;
+            ProductionTask task = ProductionTask.InitTask(dbTask);
+            ProductionTaskDB topTask = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent && t.MyParent.LineOrder == SelectedTask.Task.MyParent.LineOrder - 1).FirstOrDefault();
             ProductionTask parent = (ProductionTask)SelectedTask.Parent;
 
-            _undoManager.AddUndoCommand(new LevelDownCommand(Model, downTask, SelectedTask.Task.MyParent.LineOrder));
-
-            if (SelectedTask.Parent != null)
+            SelectedTask.DownOrderBelow();
+            SelectedTask.IsExpanded = false;
+            
+            if (parent != null)
             {
-                dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
-                SelectedTask.Task.MyParent.Parent = dbTask;
-                parent.Children.Insert(selectedTaskOrder - 1, task);
-                parent.Children.Remove(SelectedTask);
+                SelectedTask.Parent.Children.Remove(SelectedTask);
+                foreach (ProductionTask child in parent.Children)
+                {
+                    if (child.Task.Equals(topTask))
+                    {
+                        child.Children.Add(task);
+                        child.HasChildren = true;
+                        child.IsExpanded = true;
+                        SelectedTask = task;
+                    }
+                }
             }
             else
             {
-                dbTask.MyParent = new HierarchyDB(dbTask);
-                SelectedTask.Task.MyParent = new HierarchyDB(dbTask, SelectedTask.Task);
-                Model.Insert(selectedTaskOrder - 1, task);
                 Model.Remove(SelectedTask);
+                foreach(ProductionTask child in Model)
+                {
+                    if (child.Task.Equals(topTask))
+                    {
+                        child.Children.Add(task);
+                        child.HasChildren = true;
+                        child.IsExpanded = true;
+                        SelectedTask = task;
+                    }
+                }
             }
-            task.Task.MyParent.LineOrder = selectedTaskOrder;
-            downTask.Task.MyParent.LineOrder = 1;
-            task.Children.Add(downTask);
-            task.HasChildren = true;
-            task.IsExpanded = true;
-            Unit.Tasks.Insert(dbTask);
+            
+            dbTask.MyParent = new HierarchyDB(topTask, dbTask);
+            if (Unit.Tasks.Get().Where(t => t.MyParent.Parent == topTask).Count() == 0)
+            {
+                
+                dbTask.MyParent.LineOrder = 1;
+            }
+            else
+            {
+                int maxLineOrder = Unit.Tasks.Get().Where(t => t.MyParent.Parent == topTask).Max(t => t.MyParent.LineOrder);
+                dbTask.MyParent.LineOrder = maxLineOrder+1;
+            }
             Unit.Commit();
-            SelectedTask = downTask;
+            
+            
         }
 
         #endregion
