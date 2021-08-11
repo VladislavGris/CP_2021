@@ -498,9 +498,9 @@
                                 <TextBox Text="{Binding Task.InProduction.ExecutorName2, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Дата выдачи"/>
                                 <DatePicker SelectedDate="{Binding Task.InProduction.GivingDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Дата готовности(п)"/>
+                                <TextBlock Text="Дата готовности(план)"/>
                                 <DatePicker SelectedDate="{Binding Task.InProduction.ProjectedDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Дата готовности"/>
+                                <TextBlock Text="Дата готовности(факт)"/>
                                 <DatePicker SelectedDate="{Binding Task.InProduction.CompletionDate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </DataTemplate>
