@@ -537,9 +537,17 @@
                                 <TextBox Text="{Binding Task.Manufacture.LetterNum, UpdateSourceTrigger=PropertyChanged}"/>
                                 <TextBlock Text="Номер спецификации"/>
                                 <TextBox Text="{Binding Task.Manufacture.SpecNum, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Готовность(п)"/>
+                                <DatePicker SelectedDate="{Binding Task.Manufacture.PredictDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Готовность(факт)"/>
+                                <DatePicker SelectedDate="{Binding Task.Manufacture.FactDate, UpdateSourceTrigger=PropertyChanged}"/>
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="Спецификация на контроле"/>
                                     <CheckBox IsChecked="{Binding Task.Manufacture.OnControl, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Спецификация к выписке"/>
+                                    <CheckBox IsChecked="{Binding Task.Manufacture.VipiskSpec, UpdateSourceTrigger=PropertyChanged}"/>
                                 </StackPanel>
                             </StackPanel>
                         </DataTemplate>
