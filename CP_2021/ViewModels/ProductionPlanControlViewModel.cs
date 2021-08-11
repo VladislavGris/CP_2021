@@ -508,25 +508,6 @@ namespace CP_2021.ViewModels
         #endregion
 
         #region SearchCommands
-        #region ShowSearchGridCommand
-
-        public ICommand ShowSearchGridCommand { get; }
-
-        private bool CanShowSearchGridCommandExecute(object p) => true;
-
-        private void OnShowSearchGridCommandExecuted(object p)
-        {
-            if (((Grid)p).RowDefinitions.ElementAt(2).Height != new GridLength(0))
-            {
-                ((Grid)p).RowDefinitions.ElementAt(2).Height = new GridLength(0);
-            }
-            else
-            {
-                ((Grid)p).RowDefinitions.ElementAt(2).Height = new GridLength(40);
-            }
-        }
-
-        #endregion
 
         #region SearchCommand
 
@@ -625,9 +606,13 @@ namespace CP_2021.ViewModels
                 }
                 searchManager.ExecuteSearchStrategy();
                 SearchResults = searchManager.GetSearchResults();
-                if(SearchResults.Count == 1 || SearchResults.Count == 0) 
+                if(SearchResults.Count != 0) 
                 {
-                    MessageBox.Show("Поиск завершен");
+                    MessageBox.Show("Поиск завершен. Количество совпадений: " + SearchResults.Count);
+                }
+                else
+                {
+                    MessageBox.Show("Поиск завершен. Совпадений не найдено");
                 }
             }
             catch (Exception ex)
@@ -635,16 +620,13 @@ namespace CP_2021.ViewModels
                 if (ex is IncorrectDateFormatException or IncorrectSearchValueException)
                 {
                     SearchResultString = ex.Message;
+                    MessageBox.Show(ex.Message);
                 }
             }
 
             if (SearchResultString == null)
             {
-                if (SearchResults.Count == 0)
-                {
-                    SearchResultString = "Совпадений не найдено";
-                }
-                else
+                if (SearchResults.Count != 0)
                 {
                     SearchResultString = $"Количество совпадений: {SearchResults.Count}";
                     SelectedTask = SearchResults.First();
@@ -670,7 +652,7 @@ namespace CP_2021.ViewModels
                 SelectedTask = SearchResults.ElementAt(resultIndex + 1);
                 if (SelectedTask.Equals(SearchResults.Last()))
                 {
-                    MessageBox.Show("Поиск завершен");
+                    MessageBox.Show("Конец результатов поиска");
                 }
             }
             else
@@ -947,7 +929,6 @@ namespace CP_2021.ViewModels
             CutTaskCommand = new LambdaCommand(OnCutTaskCommandExecuted, CanCutTaskCommandExecute);
             PasteTaskCommand = new LambdaCommand(OnPasteTaskCommandExecuted, CanPasteTaskCommandExecute);
             SearchCommand = new LambdaCommand(OnSearchCommandExecuted, CanSearchCommandExecute);
-            ShowSearchGridCommand = new LambdaCommand(OnShowSearchGridCommandExecuted, CanShowSearchGridCommandExecute);
             MoveNextResultCommand = new LambdaCommand(OnMoveNextResultCommandExecuted, CanMoveNextResultCommandExecute);
             MovePreviousResultCommand = new LambdaCommand(OnMovePreviousResultCommandExecuted, CanMovePreviousResultCommandExecute);
             OnCollapsingCommand = new LambdaCommand(OnOnCollapsingCommandExecuted, CanOnCollapsingCommandExecute);

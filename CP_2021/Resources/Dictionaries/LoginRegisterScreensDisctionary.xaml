@@ -168,6 +168,11 @@
         <Setter Property="FontSize" Value="18"/>
         <Setter Property="Background" Value="#6393C2"/>
     </Style>
+    <Style TargetType="TextBox" x:Key="SearchStrStyle">
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="FontSize" Value="18"/>
+    </Style>
     <Style TargetType="Label" x:Key="Header" BasedOn="{StaticResource LabelStyle}">
         <Setter Property="FontSize" Value="25"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>

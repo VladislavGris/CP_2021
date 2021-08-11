@@ -22,24 +22,20 @@
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
     <Grid x:Name="MainGrid">
-        
+
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding User.Position, Converter={StaticResource PannelVisibilityConverter}}"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="0"/>
         </Grid.RowDefinitions>
-        <Grid.InputBindings>
-            <KeyBinding Gesture="CTRL+F" Command="{Binding ShowSearchGridCommand}" CommandParameter="{Binding .,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Grid}}}"/>
-            <!--<KeyBinding Key="Delete" Command="{Binding DeleteProductionTaskCommand}"/>-->
-        </Grid.InputBindings>
         <Grid Grid.Row="0"
               Background="#FF31577E">
             <Grid>
-                <!--<Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="3*"/>
-                </Grid.ColumnDefinitions>-->
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6*"/>
+                    <ColumnDefinition Width="5*"/>
+                </Grid.ColumnDefinitions>
                 <ListView x:Name="ListViewMenu"
+                          Grid.Column="0"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           Background="Transparent"
@@ -190,14 +186,6 @@
                             </Image.Source>
                         </Image>
                     </ListViewItem>
-                    <ListViewItem x:Name="ShowSearch" Width="60"
-                              ToolTip="Показать/скрыть панель поиска">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding ShowSearchGridCommand}" MouseAction="LeftClick" CommandParameter="{Binding ., ElementName=MainGrid}"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_Search"
-                                     Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
                     <ListViewItem x:Name="UpTask" Width="60"
                               ToolTip="Поднять задачу">
                         <ListViewItem.InputBindings>
@@ -231,7 +219,77 @@
                                      Style="{StaticResource TooltipIconStyle}"/>
                     </ListViewItem>
                 </ListView>
-                <!--<Label Grid.Column="1" Content="{Binding UpdatingMessage}" Foreground="{StaticResource ForegroundBrush}"/>-->
+                <StackPanel
+                    Grid.Column="1"
+                    Orientation="Horizontal"
+              Background="{StaticResource BackgroundBrush}">
+                    <Label Content="Поиск по "
+                   Style="{StaticResource LabelStyle}"
+                   VerticalAlignment="Center"/>
+                    <ComboBox Height="30"
+                      SelectedIndex="{Binding SelectedSearchIndex, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource SearchBoxStyle}"
+                      ItemContainerStyle="{StaticResource SearchBoxItemStyle}"
+                      ItemsSource="{Binding SearchComboBoxContent}"
+                      IsTextSearchEnabled="True"
+                      IsTextSearchCaseSensitive="False"
+                      IsEditable="True">
+                    </ComboBox>
+                    <TextBox Style="{StaticResource SearchStrStyle}"
+                     Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
+                     Width="200"
+                     Height="30"
+                     Margin="10 0 0 0"/>
+                    <Button Style="{StaticResource CircleButton}"
+                    Height="30"
+                    Width="30"
+                    VerticalAlignment="Center"
+                    ToolTip="Найти"
+                    Margin="5 0 0 0"
+                    Command="{Binding SearchCommand}"
+                    CommandParameter="{Binding ElementName=Grid}">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Solid_Search"
+                                     Foreground="White"
+                                     Height="20"
+                                     Width="20"/>
+
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{StaticResource CircleButton}"
+                    Height="30"
+                    Width="30"
+                    VerticalAlignment="Center"
+                    ToolTip="Предыдущий результат"
+                    Margin="5 0 0 0"
+                    Command="{Binding MovePreviousResultCommand}"
+                    CommandParameter="{Binding ElementName=Grid}">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Regular_ArrowAltCircleLeft"
+                                     Foreground="White"
+                                     Height="30"
+                                     Width="30"/>
+                        </Button.Content>
+                    </Button>
+                    <Button Style="{StaticResource CircleButton}"
+                    Height="30"
+                    Width="30"
+                    VerticalAlignment="Center"
+                    ToolTip="Следующий результат"
+                    Margin="5 0 0 0"
+                    Command="{Binding MoveNextResultCommand}"
+                    CommandParameter="{Binding ElementName=Grid}">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Regular_ArrowAltCircleRight"
+                                     Foreground="White"
+                                     Height="30"
+                                     Width="30"/>
+                        </Button.Content>
+                    </Button>
+                    <!--<Label Content="{Binding SearchResultString}"
+                   Style="{StaticResource LabelStyle}"
+                   VerticalAlignment="Center"/>-->
+                </StackPanel>
             </Grid>
             
         </Grid>
@@ -279,7 +337,7 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
-                        
+
                         <DataTrigger Binding="{Binding Task.Completion}" Value="1">
                             <Setter Property="Background" Value="Pink"/>
                         </DataTrigger>
@@ -611,98 +669,5 @@
                 </ie:EventTrigger>
             </ie:Interaction.Triggers>
         </DataGrid>
-        <StackPanel Grid.Row="2"
-                    Orientation="Horizontal"
-              Background="{StaticResource BackgroundBrush}">
-            <Label Content="Поиск по "
-                   Style="{StaticResource LabelStyle}"
-                   VerticalAlignment="Center"/>
-            <ComboBox Height="30"
-                      SelectedIndex="{Binding SelectedSearchIndex, UpdateSourceTrigger=PropertyChanged}"
-                      ItemsSource="{Binding SearchComboBoxContent}"
-                      IsTextSearchEnabled="True"
-                      IsTextSearchCaseSensitive="False"
-                      IsEditable="True">
-                <!--<ComboBoxItem Content="Изделие"/>
-                <ComboBoxItem Content="Распорядительный документ"/>
-                <ComboBoxItem Content="Количество"/>
-                <ComboBoxItem Content="Стоимость по спецификации"/>
-                <ComboBoxItem Content="Приходный документ"/>
-                <ComboBoxItem Content="Желаемая дата"/>
-                <ComboBoxItem Content="Реальная дата"/>
-                <ComboBoxItem Content="Ведомость комплектации"/>
-                <ComboBoxItem Content="Дата комплектации"/>
-                <ComboBoxItem Content="Процент получения"/>
-                <ComboBoxItem Content="Номер МСЛ"/>
-                <ComboBoxItem Content="Сборка"/>
-                <ComboBoxItem Content="Электромонтаж"/>
-                <ComboBoxItem Content="Дата выдачи"/>
-                <ComboBoxItem Content="Дата готовности(п)"/>
-                <ComboBoxItem Content="Дата готовности"/>
-                <ComboBoxItem Content="Предприятие изготовитель"/>
-                <ComboBoxItem Content="Номер письма"/>
-                <ComboBoxItem Content="Номер спецификации"/>
-                <ComboBoxItem Content="Накладная"/>
-                <ComboBoxItem Content="Отчет"/>
-                <ComboBoxItem Content="Накладная возврата"/>
-                <ComboBoxItem Content="Дата поступления на склад"/>
-                <ComboBoxItem Content="Номер и дата акта расходования"/>
-                <ComboBoxItem Content="Примечания"/>-->
-            </ComboBox>
-            <TextBox Style="{StaticResource TextBoxStyle}"
-                     Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
-                     Width="100"
-                     Height="30"
-                     Margin="10 0 0 0"/>
-            <Button Style="{StaticResource CircleButton}"
-                    Height="30"
-                    Width="30"
-                    VerticalAlignment="Center"
-                    ToolTip="Найти"
-                    Margin="5 0 0 0"
-                    Command="{Binding SearchCommand}"
-                    CommandParameter="{Binding ElementName=Grid}">
-                <Button.Content>
-                    <fa:ImageAwesome Icon="Solid_Search"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Height="20"
-                                     Width="20"/>
-
-                </Button.Content>
-            </Button>
-            <Button Style="{StaticResource CircleButton}"
-                    Height="30"
-                    Width="30"
-                    VerticalAlignment="Center"
-                    ToolTip="Предыдущий результат"
-                    Margin="5 0 0 0"
-                    Command="{Binding MovePreviousResultCommand}"
-                    CommandParameter="{Binding ElementName=Grid}">
-                <Button.Content>
-                    <fa:ImageAwesome Icon="Regular_ArrowAltCircleLeft"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Height="30"
-                                     Width="30"/>
-                </Button.Content>
-            </Button>
-            <Button Style="{StaticResource CircleButton}"
-                    Height="30"
-                    Width="30"
-                    VerticalAlignment="Center"
-                    ToolTip="Следующий результат"
-                    Margin="5 0 0 0"
-                    Command="{Binding MoveNextResultCommand}"
-                    CommandParameter="{Binding ElementName=Grid}">
-                <Button.Content>
-                    <fa:ImageAwesome Icon="Regular_ArrowAltCircleRight"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Height="30"
-                                     Width="30"/>
-                </Button.Content>
-            </Button>
-            <Label Content="{Binding SearchResultString}"
-                   Style="{StaticResource LabelStyle}"
-                   VerticalAlignment="Center"/>
-        </StackPanel>
     </Grid>
 </UserControl>
