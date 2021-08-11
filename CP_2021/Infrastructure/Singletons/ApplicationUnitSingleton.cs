@@ -26,5 +26,10 @@ namespace CP_2021.Infrastructure.Singletons
         {
             dbUnit = new ApplicationUnit(new ApplicationContext());
         }
+
+        public static void RecreateUnit()
+        {
+            _instance = new ApplicationUnitSingleton();
+        }
     }
 }

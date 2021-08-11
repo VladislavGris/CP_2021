@@ -285,7 +285,7 @@ namespace CP_2021.ViewModels
                 case MessageBoxResult.Yes:
                     ProductionTask parent = (ProductionTask)SelectedTask.Parent;
                     ProductionTask taskToUndo = SelectedTask.CloneTask();
-
+                    
                     SelectedTask.Remove(Model);
                     if (parent == null)
                     {
@@ -427,7 +427,9 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateModelCommandExecuted(object p)
         {
-            Unit.Refresh();
+            //Unit.Refresh();
+            ApplicationUnitSingleton.RecreateUnit();
+            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
             _undoManager = new UndoRedoManager();
