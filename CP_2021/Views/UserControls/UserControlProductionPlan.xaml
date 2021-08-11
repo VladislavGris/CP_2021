@@ -317,7 +317,7 @@
                             <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
                                       Background="Transparent">
                                 <ComboBoxItem Content="Не задано"/>
-                                
+
                                 <ComboBoxItem Content="Отработка документации"/>
                                 <ComboBoxItem Content="ВК на склад"/>
                                 <ComboBoxItem Content="В работе"/>
@@ -330,13 +330,41 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Распорядительный документ"
-                                    Binding="{Binding Task.ManagDoc, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="140"
-                                    ElementStyle="{StaticResource DatagridCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}">
-                    
-                </DataGridTextColumn>
+                <DataGridTemplateColumn x:Name="Document">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="Solid_PencilAlt"
+                                                 Foreground="{StaticResource ForegroundBrush}"
+                                                 Width="12"
+                                                 Height="12"/>
+                                <TextBlock Text="Документ"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock MaxWidth="140"
+                                       TextWrapping="Wrap"
+                                       Text="{Binding Task.ManagDoc, UpdateSourceTrigger=PropertyChanged}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="Документ"/>
+                                <TextBox Text="{Binding Task.ManagDoc, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MaxWidth="140"/>
+                                <TextBlock Text="Желаемая дата"/>
+                                <DatePicker SelectedDate="{Binding Task.VishDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Реальная дата"/>
+                                <DatePicker SelectedDate="{Binding Task.RealDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Изделие">
                     <DataGridTemplateColumn.CellTemplate>
@@ -398,37 +426,6 @@
                                     MinWidth="100"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
-
-                <DataGridTemplateColumn x:Name="Date">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource ForegroundBrush}"
-                                                 Width="12"
-                                                 Height="12"/>
-                                <TextBlock Text="Дата"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock MaxWidth="300"
-                                       TextWrapping="Wrap"
-                                       Text="{Binding Task.VishDate, Converter={StaticResource DateConverter}}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="Желаемая дата"/>
-                                <DatePicker SelectedDate="{Binding Task.VishDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Реальная дата"/>
-                                <DatePicker SelectedDate="{Binding Task.RealDate, UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn MaxWidth="300">
                     <DataGridTemplateColumn.HeaderTemplate>
