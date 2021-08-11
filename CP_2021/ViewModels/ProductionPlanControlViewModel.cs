@@ -427,7 +427,6 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateModelCommandExecuted(object p)
         {
-            //Unit.Refresh();
             ApplicationUnitSingleton.RecreateUnit();
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();

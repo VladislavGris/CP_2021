@@ -22,6 +22,12 @@ namespace CP_2021.Models.DBModels
 
         public bool OnControl { get; set; }
 
+        public bool VipiskSpec { get; set; }
+
+        public DateTime? PredictDate { get; set; }
+
+        public DateTime? FactDate { get; set; }
+
         [Column("Production_Task_Id")]
         public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }

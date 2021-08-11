@@ -26,6 +26,8 @@ namespace CP_2021.Models.DBModels
         [Column("Receiving_Date", TypeName ="date")]
         public DateTime? ReceivingDate { get; set; }
 
+        public bool ReturnGiving { get; set; }
+
         [Column("Production_Task_Id")]
         public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
