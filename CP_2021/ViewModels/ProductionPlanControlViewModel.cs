@@ -625,6 +625,10 @@ namespace CP_2021.ViewModels
                 }
                 searchManager.ExecuteSearchStrategy();
                 SearchResults = searchManager.GetSearchResults();
+                if(SearchResults.Count == 1 || SearchResults.Count == 0) 
+                {
+                    MessageBox.Show("Поиск завершен");
+                }
             }
             catch (Exception ex)
             {
@@ -664,6 +668,10 @@ namespace CP_2021.ViewModels
             {
                 int resultIndex = SearchResults.IndexOf(SelectedTask);
                 SelectedTask = SearchResults.ElementAt(resultIndex + 1);
+                if (SelectedTask.Equals(SearchResults.Last()))
+                {
+                    MessageBox.Show("Поиск завершен");
+                }
             }
             else
             {
