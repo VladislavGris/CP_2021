@@ -3,13 +3,17 @@
                     xmlns:commands="clr-namespace:CP_2021.Infrastructure.Commands">
     
     <!-- Brushes -->
-    <SolidColorBrush x:Key="ForegroundBrush" Color="#6393C2" />
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#31577e" />
+    <SolidColorBrush x:Key="ForegroundBrush" Color="White" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#2F732D" />
+    <SolidColorBrush x:Key="ButtonBackground" Color="#368433"/>
     <SolidColorBrush x:Key="DatagridHeaderBrush" Color="#95d9c3"/>
-    
+    <SolidColorBrush x:Key="LightButtonBackground" Color="#3D963A"/>
+    <SolidColorBrush x:Key="FontColor" Color="Black"/>
+    <SolidColorBrush x:Key="InnerBackground" Color="#286226"/>
+
     <!-- Window -->
     <Style TargetType="Window" x:Key="WindowStyle">
-        <Setter Property="Background" Value="#5c99d6"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
         <Setter Property="ResizeMode" Value="NoResize"/>
         <Setter Property="Width" Value="300"/>
         <Setter Property="WindowStyle" Value="None"/>
@@ -62,7 +66,7 @@
     <Style x:Key="EnterButton"
            TargetType="Button">
         <Setter Property="FontSize" Value="18"/>
-        <Setter Property="Background" Value="#6393C2"/>
+        <Setter Property="Background" Value="{StaticResource ButtonBackground}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Margin" Value="60 10"/>
         <Setter Property="Cursor" Value="Hand"/>
@@ -77,7 +81,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Background" Value="{StaticResource LightBackgroundBrush}"/>
+                <Setter Property="Background" Value="{StaticResource LightButtonBackground}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
                 <Setter Property="BorderThickness" Value="2"/>
@@ -164,9 +168,9 @@
         <Setter Property="FontSize" Value="18"/>
     </Style>
     <Style TargetType="TextBox" x:Key="TextBoxStyle">
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="Black"/>
         <Setter Property="FontSize" Value="18"/>
-        <Setter Property="Background" Value="#6393C2"/>
+        <Setter Property="Background" Value="{StaticResource ForegroundBrush}"/>
     </Style>
     <Style TargetType="TextBox" x:Key="SearchStrStyle">
         <Setter Property="Foreground" Value="Black"/>
@@ -184,9 +188,9 @@
     </Style>
     <Style x:Key="PasswordBoxStyle"
            TargetType="PasswordBox">
-        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Foreground" Value="{StaticResource FontColor}"/>
         <Setter Property="FontSize" Value="18"/>
-        <Setter Property="Background" Value="#6393C2"/>
+        <Setter Property="Background" Value="{StaticResource ForegroundBrush}"/>
     </Style>
     <Style x:Key="SmallButtonTextStyle"
            TargetType="TextBlock">
@@ -201,7 +205,7 @@
     
     <!-- Border -->
     <Style TargetType="Border" x:Key="BorderStyle">
-        <Setter Property="Background" Value="#31577e"/>
+        <Setter Property="Background" Value="{StaticResource InnerBackground}"/>
         <Setter Property="CornerRadius" Value="20"/>
         <Setter Property="Margin" Value="20"/>
     </Style>

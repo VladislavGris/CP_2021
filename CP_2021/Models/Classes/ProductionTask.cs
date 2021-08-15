@@ -144,10 +144,10 @@ namespace CP_2021.Models.Classes
             dbTask.MyParent = new HierarchyDB(dbTask);
             dbTask.MyParent.LineOrder = this.Task.MyParent.LineOrder + 1;
             ProductionTask task = new ProductionTask(dbTask);
-            model.Insert(dbTask.MyParent.LineOrder - 1, task);
             task.UpOrderBelow();
             unit.Tasks.Insert(dbTask);
             unit.Commit();
+            model.Insert(dbTask.MyParent.LineOrder - 1, task);
             return task;
         }
 
@@ -156,7 +156,9 @@ namespace CP_2021.Models.Classes
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             this.DownOrderBelow();
             this.IsExpanded = false;
-            if(this.Task.ParentTo != null)
+            unit.Tasks.Delete(unit.Tasks.Get().Where(t => t.Id == this.Task.Id).First());
+            unit.Commit();
+            if (this.Task.ParentTo != null)
             {
                 while(this.Children.LastOrDefault() != null)
                 {
@@ -171,8 +173,6 @@ namespace CP_2021.Models.Classes
             {
                 this.Parent.Children.Remove(this);
             }
-            unit.Tasks.Delete(unit.Tasks.Get().Where(t => t.Id == this.Task.Id).First());
-            unit.Commit();
         }
 
         public void AddChild(ProductionTask child)

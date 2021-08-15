@@ -72,7 +72,7 @@
             <ColumnDefinition Name="MenuColumn" Width="Auto" MinWidth="70"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Grid x:Name="GridMenu" Width="70" MinWidth="40" HorizontalAlignment="Left" Background="#FF31577E" Grid.Column="0">
+        <Grid x:Name="GridMenu" Width="70" MinWidth="40" HorizontalAlignment="Left" Background="{StaticResource BackgroundBrush}" Grid.Column="0">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
             </Grid.Effect>
@@ -99,20 +99,20 @@
                                 <Setter Property="VerticalAlignment" Value="Top"/>
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#FF31577E"/>
+                                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
                                 <Setter Property="Cursor" Value="Hand"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border Background="{TemplateBinding Background}" BorderBrush="White" BorderThickness="1">
                                                 <Grid>
-                                                    <fa:ImageAwesome x:Name="icon" Icon="Solid_Bars" Width="25" Height="25" Foreground="#FF31577E"/>
+                                                    <fa:ImageAwesome x:Name="icon" Icon="Solid_Bars" Width="25" Height="25" Foreground="{StaticResource BackgroundBrush}"/>
                                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Grid>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="icon" Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+                                                    <Setter TargetName="icon" Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -134,20 +134,20 @@
                                 <Setter Property="VerticalAlignment" Value="Top"/>
                                 <Setter Property="Background" Value="Transparent"/>
                                 <Setter Property="BorderBrush" Value="Transparent"/>
-                                <Setter Property="Foreground" Value="#FF31577E"/>
+                                <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
                                 <Setter Property="Cursor" Value="Hand"/>
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="{x:Type Button}">
                                             <Border Background="{TemplateBinding Background}" BorderBrush="White" BorderThickness="1">
                                                 <Grid>
-                                                    <fa:ImageAwesome x:Name="icon" Icon="Solid_ArrowLeft" Width="25" Height="25" Foreground="#FF31577E"/>
+                                                    <fa:ImageAwesome x:Name="icon" Icon="Solid_ArrowLeft" Width="25" Height="25" Foreground="{StaticResource BackgroundBrush}"/>
                                                     <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Grid>
                                             </Border>
                                             <ControlTemplate.Triggers>
                                                 <Trigger Property="IsMouseOver" Value="True">
-                                                    <Setter TargetName="icon" Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
+                                                    <Setter TargetName="icon" Property="Foreground" Value="{StaticResource BackgroundBrush}"/>
                                                 </Trigger>
                                             </ControlTemplate.Triggers>
                                         </ControlTemplate>
@@ -162,7 +162,7 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           Background="Transparent"
                           BorderBrush="Transparent"
-                          Foreground="#FF5C99D6">
+                          Foreground="{StaticResource ForegroundBrush}">
                     <ListView.Resources>
                         <Style x:Key="FocusVisual">
                             <Setter Property="Control.Template">
@@ -282,14 +282,14 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemHelp" Height="60">
+                    <!--<ListViewItem x:Name="ItemHelp" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_Question"
                                              Style="{StaticResource TooltipIconStyle}"/>
                             <TextBlock Text="Помощь"
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
-                    </ListViewItem>
+                    </ListViewItem>-->
                     <ListViewItem x:Name="ItemLogOut" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_SignOutAlt"

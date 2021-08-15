@@ -62,7 +62,7 @@
                     <Border BorderThickness="2"
                             CornerRadius="5"
                             BorderBrush="White"
-                            Background="{StaticResource LightBackgroundBrush}">
+                            Background="{StaticResource ButtonBackground}">
                         <Grid Margin="7">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="0.225*"/>

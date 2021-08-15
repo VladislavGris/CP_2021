@@ -27,7 +27,7 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
-              Background="#FF31577E">
+              Background="{StaticResource BackgroundBrush}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="6*"/>
@@ -39,7 +39,7 @@
                       ScrollViewer.VerticalScrollBarVisibility="Disabled"
                           Background="Transparent"
                           BorderBrush="Transparent"
-                          Foreground="#FF5C99D6">
+                          Foreground="{StaticResource ForegroundBrush}">
                     <ListView.Resources>
                         <Style x:Key="FocusVisual">
                             <Setter Property="Control.Template">
@@ -139,8 +139,11 @@
                         <ListViewItem.InputBindings>
                             <MouseBinding Command="{Binding DeleteProductionTaskCommand}" MouseAction="LeftClick"/>
                         </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_Minus"
-                                     Style="{StaticResource TooltipIconStyle}"/>
+                        <Image Width="40" Height="40">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/delete.png"/>
+                            </Image.Source>
+                        </Image>
                     </ListViewItem>
                     <ListViewItem x:Name="LevelUpItem" Width="60"
                               ToolTip="Повысить уровень">
@@ -179,9 +182,9 @@
                         <ListViewItem.InputBindings>
                             <MouseBinding Command="{Binding UpdateModelCommand}" MouseAction="LeftClick"/>
                         </ListViewItem.InputBindings>
-                        <Image Style="{StaticResource PannelImageStyle}">
+                        <Image Width="40" Height="40">
                             <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/refresh.png"/>
+                                <BitmapImage UriSource="/Resources/Images/update.png"/>
                             </Image.Source>
                         </Image>
                     </ListViewItem>
@@ -206,16 +209,22 @@
                         <ListViewItem.InputBindings>
                             <MouseBinding Command="{Binding UndoCommand}" MouseAction="LeftClick"/>
                         </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_ArrowLeft"
-                                     Style="{StaticResource TooltipIconStyle}"/>
+                        <Image Width="40" Height="40">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/undo.png"/>
+                            </Image.Source>
+                        </Image>
                     </ListViewItem>
                     <ListViewItem x:Name="Redo" Width="60"
                               ToolTip="Вернуть изменения">
                         <ListViewItem.InputBindings>
                             <MouseBinding Command="{Binding RedoCommand}" MouseAction="LeftClick"/>
                         </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_ArrowRight"
-                                     Style="{StaticResource TooltipIconStyle}"/>
+                        <Image Width="40" Height="40">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/redo.png"/>
+                            </Image.Source>
+                        </Image>
                     </ListViewItem>
                 </ListView>
                 <StackPanel
@@ -372,7 +381,8 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
-                                      Background="Transparent">
+                                      Background="Transparent"
+                                      Style="{StaticResource SearchBoxStyle}">
                                 <ComboBoxItem Content="Не задано"/>
 
                                 <ComboBoxItem Content="Отработка документации"/>

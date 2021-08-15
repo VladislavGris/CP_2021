@@ -47,7 +47,7 @@
                        Foreground="White"
                        VerticalAlignment="Bottom"/>
         </Grid>
-        <Border Background="{StaticResource LightBackgroundBrush}"
+        <Border Background="{StaticResource LightButtonBackground}"
                 CornerRadius="20"
                 Grid.Row="1"
                 Margin="10">

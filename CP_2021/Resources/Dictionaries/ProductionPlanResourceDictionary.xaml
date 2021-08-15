@@ -24,13 +24,15 @@
     <convert:MultiParameterConverter x:Key="MultiParameterConverter"/>
 
     <!--Brushes #575757 -->
-    <SolidColorBrush x:Key="ForegroundBrush" Color="#6393C2" />
-    <SolidColorBrush x:Key="BackgroundBrush" Color="#31577e" />
+    <SolidColorBrush x:Key="ForegroundBrush" Color="White" />
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#2F732D" />
     <SolidColorBrush x:Key="LightBackgroundBrush" Color="#3E6F9F" />
     <SolidColorBrush x:Key="DatagridHeaderBrush" Color="White"/>
     <SolidColorBrush x:Key="AdditionalColor" Color="#9161C2"/>
     <SolidColorBrush x:Key="FontColor" Color="Black"/>
     <SolidColorBrush x:Key="DisabledButton" Color="Gray"/>
+    <SolidColorBrush x:Key="DatagridBorderBrush" Color="Black"/>
+    <SolidColorBrush x:Key="LightButtonBackground" Color="#3D963A"/>
 
     <!--For Datagrid Cells-->
     <Style x:Key="EditingDatagridCellStyle"
@@ -68,7 +70,7 @@
                 </DataTemplate>
             </Setter.Value>
         </Setter>
-        <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource DatagridBorderBrush}"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Background" Value="{StaticResource DatagridHeaderBrush}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -76,8 +78,8 @@
     <Style TargetType="DataGrid"
            x:Key="ExampleStyle">
         <Setter Property="BorderBrush" Value="{StaticResource BackgroundBrush}" />
-        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource ForegroundBrush}" />
-        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource ForegroundBrush}" />
+        <Setter Property="HorizontalGridLinesBrush" Value="{StaticResource DatagridBorderBrush}" />
+        <Setter Property="VerticalGridLinesBrush" Value="{StaticResource DatagridBorderBrush}" />
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="CanUserResizeRows" Value="False"/>
@@ -110,12 +112,12 @@
                         <!-- Highlight selected rows -->
                         <Trigger Property="IsSelected" Value="True">
                             <Setter Property="Background" Value="#ff66ccff" />
-                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource DatagridBorderBrush}" />
                             <Setter Property="Foreground" Value="Black" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
                             <Setter Property="Background" Value="#ff66ccff" />
-                            <Setter Property="BorderBrush" Value="{StaticResource ForegroundBrush}" />
+                            <Setter Property="BorderBrush" Value="{StaticResource DatagridBorderBrush}" />
                             <Setter Property="BorderThickness" Value="1"/>
                             <Setter Property="Foreground" Value="{StaticResource FontColor}" />
                         </Trigger>
@@ -164,13 +166,13 @@
         <Setter Property="Height" Value="25"/>
         <Setter Property="Width" Value="25"/>
         <Setter Property="Margin" Value="10"/>
-        <Setter Property="Foreground" Value="#FF5C99D6"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
     </Style>
     <Style x:Key="UndoRedoButtons"
            TargetType="fa:ImageAwesome">
         <Setter Property="Height" Value="12"/>
         <Setter Property="Width" Value="12"/>
-        <Setter Property="Foreground" Value="#FF5C99D6"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundBrush}"/>
     </Style>
     <Style x:Key="UndoButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
@@ -192,7 +194,7 @@
         <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
     </Style>
-    <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+    <!--<ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
@@ -350,7 +352,7 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
-    </Style>
+    </Style>-->
     
     <!-- Checkbox -->
     
@@ -372,7 +374,7 @@
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="ellipse" Property="Fill" Value="{StaticResource LightBackgroundBrush}"/>
+                            <Setter TargetName="ellipse" Property="Fill" Value="{StaticResource LightButtonBackground}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
                             <Setter TargetName="ellipse" Property="StrokeThickness" Value="3"/>

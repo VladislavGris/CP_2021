@@ -48,7 +48,7 @@
                        VerticalAlignment="Bottom"/>
         </Grid>
         <Border CornerRadius="20"
-                Background="{StaticResource LightBackgroundBrush}"
+                Background="{StaticResource LightButtonBackground}"
                 Margin="10"
                 Grid.Row="1">
             <StackPanel 

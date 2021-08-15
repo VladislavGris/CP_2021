@@ -48,7 +48,7 @@
                                         <Setter TargetName="Panel" Property="Background" Value="White" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="False">
-                                        <Setter TargetName="Panel" Property="Background" Value="#6393C2" />
+                                        <Setter TargetName="Panel" Property="Background" Value="#368433" />
                                         <Setter Property="TextElement.Foreground" Value="White"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
@@ -72,6 +72,8 @@
                                 Margin="0 3 200 3"
                                 Width="50"
                                 HorizontalAlignment="Right"
+                                Style="{StaticResource ButtonRestyling}"
+                                Background="{StaticResource ButtonBackground}"
                                 Command="{Binding GenerateNoSpecPDFCommand}">
                             <Button.Content>
                                 <fa:ImageAwesome Icon="Solid_Save"
@@ -125,6 +127,8 @@
                                 Margin="0 3 200 3"
                                 Width="50"
                                 HorizontalAlignment="Right"
+                                    Style="{StaticResource ButtonRestyling}"
+                                Background="{StaticResource ButtonBackground}"
                                 Command="{Binding GenerateGivingAvailabilityPDFCommand}">
                                 <Button.Content>
                                     <fa:ImageAwesome Icon="Solid_Save"
@@ -211,6 +215,8 @@
                         <Button ToolTip="Сохранить как PDF"
                                 Margin="0 3 200 3"
                                 Width="50"
+                                Style="{StaticResource ButtonRestyling}"
+                                Background="{StaticResource ButtonBackground}"
                                 HorizontalAlignment="Right"
                                 Command="{Binding GenerateGivingReportsPDFCommand}">
                             <Button.Content>
@@ -267,6 +273,8 @@
                             <Button ToolTip="Сохранить как PDF"
                                 Margin="0 3 200 3"
                                 Width="50"
+                                    Style="{StaticResource ButtonRestyling}"
+                                Background="{StaticResource ButtonBackground}"
                                 HorizontalAlignment="Right"
                                 Command="{Binding GenerateInProductionPDFCommand}">
                                 <Button.Content>
@@ -351,6 +359,8 @@
                             <Button ToolTip="Сохранить как PDF"
                                 Margin="0 3 200 3"
                                 Width="50"
+                                    Style="{StaticResource ButtonRestyling}"
+                                Background="{StaticResource ButtonBackground}"
                                 HorizontalAlignment="Right"
                                 Command="{Binding GenerateExecutorInProductionPDFCommand}">
                                 <Button.Content>
@@ -446,6 +456,8 @@
                                VerticalAlignment="Center"/>
                             <Button ToolTip="Сохранить как PDF"
                                 Margin="0 3 200 3"
+                                    Style="{StaticResource ButtonRestyling}"
+                                Background="{StaticResource ButtonBackground}"
                                 Width="50"
                                 HorizontalAlignment="Right"
                                 Command="{Binding GenerateExecutorCompletedPDFCommand}">
