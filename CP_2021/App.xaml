@@ -4,6 +4,7 @@
              xmlns:l="clr-namespace:CP_2021"
              StartupUri="Views/Windows/LoginScreen.xaml">
     <Application.Resources>
+        
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Dictionaries/ProductionPlanResourceDictionary.xaml"/>

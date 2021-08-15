@@ -22,7 +22,6 @@
         <vm:ProductionPlanControlViewModel/>
     </UserControl.DataContext>
     <Grid x:Name="MainGrid">
-
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding User.Position, Converter={StaticResource PannelVisibilityConverter}}"/>
             <RowDefinition Height="*"/>
@@ -489,17 +488,23 @@
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="Solid_PencilAlt"
+                                    <fa:ImageAwesome Icon="Solid_PencilAlt"
                                                  Foreground="{StaticResource ForegroundBrush}"
                                                  Width="12"
                                                  Height="12"/>
-                                <TextBlock Text="Ведомость комплектации"/>
-                            </StackPanel>
+                                    <TextBlock Text="Ведомость комплектации"/>
+                                </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Task.Complectation.Complectation}"/>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{Binding Task.Complectation.Complectation}"/>
+                                <!--<Grid>
+                                    
+                                    <Rectangle Margin="5,5" Fill="Yellow" Width="20" Height="20"/>
+                                </Grid>-->
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>

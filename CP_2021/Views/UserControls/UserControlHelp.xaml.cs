@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace CP_2021.Views.UserControls
 {
     /// <summary>
-    /// Interaction logic for UserControlSettings.xaml
+    /// Interaction logic for UserControlHelp.xaml
     /// </summary>
-    public partial class UserControlSettings : UserControl
+    public partial class UserControlHelp : UserControl
     {
-        public UserControlSettings()
+        public UserControlHelp()
         {
             InitializeComponent();
         }

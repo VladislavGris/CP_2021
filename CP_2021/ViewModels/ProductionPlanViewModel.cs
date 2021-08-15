@@ -149,9 +149,9 @@ namespace CP_2021.ViewModels
                 case "ItemTasks":
                     InitMyTasks();
                     break;
-                //case "ItemSettings":
-                //    ContentContainerContent = new UserControlSettings();
-                //    break;
+                case "ItemHelp":
+                    ContentContainerContent = new UserControlHelp();
+                    break;
                 case "ItemGivenTasks":
                     InitGivenTasksControl();
                     break;
