@@ -353,18 +353,24 @@
                             <Setter Property="Background" Value="#8CA19A"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="3">
-                            <Setter Property="Background" Value="Yellow"/>
+                            <Setter Property="Background" Value="#FDB11B"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="4">
-                            <Setter Property="Background" Value="#0DCA8B"/>
+                            <Setter Property="Background" Value="Yellow"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="5">
-                            <Setter Property="Background" Value="#E86DE7"/>
+                            <Setter Property="Background" Value="#0DCA8B"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="6">
-                            <Setter Property="Background" Value="#EED092"/>
+                            <Setter Property="Background" Value="#E86DE7"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="7">
+                            <Setter Property="Background" Value="#EED092"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="8">
+                            <Setter Property="Background" Value="#7A67E6"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="9">
                             <Setter Property="Background" Value="#72AE3B"/>
                         </DataTrigger>
                         <!--E55151  7A67E6-->
@@ -388,10 +394,12 @@
 
                                 <ComboBoxItem Content="Отработка документации"/>
                                 <ComboBoxItem Content="ВК на склад"/>
+                                <ComboBoxItem Content="В работе по кооперации"/>
                                 <ComboBoxItem Content="В работе"/>
                                 <ComboBoxItem Content="Формирование актов"/>
                                 <ComboBoxItem Content="Проверка СКБ"/>
                                 <ComboBoxItem Content="Склад ОЭЦ"/>
+                                <ComboBoxItem Content="Собрано по акту"/>
                                 <ComboBoxItem Content="Склад"/>
                             </ComboBox>
                         </DataTemplate>
