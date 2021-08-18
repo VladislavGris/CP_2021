@@ -96,10 +96,11 @@ namespace CP_2021.Models.DBModels
             return task;
         }
 
+        //Опускает все элементы с LineOrder больше текущего
         public void DownTaskBelow()
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.MyParent.Parent && t != this).OrderBy(t => t.MyParent.LineOrder);
+            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.ParentId == this.MyParent.ParentId && t != this).OrderBy(t => t.MyParent.LineOrder);
             foreach (var task in tasksByParent)
             {
                 if (task.MyParent.LineOrder >= this.MyParent.LineOrder)
@@ -107,6 +108,35 @@ namespace CP_2021.Models.DBModels
                     task.MyParent.LineOrder++;
                 }
             }
+        }
+
+        //Поднимает все элементы с LineOrder больше текущего
+        public void UpOrderBelow()
+        {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.ParentId == this.MyParent.ParentId).OrderBy(t => t.MyParent.LineOrder);
+            foreach (var task in tasksByParent)
+            {
+                if (task.MyParent.LineOrder > this.MyParent.LineOrder)
+                {
+                    task.MyParent.LineOrder--;
+                }
+            }
+        }
+
+        public void Remove()
+        {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            
+            if(this.ParentTo != null)
+            {
+                while(this.ParentTo.Count != 0)
+                {
+                    this.ParentTo.Last().Child.Remove();
+                }
+            }
+            unit.Tasks.Delete(this);
+            unit.Commit();
         }
     }
 }

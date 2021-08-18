@@ -357,44 +357,27 @@ namespace CP_2021.ViewModels
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                    ProductionTask taskToUndo = SelectedTask.CloneTask();
-                    try
+                    ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                    if (dbTask != null)
                     {
-                        SelectedTask.Remove(Model);
-                        if (parent == null)
+                        try
                         {
-                            _undoManager.AddUndoCommand(new RemoveRootCommand(Model, taskToUndo));
-                            if (Model.Count != 0)
-                                SelectedTask = (ProductionTask)Model.Last();
-                            else
-                                SelectedTask = null;
+                            dbTask.UpOrderBelow();
+                            dbTask.Remove();
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            _undoManager.AddUndoCommand(new RemoveChildCommand(parent, taskToUndo));
-                            if (parent.Children.Count != 0)
-                                SelectedTask = (ProductionTask)parent.Children.Last();
-                            else
-                                SelectedTask = parent;
+                            MessageBox.Show("Неизвестная ошибка");
+                            _log.Error("ProductionPlanControlViewModel::DeleteProductionTaskCommand " + ex.Message);
                         }
-                        if (parent != null)
-                        {
-                            parent.CheckTaskHasChildren();
-                        }
-                    }
-                    catch(InvalidOperationException ex)
+            }
+                    else
                     {
-                        MessageBox.Show("Строка была удалена. Обновите базу");
-                        _log.Warn("ProductionPlanControlViewModel::DeleteProductionTaskCommand::Remove | " + ex.GetType().Name + " | " + ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                        _log.Error("UNKNOWN | ProductionPlanControlViewModel::DeleteProductionTaskCommand::Remove | " + ex.GetType().Name + " | " + ex.Message);
+                        MessageBox.Show("Выбранный элемент уже был удален");
                     }
                     break;
             }
+            Update();
         }
 
         #endregion

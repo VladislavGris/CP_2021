@@ -154,17 +154,21 @@ namespace CP_2021.Models.Classes
         public void Remove(TreeGridModel model)
         {
             ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            this.DownOrderBelow();
-            this.IsExpanded = false;
-            unit.Tasks.Delete(unit.Tasks.Get().Where(t => t.Id == this.Task.Id).First());
+            ProductionTaskDB dbTask = unit.Tasks.Get().Where(t => t.Id == this.Task.Id).SingleOrDefault();
+            dbTask.UpOrderBelow();
+            unit.Tasks.Delete(dbTask);
             unit.Commit();
-            if (this.Task.ParentTo != null)
+
+            this.IsExpanded = false;
+            if (dbTask.ParentTo != null)
             {
                 while(this.Children.LastOrDefault() != null)
                 {
                     ((ProductionTask)this.Children.Last()).Remove(model);
                 }
             }
+
+            //TODO: Убрать позже после переписи всех функций с обновлением
             if(this.Parent == null)
             {
                 model.Remove(this);
