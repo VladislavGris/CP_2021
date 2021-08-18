@@ -847,78 +847,28 @@ namespace CP_2021.ViewModels
 
         private void OnDownTaskCommandExecuted(object p)
         {
+            ProductionTaskDB taskToDown = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
             try
             {
-                int selectedOrderBase = SelectedTask.Task.MyParent.LineOrder + 1;
-
-                ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                ProductionTaskDB task = new ProductionTaskDB();
-
-                if (parent == null)
+                ProductionTaskDB taskToUp = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToDown.MyParent.ParentId && t.MyParent.LineOrder == taskToDown.MyParent.LineOrder + 1).SingleOrDefault();
+                if (taskToDown == null)
                 {
-                    task = Unit.Tasks.Get().Where(t => t.MyParent.Parent == null && t.MyParent.LineOrder == selectedOrderBase).SingleOrDefault();
-                    //Model.SwapItems(selectedOrderBase - 1, selectedOrderBase - 2);
+                    MessageBox.Show("Выбранная строка была удалена");
                 }
                 else
                 {
-                    task = Unit.Tasks.Get().Where(t => t.MyParent.Parent != null && t.MyParent.Parent.Equals(parent.Task) && t.MyParent.LineOrder == selectedOrderBase).SingleOrDefault();
+                    taskToUp.MyParent.LineOrder--;
+                    taskToDown.MyParent.LineOrder++;
+                    Unit.Commit();
                 }
-                task.MyParent.LineOrder--;
-                SelectedTask.Task.MyParent.LineOrder++;
-
-                if (parent != null)
-                {
-                    var taskToDown = SelectedTask.Clone();
-                    parent.Children.Remove(SelectedTask);
-
-                    ProductionTask taskToUp = new ProductionTask();
-                    foreach (ProductionTask child in parent.Children)
-                    {
-                        if (child.Task.Equals(task))
-                        {
-                            taskToUp = child.Clone();
-                            parent.Children.Remove(child);
-                            break;
-                        }
-                    }
-
-                    taskToDown.IsExpanded = false;
-                    taskToUp.IsExpanded = false;
-
-                    parent.Children.Insert(selectedOrderBase - 2, taskToUp);
-                    parent.Children.Insert(selectedOrderBase - 1, taskToDown);
-                    SelectedTask = taskToDown;
-                }
-                else
-                {
-                    var taskToDown = SelectedTask.Clone();
-                    Model.Remove(SelectedTask);
-
-                    ProductionTask taskToUp = new ProductionTask();
-                    foreach (ProductionTask root in Model)
-                    {
-                        if (root.Task.Equals(task))
-                        {
-                            taskToUp = root.Clone();
-                            Model.Remove(root);
-                            break;
-                        }
-                    }
-
-                    taskToDown.IsExpanded = false;
-                    taskToUp.IsExpanded = false;
-
-                    Model.Insert(selectedOrderBase - 2, taskToUp);
-                    Model.Insert(selectedOrderBase - 1, taskToDown);
-                    SelectedTask = taskToDown;
-                }
-                Unit.Commit();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::DownTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
+                MessageBox.Show("Неизвестная ошибка");
+                _log.Error("ProductionPlanControlViewModel::DownTaskCommand " + ex.Message);
             }
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, taskToDown);
         }
 
         #endregion
