@@ -367,6 +367,7 @@
                         <DataTrigger Binding="{Binding Task.Completion}" Value="7">
                             <Setter Property="Background" Value="#72AE3B"/>
                         </DataTrigger>
+                        <!--E55151  7A67E6-->
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
@@ -402,7 +403,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource ForegroundBrush}"
+                                                 Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12"/>
                                 <TextBlock Text="Документ"/>
@@ -481,29 +482,18 @@
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
 
-                <DataGridTextColumn Header="Стоимость по спецификации"
-                                    Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="110"
-                                    ElementStyle="{StaticResource DatagridCenterCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
-
-                <DataGridTextColumn Header="Приходный документ"
-                                    Binding="{Binding Task.IncDoc, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="120"
-                                    MinWidth="100"
-                                    ElementStyle="{StaticResource DatagridCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
-
+                <!--Цена за единицу без ндс--> 
+                
                 <DataGridTemplateColumn MaxWidth="300">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                    <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource ForegroundBrush}"
+                                <fa:ImageAwesome Icon="Solid_PencilAlt"
+                                                 Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12"/>
-                                    <TextBlock Text="Ведомость комплектации"/>
-                                </StackPanel>
+                                <TextBlock Text="Ведомость комплектации"/>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
@@ -541,40 +531,42 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn MaxWidth="170">
+                <DataGridTemplateColumn>
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource ForegroundBrush}"
+                                                 Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12"/>
-                                <TextBlock Text="Выдача в производство"
-                                           TextWrapping="Wrap"/>
+                                <TextBlock Text="Давальческая"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Task.InProduction.GivingDate, Converter={StaticResource DateConverter}}"
-                                       HorizontalAlignment="Center"/>
+                            <CheckBox IsChecked="{Binding Task.Giving.State, UpdateSourceTrigger=PropertyChanged}"
+                                      HorizontalAlignment="Center"
+                                      Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
+                                      IsHitTestVisible="{Binding DataContext.User.Position, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource EditCheckboxConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="Номер МСЛ"/>
-                                <TextBox Text="{Binding Task.InProduction.Number, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Сборка"/>
-                                <TextBox Text="{Binding Task.InProduction.ExecutorName, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Электромонтаж"/>
-                                <TextBox Text="{Binding Task.InProduction.ExecutorName2, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Дата выдачи"/>
-                                <DatePicker SelectedDate="{Binding Task.InProduction.GivingDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Дата готовности(план)"/>
-                                <DatePicker SelectedDate="{Binding Task.InProduction.ProjectedDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Дата готовности(факт)"/>
-                                <DatePicker SelectedDate="{Binding Task.InProduction.CompletionDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Накладная"/>
+                                <TextBox Text="{Binding Task.Giving.Bill, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Отчет"/>
+                                <TextBox Text="{Binding Task.Giving.Report, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Накладная возврата"/>
+                                <TextBox Text="{Binding Task.Giving.ReturnReport, UpdateSourceTrigger=PropertyChanged}"/>
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="0 0 0 5">
+                                    <TextBlock Text="Возвратное давальческое"/>
+                                    <CheckBox IsChecked="{Binding Task.Giving.ReturnGiving, UpdateSourceTrigger=PropertyChanged}"/>
+                                </StackPanel>
+                                <TextBlock Text="Срок закупки"/>
+                                <DatePicker SelectedDate="{Binding Task.Giving.ReceivingDate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -585,7 +577,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource ForegroundBrush}"
+                                                 Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12"/>
                                 <TextBlock Text="Изготовитель"/>
@@ -624,58 +616,72 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource ForegroundBrush}"
-                                                 Width="12"
-                                                 Height="12"/>
-                                <TextBlock Text="Давальческая"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox IsChecked="{Binding Task.Giving.State, UpdateSourceTrigger=PropertyChanged}"
-                                      HorizontalAlignment="Center"
-                                      Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                      IsHitTestVisible="{Binding DataContext.User.Position, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, Converter={StaticResource EditCheckboxConverter}}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <TextBlock Text="Накладная"/>
-                                <TextBox Text="{Binding Task.Giving.Bill, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Отчет"/>
-                                <TextBox Text="{Binding Task.Giving.Report, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Накладная возврата"/>
-                                <TextBox Text="{Binding Task.Giving.ReturnReport, UpdateSourceTrigger=PropertyChanged}"/>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0 0 0 5">
-                                    <TextBlock Text="Возвратное давальческое"/>
-                                    <CheckBox IsChecked="{Binding Task.Giving.ReturnGiving, UpdateSourceTrigger=PropertyChanged}"/>
-                                </StackPanel>
-                                <TextBlock Text="Срок закупки"/>
-                                <DatePicker SelectedDate="{Binding Task.Giving.ReceivingDate, UpdateSourceTrigger=PropertyChanged}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>
+                <!--Добавить карандаш-->
+                <DataGridTextColumn Header="Оплата"
+                                    Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
+                                    MaxWidth="110"
+                                    ElementStyle="{StaticResource DatagridCenterCellStyle}"
+                                    EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
+
+                <DataGridTextColumn Header="Приходный документ"
+                                    Binding="{Binding Task.IncDoc, UpdateSourceTrigger=PropertyChanged}"
+                                    MaxWidth="120"
+                                    MinWidth="100"
+                                    ElementStyle="{StaticResource DatagridCellStyle}"
+                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
 
                 <DataGridTextColumn Header="Номер и дата акта расходования"
                                     Binding="{Binding Task.ExpendNum, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="135"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
+                
+                <!--Трудозатраты-->
+
+                <DataGridTemplateColumn MaxWidth="170">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="Solid_PencilAlt"
+                                                 Foreground="{StaticResource FontColor}"
+                                                 Width="12"
+                                                 Height="12"/>
+                                <TextBlock Text="Выдача в производство"
+                                           TextWrapping="Wrap"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Task.InProduction.GivingDate, Converter={StaticResource DateConverter}}"
+                                       HorizontalAlignment="Center"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="Номер МСЛ"/>
+                                <TextBox Text="{Binding Task.InProduction.Number, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Сборка"/>
+                                <TextBox Text="{Binding Task.InProduction.ExecutorName, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Электромонтаж"/>
+                                <TextBox Text="{Binding Task.InProduction.ExecutorName2, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Дата выдачи"/>
+                                <DatePicker SelectedDate="{Binding Task.InProduction.GivingDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Дата готовности(план)"/>
+                                <DatePicker SelectedDate="{Binding Task.InProduction.ProjectedDate, UpdateSourceTrigger=PropertyChanged}"/>
+                                <TextBlock Text="Дата готовности(факт)"/>
+                                <DatePicker SelectedDate="{Binding Task.InProduction.CompletionDate, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Примечания"
                                     Binding="{Binding Task.Note, UpdateSourceTrigger=PropertyChanged}"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"
-                                    Width="200"/>
+                                    Width="400"/>
 
             </DataGrid.Columns>
             <ie:Interaction.Triggers>
