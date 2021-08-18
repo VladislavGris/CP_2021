@@ -390,40 +390,67 @@ namespace CP_2021.ViewModels
 
         private void OnLevelUpCommandExecuted(object p)
         {
-            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            ProductionTask task = ProductionTask.InitTask(SelectedTask.Task);
-            try
+            ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            if(dbTask == null)
             {
-                SelectedTask.IsExpanded = false;
-                SelectedTask.DownOrderBelow();
-
-                _undoManager.AddUndoCommand(new LevelUpCommand(Model, parent, task, task.Task.MyParent.LineOrder));
-
-                parent.Children.Remove(SelectedTask);
-
-                task.Task.MyParent.LineOrder = parent.Task.MyParent.LineOrder + 1;
-
-                if (parent.Parent == null)
+                MessageBox.Show("Выделенная строка была удалена");
+            }
+            else
+            {
+                dbTask.UpOrderBelow();
+                if (dbTask.MyParent.Parent.MyParent.Parent == null)
                 {
-                    task.Task.MyParent.Parent = null;
-                    Model.Insert(task.Task.MyParent.LineOrder - 1, task);
+                    int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
+                    dbTask.MyParent = new HierarchyDB(dbTask);
+                    dbTask.MyParent.LineOrder = lineOrder;
+                    Unit.Commit();
+                    dbTask.DownTaskBelow();
                 }
                 else
                 {
-                    task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
-                    parent.Parent.Children.Insert(task.Task.MyParent.LineOrder - 1, task);
+                    int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
+                    dbTask.MyParent = new HierarchyDB(dbTask.MyParent.Parent.MyParent.Parent, dbTask);
+                    dbTask.MyParent.LineOrder = lineOrder;
+                    Unit.Commit();
+                    dbTask.DownTaskBelow();
                 }
-
-                task.UpOrderBelow();
-                parent.CheckTaskHasChildren();
                 Unit.Commit();
-                SelectedTask = task;
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::LevelUpCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
+            Update();
+            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            //ProductionTask task = ProductionTask.InitTask(SelectedTask.Task);
+            //try
+            //{
+            //    SelectedTask.IsExpanded = false;
+            //    SelectedTask.DownOrderBelow();
+
+            //    _undoManager.AddUndoCommand(new LevelUpCommand(Model, parent, task, task.Task.MyParent.LineOrder));
+
+            //    parent.Children.Remove(SelectedTask);
+
+            //    task.Task.MyParent.LineOrder = parent.Task.MyParent.LineOrder + 1;
+
+            //    if (parent.Parent == null)
+            //    {
+            //        task.Task.MyParent.Parent = null;
+            //        Model.Insert(task.Task.MyParent.LineOrder - 1, task);
+            //    }
+            //    else
+            //    {
+            //        task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
+            //        parent.Parent.Children.Insert(task.Task.MyParent.LineOrder - 1, task);
+            //    }
+
+            //    task.UpOrderBelow();
+            //    parent.CheckTaskHasChildren();
+            //    Unit.Commit();
+            //    SelectedTask = task;
+            //}
+            //catch(Exception ex)
+            //{
+            //    MessageBox.Show("Неизвестная ошибка. Обновите базу");
+            //    _log.Error("UNKNOWN | ProductionPlanControlViewModel::LevelUpCommand | " + ex.GetType().Name + " | " + ex.Message);
+            //}
             
         }
 
