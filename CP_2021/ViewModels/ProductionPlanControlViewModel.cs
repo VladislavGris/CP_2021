@@ -187,14 +187,13 @@ namespace CP_2021.ViewModels
             try
             {
                 Model.ExpandAll();
-                Update();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::ExpandAllCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            
+            Update();
         }
 
         #endregion
@@ -210,13 +209,13 @@ namespace CP_2021.ViewModels
             try
             {
                 Model.CollapseAll();
-                Update();
+                
             }catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::RollUpAllCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            
+            Update();
         }
 
         #endregion
@@ -293,7 +292,6 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Commit();
-                Update();
             }
             catch(DbUpdateConcurrencyException ex)
             {
@@ -304,6 +302,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
+            Update();
         }
 
         #endregion
@@ -316,23 +315,32 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
-            ProductionTask parent = (ProductionTask)SelectedTask;
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             try
             {
-                SelectedTask.IsExpanded = true;
-                SelectedTask = SelectedTask.AddEmptyChild();
-                _undoManager.AddUndoCommand(new AddNewChildCommand(parent, SelectedTask));
+                ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).Single();
+                parent.Expanded = true;
+                dbTask.MyParent = new HierarchyDB(parent, dbTask);
+
+                if (Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Count() != 0)
+                {
+                    dbTask.MyParent.LineOrder = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
+                }
+                else
+                {
+                    dbTask.MyParent.LineOrder = 1;
+                }
+
+                Unit.Tasks.Insert(dbTask);
+                Unit.Commit();
             }
-            catch(DbUpdateConcurrencyException ex)
+            catch(Exception ex)
             {
-                MessageBox.Show("Строка была удалена. Обновите базу");
-                _log.Warn("ProductionPlanControlViewModel::AddChildCommand::AddEmptyChild | " + ex.GetType().Name + " | " + ex.Message);
+                MessageBox.Show("Неизвестная ошибка");
+                _log.Error("ProductionPlanControlViewModel::OnAddChildCommandExecuted " + ex.Message);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::AddChildCommand::AddEmptyChild | " + ex.GetType().Name + " | " + ex.Message);
-            }
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
