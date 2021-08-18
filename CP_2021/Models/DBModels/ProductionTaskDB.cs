@@ -1,4 +1,6 @@
-﻿using CP_2021.Models.Base;
+﻿using CP_2021.Infrastructure.Singletons;
+using CP_2021.Infrastructure.Units;
+using CP_2021.Models.Base;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -92,6 +94,19 @@ namespace CP_2021.Models.DBModels
             task.MyParent = this.MyParent;
             task.ParentTo = this.ParentTo;
             return task;
+        }
+
+        public void DownTaskBelow()
+        {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            var tasksByParent = unit.Tasks.Get().Where(t => t.MyParent.Parent == this.MyParent.Parent && t != this).OrderBy(t => t.MyParent.LineOrder);
+            foreach (var task in tasksByParent)
+            {
+                if (task.MyParent.LineOrder >= this.MyParent.LineOrder)
+                {
+                    task.MyParent.LineOrder++;
+                }
+            }
         }
     }
 }

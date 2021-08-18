@@ -282,5 +282,45 @@ namespace CP_2021.Models.Classes
                 }
             }
         }
+
+        public static ProductionTask FindByTask(TreeGridModel model, ProductionTaskDB taskToFind)
+        {
+            ProductionTask task = model.Cast<ProductionTask>().Where(t=>t.Task.Id == taskToFind.Id).FirstOrDefault();
+            if(task == null)
+            {
+                foreach(ProductionTask root in model)
+                {
+                    if (root.HasChildren)
+                    {
+                        task = root.CheckTaskForMathch(taskToFind);
+                        if (task != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            return task;
+        }
+
+        public ProductionTask CheckTaskForMathch(ProductionTaskDB taskForMathch)
+        {
+            ProductionTask task = this.Children.Cast<ProductionTask>().Where(t => t.Task.Id == taskForMathch.Id).FirstOrDefault();
+            if (task == null)
+            {
+                foreach(ProductionTask child in this.Children)
+                {
+                    if (child.HasChildren)
+                    {
+                        task = child.CheckTaskForMathch(taskForMathch);
+                        if (task != null)
+                        {
+                            break;
+                        }
+                    }
+                }
+            }
+            return task;
+        }
     }
 }

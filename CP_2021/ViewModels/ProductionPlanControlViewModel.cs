@@ -227,60 +227,50 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            if(Model.Count == 0)
+            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
+            //Если база данных пустая
+            try
             {
-                ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-                dbTask.MyParent = new HierarchyDB(dbTask);
-                dbTask.MyParent.LineOrder = 1;
-                ProductionTask task = new ProductionTask(dbTask);
-                Model.Add(task);
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
-            }
-            else
-            {
-                if(SelectedTask == null)
+                if (Unit.Tasks.Get().Count() == 0)
                 {
-                    return;
-                }
-                if (SelectedTask?.Task.MyParent.Parent != null)
-                {
-                    ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                    try
-                    {
-                        SelectedTask = SelectedTask.AddAtTheSameLevel();
-                        _undoManager.AddUndoCommand(new AddNewChildCommand(parent, SelectedTask));
-                    }catch(Exception ex)
-                    {
-                        MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                        _log.Error("UNKNOWN | ProductionPlanControlViewModel::AddProductionTaskCommand::AddAtTheSameLevel | " + ex.GetType().Name + " | " + ex.Message);
-                    }
-                    
+                    dbTask.MyParent = new HierarchyDB(dbTask);
+                    dbTask.MyParent.LineOrder = 1;
                 }
                 else
                 {
-                    try
+                    //Команда не выполняется без выбранной задачи
+                    if (SelectedTask == null)
                     {
-                        SelectedTask = SelectedTask.AddEmptyRootToModel(Model);
-                        _undoManager.AddUndoCommand(new AddNewRootCommand(Model, SelectedTask));
+                        MessageBox.Show("Не выбран элемент для добавления");
+                        return;
                     }
-                    catch (ArgumentOutOfRangeException ex)
+                    //Добавление головного изделия, иначе изделие в Children к Parent
+                    if (SelectedTask.Task.MyParent.Parent != null)
                     {
-                        MessageBox.Show("Невозможно вставить элемент. Внутренняя ошибка базы");
-                        _log.Warn("ProductionPlanControlViewModel::AddProductionTaskCommand::AddEmptyRootToModel | " + ex.GetType().Name + " | " + ex.Message);
+                        ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.MyParent.ParentId).Single();
+                        parent.Expanded = true;
+                        dbTask.MyParent = new HierarchyDB(parent, dbTask);
+                        dbTask.MyParent.LineOrder = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
                     }
-                    catch(DbUpdateConcurrencyException ex)
+                    else
                     {
-                        MessageBox.Show("Строка была удалена. Обновите базу");
-                        _log.Warn("ProductionPlanControlViewModel::AddProductionTaskCommand::AddEmptyRootToModel | " + ex.GetType().Name + " | " + ex.Message);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                        _log.Error("UNKNOWN | ProductionPlanControlViewModel::AddProductionTaskCommand::AddEmptyRootToModel | " + ex.GetType().Name + " | " + ex.Message);
+                        dbTask.MyParent = new HierarchyDB(dbTask);
+                        //Выборка элемента с Id выбранного элемента
+                        ProductionTaskDB upperTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).Single();
+                        dbTask.MyParent.LineOrder = upperTask.MyParent.LineOrder + 1;
+                        dbTask.DownTaskBelow();
                     }
                 }
+                Unit.Tasks.Insert(dbTask);
+                Unit.Commit();
             }
+            catch(InvalidOperationException ex)
+            {
+                MessageBox.Show("Выбранный вами элемент был удален");
+                _log.Warn("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.Message);
+            }
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
@@ -520,19 +510,7 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateModelCommandExecuted(object p)
         {
-            try
-            {
-                ApplicationUnitSingleton.RecreateUnit();
-                Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-                ProductionTasks = Unit.Tasks.Get().ToList();
-                Model = ProductionTask.InitModel(ProductionTasks);
-                _undoManager = new UndoRedoManager();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::UpdateModelCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
+            Update();
         }
 
         #endregion
@@ -1088,6 +1066,27 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #endregion
+
+        #region Методы
+
+        private void Update()
+        {
+            try
+            {
+                ApplicationUnitSingleton.RecreateUnit();
+                Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                ProductionTasks = Unit.Tasks.Get().ToList();
+                Model = ProductionTask.InitModel(ProductionTasks);
+                _undoManager = new UndoRedoManager();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Неизвестная ошибка. Обновите базу");
+                _log.Error("UNKNOWN | ProductionPlanControlViewModel::UpdateModelCommand | " + ex.GetType().Name + " | " + ex.Message);
+            }
+        }
+
         #endregion
 
         public ProductionPlanControlViewModel()
