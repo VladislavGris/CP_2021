@@ -187,6 +187,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Model.ExpandAll();
+                Update();
             }
             catch (Exception ex)
             {
@@ -209,6 +210,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Model.CollapseAll();
+                Update();
             }catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
@@ -291,6 +293,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Commit();
+                Update();
             }
             catch(DbUpdateConcurrencyException ex)
             {
