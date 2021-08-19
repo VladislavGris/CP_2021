@@ -180,13 +180,16 @@ namespace CP_2021.ViewModels
 
         public ICommand ExpandAllCommand { get; }
 
-        private bool CanExpandAllCommandExecute(object p) => Model!=null;
+        private bool CanExpandAllCommandExecute(object p) => true;
 
         private void OnExpandAllCommandExecuted(object p)
         {
             try
             {
-                Model.ExpandAll();
+                foreach(ProductionTaskDB task in Unit.Tasks.Get()){
+                    task.Expanded = true;
+                }
+                Unit.Commit();
             }
             catch (Exception ex)
             {
@@ -202,15 +205,19 @@ namespace CP_2021.ViewModels
 
         public ICommand RollUpAllCommand { get; }
 
-        private bool CanRollUpAllCommandExecute(object p) => Model != null;
+        private bool CanRollUpAllCommandExecute(object p) => true;
 
         private void OnRollUpAllCommandExecuted(object p)
         {
             try
             {
-                Model.CollapseAll();
-                
-            }catch(Exception ex)
+                foreach (ProductionTaskDB task in Unit.Tasks.Get())
+                {
+                    task.Expanded = false;
+                }
+                Unit.Commit();
+            }
+            catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::RollUpAllCommand | " + ex.GetType().Name + " | " + ex.Message);
