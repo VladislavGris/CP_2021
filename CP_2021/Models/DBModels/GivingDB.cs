@@ -40,6 +40,7 @@ namespace CP_2021.Models.DBModels
             giving.Report = this.Report;
             giving.ReturnReport = this.ReturnReport;
             giving.ReceivingDate = this.ReceivingDate;
+            giving.ReturnGiving = this.ReturnGiving;
             return giving;
         }
     }

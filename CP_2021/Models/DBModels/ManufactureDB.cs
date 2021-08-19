@@ -38,6 +38,10 @@ namespace CP_2021.Models.DBModels
             manuf.Name = this.Name;
             manuf.LetterNum = this.LetterNum;
             manuf.SpecNum = this.SpecNum;
+            manuf.VipiskSpec = this.VipiskSpec;
+            manuf.OnControl = this.OnControl;
+            manuf.PredictDate = this.PredictDate;
+            manuf.FactDate = this.FactDate;
             return manuf;
         }
     }

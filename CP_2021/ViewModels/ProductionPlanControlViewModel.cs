@@ -309,7 +309,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            Update();
+            //Update();
         }
 
         #endregion
@@ -397,68 +397,41 @@ namespace CP_2021.ViewModels
 
         private void OnLevelUpCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-            if(dbTask == null)
+            try
             {
-                MessageBox.Show("Выделенная строка была удалена");
-            }
-            else
-            {
-                dbTask.UpOrderBelow();
-                if (dbTask.MyParent.Parent.MyParent.Parent == null)
+                ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                if (dbTask == null)
                 {
-                    int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
-                    dbTask.MyParent = new HierarchyDB(dbTask);
-                    dbTask.MyParent.LineOrder = lineOrder;
-                    Unit.Commit();
-                    dbTask.DownTaskBelow();
+                    MessageBox.Show("Выделенная строка была удалена");
                 }
                 else
                 {
-                    int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
-                    dbTask.MyParent = new HierarchyDB(dbTask.MyParent.Parent.MyParent.Parent, dbTask);
-                    dbTask.MyParent.LineOrder = lineOrder;
+                    dbTask.UpOrderBelow();
+                    if (dbTask.MyParent.Parent.MyParent.Parent == null)
+                    {
+                        int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
+                        dbTask.MyParent = new HierarchyDB(dbTask);
+                        dbTask.MyParent.LineOrder = lineOrder;
+                        Unit.Commit();
+                        dbTask.DownTaskBelow();
+                    }
+                    else
+                    {
+                        int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
+                        dbTask.MyParent = new HierarchyDB(dbTask.MyParent.Parent.MyParent.Parent, dbTask);
+                        dbTask.MyParent.LineOrder = lineOrder;
+                        Unit.Commit();
+                        dbTask.DownTaskBelow();
+                    }
                     Unit.Commit();
-                    dbTask.DownTaskBelow();
                 }
-                Unit.Commit();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Неизвестная ошибка");
+                _log.Error("ProductionPlanControlViewModel::LevelUpCommand " + ex.Message);
             }
             Update();
-            //ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-            //ProductionTask task = ProductionTask.InitTask(SelectedTask.Task);
-            //try
-            //{
-            //    SelectedTask.IsExpanded = false;
-            //    SelectedTask.DownOrderBelow();
-
-            //    _undoManager.AddUndoCommand(new LevelUpCommand(Model, parent, task, task.Task.MyParent.LineOrder));
-
-            //    parent.Children.Remove(SelectedTask);
-
-            //    task.Task.MyParent.LineOrder = parent.Task.MyParent.LineOrder + 1;
-
-            //    if (parent.Parent == null)
-            //    {
-            //        task.Task.MyParent.Parent = null;
-            //        Model.Insert(task.Task.MyParent.LineOrder - 1, task);
-            //    }
-            //    else
-            //    {
-            //        task.Task.MyParent.Parent = ((ProductionTask)parent.Parent).Task;
-            //        parent.Parent.Children.Insert(task.Task.MyParent.LineOrder - 1, task);
-            //    }
-
-            //    task.UpOrderBelow();
-            //    parent.CheckTaskHasChildren();
-            //    Unit.Commit();
-            //    SelectedTask = task;
-            //}
-            //catch(Exception ex)
-            //{
-            //    MessageBox.Show("Неизвестная ошибка. Обновите базу");
-            //    _log.Error("UNKNOWN | ProductionPlanControlViewModel::LevelUpCommand | " + ex.GetType().Name + " | " + ex.Message);
-            //}
-            
         }
 
         #endregion
@@ -471,66 +444,32 @@ namespace CP_2021.ViewModels
 
         private void OnLevelDownCommandExecuted(object p)
         {
+            ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t=>t.Id == SelectedTask.Task.Id).SingleOrDefault();
             try
             {
-                ProductionTaskDB dbTask = SelectedTask.Task;
-                ProductionTask task = ProductionTask.InitTask(dbTask);
-                ProductionTaskDB topTask = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent && t.MyParent.LineOrder == SelectedTask.Task.MyParent.LineOrder - 1).FirstOrDefault();
-                ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-
-                SelectedTask.DownOrderBelow();
-                SelectedTask.IsExpanded = false;
-
-                if (parent != null)
+                if (dbTask == null)
                 {
-                    SelectedTask.Parent.Children.Remove(SelectedTask);
-                    foreach (ProductionTask child in parent.Children)
-                    {
-                        if (child.Task.Equals(topTask))
-                        {
-                            _undoManager.AddUndoCommand(new LevelDownCommand(Model, task, child, parent, dbTask.MyParent.LineOrder));
-                            child.Children.Add(task);
-                            child.HasChildren = true;
-                            child.IsExpanded = true;
-                            SelectedTask = task;
-                        }
-                    }
+                    MessageBox.Show("Выделенная строка была удалена");
                 }
                 else
                 {
-                    Model.Remove(SelectedTask);
-                    foreach (ProductionTask child in Model)
-                    {
-                        if (child.Task.Equals(topTask))
-                        {
-                            _undoManager.AddUndoCommand(new LevelDownCommand(Model, task, child, parent, dbTask.MyParent.LineOrder));
-                            child.Children.Add(task);
-                            child.HasChildren = true;
-                            child.IsExpanded = true;
-                            SelectedTask = task;
-                        }
-                    }
-                }
-
-                dbTask.MyParent = new HierarchyDB(topTask, dbTask);
-                if (Unit.Tasks.Get().Where(t => t.MyParent.Parent == topTask).Count() == 0)
-                {
-
+                    dbTask.UpOrderBelow();
+                    ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == dbTask.MyParent.ParentId && t.MyParent.LineOrder == dbTask.MyParent.LineOrder - 1).Single();
+                    parent.Expanded = true;
+                    dbTask.MyParent = new HierarchyDB(parent, dbTask);
                     dbTask.MyParent.LineOrder = 1;
+                    Unit.Commit();
+                    dbTask.DownTaskBelow();
+                    Unit.Commit();
                 }
-                else
-                {
-                    int maxLineOrder = Unit.Tasks.Get().Where(t => t.MyParent.Parent == topTask).Max(t => t.MyParent.LineOrder);
-                    dbTask.MyParent.LineOrder = maxLineOrder + 1;
-                }
-                Unit.Commit();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::LevelDownCommand | " + ex.GetType().Name + " | " + ex.Message);
+                MessageBox.Show("Неизвестная ошибка");
+                _log.Error("ProductionPlanControlViewModel::LevelDownCommand " + ex.Message);
             }
-             
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
@@ -581,11 +520,23 @@ namespace CP_2021.ViewModels
             try
             {
                 TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
-                ProductionTask parent = (ProductionTask)SelectedTask.Parent;
-                SelectedTask.Remove(Model);
-                if (parent != null)
+                ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                if (dbTask != null)
                 {
-                    parent.CheckTaskHasChildren();
+                    try
+                    {
+                        dbTask.UpOrderBelow();
+                        dbTask.Remove();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Неизвестная ошибка");
+                        _log.Error("ProductionPlanControlViewModel::DeleteProductionTaskCommand " + ex.Message);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Выбранный элемент уже был удален");
                 }
             }
             catch (Exception ex)
@@ -605,21 +556,19 @@ namespace CP_2021.ViewModels
 
         private void OnPasteTaskCommandExecuted(object p)
         {
+            ProductionTaskDB dbTask = TaskToCopy.Task.Clone();
             try
             {
-                ProductionTaskDB dbTask = TaskToCopy.Task.Clone();
                 ProductionTask task = new ProductionTask(dbTask);
-                SelectedTask.UpOrderBelow();
+                SelectedTask.Task.DownTaskBelow();
 
                 if (SelectedTask.Parent == null)
                 {
                     dbTask.MyParent = new HierarchyDB(dbTask);
-                    Model.Insert(SelectedTask.Task.MyParent.LineOrder, task);
                 }
                 else
                 {
                     dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
-                    ((ProductionTask)SelectedTask.Parent).Children.Insert(SelectedTask.Task.MyParent.LineOrder, task);
                 }
                 dbTask.MyParent.LineOrder = SelectedTask.Task.MyParent.LineOrder + 1;
 
@@ -628,7 +577,6 @@ namespace CP_2021.ViewModels
 
                 if (TaskToCopy.HasChildren)
                 {
-                    task.HasChildren = true;
                     foreach (ProductionTask child in TaskToCopy.Children)
                     {
                         task.AddChild(child);
@@ -639,7 +587,9 @@ namespace CP_2021.ViewModels
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::PasteTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
-            } 
+            }
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion

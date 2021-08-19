@@ -188,13 +188,12 @@ namespace CP_2021.Models.Classes
             dbChild.MyParent.LineOrder = child.Task.MyParent.LineOrder;
             ProductionTask childToAdd = new ProductionTask(dbChild);
 
-            this.Children.Add(childToAdd);
+            //this.Children.Add(childToAdd);
             unit.Tasks.Insert(dbChild);
             unit.Commit();
 
             if (child.HasChildren)
             {
-                childToAdd.HasChildren = true;
                 foreach(ProductionTask item in child.Children)
                 {
                     childToAdd.AddChild(item);
