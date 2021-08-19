@@ -823,7 +823,7 @@ namespace CP_2021.ViewModels
 
         public ICommand UpTaskCommand { get; }
 
-        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.Task.MyParent.LineOrder != 1;
+        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.Task.MyParent.LineOrder != 1 && SelectedTask!=null;
 
         private void OnUpTaskCommandExecuted(object p)
         {
