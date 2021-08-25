@@ -13,6 +13,7 @@
     <None Remove="Resources\Images\add_child.png" />
     <None Remove="Resources\Images\add_children.png" />
     <None Remove="Resources\Images\add_root.png" />
+    <None Remove="Resources\Images\bold_button.png" />
     <None Remove="Resources\Images\close.png" />
     <None Remove="Resources\Images\delete.png" />
     <None Remove="Resources\Images\icon.png" />
@@ -109,6 +110,12 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
     </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\Images\bold_button.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>

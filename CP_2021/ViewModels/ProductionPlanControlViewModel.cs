@@ -901,6 +901,30 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region SetBoldCommand
+
+        public ICommand SetBoldCommand { get; }
+
+        private bool CanSetBoldCommandExecute(object p) => SelectedTask!=null;
+
+        private void OnSetBoldCommandExecuted(object p)
+        {
+            ProductionTaskDB task = Unit.Tasks.Get().Where(t=>t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            if (task == null)
+            {
+                MessageBox.Show("Выбранная строка была удалена");
+            }
+            else
+            {
+                task.Formatting.IsBold = task.Formatting.IsBold == true ? false : true;
+            }
+            Unit.Commit();
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, task);
+        }
+
+        #endregion
+
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
@@ -999,6 +1023,7 @@ namespace CP_2021.ViewModels
             DownTaskCommand = new LambdaCommand(OnDownTaskCommandExecuted, CanDownTaskCommandExecute);
             UndoCommand = new LambdaCommand(OnUndoCommandExecuted, CanUndoCommandExecute);
             RedoCommand = new LambdaCommand(OnRedoCommandExecuted, CanRedoCommandExecute);
+            SetBoldCommand = new LambdaCommand(OnSetBoldCommandExecuted, CanSetBoldCommandExecute);
             #endregion
 
             User = UserDataSingleton.GetInstance().user;

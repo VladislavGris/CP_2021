@@ -204,6 +204,17 @@
                         <fa:ImageAwesome Icon="Solid_ArrowDown"
                                              Style="{StaticResource TooltipIconStyle}"/>
                     </ListViewItem>
+                    <ListViewItem x:Name="SetBold" Width="60"
+                              ToolTip="Жирный">
+                        <ListViewItem.InputBindings>
+                            <MouseBinding Command="{Binding SetBoldCommand}" MouseAction="LeftClick"/>
+                        </ListViewItem.InputBindings>
+                        <Image Height="40">
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/bold_button.png"/>
+                            </Image.Source>
+                        </Image>
+                    </ListViewItem>
                     <!--<ListViewItem x:Name="Undo" Width="60"
                               ToolTip="Отменить изменения">
                         <ListViewItem.InputBindings>
@@ -345,7 +356,6 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
-
                         <DataTrigger Binding="{Binding Task.Completion}" Value="1">
                             <Setter Property="Background" Value="Pink"/>
                         </DataTrigger>
@@ -372,6 +382,9 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="9">
                             <Setter Property="Background" Value="#72AE3B"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Formatting.IsBold}" Value="True">
+                            <Setter Property="FontWeight" Value="Bold"/>
                         </DataTrigger>
                         <!--E55151  7A67E6-->
                     </Style.Triggers>
