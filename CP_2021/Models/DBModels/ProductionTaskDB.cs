@@ -55,6 +55,9 @@ namespace CP_2021.Models.DBModels
         public virtual GivingDB Giving { get; set; }
         public virtual InProductionDB InProduction { get; set; }
         public virtual ManufactureDB Manufacture { get; set; }
+        public virtual FormattingDB Formatting { get; set; }
+        public virtual PaymentDB Payment { get; set; }
+        public virtual LaborCostsDB LaborCosts { get; set; }
 
         public ProductionTaskDB() { }
 
@@ -65,6 +68,9 @@ namespace CP_2021.Models.DBModels
             Giving = new GivingDB();
             InProduction = new InProductionDB();
             Manufacture = new ManufactureDB();
+            Formatting = new FormattingDB();
+            Payment = new PaymentDB();
+            LaborCosts = new LaborCostsDB();
         }
 
         public ProductionTaskDB Clone()
@@ -82,6 +88,9 @@ namespace CP_2021.Models.DBModels
             taskDB.Giving = this.Giving.Clone();
             taskDB.InProduction = this.InProduction.Clone();
             taskDB.Manufacture = this.Manufacture.Clone();
+            taskDB.Formatting = this.Formatting.Clone();
+            taskDB.Payment = this.Payment.Clone();
+            taskDB.LaborCosts = this.LaborCosts.Clone();
             taskDB.Completion = this.Completion;
             taskDB.Note = this.Note;
 

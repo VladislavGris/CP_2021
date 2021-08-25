@@ -605,6 +605,7 @@ namespace CP_2021.ViewModels
 
         private void OnSearchCommandExecuted(object p)
         {
+            Update();
             SearchResultString = null;
             SearchResults = new List<ProductionTask>();
             FieldNames fieldName = (FieldNames)SelectedSearchIndex;
@@ -922,7 +923,6 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::OnCollapsingCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            Update();
         }
 
         #endregion
@@ -948,7 +948,6 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::OnExpandingCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            Update();
         }
 
         #endregion

@@ -30,6 +30,7 @@ namespace CP_2021.Data
             modelBuilder.Entity<TaskDB>().Property(c => c.Completion).HasDefaultValue(false);
             modelBuilder.Entity<ReportDB>().Property(p => p.State).HasDefaultValue(false);
             modelBuilder.Entity<UserDB>().Property(u => u.Position).HasDefaultValue(0);
+            modelBuilder.Entity<FormattingDB>().Property(t => t.IsBold).HasDefaultValue(false);
             #endregion
             #region IsUnique
             modelBuilder.Entity<ComplectationDB>().HasIndex(c => c.ProductionTaskId).IsUnique();
@@ -37,12 +38,23 @@ namespace CP_2021.Data
             modelBuilder.Entity<InProductionDB>().HasIndex(i => i.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ReportDB>().HasIndex(r => r.TaskId).IsUnique();
+            modelBuilder.Entity<FormattingDB>().HasIndex(f => f.ProductionTaskId).IsUnique();
             #endregion
             string passwordHash = PasswordHashing.CreateHash("8558286");
             modelBuilder.Entity<UserDB>().HasData(new UserDB("grishkevichai", passwordHash, "Алексей", "Гришкевич") {Id = Guid.NewGuid(), Position = 2 });
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Parent).WithMany(t => t.ParentTo).HasForeignKey(h => h.ParentId).OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Child).WithOne(t => t.MyParent);
+            modelBuilder.Entity<FormattingDB>().HasOne<ProductionTaskDB>(t => t.ProductionTask).WithOne(t => t.Formatting);
+
+            modelBuilder.Entity<PaymentDB>().HasIndex(t => t.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<PaymentDB>().Property(t => t.IsFirstPayment).HasDefaultValue(false);
+            modelBuilder.Entity<PaymentDB>().Property(t => t.IsSecondPayment).HasDefaultValue(false);
+            modelBuilder.Entity<PaymentDB>().Property(t => t.IsFullPayment).HasDefaultValue(false);
+            modelBuilder.Entity<PaymentDB>().HasOne<ProductionTaskDB>(t => t.ProductionTask).WithOne(t => t.Payment);
+
+            modelBuilder.Entity<LaborCostsDB>().HasIndex(t => t.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<LaborCostsDB>().HasOne<ProductionTaskDB>(t => t.ProductionTask).WithOne(t => t.LaborCosts);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

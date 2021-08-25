@@ -22,7 +22,9 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<TaskDB> _userTasks;
         private BaseRepository<ReportDB> _reports;
         private BaseRepository<HierarchyDB> _hierarchy;
-
+        private BaseRepository<FormattingDB> _formatting;
+        private BaseRepository<PaymentDB> _payment;
+        private BaseRepository<LaborCostsDB> _labor;
 
         public ApplicationUnit(ApplicationContext context)
         {
@@ -36,6 +38,9 @@ namespace CP_2021.Infrastructure.Units
             UserTasks.Get();
             Reports.Get();
             Hierarchy.Get();
+            Formatting.Get();
+            Payment.Get();
+            Labor.Get();
         }
 
         public IRepository<ProductionTaskDB> Tasks
@@ -110,7 +115,30 @@ namespace CP_2021.Infrastructure.Units
             }
         }
 
-        
+        public IRepository<FormattingDB> Formatting
+        {
+            get
+            {
+                return _formatting ?? (_formatting = new BaseRepository<FormattingDB>(_context));
+            }
+        }
+
+        public IRepository<PaymentDB> Payment
+        {
+            get
+            {
+                return _payment ?? (_payment = new BaseRepository<PaymentDB>(_context));
+            }
+        }
+
+        public IRepository<LaborCostsDB> Labor
+        {
+            get
+            {
+                return _labor ?? (_labor = new BaseRepository<LaborCostsDB>(_context));
+            }
+        }
+
         public void Commit()
         {
              _context.SaveChanges();
@@ -127,6 +155,9 @@ namespace CP_2021.Infrastructure.Units
             UserTasks.Refresh();
             Reports.Refresh();
             Hierarchy.Refresh();
+            Formatting.Refresh();
+            Payment.Refresh();
+            Labor.Refresh();
         }
     }
 }
