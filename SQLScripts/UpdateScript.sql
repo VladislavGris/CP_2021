@@ -1,4 +1,4 @@
-use CompanyPlannerDB2
+use CompanyPlannerDB
 go
 SET ANSI_NULLS ON
 GO
@@ -59,18 +59,18 @@ GO
 CREATE TABLE [dbo].[Payment](
 	[Id] [uniqueidentifier] default newid() NOT NULL,
 	[Contract] [nvarchar](max) NULL,
-	[SpecificationSum] [decimal](18, 2) NULL,
+	[SpecificationSum] [nvarchar](max) NULL,
 	[Project] [nvarchar](max) NULL,
-	[PriceWithoutVAT] [decimal](18, 2) NULL,
+	[PriceWithoutVAT] [nvarchar](max) NULL,
 	[Note] [nvarchar](max) NULL,
 	[IsFirstPayment] [bit] NOT NULL,
-	[FirstPaymentSum] [decimal](18, 2) NULL,
+	[FirstPaymentSum] [nvarchar](max) NULL,
 	[FirstPaymentDate] [date] NULL,
 	[IsSecondPayment] [bit] NOT NULL,
-	[SecondPaymentSum] [decimal](18, 2) NULL,
+	[SecondPaymentSum] [nvarchar](max) NULL,
 	[SecondPaymentDate] [date] NULL,
 	[IsFullPayment] [bit] NOT NULL,
-	[FullPaymentSum] [decimal](18, 2) NULL,
+	[FullPaymentSum] [nvarchar](max) NULL,
 	[FullPaymentDate] [date] NULL,
 	[ProductionTaskId] [uniqueidentifier] NOT NULL,
  CONSTRAINT [PK_Payment] PRIMARY KEY CLUSTERED 

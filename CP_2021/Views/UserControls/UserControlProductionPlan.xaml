@@ -310,7 +310,6 @@
                    VerticalAlignment="Center"/>-->
                 </StackPanel>
             </Grid>
-            
         </Grid>
         <DataGrid Name="Grid"
                   Grid.Row="1"
@@ -326,21 +325,21 @@
                               Command="{Binding CutTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Solid_Cut"
-                                             Foreground="{StaticResource ForegroundBrush}"/>
+                                             Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Копировать"
                               Command="{Binding CopyTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Regular_Copy"
-                                             Foreground="{StaticResource ForegroundBrush}"/>
+                                             Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Вставить"
                               Command="{Binding PasteTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Solid_Paste"
-                                             Foreground="{StaticResource ForegroundBrush}"/>
+                                             Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
@@ -348,7 +347,7 @@
                               Command="{Binding DeleteProductionTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Solid_Minus"
-                                             Foreground="{StaticResource ForegroundBrush}"/>
+                                             Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </ContextMenu>
@@ -503,7 +502,11 @@
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
 
-                <!--Цена за единицу без ндс--> 
+                <DataGridTextColumn Header="Цена за единицу без НДС"
+                                    Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
+                                    Width="100"
+                                    ElementStyle="{StaticResource DatagridCenterCellStyle}"
+                                    EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
                 
                 <DataGridTemplateColumn MaxWidth="300">
                     <DataGridTemplateColumn.HeaderTemplate>
@@ -637,12 +640,24 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <!--Добавить карандаш-->
-                <DataGridTextColumn Header="Оплата"
-                                    Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="110"
-                                    ElementStyle="{StaticResource DatagridCenterCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
+                <DataGridTemplateColumn Width="100">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="Solid_PencilAlt"
+                                                 Foreground="{StaticResource FontColor}"
+                                                 Width="12"
+                                                 Height="12"/>
+                                <TextBlock Text="Оплата"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenPaymentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Приходный документ"
                                     Binding="{Binding Task.IncDoc, UpdateSourceTrigger=PropertyChanged}"

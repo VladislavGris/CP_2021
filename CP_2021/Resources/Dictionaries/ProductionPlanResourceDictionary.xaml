@@ -387,4 +387,32 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="TriangleButton" TargetType="Button">
+        <!--<Setter Property="Width" Value="50"/>
+        <Setter Property="Height" Value="50"/>-->
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+
+                        <Canvas>
+                            <Polygon Points="15,-5 15,10 -5,-5"
+                                 Fill="Transparent"
+                                 Stroke="Transparent"
+                                     x:Name="Triangle"/>
+                        </Canvas>
+                        <ContentPresenter x:Name="content"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Triangle" Property="Fill" Value="Green"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

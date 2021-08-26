@@ -14,32 +14,32 @@ namespace CP_2021.Models.DBModels
         // Договор
         public string Contract { get; set; }
         // Сумма спецификации
-        public decimal? SpecificationSum { get; set; }
+        public string SpecificationSum { get; set; }
         // Проект
         public string Project { get; set; }
         // Цена за единицу без НДС
-        public decimal? PriceWithoutVAT { get; set; }
+        public string PriceWithoutVAT { get; set; }
         // Примечание
         public string Note { get; set; }
 
         // Оплата 50% 1 часть (да/нет)
         public bool IsFirstPayment { get; set; }
         // Оплата 50% 1 часть сумма
-        public decimal? FirstPaymentSum { get; set; }
+        public string FirstPaymentSum { get; set; }
         // Оплата 50% 1 часть дата
         public DateTime? FirstPaymentDate { get; set; }
 
         // Оплата 50% 2 часть (да/нет)
         public bool IsSecondPayment { get; set; }
         // Оплата 50% 2 часть сумма
-        public decimal? SecondPaymentSum { get; set; }
+        public string SecondPaymentSum { get; set; }
         // Оплата 50% 2 часть дата
         public DateTime? SecondPaymentDate { get; set; }
 
         // Оплата 100% (да/нет)
         public bool IsFullPayment { get; set; }
         // Оплата 100% сумма
-        public decimal? FullPaymentSum { get; set; }
+        public string FullPaymentSum { get; set; }
         // Оплата 100% дата
         public DateTime? FullPaymentDate { get; set; }
 

@@ -20,9 +20,18 @@
         <Setter Property="Icon" Value="/Resources/Images/icon.png"/>
         <Setter Property="WindowChrome.WindowChrome">
             <Setter.Value>
-                <WindowChrome CaptionHeight="30"/>
+                <WindowChrome CaptionHeight="30" />
             </Setter.Value>
         </Setter>
+        <!--<Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Window">
+                    <Border Background="Green" Width="5">
+                        <ContentPresenter Content="{TemplateBinding Content}" />
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>-->
     </Style>
 
     <!-- Buttons -->

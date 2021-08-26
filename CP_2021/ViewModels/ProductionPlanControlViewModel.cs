@@ -28,6 +28,8 @@ using CP_2021.Infrastructure.Threading;
 using log4net;
 using log4net.Config;
 using System.Reflection;
+using CP_2021.ViewModels.DataWindowViewModels;
+using CP_2021.Views.Windows.DataWindows;
 
 namespace CP_2021.ViewModels
 {
@@ -925,6 +927,23 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region OpenPaymentWindowCommand
+
+        public ICommand OpenPaymentWindowCommand { get; }
+
+        private bool CanOpenPaymentWindowCommandExecute(object p) => true;
+
+        private void OnOpenPaymentWindowCommandExecuted(object p)
+        {
+            PaymentWindowViewModel paymentVM = new PaymentWindowViewModel();
+            paymentVM.SetEditableTask(SelectedTask.Task);
+            PaymentWindow paymentWindow = new PaymentWindow();
+            paymentWindow.DataContext = paymentVM;
+            paymentWindow.Show();
+        }
+
+        #endregion
+
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
@@ -1024,6 +1043,7 @@ namespace CP_2021.ViewModels
             UndoCommand = new LambdaCommand(OnUndoCommandExecuted, CanUndoCommandExecute);
             RedoCommand = new LambdaCommand(OnRedoCommandExecuted, CanRedoCommandExecute);
             SetBoldCommand = new LambdaCommand(OnSetBoldCommandExecuted, CanSetBoldCommandExecute);
+            OpenPaymentWindowCommand = new LambdaCommand(OnOpenPaymentWindowCommandExecuted, CanOpenPaymentWindowCommandExecute);
             #endregion
 
             User = UserDataSingleton.GetInstance().user;
