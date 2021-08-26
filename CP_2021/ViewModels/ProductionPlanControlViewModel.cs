@@ -944,6 +944,23 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region OpenLaborCostsWindowCommand
+
+        public ICommand OpenLaborCostsWindowCommand { get; }
+
+        private bool CanOpenLaborCostsWindowCommandExecute(object p) => true;
+
+        private void OnOpenLaborCostsWindowCommandExecuted(object p)
+        {
+            LaborCostsViewModel laborVm = new LaborCostsViewModel();
+            laborVm.SetEditableTask(SelectedTask.Task);
+            LaborCostsWindow laborWindow = new LaborCostsWindow();
+            laborWindow.DataContext = laborVm;
+            laborWindow.Show();
+        }
+
+        #endregion
+
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
@@ -1044,6 +1061,7 @@ namespace CP_2021.ViewModels
             RedoCommand = new LambdaCommand(OnRedoCommandExecuted, CanRedoCommandExecute);
             SetBoldCommand = new LambdaCommand(OnSetBoldCommandExecuted, CanSetBoldCommandExecute);
             OpenPaymentWindowCommand = new LambdaCommand(OnOpenPaymentWindowCommandExecuted, CanOpenPaymentWindowCommandExecute);
+            OpenLaborCostsWindowCommand = new LambdaCommand(OnOpenLaborCostsWindowCommandExecuted, CanOpenLaborCostsWindowCommandExecute);
             #endregion
 
             User = UserDataSingleton.GetInstance().user;
