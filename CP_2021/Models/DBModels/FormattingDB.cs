@@ -13,6 +13,14 @@ namespace CP_2021.Models.DBModels
     {
         public bool IsBold { get; set; }
 
+        public bool IsItalic {  get; set; }
+
+        public bool IsUnderline { get; set; }
+
+        public string FontFamily { get; set; }
+
+        public int FontSize { get; set; }
+
         public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
 

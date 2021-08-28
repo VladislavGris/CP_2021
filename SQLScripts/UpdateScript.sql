@@ -9,6 +9,10 @@ GO
 CREATE TABLE [dbo].[Formatting](
 	[Id] [uniqueidentifier] default newid() NOT NULL,
 	[IsBold] [bit] NOT NULL,
+	[IsItalic] [bit] not null default(0),
+	[IsUnderline] [bit] not null default(0),
+	[FontFamily] [nvarchar](max) default('Arial'),
+	[FontSize] [int] default(14),
 	[ProductionTaskId] [uniqueidentifier] NOT NULL,
  CONSTRAINT [PK_Formatting] PRIMARY KEY CLUSTERED 
 (

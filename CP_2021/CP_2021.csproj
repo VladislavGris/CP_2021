@@ -16,12 +16,20 @@
     <None Remove="Resources\Images\bold_button.png" />
     <None Remove="Resources\Images\close.png" />
     <None Remove="Resources\Images\delete.png" />
+    <None Remove="Resources\Images\down_task.png" />
     <None Remove="Resources\Images\icon.png" />
+    <None Remove="Resources\Images\italic_button.png" />
+    <None Remove="Resources\Images\level_down.png" />
+    <None Remove="Resources\Images\level_up.png" />
     <None Remove="Resources\Images\minimize.png" />
     <None Remove="Resources\Images\redo.png" />
     <None Remove="Resources\Images\refresh.png" />
+    <None Remove="Resources\Images\roll_down.png" />
+    <None Remove="Resources\Images\roll_up.png" />
+    <None Remove="Resources\Images\underline_button.png" />
     <None Remove="Resources\Images\undo.png" />
     <None Remove="Resources\Images\update.png" />
+    <None Remove="Resources\Images\up_task.png" />
     <None Remove="Views\Windows\CPIcon.png" />
     <None Remove="Views\Windows\favicon.ico" />
     <None Remove="Views\Windows\icon.png" />
@@ -62,16 +70,26 @@
     <Resource Include="Resources\Images\delete.png">
       <CopyToOutputDirectory></CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Images\down_task.png" />
     <Resource Include="Resources\Images\icon.png" />
+    <Resource Include="Resources\Images\italic_button.png" />
+    <Resource Include="Resources\Images\level_down.png">
+      <CopyToOutputDirectory></CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\level_up.png" />
     <Resource Include="Resources\Images\minimize.png" />
     <Resource Include="Resources\Images\redo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\refresh.png" />
+    <Resource Include="Resources\Images\roll_down.png" />
+    <Resource Include="Resources\Images\roll_up.png" />
+    <Resource Include="Resources\Images\underline_button.png" />
     <Resource Include="Resources\Images\undo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Images\update.png" />
+    <Resource Include="Resources\Images\up_task.png" />
     <Resource Include="Views\Windows\icon.png" />
   </ItemGroup>
 

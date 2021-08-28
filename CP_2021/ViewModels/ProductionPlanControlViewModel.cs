@@ -54,6 +54,30 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region FontSizes
+
+        private List<int> _fontSizes;
+
+        public List<int> FontSizes
+        {
+            get => _fontSizes;
+            set => Set(ref _fontSizes, value);
+        }
+
+        #endregion
+
+        #region FontFamilies
+
+        private List<string> _fontFamilies;
+
+        public List<string> FontFamilies
+        {
+            get => _fontFamilies;
+            set => Set(ref _fontFamilies, value);
+        }
+
+        #endregion
+
         #region TaskToCopy
 
         private ProductionTask _taskToCopy;
@@ -927,6 +951,54 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region SetItalicCommand
+
+        public ICommand SetItalicCommand { get; }
+
+        private bool CanSetItalicCommandExecute(object p) => SelectedTask != null;
+
+        private void OnSetItalicCommandExecuted(object p)
+        {
+            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            if (task == null)
+            {
+                MessageBox.Show("Выбранная строка была удалена");
+            }
+            else
+            {
+                task.Formatting.IsItalic = task.Formatting.IsItalic == true ? false : true;
+            }
+            Unit.Commit();
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, task);
+        }
+
+        #endregion
+
+        #region SetUnderlineCommand
+
+        public ICommand SetUnderlineCommand { get; }
+
+        private bool CanSetUnderlineCommandExecute(object p) => SelectedTask != null;
+
+        private void OnSetUnderlineCommandExecuted(object p)
+        {
+            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            if (task == null)
+            {
+                MessageBox.Show("Выбранная строка была удалена");
+            }
+            else
+            {
+                task.Formatting.IsUnderline = task.Formatting.IsUnderline == true ? false : true;
+            }
+            Unit.Commit();
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, task);
+        }
+
+        #endregion
+
         #region OpenPaymentWindowCommand
 
         public ICommand OpenPaymentWindowCommand { get; }
@@ -935,7 +1007,7 @@ namespace CP_2021.ViewModels
 
         private void OnOpenPaymentWindowCommandExecuted(object p)
         {
-            PaymentWindowViewModel paymentVM = new PaymentWindowViewModel();
+            DataWindowViewModel paymentVM = new DataWindowViewModel();
             paymentVM.SetEditableTask(SelectedTask.Task);
             PaymentWindow paymentWindow = new PaymentWindow();
             paymentWindow.DataContext = paymentVM;
@@ -952,11 +1024,34 @@ namespace CP_2021.ViewModels
 
         private void OnOpenLaborCostsWindowCommandExecuted(object p)
         {
-            LaborCostsViewModel laborVm = new LaborCostsViewModel();
+            DataWindowViewModel laborVm = new DataWindowViewModel();
             laborVm.SetEditableTask(SelectedTask.Task);
             LaborCostsWindow laborWindow = new LaborCostsWindow();
             laborWindow.DataContext = laborVm;
             laborWindow.Show();
+        }
+
+        #endregion
+
+        #region OpenDocumentWindowCommand
+
+        public ICommand OpenDocumentWindowCommand { get; }
+
+        private bool CanOpenDocumentWindowCommandExecute(object p) => true;
+
+        private void OnOpenDocumentWindowCommandExecuted(object p)
+        {
+            DataWindowViewModel laborVm = new DataWindowViewModel();
+            laborVm.SetEditableTask(SelectedTask.Task);
+            DocumentWindow window = new DocumentWindow();
+            window.Closed += Window_Closed;
+            window.DataContext = laborVm;
+            window.Show();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Update();
         }
 
         #endregion
@@ -1060,10 +1155,15 @@ namespace CP_2021.ViewModels
             UndoCommand = new LambdaCommand(OnUndoCommandExecuted, CanUndoCommandExecute);
             RedoCommand = new LambdaCommand(OnRedoCommandExecuted, CanRedoCommandExecute);
             SetBoldCommand = new LambdaCommand(OnSetBoldCommandExecuted, CanSetBoldCommandExecute);
+            SetItalicCommand = new LambdaCommand(OnSetItalicCommandExecuted, CanSetItalicCommandExecute);
+            SetUnderlineCommand = new LambdaCommand(OnSetUnderlineCommandExecuted, CanSetUnderlineCommandExecute);
             OpenPaymentWindowCommand = new LambdaCommand(OnOpenPaymentWindowCommandExecuted, CanOpenPaymentWindowCommandExecute);
             OpenLaborCostsWindowCommand = new LambdaCommand(OnOpenLaborCostsWindowCommandExecuted, CanOpenLaborCostsWindowCommandExecute);
+            OpenDocumentWindowCommand = new LambdaCommand(OnOpenDocumentWindowCommandExecuted, CanOpenDocumentWindowCommandExecute);
             #endregion
 
+            FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
+            FontFamilies = new List<string> { "Arial", "Calibre", "Times New Roman" };
             User = UserDataSingleton.GetInstance().user;
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
@@ -1075,9 +1175,6 @@ namespace CP_2021.ViewModels
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             string filepath = Directory.GetCurrentDirectory() + "\\Data\\Configs\\log4net.config";
             XmlConfigurator.Configure(logRepo, new FileInfo(filepath));
-
-            //UpdatingThread updThread = new UpdatingThread(UpdatingMessage);
-            //updThread.StartThread();
         }
     }
 }

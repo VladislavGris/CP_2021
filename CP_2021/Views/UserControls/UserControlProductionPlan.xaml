@@ -28,237 +28,186 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               Background="{StaticResource BackgroundBrush}">
-            <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="3*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="6*"/>
-                    <ColumnDefinition Width="5*"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ListView x:Name="ListViewMenu"
-                          Grid.Column="0"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      ScrollViewer.VerticalScrollBarVisibility="Disabled"
-                          Background="Transparent"
-                          BorderBrush="Transparent"
-                          Foreground="{StaticResource ForegroundBrush}">
-                    <ListView.Resources>
-                        <Style x:Key="FocusVisual">
-                            <Setter Property="Control.Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                        <SolidColorBrush x:Key="Item.MouseOver.Background" Color="#3D26A0DA"/>
-                        <SolidColorBrush x:Key="Item.MouseOver.Border" Color="Transparent"/>
-                        <SolidColorBrush x:Key="Item.SelectedInactive.Background" Color="#3DDADADA"/>
-                        <SolidColorBrush x:Key="Item.SelectedInactive.Border" Color="Transparent"/>
-                        <SolidColorBrush x:Key="Item.SelectedActive.Background" Color="#3D26A0DA"/>
-                        <SolidColorBrush x:Key="Item.SelectedActive.Border" Color="Transparent"/>
-                        <Style TargetType="{x:Type ListViewItem}">
-                            <Setter Property="SnapsToDevicePixels" Value="True"/>
-                            <Setter Property="Padding" Value="4,1"/>
-                            <Setter Property="HorizontalContentAlignment" Value="{Binding HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                            <Setter Property="VerticalContentAlignment" Value="{Binding VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
-                            <Setter Property="Background" Value="Transparent"/>
-                            <Setter Property="BorderBrush" Value="Transparent"/>
-                            <Setter Property="BorderThickness" Value="1"/>
-                            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="{x:Type ListViewItem}">
-                                        <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
-                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                                        </Border>
-                                        <ControlTemplate.Triggers>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="IsMouseOver" Value="True"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.MouseOver.Background}"/>
-                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.MouseOver.Border}"/>
-                                            </MultiTrigger>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
-                                                    <Condition Property="IsSelected" Value="True"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Background}"/>
-                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedInactive.Border}"/>
-                                            </MultiTrigger>
-                                            <MultiTrigger>
-                                                <MultiTrigger.Conditions>
-                                                    <Condition Property="Selector.IsSelectionActive" Value="True"/>
-                                                    <Condition Property="IsSelected" Value="True"/>
-                                                </MultiTrigger.Conditions>
-                                                <Setter Property="Background" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Background}"/>
-                                                <Setter Property="BorderBrush" TargetName="Bd" Value="{StaticResource Item.SelectedActive.Border}"/>
-                                            </MultiTrigger>
-                                            <Trigger Property="IsEnabled" Value="False">
-                                                <Setter Property="TextElement.Foreground" TargetName="Bd" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.Resources>
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Horizontal"></StackPanel>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListViewItem Width="60"
-                              ToolTip="Добавить на тот же уровень">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding AddProductionTaskCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Width="40"                                              Height="40"
-                           Margin="5">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Button Grid.Column="0" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Добавить на тот же уровень" Command="{Binding AddProductionTaskCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
                                 <BitmapImage UriSource="/Resources/Images/add_root.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>
-                    <ListViewItem Width="60"
-                              ToolTip="Добавить на уровень ниже">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding AddChildCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Width="40"
-                           Height="40"
-                           Margin="5">
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="1" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Повысить уровень" Command="{Binding LevelUpCommand}">
+                    <Button.Content>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/level_up.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Свернуть все" Command="{Binding RollUpAllCommand}">
+                    <Button.Content>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/roll_up.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="0" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Добавить на уровень ниже" Command="{Binding AddChildCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
                                 <BitmapImage UriSource="/Resources/Images/add_child.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>
-                    <ListViewItem x:Name="RemoveTaskItem" Width="60"
-                              ToolTip="Удалить задачу">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding DeleteProductionTaskCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Width="40" Height="40">
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="1" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Понизить уровень" Command="{Binding LevelDownCommand}">
+                    <Button.Content>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/level_down.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Развернуть все" Command="{Binding ExpandAllCommand}">
+                    <Button.Content>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/roll_down.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="3" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Поднять задачу" Command="{Binding UpTaskCommand}">
+                    <Button.Content>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/up_task.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Опустить задачу" Command="{Binding DownTaskCommand}">
+                    <Button.Content>
+                        <Image>
+                            <Image.Source>
+                                <BitmapImage UriSource="/Resources/Images/down_task.png"/>
+                            </Image.Source>
+                        </Image>
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="4" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Удалить задачу" Command="{Binding DeleteProductionTaskCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
                                 <BitmapImage UriSource="/Resources/Images/delete.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>
-                    <ListViewItem x:Name="LevelUpItem" Width="60"
-                              ToolTip="Повысить уровень">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding LevelUpCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_LevelUpAlt"
-                                     Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
-                    <ListViewItem x:Name="LevelDownItem" Width="60"
-                              ToolTip="Понизить уровень">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding LevelDownCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_LevelDownAlt"
-                                     Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
-                    <ListViewItem x:Name="ExpandAllItem" Width="60"
-                              ToolTip="Развернуть все">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding ExpandAllCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Regular_ArrowAltCircleDown"
-                                     Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
-                    <ListViewItem x:Name="HideAllItem" Width="60"
-                              ToolTip="Свернуть все">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding RollUpAllCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Regular_ArrowAltCircleUp"
-                                     Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
-                    <ListViewItem x:Name="UpdateModel" Width="60"
-                              ToolTip="Обновить">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding UpdateModelCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Width="40" Height="40">
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="4" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Обновить" Command="{Binding UpdateModelCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
                                 <BitmapImage UriSource="/Resources/Images/update.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>
-                    <ListViewItem x:Name="UpTask" Width="60"
-                              ToolTip="Поднять задачу">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding UpTaskCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_ArrowUp"
-                                             Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
-                    <ListViewItem x:Name="DownTask" Width="60"
-                              ToolTip="Опустить задачу">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding DownTaskCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <fa:ImageAwesome Icon="Solid_ArrowDown"
-                                             Style="{StaticResource TooltipIconStyle}"/>
-                    </ListViewItem>
-                    <ListViewItem x:Name="SetBold" Width="60"
-                              ToolTip="Жирный">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding SetBoldCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Height="40">
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="1" Margin="10 0 0 0">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding FontFamilies}" Style="{StaticResource SearchBoxStyle}"/>
+                <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding FontSizes}" Style="{StaticResource SearchBoxStyle}"/>
+                <Button Grid.Column="1" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Жирный" Command="{Binding SetBoldCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
                                 <BitmapImage UriSource="/Resources/Images/bold_button.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>
-                    <!--<ListViewItem x:Name="Undo" Width="60"
-                              ToolTip="Отменить изменения">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding UndoCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Width="40" Height="40">
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Курсив" Command="{Binding SetItalicCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/undo.png"/>
+                                <BitmapImage UriSource="/Resources/Images/italic_button.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>
-                    <ListViewItem x:Name="Redo" Width="60"
-                              ToolTip="Вернуть изменения">
-                        <ListViewItem.InputBindings>
-                            <MouseBinding Command="{Binding RedoCommand}" MouseAction="LeftClick"/>
-                        </ListViewItem.InputBindings>
-                        <Image Width="40" Height="40">
+                    </Button.Content>
+                </Button>
+                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Подчеркнутый" Command="{Binding SetUnderlineCommand}">
+                    <Button.Content>
+                        <Image>
                             <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/redo.png"/>
+                                <BitmapImage UriSource="/Resources/Images/underline_button.png"/>
                             </Image.Source>
                         </Image>
-                    </ListViewItem>-->
-                </ListView>
-                <StackPanel
-                    Grid.Column="1"
-                    Orientation="Horizontal"
-              Background="{StaticResource BackgroundBrush}">
-                    <Label Content="Поиск по "
-                   Style="{StaticResource LabelStyle}"
-                   VerticalAlignment="Center"/>
-                    <ComboBox Height="30"
-                      SelectedIndex="{Binding SelectedSearchIndex, UpdateSourceTrigger=PropertyChanged}"
-                      Style="{StaticResource SearchBoxStyle}"
-                      ItemContainerStyle="{StaticResource SearchBoxItemStyle}"
-                      ItemsSource="{Binding SearchComboBoxContent}"
-                      IsTextSearchEnabled="True"
-                      IsTextSearchCaseSensitive="False"
-                      IsEditable="True">
-                    </ComboBox>
-                    <TextBox Style="{StaticResource SearchStrStyle}"
+                    </Button.Content>
+                </Button>
+            </Grid>
+            <Grid Grid.Column="2" Margin="10 0 0 0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2.5*"/>
+                    <ColumnDefinition Width="1.5*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBox Style="{StaticResource SearchStrStyle}"
                      Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
-                     Width="200"
-                     Height="30"
-                     Margin="10 0 0 0"/>
+                     Grid.Row="1"
+                         Grid.Column="0" Grid.ColumnSpan="2"
+                         Margin="0 2 0 0"
+                         FontSize="18"/>
+                <Label Content="Поиск по "
+                   Style="{StaticResource LabelStyle}"
+                   Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right"/>
+                <ComboBox SelectedIndex="{Binding SelectedSearchIndex, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SearchBoxStyle}"
+                          ItemContainerStyle="{StaticResource SearchBoxItemStyle}"
+                          ItemsSource="{Binding SearchComboBoxContent}"
+                          Grid.Row="0"
+                          Grid.Column="1"
+                          IsTextSearchEnabled="True"
+                          IsTextSearchCaseSensitive="False"
+                          IsEditable="True"
+                          Margin="0 2 0 0"
+                          FontSize="18">
+                </ComboBox>
+                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left">
                     <Button Style="{StaticResource CircleButton}"
                     Height="30"
                     Width="30"
@@ -305,9 +254,6 @@
                                      Width="30"/>
                         </Button.Content>
                     </Button>
-                    <!--<Label Content="{Binding SearchResultString}"
-                   Style="{StaticResource LabelStyle}"
-                   VerticalAlignment="Center"/>-->
                 </StackPanel>
             </Grid>
         </Grid>
@@ -356,45 +302,54 @@
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="1">
-                            <Setter Property="Background" Value="Pink"/>
+                            <Setter Property="Background" Value="#F60395"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="2">
-                            <Setter Property="Background" Value="#8CA19A"/>
+                            <Setter Property="Background" Value="#DAE1DF"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="3">
-                            <Setter Property="Background" Value="#FDB11B"/>
+                            <Setter Property="Background" Value="#DF8B74"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="4">
                             <Setter Property="Background" Value="Yellow"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="5">
-                            <Setter Property="Background" Value="#0DCA8B"/>
+                            <Setter Property="Background" Value="#4CA243"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="6">
-                            <Setter Property="Background" Value="#E86DE7"/>
+                            <Setter Property="Background" Value="#E696E6"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="7">
-                            <Setter Property="Background" Value="#EED092"/>
+                            <Setter Property="Background" Value="#EBBC46"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="8">
-                            <Setter Property="Background" Value="#7A67E6"/>
+                            <Setter Property="Background" Value="#4955FF"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Completion}" Value="9">
-                            <Setter Property="Background" Value="#72AE3B"/>
+                            <Setter Property="Background" Value="#98C072"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Completion}" Value="10">
+                            <Setter Property="Background" Value="#32EB21"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding Task.Formatting.IsBold}" Value="True">
                             <Setter Property="FontWeight" Value="Bold"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Formatting.IsItalic}" Value="True">
+                            <Setter Property="FontStyle" Value="Italic"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Task.Formatting.IsUnderline}" Value="True">
+                            <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
                         </DataTrigger>
                         <!--E55151  7A67E6-->
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="Выполнение">
+                <DataGridTemplateColumn Header="Статус" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Left" TextWrapping="Wrap"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -413,6 +368,7 @@
                                 <ComboBoxItem Content="Склад ОЭЦ"/>
                                 <ComboBoxItem Content="Собрано по акту"/>
                                 <ComboBoxItem Content="Склад"/>
+                                <ComboBoxItem Content="Временная выдача"/>
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -432,12 +388,15 @@
                     </DataGridTemplateColumn.HeaderTemplate>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock MaxWidth="140"
+                            <Grid>
+                                <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
-                                       Text="{Binding Task.ManagDoc, UpdateSourceTrigger=PropertyChanged}"/>
+                                       Text="{Binding Task.ManagDoc, Mode=TwoWay}"/>
+                                <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenDocumentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                            </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
+                    <!--<DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <StackPanel>
                                 <TextBlock Text="Документ"/>
@@ -445,13 +404,13 @@
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MaxWidth="140"/>
-                                <TextBlock Text="Желаемая дата"/>
+                                <TextBlock Text="Планируемая дата"/>
                                 <DatePicker SelectedDate="{Binding Task.VishDate, UpdateSourceTrigger=PropertyChanged}"/>
-                                <TextBlock Text="Реальная дата"/>
+                                <TextBlock Text="Фактическая дата"/>
                                 <DatePicker SelectedDate="{Binding Task.RealDate, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
                         </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>-->
                 </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn Header="Изделие">
@@ -555,7 +514,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="200">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -563,7 +522,7 @@
                                                  Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12"/>
-                                <TextBlock Text="Давальческая"/>
+                                <TextBlock Text="Давальческое имущество" TextWrapping="Wrap"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
