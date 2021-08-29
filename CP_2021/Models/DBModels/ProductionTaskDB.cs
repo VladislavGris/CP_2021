@@ -45,6 +45,8 @@ namespace CP_2021.Models.DBModels
 
         public bool Expanded { get; set; }
 
+        public string EditingBy { get; set; }
+
         public virtual HierarchyDB MyParent { get; set; }
         public virtual List<HierarchyDB> ParentTo { get; set; }
         [Required]

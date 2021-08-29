@@ -127,3 +127,5 @@ alter table Manufacture
 add ExecutionAct bit not null default(0), ExecutionTerm date null, CalendarDays nvarchar(max), WorkingDays nvarchar(max), Note nvarchar(max)
 alter table In_Production
 add Note nvarchar(max) null
+alter table Production_Plan
+add EditingBy nvarchar(max) default('default') not null

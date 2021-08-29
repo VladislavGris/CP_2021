@@ -3,6 +3,8 @@ using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Utils;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
+using CP_2021.Infrastructure.Units;
+using System.Linq;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -119,9 +121,21 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             MessageBoxResult result = MessageBox.Show("Вы действительно хотите сохранить изменения?", "Сохранить", MessageBoxButton.YesNoCancel);
             if (result == MessageBoxResult.Yes)
             {
-                ApplicationUnitSingleton.GetInstance().dbUnit.Commit();   
+                _editableTask.EditingBy = "default";
+                ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
+                ((Window)p).Close();
             }
-            ((Window)p).Close();
+            else if(result == MessageBoxResult.No)
+            {
+                ApplicationUnitSingleton.GetInstance().dbUnit.Refresh();
+                ProductionTaskDB task = ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t=>t.Id == _editableTask.Id).FirstOrDefault();
+                if (task != null)
+                {
+                    task.EditingBy = "default";
+                    ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
+                }
+                ((Window)p).Close();
+            }
         }
 
         #endregion
