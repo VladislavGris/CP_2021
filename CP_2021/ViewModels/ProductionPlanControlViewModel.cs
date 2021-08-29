@@ -30,6 +30,7 @@ using log4net.Config;
 using System.Reflection;
 using CP_2021.ViewModels.DataWindowViewModels;
 using CP_2021.Views.Windows.DataWindows;
+using System.Windows.Data;
 
 namespace CP_2021.ViewModels
 {
@@ -1056,6 +1057,34 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region SelectionChangedCommand
+
+        public ICommand SelectionChangedCommand { get; }
+
+        private bool CanSelectionChangedCommandExecute(object p) => SelectedTask!=null;
+
+        private void OnSelectionChangedCommandExecuted(object p)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы хотите изменить статус?", "Изменение статуса", MessageBoxButton.YesNo);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    BindingExpression be = ((ComboBox)p).GetBindingExpression(ComboBox.SelectedIndexProperty);
+                    be.UpdateSource();
+                    switch (SelectedTask.Task.Completion)
+                    {
+                        case (short)TaskCompletion.VKOnStorage:
+                            SelectedTask.Task.Complectation.ComplectationDate = DateTime.Now;
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        #endregion
+
         #region OpenComplectationWindowCommand
 
         public ICommand OpenComplectationWindowCommand { get; }
@@ -1236,7 +1265,7 @@ namespace CP_2021.ViewModels
             OpenGivingWindowCommand = new LambdaCommand(OnOpenGivingWindowCommandExecuted, CanOpenGivingWindowCommandExecute);
             OpenManufactureWindowCommand = new LambdaCommand(OnOpenManufactureWindowCommandExecuted, CanOpenManufactureWindowCommandExecute);
             OpenInProductionWindowCommand = new LambdaCommand(OnOpenInProductionWindowCommandExecuted, CanOpenInProductionWindowCommandExecute);
-
+            SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
             #endregion
 
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };

@@ -354,11 +354,10 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox SelectedIndex="{Binding Task.Completion, UpdateSourceTrigger=PropertyChanged}"
+                            <ComboBox SelectedIndex="{Binding Task.Completion, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                       Background="Transparent"
                                       Style="{StaticResource SearchBoxStyle}">
                                 <ComboBoxItem Content="Не задано"/>
-
                                 <ComboBoxItem Content="Отработка документации"/>
                                 <ComboBoxItem Content="ВК на склад"/>
                                 <ComboBoxItem Content="В работе по кооперации"/>
@@ -369,6 +368,11 @@
                                 <ComboBoxItem Content="Собрано по акту"/>
                                 <ComboBoxItem Content="Склад"/>
                                 <ComboBoxItem Content="Временная выдача"/>
+                                <ie:Interaction.Triggers>
+                                    <ie:EventTrigger EventName="SelectionChanged">
+                                        <ie:InvokeCommandAction Command="{Binding DataContext.SelectionChangedCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type ComboBox}}}"/>
+                                    </ie:EventTrigger>
+                                </ie:Interaction.Triggers>
                             </ComboBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>

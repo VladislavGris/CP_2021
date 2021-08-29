@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CP_2021.Views.Windows.DataWindows"
         xmlns:vm="clr-namespace:CP_2021.ViewModels.DataWindowViewModels"
+        xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="ManufactureWindow" Height="535" Width="600" WindowStyle="None"
         Style="{StaticResource WindowStyle}"
@@ -77,8 +78,20 @@
                     </CheckBox>
                     <TextBox Text="{Binding EditableTask.Manufacture.SpecNum}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="3" Margin="0 0 10 0"/>
                     <DatePicker Grid.Row="4" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding EditableTask.Manufacture.ExecutionTerm, Mode=TwoWay}"/>
-                    <TextBox Text="{Binding EditableTask.Manufacture.CalendarDays}" FontSize="16" Grid.Column="1" Grid.Row="5" Margin="2.5 0 80 0"/>
-                    <TextBox Text="{Binding EditableTask.Manufacture.WorkingDays}" FontSize="16" Grid.Column="1" Grid.Row="6" Margin="2.5 0 80 0"/>
+                    <TextBox Text="{Binding EditableTask.Manufacture.CalendarDays}" FontSize="16" Grid.Column="1" Grid.Row="5" Margin="2.5 0 80 0">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="LostFocus">
+                                <ie:InvokeCommandAction Command="{Binding SetExecutionTermCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TextBox>
+                    <TextBox Text="{Binding EditableTask.Manufacture.WorkingDays}" FontSize="16" Grid.Column="1" Grid.Row="6" Margin="2.5 0 80 0">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="LostFocus">
+                                <ie:InvokeCommandAction Command="{Binding SetExecutionTermCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TextBox>
                     <DatePicker Grid.Row="7" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding EditableTask.Manufacture.FactDate, Mode=TwoWay}"/>
                     <CheckBox IsChecked="{Binding EditableTask.Manufacture.OnControl}" Grid.Column="1" Grid.Row="8" HorizontalAlignment="Left">
                         <CheckBox.LayoutTransform>

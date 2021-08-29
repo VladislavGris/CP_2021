@@ -148,4 +148,19 @@ namespace CP_2021.Models.DBModels
             unit.Commit();
         }
     }
+
+    enum TaskCompletion : short
+    {
+        NotDefined = 0,
+        Documentation,
+        VKOnStorage,
+        CooperationWork,
+        Work,
+        ActOrganization,
+        SKBCheck,
+        OEZStorage,
+        CollectedByAct,
+        Storage,
+        TimedExtradition
+    }
 }

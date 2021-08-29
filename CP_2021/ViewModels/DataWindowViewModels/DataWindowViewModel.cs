@@ -1,8 +1,10 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Singletons;
+using CP_2021.Infrastructure.Utils;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using System;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -76,6 +78,36 @@ namespace CP_2021.ViewModels.DataWindowViewModels
 
         #endregion
 
+        #region SetExecutionTermCommand
+
+        public ICommand SetExecutionTermCommand { get; }
+
+        private bool CanSetExecutionTermCommandExecute(object p) => true;
+
+        private void OnSetExecutionTermCommandExecuted(object p)
+        {
+            if((!String.IsNullOrEmpty(_editableTask.Manufacture.CalendarDays) || !String.IsNullOrEmpty(_editableTask.Manufacture.WorkingDays)) &&
+                _editableTask.Payment.IsFirstPayment)
+            {
+                int days;
+                if (!String.IsNullOrEmpty(_editableTask.Manufacture.CalendarDays)){
+                    if(Int32.TryParse(_editableTask.Manufacture.CalendarDays, out days))
+                    {
+                        _editableTask.Manufacture.ExecutionTerm = DateTime.Now.AddDays(days);
+                    }
+                }
+                else
+                {
+                    if (Int32.TryParse(_editableTask.Manufacture.WorkingDays, out days))
+                    {
+                        _editableTask.Manufacture.ExecutionTerm = WorkingDays.AddWorkingDays(DateTime.Now, days);
+                    }
+                }
+            }
+        }
+
+        #endregion
+
         #region SaveCommand
 
         public ICommand SaveCommand { get; }
@@ -107,6 +139,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             SavePaymentCommand = new LambdaCommand(OnSavePaymentCommandExecuted, CanSavePaymentCommandExecute);
             SaveLaborCostsCommand = new LambdaCommand(OnSaveLaborCostsCommandExecuted, CanSaveLaborCostsCommandExecute);
             SaveCommand = new LambdaCommand(OnSaveCommandExecuted, CanSaveCommandExecute);
+            SetExecutionTermCommand = new LambdaCommand(OnSetExecutionTermCommandExecuted, CanSetExecutionTermCommandExecute);
         }
     }
 }

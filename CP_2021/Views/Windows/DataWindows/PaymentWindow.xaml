@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CP_2021.Views.Windows.DataWindows"
         xmlns:vm="clr-namespace:CP_2021.ViewModels.DataWindowViewModels"
+        xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="PaymentWindow" Height="470" Width="600" WindowStyle="None"
         Style="{StaticResource WindowStyle}"
@@ -77,6 +78,11 @@
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Checked">
+                                <ie:InvokeCommandAction Command="{Binding SetExecutionTermCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
                     </CheckBox>
                     <CheckBox Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsSecondPayment, Mode=TwoWay}">
                         <CheckBox.LayoutTransform>
@@ -107,7 +113,7 @@
                     <TextBlock Text="Примечание" HorizontalAlignment="Center" FontSize="18"/>
                     <TextBox Width="500" Height="100" FontSize="16" Text="{Binding EditableTask.Payment.Note, Mode=TwoWay}"/>
                 </StackPanel>
-                <Button Content="Сохранить" Width="150" Margin="0 10 10 0" HorizontalAlignment="Right" FontSize="18" Command="{Binding SavePaymentCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                <Button Content="Сохранить" Width="150" Margin="0 10 10 0" HorizontalAlignment="Right" FontSize="18" Command="{Binding SaveCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
             </StackPanel>
         </Grid>
     </Border>
