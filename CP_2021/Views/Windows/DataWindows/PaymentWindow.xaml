@@ -62,7 +62,7 @@
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="0.2*"/>
+                        <ColumnDefinition Width="0.3*"/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
                         <ColumnDefinition/>
@@ -73,9 +73,21 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsFirstPayment, Mode=TwoWay}"/>
-                    <CheckBox Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsSecondPayment, Mode=TwoWay}"/>
-                    <CheckBox Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsFullPayment, Mode=TwoWay}"/>
+                    <CheckBox Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsFirstPayment, Mode=TwoWay}">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                    <CheckBox Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsSecondPayment, Mode=TwoWay}">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
+                    <CheckBox Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsFullPayment, Mode=TwoWay}">
+                        <CheckBox.LayoutTransform>
+                            <ScaleTransform ScaleX="2" ScaleY="2"/>
+                        </CheckBox.LayoutTransform>
+                    </CheckBox>
 
                     <TextBlock Text="Оплата 50% 1 часть" Grid.Row="1" Grid.Column="1" FontSize="18"/>
                     <TextBlock Text="Оплата 50% 2 часть" Grid.Row="2" Grid.Column="1" FontSize="18"/>

@@ -1056,6 +1056,78 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region OpenComplectationWindowCommand
+
+        public ICommand OpenComplectationWindowCommand { get; }
+
+        private bool CanOpenComplectationWindowCommandExecute(object p) => true;
+
+        private void OnOpenComplectationWindowCommandExecuted(object p)
+        {
+            DataWindowViewModel laborVm = new DataWindowViewModel();
+            laborVm.SetEditableTask(SelectedTask.Task);
+            ComplectationWindow window = new ComplectationWindow();
+            window.Closed += Window_Closed;
+            window.DataContext = laborVm;
+            window.Show();
+        }
+
+        #endregion
+
+        #region OpenGivingWindowCommand
+
+        public ICommand OpenGivingWindowCommand { get; }
+
+        private bool CanOpenGivingWindowCommandExecute(object p) => true;
+
+        private void OnOpenGivingWindowCommandExecuted(object p)
+        {
+            DataWindowViewModel laborVm = new DataWindowViewModel();
+            laborVm.SetEditableTask(SelectedTask.Task);
+            GivingWindow window = new GivingWindow();
+            window.Closed += Window_Closed;
+            window.DataContext = laborVm;
+            window.Show();
+        }
+
+        #endregion
+
+        #region OpenManufactureWindowCommand
+
+        public ICommand OpenManufactureWindowCommand { get; }
+
+        private bool CanOpenManufactureWindowCommandExecute(object p) => true;
+
+        private void OnOpenManufactureWindowCommandExecuted(object p)
+        {
+            DataWindowViewModel laborVm = new DataWindowViewModel();
+            laborVm.SetEditableTask(SelectedTask.Task);
+            ManufactureWindow window = new ManufactureWindow();
+            window.Closed += Window_Closed;
+            window.DataContext = laborVm;
+            window.Show();
+        }
+
+        #endregion
+
+        #region OpenInProductionWindowCommand
+
+        public ICommand OpenInProductionWindowCommand { get; }
+
+        private bool CanOpenInProductionWindowCommandExecute(object p) => true;
+
+        private void OnOpenInProductionWindowCommandExecuted(object p)
+        {
+            DataWindowViewModel laborVm = new DataWindowViewModel();
+            laborVm.SetEditableTask(SelectedTask.Task);
+            InProductionWindow window = new InProductionWindow();
+            window.Closed += Window_Closed;
+            window.DataContext = laborVm;
+            window.Show();
+        }
+
+        #endregion
+
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
@@ -1160,6 +1232,11 @@ namespace CP_2021.ViewModels
             OpenPaymentWindowCommand = new LambdaCommand(OnOpenPaymentWindowCommandExecuted, CanOpenPaymentWindowCommandExecute);
             OpenLaborCostsWindowCommand = new LambdaCommand(OnOpenLaborCostsWindowCommandExecuted, CanOpenLaborCostsWindowCommandExecute);
             OpenDocumentWindowCommand = new LambdaCommand(OnOpenDocumentWindowCommandExecuted, CanOpenDocumentWindowCommandExecute);
+            OpenComplectationWindowCommand = new LambdaCommand(OnOpenComplectationWindowCommandExecuted, CanOpenComplectationWindowCommandExecute);
+            OpenGivingWindowCommand = new LambdaCommand(OnOpenGivingWindowCommandExecuted, CanOpenGivingWindowCommandExecute);
+            OpenManufactureWindowCommand = new LambdaCommand(OnOpenManufactureWindowCommandExecuted, CanOpenManufactureWindowCommandExecute);
+            OpenInProductionWindowCommand = new LambdaCommand(OnOpenInProductionWindowCommandExecuted, CanOpenInProductionWindowCommandExecute);
+
             #endregion
 
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };

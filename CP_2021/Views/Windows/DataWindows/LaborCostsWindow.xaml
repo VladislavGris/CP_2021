@@ -49,7 +49,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Проект" FontSize="18" Grid.Column="0" Grid.Row="0" Margin="10 0 0 0"/>
-                    <TextBlock Text="Субконта" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="10 0 0 0"/>
+                    <TextBlock Text="Субконто" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="10 0 0 0"/>
                     <TextBlock Text="Дата" FontSize="18" Grid.Column="0" Grid.Row="2" Margin="10 0 0 0"/>
                     <TextBox Text="{Binding EditableTask.LaborCosts.Project}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0"/>
                     <TextBox Text="{Binding EditableTask.LaborCosts.Subcont}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0"/>

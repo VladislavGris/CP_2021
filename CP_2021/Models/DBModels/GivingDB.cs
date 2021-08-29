@@ -27,6 +27,10 @@ namespace CP_2021.Models.DBModels
         public DateTime? ReceivingDate { get; set; }
 
         public bool ReturnGiving { get; set; }
+        //Закупное имущество
+        public string PurchaseGoods { get; set; }
+        //Примечание
+        public string Note { get; set; }
 
         [Column("Production_Task_Id")]
         public Guid ProductionTaskId { get; set; }
@@ -41,6 +45,8 @@ namespace CP_2021.Models.DBModels
             giving.ReturnReport = this.ReturnReport;
             giving.ReceivingDate = this.ReceivingDate;
             giving.ReturnGiving = this.ReturnGiving;
+            giving.PurchaseGoods = this.PurchaseGoods;
+            giving.Note = this.Note;
             return giving;
         }
     }

@@ -28,6 +28,17 @@ namespace CP_2021.Models.DBModels
 
         public DateTime? FactDate { get; set; }
 
+        //Акт выполненных работ
+        public bool ExecutionAct { get; set; }
+        //Срок изготовл. по спецификации
+        public DateTime? ExecutionTerm { get; set; }
+        //Календарные дни
+        public string CalendarDays { get; set; }
+        //Рабочие дни
+        public string WorkingDays { get; set; }
+        //Примечание
+        public string Note { get; set; }
+
         [Column("Production_Task_Id")]
         public Guid ProductionTaskId { get; set; }
         public virtual ProductionTaskDB ProductionTask { get; set; }
@@ -42,6 +53,10 @@ namespace CP_2021.Models.DBModels
             manuf.OnControl = this.OnControl;
             manuf.PredictDate = this.PredictDate;
             manuf.FactDate = this.FactDate;
+            manuf.ExecutionAct = this.ExecutionAct;
+            manuf.ExecutionTerm = this.ExecutionTerm;
+            manuf.CalendarDays = this.CalendarDays;
+            manuf.WorkingDays = this.WorkingDays;
             return manuf;
         }
     }

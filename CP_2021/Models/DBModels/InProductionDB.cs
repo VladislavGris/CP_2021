@@ -28,6 +28,8 @@ namespace CP_2021.Models.DBModels
 
         [Column("Projected_Date", TypeName = "date")]
         public DateTime? ProjectedDate { get; set; }
+        //Примечание
+        public string Note { get; set; }
 
         [Column("Production_Task_Id")]
         public Guid ProductionTaskId { get; set; }
