@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:convert="clr-namespace:CP_2021.Infrastructure.Converters"
+                    xmlns:convertComp="clr-namespace:CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation"
+                    xmlns:convertUtil="clr-namespace:CP_2021.Infrastructure.Converters.Utility"
                     xmlns:fa="http://schemas.fontawesome.com/icons/">
 
     <!--Converters-->    
@@ -23,6 +25,10 @@
     <convert:SendReportButtonVisibilityConverter x:Key="SendReportConverter"/>
     <convert:MultiParameterConverter x:Key="MultiParameterConverter"/>
     <convert:TextBoxToDecimalConverter x:Key="StringToDecimalConverter"/>
+    <convertComp:PercentageVisibility x:Key="PercentageVisibility"/>
+    <convertComp:RackVisibility x:Key="RackVisibility"/>
+    <convertComp:ShelfVisibility x:Key="ShelfVisibility"/>
+    <convertUtil:AddingPercentage x:Key="AddingPercentage"/>
 
     <!--Brushes #575757 -->
     <SolidColorBrush x:Key="ForegroundBrush" Color="White" />

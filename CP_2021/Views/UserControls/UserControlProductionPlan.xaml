@@ -467,8 +467,27 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock Text="{Binding Task.Complectation.Complectation}"/>
-                                <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenComplectationWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding Task.Complectation.Complectation}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"/>
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding Task, Converter={StaticResource PercentageVisibility}}">
+                                    <TextBlock Text="{Binding Task.Complectation.Percentage,Converter={StaticResource AddingPercentage}}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
+                                </Border>
+
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1" Background="Yellow" Visibility="{Binding Task, Converter={StaticResource RackVisibility}}">
+                                    <TextBlock Text="{Binding Task.Complectation.Rack}" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="2" BorderThickness="1" Background="Yellow" Visibility="{Binding Task, Converter={StaticResource ShelfVisibility}}">
+                                    <TextBlock Text="{Binding Task.Complectation.Shelf}" HorizontalAlignment="Center"/>
+                                </Border>
+                                <Button Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenComplectationWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
