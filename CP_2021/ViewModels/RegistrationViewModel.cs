@@ -15,18 +15,12 @@ using Microsoft.Data.SqlClient;
 using CP_2021.Models.DBModels;
 using CP_2021.Infrastructure;
 using CP_2021.Infrastructure.Singletons;
+using Microsoft.EntityFrameworkCore;
 
 namespace CP_2021.ViewModels
 {
     class RegistrationViewModel : ViewModelBase
     {
-        #region Поля
-
-        private ApplicationUnit _unit;
-        private readonly string FIND_USER = "SELECT * FROM Users WHERE Login=@login";
-
-        #endregion
-
         #region Свойства
 
         #region Login
@@ -109,23 +103,32 @@ namespace CP_2021.ViewModels
         {
             CheckLoginPasswordLength();
             CheckNameSurnameLength();
-
-            var user = GetUsersByLoginFromDB();
-            if (user.ToList().Count > 0)
+            try
             {
-                MessageBox.Show("Такой логин уже существует");
-                return;
+                UserDB user;
+                using (ApplicationContext context = new ApplicationContext())
+                {
+                    user = context.Users.Where(u => u.Login == Login).FirstOrDefault();
+                    if (user != null)
+                    {
+                        MessageBox.Show("Такой логин уже существует");
+                        return;
+                    }
+                    string passwordHash = PasswordHashing.CreateHash(Password);
+                    UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
+                    context.Users.Add(newUser);
+                    context.SaveChanges();
+                    UserDataSingleton.GetInstance().SetUser(newUser);
+                }
+                ProductionPlan plan = new ProductionPlan();
+                ((RegistrationScreen)p).Close();
+                plan.Show();
             }
-            string passwordHash = PasswordHashing.CreateHash(Password);
-            UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
-
-            _unit.DBUsers.Insert(newUser);
-            _unit.Commit();
-
-            UserDataSingleton.GetInstance().SetUser(newUser);
-            ProductionPlan plan = new ProductionPlan();
-            ((RegistrationScreen)p).Close();
-            plan.Show();
+            catch(SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+                Application.Current.Shutdown();
+            }
         }
 
         #endregion
@@ -152,12 +155,6 @@ namespace CP_2021.ViewModels
             }
         }
 
-        private IEnumerable<UserDB> GetUsersByLoginFromDB()
-        {
-            SqlParameter loginParam = new SqlParameter("@login", Login);
-            return _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
-        }
-
         #endregion
 
         public RegistrationViewModel()
@@ -166,7 +163,6 @@ namespace CP_2021.ViewModels
             OpenLoginWindowCommand = new LambdaCommand(OnOpenLoginWindowCommandExecuted, CanOpenLoginWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
             #endregion
-            _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
         }
     }
 }

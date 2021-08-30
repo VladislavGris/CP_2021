@@ -21,13 +21,6 @@ namespace CP_2021.ViewModels
 {
     class LoginViewModel : ViewModelBase
     {
-        #region Поля
-
-        private readonly string FIND_USER = "SELECT * FROM Users WHERE Login=@login";
-        private ApplicationUnit _unit;
-
-        #endregion
-
         #region Свойства
 
         #region Login
@@ -86,17 +79,29 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
                 return;
             }
-            var user = GetUsersByLoginFormDB();
-            if (user.ToList().Count != 0 && PasswordHashing.ValidatePassword(Password, user.ToList().ElementAt(0).Password))
+            try
             {
-                UserDataSingleton.GetInstance().SetUser(user.ToList().ElementAt(0));
-                ProductionPlan plan = new ProductionPlan();
-                ((LoginScreen)p).Close();
-                plan.Show();
+                UserDB user;
+                using (ApplicationContext context = new ApplicationContext())
+                {
+                    user = context.Users.Where(u => u.Login == Login).FirstOrDefault();
+                }
+                if (user != null && PasswordHashing.ValidatePassword(Password, user.Password))
+                {
+                    UserDataSingleton.GetInstance().SetUser(user);
+                    ProductionPlan plan = new ProductionPlan();
+                    ((LoginScreen)p).Close();
+                    plan.Show();
+                }
+                else
+                {
+                    MessageBox.Show("Логин или пароль введены неверно");
+                }
             }
-            else
+            catch (SqlException e)
             {
-                MessageBox.Show("Логин или пароль введены неверно");
+                MessageBox.Show(e.Message);
+                Application.Current.Shutdown();
             }
         }
 
@@ -111,27 +116,12 @@ namespace CP_2021.ViewModels
             return (Login.Length < 4 || Login.Length > 15) || (Password.Length < 4 || Password.Length > 15);
         }
 
-        private IEnumerable<UserDB> GetUsersByLoginFormDB()
-        {
-            SqlParameter loginParam = new SqlParameter("@login", Login);
-            return _unit.DBUsers.GetWithRawSql(FIND_USER, loginParam);
-        }
-
         #endregion
 
         public LoginViewModel()
         {
             OpenRegistrationWindowCommand = new LambdaCommand(OnOpenRegistrationWindowCommandExecuted, CanOpenRegistrationWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
-            try
-            {
-                _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            }
-            catch (SqlException e)
-            {
-                MessageBox.Show(e.Message);
-                Application.Current.Shutdown();
-            }
         }
     }
 }

@@ -15,6 +15,18 @@ namespace CP_2021.Data
 {
     class ApplicationContext : DbContext
     {
+        public virtual DbSet<ProductionTaskDB> Production_Plan { get; set; }
+        public virtual DbSet<ComplectationDB> Complectation { get; set; }
+        public virtual DbSet<GivingDB> Giving { get; set; }
+        public virtual DbSet<InProductionDB> In_Production { get; set; }
+        public virtual DbSet<HierarchyDB> HierarchyDB { get; set; }
+        public virtual DbSet<UserDB> Users { get; set; }
+        public virtual DbSet<FormattingDB> Formatting { get; set; }
+        public virtual DbSet<LaborCostsDB> LaborCosts { get; set; }
+        public virtual DbSet<ManufactureDB> Manufacture { get; set; }
+        public virtual DbSet<PaymentDB> Payment { get; set; }
+        public virtual DbSet<ReportDB> Reports { get; set; }
+        public virtual DbSet<TaskDB> Tasks { get; set; }
 
         public ApplicationContext() : base() {
             //Database.EnsureDeleted();

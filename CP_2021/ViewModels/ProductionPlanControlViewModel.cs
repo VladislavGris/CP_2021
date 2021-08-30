@@ -309,8 +309,8 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.ToString());
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            //Update();
+            //SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
@@ -1011,35 +1011,39 @@ namespace CP_2021.ViewModels
             try
             {
                 //Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
+                using(ApplicationContext context = new ApplicationContext())
                 {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel paymentVM = new DataWindowViewModel();
-                    paymentVM.SetEditableTask(SelectedTask.Task);
-                    PaymentWindow paymentWindow = new PaymentWindow();
-                    paymentWindow.Closed += Window_Closed;
-                    paymentWindow.DataContext = paymentVM;
-                    paymentWindow.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
+                    ProductionTaskDB task = context.Production_Plan.Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                    //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                    if (task == null)
                     {
-                        MessageBox.Show($"Строка уже редактируется");
+                        MessageBox.Show("Изделие было удалено");
+                        Update();
+                    }
+                    if (task.EditingBy == "default")
+                    {
+                        task.EditingBy = UserDataSingleton.GetInstance().user.Login;
+                        context.SaveChanges();
+                        DataWindowViewModel paymentVM = new DataWindowViewModel();
+                        paymentVM.SetEditableTask(SelectedTask.Task);
+                        PaymentWindow paymentWindow = new PaymentWindow();
+                        paymentWindow.Closed += Window_Closed;
+                        paymentWindow.DataContext = paymentVM;
+                        paymentWindow.Show();
                     }
                     else
                     {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
+                        UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
+                        if (user == null)
+                        {
+                            MessageBox.Show($"Строка уже редактируется");
+                        }
+                        else
+                        {
+                            MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
+                        }
 
+                    }
                 }
             }
             catch(Exception ex)
