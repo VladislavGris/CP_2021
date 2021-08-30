@@ -307,7 +307,7 @@ namespace CP_2021.ViewModels
             catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.Message);
+                _log.Error("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.ToString());
             }
             Update();
             SelectedTask = ProductionTask.FindByTask(Model, dbTask);
@@ -1010,7 +1010,7 @@ namespace CP_2021.ViewModels
         {
             try
             {
-                Unit.Refresh();
+                //Unit.Refresh();
                 ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
                 if (task == null)
                 {
@@ -1153,7 +1153,9 @@ namespace CP_2021.ViewModels
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
             Update();
+            SelectedTask = ProductionTask.FindByTask(Model,task);
         }
 
         #endregion

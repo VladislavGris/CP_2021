@@ -88,6 +88,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
 
         private void OnSetExecutionTermCommandExecuted(object p)
         {
+            Debug.WriteLine("Editing");
             if((!String.IsNullOrEmpty(_editableTask.Manufacture.CalendarDays) || !String.IsNullOrEmpty(_editableTask.Manufacture.WorkingDays)) &&
                 _editableTask.Payment.IsFirstPayment)
             {
@@ -121,7 +122,12 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             MessageBoxResult result = MessageBox.Show("Вы действительно хотите сохранить изменения?", "Сохранить", MessageBoxButton.YesNoCancel);
             if (result == MessageBoxResult.Yes)
             {
-                _editableTask.EditingBy = "default";
+                ProductionTaskDB task = ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t => t.Id == _editableTask.Id).FirstOrDefault();
+                if (task != null)
+                {
+                    task.EditingBy = "default";
+                    
+                }
                 ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
                 ((Window)p).Close();
             }

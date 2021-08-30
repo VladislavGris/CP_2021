@@ -1,4 +1,4 @@
-use CompanyPlannerDB
+use MainCompanyPlannerDB
 go
 SET ANSI_NULLS ON
 GO
