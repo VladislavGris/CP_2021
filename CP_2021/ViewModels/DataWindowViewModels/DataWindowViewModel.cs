@@ -9,6 +9,7 @@ using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
+using CP_2021.Data;
 
 namespace CP_2021.ViewModels.DataWindowViewModels
 {
@@ -126,19 +127,20 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                 if (task != null)
                 {
                     task.EditingBy = "default";
-                    
                 }
                 ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
                 ((Window)p).Close();
             }
             else if(result == MessageBoxResult.No)
             {
-                ApplicationUnitSingleton.GetInstance().dbUnit.Refresh();
-                ProductionTaskDB task = ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t=>t.Id == _editableTask.Id).FirstOrDefault();
-                if (task != null)
+                using(ApplicationContext context = new ApplicationContext())
                 {
-                    task.EditingBy = "default";
-                    ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
+                    var task = context.Production_Plan.Where(p=>p.Id ==  _editableTask.Id).FirstOrDefault();
+                    if (task != null)
+                    {
+                        task.EditingBy = "default";
+                    }
+                    context.SaveChanges();
                 }
                 ((Window)p).Close();
             }

@@ -105,21 +105,18 @@ namespace CP_2021.ViewModels
             CheckNameSurnameLength();
             try
             {
-                UserDB user;
-                using (ApplicationContext context = new ApplicationContext())
+                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                UserDB user = unit.DBUsers.Get().Where(u=>u.Login == Login).FirstOrDefault();
+                if (user != null)
                 {
-                    user = context.Users.Where(u => u.Login == Login).FirstOrDefault();
-                    if (user != null)
-                    {
-                        MessageBox.Show("Такой логин уже существует");
-                        return;
-                    }
-                    string passwordHash = PasswordHashing.CreateHash(Password);
-                    UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
-                    context.Users.Add(newUser);
-                    context.SaveChanges();
-                    UserDataSingleton.GetInstance().SetUser(newUser);
+                    MessageBox.Show("Такой логин уже существует");
+                    return;
                 }
+                string passwordHash = PasswordHashing.CreateHash(Password);
+                UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
+                unit.DBUsers.Insert(newUser);
+                unit.Commit();
+                UserDataSingleton.GetInstance().SetUser(newUser);
                 ProductionPlan plan = new ProductionPlan();
                 ((RegistrationScreen)p).Close();
                 plan.Show();

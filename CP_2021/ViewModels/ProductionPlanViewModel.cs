@@ -29,7 +29,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region ButtonCloseMenuVisibility
 
         private Visibility _ButtonCloseMenuVisibility = Visibility.Collapsed;
@@ -45,7 +44,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region ButtonOpenMenuVisibility
 
         private Visibility _ButtonOpenMenuVisibility = Visibility.Visible;
@@ -61,39 +59,71 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
-        #region Title
-        private string _Title = "Company Planner";
-
-        public string Title
-        {
-            get => _Title;
-            set => Set(ref _Title, value);
-        }
-        #endregion
-
         #region User
         private UserDB _user;
-
+        // Через Position пользователя осуществляется вилимость кнопок боковой панели окна
         public UserDB User
         {
             get => _user;
             set => Set(ref _user, value);
         }
         #endregion
+        #region ProductionPlanControl
+        private UserControlProductionPlan _planControl;
 
-        #region Unit
-
-        private ApplicationUnit _unit;
-
-        public ApplicationUnit Unit
+        public UserControlProductionPlan PlanControl
         {
-            get => _unit;
-            set => Set(ref _unit, value);
+            get => _planControl;
+            set => Set(ref _planControl, value);
         }
-
         #endregion
+        #region Controls
+        #region AdminControl
+        private UserControlAdministrativePannel _adminControl;
 
+        public UserControlAdministrativePannel AdminControl
+        {
+            get => _adminControl;
+            set => Set(ref _adminControl, value);
+        }
+        #endregion
+        #region GivenTaskControl
+        private UserControlGivenTasks _givenTaskControl;
+
+        public UserControlGivenTasks GivenTaskControl
+        {
+            get => _givenTaskControl;
+            set => Set(ref _givenTaskControl, value);
+        }
+        #endregion
+        #region MyTasksControl
+        private UserControlTasks _myTasksControl;
+
+        public UserControlTasks MyTasksControl
+        {
+            get => _myTasksControl;
+            set => Set(ref _myTasksControl, value);
+        }
+        #endregion
+        #region ReportsControl
+        private UserControlReports _reportsControl;
+
+        public UserControlReports ReportsControl
+        {
+            get => _reportsControl;
+            set => Set(ref _reportsControl, value);
+        }
+        #endregion
+        #region HelpControl
+        private UserControlHelp _helpControl;
+
+        public UserControlHelp HelpControl
+        {
+            get => _helpControl;
+            set => Set(ref _helpControl, value);
+        }
+        #endregion
+        #endregion
 
         #endregion
 
@@ -112,7 +142,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region ButtonOpenMenuCommand
 
         public ICommand ButtonOpenMenuCommand { get; }
@@ -141,22 +170,22 @@ namespace CP_2021.ViewModels
             switch (list.Name)
             {
                 case "ItemProductionPlan":
-                    InitProductionPlanControl();
+                    SetPlanCurrent();
                     break;
                 case "ItemReports":
-                    InitReports();
+                    SetReportsCurrent();
                     break;
                 case "ItemTasks":
-                    InitMyTasks();
+                    SetMyTasksCurrent();
                     break;
                 case "ItemHelp":
-                    ContentContainerContent = new UserControlHelp();
+                    SetHelpCurrent();
                     break;
                 case "ItemGivenTasks":
-                    InitGivenTasksControl();
+                    SetGevenTasksCurrent();
                     break;
                 case "ItemAdministrativePannel":
-                    InitAdministrativePannelControl();
+                    SetAdminPannelCurrent();
                     break;
                 case "ItemLogOut":
                     MessageBoxResult result = MessageBox.Show("Вы действительно хотите выйти", "Выход", MessageBoxButton.YesNo);
@@ -185,7 +214,7 @@ namespace CP_2021.ViewModels
 
         private void OnWindowLoadedCommandExecuted(object p)
         {
-            InitProductionPlanControl();
+            SetPlanCurrent();
         }
 
         #endregion
@@ -194,39 +223,57 @@ namespace CP_2021.ViewModels
 
         #region Методы
 
-        private void InitProductionPlanControl()
+        private void SetPlanCurrent()
         {
-            UserControlProductionPlan control = new UserControlProductionPlan();
-            control.DataContext = new ProductionPlanControlViewModel();
-            ContentContainerContent = control;
+            if (PlanControl is null)
+            {
+                PlanControl = new UserControlProductionPlan();
+            }
+            ContentContainerContent = PlanControl;
         }
-
-        private void InitAdministrativePannelControl()
+        private void SetAdminPannelCurrent()
         {
-            UserControlAdministrativePannel pannel = new UserControlAdministrativePannel();
-            pannel.DataContext = new AdministrationPannelViewModel();
-            ContentContainerContent = pannel;
+            if(AdminControl is null)
+            {
+                AdminControl = new UserControlAdministrativePannel();
+            }
+            
+            ContentContainerContent = AdminControl;
         }
-
-        private void InitGivenTasksControl()
+        private void SetGevenTasksCurrent()
         {
-            UserControlGivenTasks tasks = new UserControlGivenTasks();
-            tasks.DataContext = new GivenTasksViewModel();
-            ContentContainerContent = tasks;
+            if(GivenTaskControl is null)
+            {
+                GivenTaskControl = new UserControlGivenTasks();
+            }
+            
+            ContentContainerContent = GivenTaskControl;
         }
-
-        private void InitMyTasks()
+        private void SetMyTasksCurrent()
         {
-            UserControlTasks tasks = new UserControlTasks();
-            tasks.DataContext = new MyTasksViewModel();
-            ContentContainerContent = tasks;
+            if(MyTasksControl is null)
+            {
+                MyTasksControl = new UserControlTasks();
+            }
+            
+            ContentContainerContent = MyTasksControl;
         }
-
-        private void InitReports()
+        private void SetReportsCurrent()
         {
-            UserControlReports reports = new UserControlReports();
-            reports.DataContext = new ReportsViewModel();
-            ContentContainerContent = reports;
+            if(ReportsControl is null)
+            {
+                ReportsControl = new UserControlReports();
+            }
+            
+            ContentContainerContent = ReportsControl;
+        }
+        private void SetHelpCurrent()
+        {
+            if(HelpControl is null)
+            {
+                HelpControl = new UserControlHelp();
+            }
+            ContentContainerContent = HelpControl;
         }
 
         #endregion
@@ -242,7 +289,6 @@ namespace CP_2021.ViewModels
             #endregion
 
             User = UserDataSingleton.GetInstance().user;
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
         }
     }
 }

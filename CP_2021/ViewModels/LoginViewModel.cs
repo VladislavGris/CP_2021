@@ -16,12 +16,17 @@ using System.Windows;
 using CP_2021.Infrastructure;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Models.DBModels;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading;
 
 namespace CP_2021.ViewModels
 {
     class LoginViewModel : ViewModelBase
     {
         #region Свойства
+
+        Thread _backgroundThread;
 
         #region Login
 
@@ -43,6 +48,30 @@ namespace CP_2021.ViewModels
         {
             get => _password;
             set => Set(ref _password, value);
+        }
+
+        #endregion
+
+        #region LoadingVisibility
+
+        private Visibility _loadingVisibility = Visibility.Hidden;
+
+        public Visibility LoadingVisibility
+        {
+            get => _loadingVisibility;
+            set => Set(ref _loadingVisibility, value);
+        }
+
+        #endregion
+
+        #region LoadingSpin
+
+        private bool _loadingSpin = false;
+
+        public bool LoadingSpin
+        {
+            get => _loadingSpin;
+            set => Set(ref _loadingSpin, value);
         }
 
         #endregion
@@ -74,35 +103,58 @@ namespace CP_2021.ViewModels
 
         private void OnSubmitCommandExecuted(object p)
         {
-            if(LoginOrPasswordHasIncorrectLength())
+            if (!_backgroundThread.IsAlive)
+            {
+                // Отображение вращающего элемента, изображающего загрузку
+                LoadingVisibility = Visibility.Visible;
+                // Созадние потока для входа в систему
+                _backgroundThread = new Thread(new ThreadStart(() => TryLogin((Window)p)));
+                _backgroundThread.Start();
+            }
+            
+            //await Task.Run(() => TryLogin((Window)p));
+        }
+
+        private void TryLogin(Window currentWindow)
+        {
+            if (!LoginOrPasswordHasIncorrectLength())
+            {
+                try
+                {
+                    UserDB user = ApplicationUnitSingleton.GetInstance().dbUnit.DBUsers.Get().Where(u => u.Login == Login).FirstOrDefault();
+
+                    if (user != null && PasswordHashing.ValidatePassword(Password, user.Password))
+                    {
+                        UserDataSingleton.GetInstance().SetUser(user);
+                        // Вызов через диспетчер приложения т.к. ЭУ изменяется и создается только из главного потока
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            var plan = new ProductionPlan();
+                            plan.Show();
+                            currentWindow.Close();
+                        });
+                    }
+                    else
+                    {
+                        MessageBox.Show("Логин или пароль введены неверно");
+                    }
+                }
+                catch (SqlException e)
+                {
+                    // Ошибка подключения к базе данных
+                    MessageBox.Show(e.Message);
+                    Application.Current.Shutdown();
+                }
+            }
+            else
             {
                 MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
-                return;
             }
-            try
+            // Остановка отображения загрузки
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                UserDB user;
-                using (ApplicationContext context = new ApplicationContext())
-                {
-                    user = context.Users.Where(u => u.Login == Login).FirstOrDefault();
-                }
-                if (user != null && PasswordHashing.ValidatePassword(Password, user.Password))
-                {
-                    UserDataSingleton.GetInstance().SetUser(user);
-                    ProductionPlan plan = new ProductionPlan();
-                    ((LoginScreen)p).Close();
-                    plan.Show();
-                }
-                else
-                {
-                    MessageBox.Show("Логин или пароль введены неверно");
-                }
-            }
-            catch (SqlException e)
-            {
-                MessageBox.Show(e.Message);
-                Application.Current.Shutdown();
-            }
+                LoadingVisibility = Visibility.Hidden;
+            });
         }
 
         #endregion
@@ -122,6 +174,9 @@ namespace CP_2021.ViewModels
         {
             OpenRegistrationWindowCommand = new LambdaCommand(OnOpenRegistrationWindowCommandExecuted, CanOpenRegistrationWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
+
+            _backgroundThread = new Thread(new ThreadStart(()=>Console.Write("")));
+            _backgroundThread.IsBackground = true;
         }
     }
 }

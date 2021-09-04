@@ -46,10 +46,14 @@
                         <b:PasswordBoxBehavior Password="{Binding Password, Mode=TwoWay}"/>
                     </ie:Interaction.Behaviors>
                 </PasswordBox>
-                <Button Content="Вход"
+                <Grid>
+                    <Button Content="Вход"
                         Style="{StaticResource EnterButton}"
                         Command="{Binding SubmitCommand}"
                         CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                    <fa:ImageAwesome Icon="Solid_Redo" Spin="True" Visibility="{Binding LoadingVisibility}" Height="20" Width="20" HorizontalAlignment="Right" Margin="0 0 35 0" Foreground="{StaticResource ForegroundBrush}"/>
+                </Grid>
+                
                 <StackPanel Orientation="Horizontal"
                             HorizontalAlignment="Center">
                     <Label Content="Не зарегестрированы?"

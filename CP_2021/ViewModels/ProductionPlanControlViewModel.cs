@@ -309,8 +309,8 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.ToString());
             }
-            //Update();
-            //SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            Update();
+            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
@@ -1157,9 +1157,9 @@ namespace CP_2021.ViewModels
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model,task);
+            //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            //Update();
+            //SelectedTask = ProductionTask.FindByTask(Model,task);
         }
 
         #endregion
@@ -1472,7 +1472,6 @@ namespace CP_2021.ViewModels
         public ProductionPlanControlViewModel()
         {
             #region Команды
-
             ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
             RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
             AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
@@ -1513,7 +1512,6 @@ namespace CP_2021.ViewModels
             Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             ProductionTasks = Unit.Tasks.Get().ToList();
             Model = ProductionTask.InitModel(ProductionTasks);
-            
             searchManager = new SearchManager();
             _undoManager = new UndoRedoManager();
 
