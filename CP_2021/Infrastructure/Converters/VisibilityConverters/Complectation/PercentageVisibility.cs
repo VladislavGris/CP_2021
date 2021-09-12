@@ -29,6 +29,7 @@ namespace CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation
             {
                 return Visibility.Hidden;
             }
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

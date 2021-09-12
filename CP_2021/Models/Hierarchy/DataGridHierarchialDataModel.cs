@@ -20,18 +20,36 @@ namespace CP_2021.Models.Hierarchy
 
         public void AddChildren()
         {
-            using (ApplicationContext context = new ApplicationContext())
+            AsyncDBUnit unit = AsyncUnitSingleton.GetInstance().dbUnit;
+            var children = unit.Tasks._set.ToList().Where(t => t.MyParent.Parent == ((ProductionTaskDB)(this.Data))).OrderBy(t => t.MyParent.LineOrder);
+            foreach (ProductionTaskDB child in children)
             {
-                foreach (ProductionTaskDB child in context.Production_Plan.Where(t => t.MyParent.Parent == ((ProductionTaskDB)(this.Data))).OrderBy(t => t.MyParent.LineOrder))
-                {
-                    DataGridHierarchialDataModel childModel = new DataGridHierarchialDataModel() { Data = child, DataManager = this.DataManager };
-                    childModel.IsExpanded = child.Expanded;
-                    childModel.AddChildren();
-                    this.AddChild(childModel);
-                }
+                DataGridHierarchialDataModel childModel = new DataGridHierarchialDataModel() { Data = child, DataManager = this.DataManager };
+                childModel.IsExpanded = child.Expanded;
+                childModel.AddChildren();
+                this.AddChild(childModel);
             }
+
             Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Children added");
         }
+
+        //public void AddChildren()
+        //{
+        //    using(ApplicationContext context = new ApplicationContext())
+        //    {
+        //        var children = context.Production_Plan.ToList().Where(t => t.MyParent.Parent == ((ProductionTaskDB)(this.Data))).OrderBy(t => t.MyParent.LineOrder);
+        //        foreach (ProductionTaskDB child in children)
+        //        {
+        //            DataGridHierarchialDataModel childModel = new DataGridHierarchialDataModel() { Data = child, DataManager = this.DataManager };
+        //            childModel.IsExpanded = child.Expanded;
+        //            childModel.AddChildren();
+        //            this.AddChild(childModel);
+        //        }
+        //    }
+
+
+        //    Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Children added");
+        //}
 
         public void AddChild(DataGridHierarchialDataModel t)
         {

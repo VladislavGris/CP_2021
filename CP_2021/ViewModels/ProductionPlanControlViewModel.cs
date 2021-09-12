@@ -31,6 +31,9 @@ using System.Reflection;
 using CP_2021.ViewModels.DataWindowViewModels;
 using CP_2021.Views.Windows.DataWindows;
 using System.Windows.Data;
+using CP_2021.Infrastructure.Utils;
+using CP_2021.Models.Hierarchy;
+using System.ComponentModel;
 
 namespace CP_2021.ViewModels
 {
@@ -42,6 +45,42 @@ namespace CP_2021.ViewModels
         private ApplicationUnit Unit;
         private UndoRedoManager _undoManager;
         private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static BackgroundWorker bgWorker;
+
+        #region StatusMessage
+
+        private string _statusMessage;
+
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => Set(ref _statusMessage, value);
+        }
+
+        #endregion
+        #region Data
+
+        private DataGridHierarchialData _data;
+
+        public DataGridHierarchialData Data
+        {
+            get => _data;
+            set => Set(ref _data, value);
+        }
+
+        #endregion
+
+        #region SelectedModel
+
+        private DataGridHierarchialDataModel _selectedModel;
+
+        public DataGridHierarchialDataModel SelectedModel
+        {
+            get => _selectedModel;
+            set => Set(ref _selectedModel, value);
+        }
+
+        #endregion
 
         #region User
 
@@ -91,13 +130,14 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region ProductionTasks
-        private List<ProductionTaskDB> _productionTasks;
+        #region ModelToCopy
 
-        public List<ProductionTaskDB> ProductionTasks
+        private DataGridHierarchialDataModel _modelToCopy;
+
+        public DataGridHierarchialDataModel ModelToCopy
         {
-            get => _productionTasks;
-            set => Set(ref _productionTasks, value);
+            get => _modelToCopy;
+            set => Set(ref _modelToCopy, value);
         }
 
         #endregion
@@ -207,23 +247,25 @@ namespace CP_2021.ViewModels
 
         public ICommand ExpandAllCommand { get; }
 
-        private bool CanExpandAllCommandExecute(object p) => true;
+        private bool CanExpandAllCommandExecute(object p) => Data!=null;
 
         private void OnExpandAllCommandExecuted(object p)
         {
             try
             {
-                foreach(ProductionTaskDB task in Unit.Tasks.Get()){
+                ApplicationUnitSingleton.RecreateUnit();
+                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                foreach (ProductionTaskDB task in unit.Tasks.Get()){
                     task.Expanded = true;
                 }
-                Unit.Commit();
+                unit.Commit();
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::ExpandAllCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            Update();
+            InitData();
         }
 
         #endregion
@@ -232,24 +274,26 @@ namespace CP_2021.ViewModels
 
         public ICommand RollUpAllCommand { get; }
 
-        private bool CanRollUpAllCommandExecute(object p) => true;
+        private bool CanRollUpAllCommandExecute(object p) => Data != null;
 
         private void OnRollUpAllCommandExecuted(object p)
         {
             try
             {
-                foreach (ProductionTaskDB task in Unit.Tasks.Get())
+                ApplicationUnitSingleton.RecreateUnit();
+                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                foreach (ProductionTaskDB task in unit.Tasks.Get())
                 {
                     task.Expanded = false;
                 }
-                Unit.Commit();
+                unit.Commit();
             }
             catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::RollUpAllCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            Update();
+            InitData();
         }
 
         #endregion
@@ -263,10 +307,12 @@ namespace CP_2021.ViewModels
         private void OnAddProductionTaskCommandExecuted(object p)
         {
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             //Если база данных пустая
             try
             {
-                if (Unit.Tasks.Get().Count() == 0)
+                if (unit.Tasks.Get().Count() == 0)
                 {
                     dbTask.MyParent = new HierarchyDB(dbTask);
                     dbTask.MyParent.LineOrder = 1;
@@ -274,43 +320,42 @@ namespace CP_2021.ViewModels
                 else
                 {
                     //Команда не выполняется без выбранной задачи
-                    if (SelectedTask == null)
+                    if (SelectedModel == null)
                     {
                         MessageBox.Show("Не выбран элемент для добавления");
                         return;
                     }
                     //Добавление головного изделия, иначе изделие в Children к Parent
-                    if (SelectedTask.Task.MyParent.Parent != null)
+                    if (((ProductionTaskDB)SelectedModel.Data).MyParent.Parent != null)
                     {
-                        ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.MyParent.ParentId).Single();
+                        ProductionTaskDB parent = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).MyParent.ParentId).Single();
                         parent.Expanded = true;
                         dbTask.MyParent = new HierarchyDB(parent, dbTask);
-                        dbTask.MyParent.LineOrder = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
+                        dbTask.MyParent.LineOrder = unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
                     }
                     else
                     {
                         dbTask.MyParent = new HierarchyDB(dbTask);
                         //Выборка элемента с Id выбранного элемента
-                        ProductionTaskDB upperTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).Single();
+                        ProductionTaskDB upperTask = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).Single();
                         dbTask.MyParent.LineOrder = upperTask.MyParent.LineOrder + 1;
                         dbTask.DownTaskBelow();
                     }
                 }
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
+                unit.Tasks.Insert(dbTask);
+                unit.Commit();
             }
             catch(InvalidOperationException ex)
             {
                 MessageBox.Show("Выбранный вами элемент был удален");
-                _log.Warn("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.Message);
+                _log.Warn("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.ToString());
             }
             catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.ToString());
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            InitData();
         }
 
         #endregion
@@ -325,18 +370,18 @@ namespace CP_2021.ViewModels
         {
             try
             {
-                Unit.Commit();
+                ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Update((ProductionTaskDB)(SelectedModel.Data));
+                ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
             }
             catch(DbUpdateConcurrencyException ex)
             {
                 MessageBox.Show("Редактируемая строка была удалена. Обновите базу");
-                _log.Warn("ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
+                _log.Warn("ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.ToString());
             }catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
+                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.ToString());
             }
-            //Update();
         }
 
         #endregion
@@ -345,36 +390,36 @@ namespace CP_2021.ViewModels
 
         public ICommand AddChildCommand { get; }
 
-        private bool CanAddChildCommandExecute(object p) => SelectedTask != null;
+        private bool CanAddChildCommandExecute(object p) => SelectedModel != null;
 
         private void OnAddChildCommandExecuted(object p)
         {
             ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
             try
             {
-                ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).Single();
+                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                ProductionTaskDB parent = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).Single();
                 parent.Expanded = true;
                 dbTask.MyParent = new HierarchyDB(parent, dbTask);
 
-                if (Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Count() != 0)
+                if (unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Count() != 0)
                 {
-                    dbTask.MyParent.LineOrder = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
+                    dbTask.MyParent.LineOrder = unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
                 }
                 else
                 {
                     dbTask.MyParent.LineOrder = 1;
                 }
 
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
+                unit.Tasks.Insert(dbTask);
+                unit.Commit();
             }
             catch(Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::OnAddChildCommandExecuted " + ex.Message);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            InitData();
         }
 
         #endregion
@@ -383,15 +428,17 @@ namespace CP_2021.ViewModels
 
         public ICommand DeleteProductionTaskCommand { get; }
 
-        private bool CanDeleteProductionTaskCommandExecute(object p) => SelectedTask != null;
+        private bool CanDeleteProductionTaskCommandExecute(object p) => SelectedModel != null;
 
         private void OnDeleteProductionTaskCommandExecuted(object p)
         {
-            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить элемент {SelectedTask.Task.Name}?", "Удаление", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить элемент {((ProductionTaskDB)SelectedModel.Data).Name}?", "Удаление", MessageBoxButton.YesNo);
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                    ApplicationUnitSingleton.RecreateUnit();
+                    ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                    ProductionTaskDB dbTask = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                     if (dbTask != null)
                     {
                         try
@@ -411,7 +458,7 @@ namespace CP_2021.ViewModels
                     }
                     break;
             }
-            Update();
+            InitData();
         }
 
         #endregion
@@ -420,13 +467,15 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelUpCommand { get; }
 
-        private bool CanLevelUpCommandExecute(object p) => SelectedTask?.Parent != null && SelectedTask != null;
+        private bool CanLevelUpCommandExecute(object p) => SelectedModel != null && ((ProductionTaskDB)SelectedModel.Data).MyParent.Parent != null;
 
         private void OnLevelUpCommandExecuted(object p)
         {
             try
             {
-                ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ApplicationUnitSingleton.RecreateUnit();
+                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                ProductionTaskDB dbTask = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (dbTask == null)
                 {
                     MessageBox.Show("Выделенная строка была удалена");
@@ -439,7 +488,7 @@ namespace CP_2021.ViewModels
                         int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
                         dbTask.MyParent = new HierarchyDB(dbTask);
                         dbTask.MyParent.LineOrder = lineOrder;
-                        Unit.Commit();
+                        unit.Commit();
                         dbTask.DownTaskBelow();
                     }
                     else
@@ -447,10 +496,10 @@ namespace CP_2021.ViewModels
                         int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
                         dbTask.MyParent = new HierarchyDB(dbTask.MyParent.Parent.MyParent.Parent, dbTask);
                         dbTask.MyParent.LineOrder = lineOrder;
-                        Unit.Commit();
+                        unit.Commit();
                         dbTask.DownTaskBelow();
                     }
-                    Unit.Commit();
+                    unit.Commit();
                 }
             }
             catch(Exception ex)
@@ -458,7 +507,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::LevelUpCommand " + ex.Message);
             }
-            Update();
+            InitData();
         }
 
         #endregion
@@ -467,11 +516,13 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelDownCommand { get; }
 
-        private bool CanLevelDownCommandExecute(object p) => SelectedTask != null && SelectedTask.Task.MyParent.LineOrder != 1;
+        private bool CanLevelDownCommandExecute(object p) => SelectedModel != null && ((ProductionTaskDB)SelectedModel.Data).MyParent.LineOrder != 1;
 
         private void OnLevelDownCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t=>t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB dbTask = unit.Tasks.Get().Where(t=>t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
             try
             {
                 if (dbTask == null)
@@ -481,13 +532,13 @@ namespace CP_2021.ViewModels
                 else
                 {
                     dbTask.UpOrderBelow();
-                    ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == dbTask.MyParent.ParentId && t.MyParent.LineOrder == dbTask.MyParent.LineOrder - 1).Single();
+                    ProductionTaskDB parent = unit.Tasks.Get().Where(t => t.MyParent.ParentId == dbTask.MyParent.ParentId && t.MyParent.LineOrder == dbTask.MyParent.LineOrder - 1).Single();
                     parent.Expanded = true;
                     dbTask.MyParent = new HierarchyDB(parent, dbTask);
                     dbTask.MyParent.LineOrder = 1;
-                    Unit.Commit();
+                    unit.Commit();
                     dbTask.DownTaskBelow();
-                    Unit.Commit();
+                    unit.Commit();
                 }
             }
             catch(Exception ex)
@@ -495,8 +546,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::LevelDownCommand " + ex.Message);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            InitData();
         }
 
         #endregion
@@ -509,7 +559,8 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateModelCommandExecuted(object p)
         {
-            Update();
+            ApplicationUnitSingleton.RecreateUnit();
+            InitData();
         }
 
         #endregion
@@ -518,13 +569,14 @@ namespace CP_2021.ViewModels
 
         public ICommand CopyTaskCommand { get; }
 
-        private bool CanCopyTaskCommandExecute(object p) => SelectedTask != null;
+        private bool CanCopyTaskCommandExecute(object p) => SelectedModel != null;
 
         private void OnCopyTaskCommandExecuted(object p)
         {
             try
             {
-                TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
+                ModelToCopy = SelectedModel;
+                //TaskToCopy = ProductionTask.InitTask(((ProductionTaskDB)SelectedModel.Data));
             }
             catch (Exception ex)
             {
@@ -540,14 +592,15 @@ namespace CP_2021.ViewModels
 
         public ICommand CutTaskCommand { get; }
 
-        private bool CanCutTaskCommandExecute(object p) => SelectedTask!=null;
+        private bool CanCutTaskCommandExecute(object p) => SelectedModel!=null;
 
         private void OnCutTaskCommandExecuted(object p)
         {
             try
             {
-                TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
-                ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ModelToCopy = SelectedModel;
+                ApplicationUnitSingleton.RecreateUnit();
+                ProductionTaskDB dbTask = ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (dbTask != null)
                 {
                     try
@@ -571,7 +624,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::CutTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            Update();
+            InitData();
         }
 
         #endregion
@@ -580,44 +633,44 @@ namespace CP_2021.ViewModels
 
         public ICommand PasteTaskCommand { get; }
 
-        private bool CanPasteTaskCommandExecute(object p) => TaskToCopy != null;
+        private bool CanPasteTaskCommandExecute(object p) => ModelToCopy != null;
 
         private void OnPasteTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = TaskToCopy.Task.Clone();
+            ProductionTaskDB dbTask = ((ProductionTaskDB)ModelToCopy.Data).Clone();
             try
             {
-                ProductionTask task = new ProductionTask(dbTask);
-                SelectedTask.Task.DownTaskBelow();
+                ApplicationUnitSingleton.RecreateUnit();
+                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+                ((ProductionTaskDB)SelectedModel.Data).DownTaskBelow();
 
-                if (SelectedTask.Parent == null)
+                if (((ProductionTaskDB)SelectedModel.Data).MyParent.Parent == null)
                 {
                     dbTask.MyParent = new HierarchyDB(dbTask);
                 }
                 else
                 {
-                    dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
+                    dbTask.MyParent = new HierarchyDB(((ProductionTaskDB)SelectedModel.Data).MyParent.Parent, dbTask);
                 }
-                dbTask.MyParent.LineOrder = SelectedTask.Task.MyParent.LineOrder + 1;
+                dbTask.MyParent.LineOrder = ((ProductionTaskDB)SelectedModel.Data).MyParent.LineOrder;
 
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
+                unit.Tasks.Insert(dbTask);
+                unit.Commit();
 
-                if (TaskToCopy.HasChildren)
+                if (ModelToCopy.HasChildren)
                 {
-                    foreach (ProductionTask child in TaskToCopy.Children)
+                    foreach (DataGridHierarchialDataModel child in ModelToCopy.Children)
                     {
-                        task.AddChild(child);
+                        dbTask.AddChildTask(child);
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::PasteTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
+                _log.Error("UNKNOWN | ProductionPlanControlViewModel::PasteTaskCommand | " + ex.ToString());
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            InitData();
         }
 
         #endregion
@@ -632,124 +685,124 @@ namespace CP_2021.ViewModels
 
         private void OnSearchCommandExecuted(object p)
         {
-            Update();
-            SearchResultString = null;
-            SearchResults = new List<ProductionTask>();
-            FieldNames fieldName = (FieldNames)SelectedSearchIndex;
-            try
-            {
-                switch (fieldName)
-                {
-                    case FieldNames.Name:
-                        searchManager.SetSearchStrategy(new NameSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ManagDoc:
-                        searchManager.SetSearchStrategy(new ManagDocSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Count:
-                        searchManager.SetSearchStrategy(new CountSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.SpecificationCost:
-                        searchManager.SetSearchStrategy(new SpecificationCostSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.IncDoc:
-                        searchManager.SetSearchStrategy(new IncDocSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.VishDate:
-                        searchManager.SetSearchStrategy(new VishDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.RealDate:
-                        searchManager.SetSearchStrategy(new RealDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Complectation:
-                        searchManager.SetSearchStrategy(new ComplectationSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ComplectationDate:
-                        searchManager.SetSearchStrategy(new ComplectationDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Percent:
-                        searchManager.SetSearchStrategy(new PercentSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.MSLNumber:
-                        searchManager.SetSearchStrategy(new MSLNumberSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Executor:
-                        searchManager.SetSearchStrategy(new FirstExecutorSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Executor2:
-                        searchManager.SetSearchStrategy(new SecondExecutorSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.GivingDate:
-                        searchManager.SetSearchStrategy(new GivingDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ProjectedDate:
-                        searchManager.SetSearchStrategy(new ProjectedDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ReadyDate:
-                        searchManager.SetSearchStrategy(new CompletionDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Manufacture:
-                        searchManager.SetSearchStrategy(new ManufactureSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.LetterNum:
-                        searchManager.SetSearchStrategy(new LetterNumSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.SpecNum:
-                        searchManager.SetSearchStrategy(new SpecNumSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Bill:
-                        searchManager.SetSearchStrategy(new BillSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Report:
-                        searchManager.SetSearchStrategy(new ReportSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ReturnReport:
-                        searchManager.SetSearchStrategy(new ReturnReportSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ReceivingDate:
-                        searchManager.SetSearchStrategy(new ReceivingDateSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.ExpendNum:
-                        searchManager.SetSearchStrategy(new ExpendNumSearchStrategy(Model, SearchString));
-                        break;
-                    case FieldNames.Note:
-                        searchManager.SetSearchStrategy(new NoteSearchStrategy(Model, SearchString));
-                        break;
-                    default:
-                        SearchResultString = "Параметр для поиска не задан";
-                        break;
+            //Update();
+            //SearchResultString = null;
+            //SearchResults = new List<ProductionTask>();
+            //FieldNames fieldName = (FieldNames)SelectedSearchIndex;
+            //try
+            //{
+            //    switch (fieldName)
+            //    {
+            //        case FieldNames.Name:
+            //            searchManager.SetSearchStrategy(new NameSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ManagDoc:
+            //            searchManager.SetSearchStrategy(new ManagDocSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Count:
+            //            searchManager.SetSearchStrategy(new CountSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.SpecificationCost:
+            //            searchManager.SetSearchStrategy(new SpecificationCostSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.IncDoc:
+            //            searchManager.SetSearchStrategy(new IncDocSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.VishDate:
+            //            searchManager.SetSearchStrategy(new VishDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.RealDate:
+            //            searchManager.SetSearchStrategy(new RealDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Complectation:
+            //            searchManager.SetSearchStrategy(new ComplectationSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ComplectationDate:
+            //            searchManager.SetSearchStrategy(new ComplectationDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Percent:
+            //            searchManager.SetSearchStrategy(new PercentSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.MSLNumber:
+            //            searchManager.SetSearchStrategy(new MSLNumberSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Executor:
+            //            searchManager.SetSearchStrategy(new FirstExecutorSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Executor2:
+            //            searchManager.SetSearchStrategy(new SecondExecutorSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.GivingDate:
+            //            searchManager.SetSearchStrategy(new GivingDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ProjectedDate:
+            //            searchManager.SetSearchStrategy(new ProjectedDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ReadyDate:
+            //            searchManager.SetSearchStrategy(new CompletionDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Manufacture:
+            //            searchManager.SetSearchStrategy(new ManufactureSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.LetterNum:
+            //            searchManager.SetSearchStrategy(new LetterNumSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.SpecNum:
+            //            searchManager.SetSearchStrategy(new SpecNumSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Bill:
+            //            searchManager.SetSearchStrategy(new BillSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Report:
+            //            searchManager.SetSearchStrategy(new ReportSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ReturnReport:
+            //            searchManager.SetSearchStrategy(new ReturnReportSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ReceivingDate:
+            //            searchManager.SetSearchStrategy(new ReceivingDateSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.ExpendNum:
+            //            searchManager.SetSearchStrategy(new ExpendNumSearchStrategy(Model, SearchString));
+            //            break;
+            //        case FieldNames.Note:
+            //            searchManager.SetSearchStrategy(new NoteSearchStrategy(Model, SearchString));
+            //            break;
+            //        default:
+            //            SearchResultString = "Параметр для поиска не задан";
+            //            break;
 
-                }
-                searchManager.ExecuteSearchStrategy();
-                SearchResults = searchManager.GetSearchResults();
-                if(SearchResults.Count != 0) 
-                {
-                    MessageBox.Show("Поиск завершен. Количество совпадений: " + SearchResults.Count);
-                }
-                else
-                {
-                    MessageBox.Show("Поиск завершен. Совпадений не найдено");
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex is IncorrectDateFormatException or IncorrectSearchValueException)
-                {
-                    SearchResultString = ex.Message;
-                    MessageBox.Show(ex.Message);
-                }
-            }
+            //    }
+            //    searchManager.ExecuteSearchStrategy();
+            //    SearchResults = searchManager.GetSearchResults();
+            //    if(SearchResults.Count != 0) 
+            //    {
+            //        MessageBox.Show("Поиск завершен. Количество совпадений: " + SearchResults.Count);
+            //    }
+            //    else
+            //    {
+            //        MessageBox.Show("Поиск завершен. Совпадений не найдено");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    if (ex is IncorrectDateFormatException or IncorrectSearchValueException)
+            //    {
+            //        SearchResultString = ex.Message;
+            //        MessageBox.Show(ex.Message);
+            //    }
+            //}
 
-            if (SearchResultString == null)
-            {
-                if (SearchResults.Count != 0)
-                {
-                    SearchResultString = $"Количество совпадений: {SearchResults.Count}";
-                    SelectedTask = SearchResults.First();
-                    ((DataGrid)p).UpdateLayout();
-                    ((DataGrid)p).ScrollIntoView(SelectedTask);
-                }
-            }
+            //if (SearchResultString == null)
+            //{
+            //    if (SearchResults.Count != 0)
+            //    {
+            //        SearchResultString = $"Количество совпадений: {SearchResults.Count}";
+            //        SelectedTask = SearchResults.First();
+            //        ((DataGrid)p).UpdateLayout();
+            //        ((DataGrid)p).ScrollIntoView(SelectedTask);
+            //    }
+            //}
         }
 
         #endregion
@@ -809,14 +862,16 @@ namespace CP_2021.ViewModels
 
         public ICommand UpTaskCommand { get; }
 
-        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.Task.MyParent.LineOrder != 1 && SelectedTask!=null;
+        private bool CanUpTaskCommandExecute(object p) => SelectedModel != null && ((ProductionTaskDB)SelectedModel.Data).MyParent.LineOrder != 1;
 
         private void OnUpTaskCommandExecuted(object p)
         {
-            ProductionTaskDB taskToUp = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB taskToUp = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
             try
             {
-                ProductionTaskDB taskToDown = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToUp.MyParent.ParentId && t.MyParent.LineOrder == taskToUp.MyParent.LineOrder - 1).SingleOrDefault();
+                ProductionTaskDB taskToDown = unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToUp.MyParent.ParentId && t.MyParent.LineOrder == taskToUp.MyParent.LineOrder - 1).SingleOrDefault();
                 if (taskToUp == null)
                 {
                     MessageBox.Show("Выбранная строка была удалена");
@@ -825,7 +880,7 @@ namespace CP_2021.ViewModels
                 {
                     taskToUp.MyParent.LineOrder--;
                     taskToDown.MyParent.LineOrder++;
-                    Unit.Commit();
+                    unit.Commit();
                 }
             }
             catch(Exception ex)
@@ -833,8 +888,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::UpTaskCommand " + ex.Message);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, taskToUp);
+            InitData();
         }
 
         #endregion
@@ -845,11 +899,11 @@ namespace CP_2021.ViewModels
 
         private bool CanDownTaskCommandExecute(object p)
         {
-            if (SelectedTask != null)
+            if (SelectedModel != null)
             {
-                int selecetedTaskLineOrder = SelectedTask.Task.MyParent.LineOrder;
-                int maxLineOrderByParent = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent).Max(t => t.MyParent.LineOrder);
-                Debug.WriteLine("selected = " + selecetedTaskLineOrder + "; max = " + maxLineOrderByParent);
+                
+                int selecetedTaskLineOrder = ((ProductionTaskDB)SelectedModel.Data).MyParent.LineOrder;
+                int maxLineOrderByParent = ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t => t.MyParent.ParentId == ((ProductionTaskDB)SelectedModel.Data).MyParent.ParentId).Max(t => t.MyParent.LineOrder);
                 return selecetedTaskLineOrder != maxLineOrderByParent;
             }
             else
@@ -860,10 +914,12 @@ namespace CP_2021.ViewModels
 
         private void OnDownTaskCommandExecuted(object p)
         {
-            ProductionTaskDB taskToDown = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB taskToDown = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
             try
             {
-                ProductionTaskDB taskToUp = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToDown.MyParent.ParentId && t.MyParent.LineOrder == taskToDown.MyParent.LineOrder + 1).SingleOrDefault();
+                ProductionTaskDB taskToUp = unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToDown.MyParent.ParentId && t.MyParent.LineOrder == taskToDown.MyParent.LineOrder + 1).SingleOrDefault();
                 if (taskToDown == null)
                 {
                     MessageBox.Show("Выбранная строка была удалена");
@@ -872,7 +928,7 @@ namespace CP_2021.ViewModels
                 {
                     taskToUp.MyParent.LineOrder--;
                     taskToDown.MyParent.LineOrder++;
-                    Unit.Commit();
+                    unit.Commit();
                 }
             }
             catch (Exception ex)
@@ -880,8 +936,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::DownTaskCommand " + ex.Message);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, taskToDown);
+            InitData();
         }
 
         #endregion
@@ -932,11 +987,13 @@ namespace CP_2021.ViewModels
 
         public ICommand SetBoldCommand { get; }
 
-        private bool CanSetBoldCommandExecute(object p) => SelectedTask!=null;
+        private bool CanSetBoldCommandExecute(object p) => SelectedModel!=null;
 
         private void OnSetBoldCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t=>t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB task = unit.Tasks.Get().Where(t=>t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).FirstOrDefault();
             if (task == null)
             {
                 MessageBox.Show("Выбранная строка была удалена");
@@ -945,9 +1002,8 @@ namespace CP_2021.ViewModels
             {
                 task.Formatting.IsBold = task.Formatting.IsBold == true ? false : true;
             }
-            Unit.Commit();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, task);
+            unit.Commit();
+            InitData();
         }
 
         #endregion
@@ -956,11 +1012,13 @@ namespace CP_2021.ViewModels
 
         public ICommand SetItalicCommand { get; }
 
-        private bool CanSetItalicCommandExecute(object p) => SelectedTask != null;
+        private bool CanSetItalicCommandExecute(object p) => SelectedModel != null;
 
         private void OnSetItalicCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB task = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).FirstOrDefault();
             if (task == null)
             {
                 MessageBox.Show("Выбранная строка была удалена");
@@ -969,9 +1027,8 @@ namespace CP_2021.ViewModels
             {
                 task.Formatting.IsItalic = task.Formatting.IsItalic == true ? false : true;
             }
-            Unit.Commit();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, task);
+            unit.Commit();
+            InitData();
         }
 
         #endregion
@@ -980,11 +1037,13 @@ namespace CP_2021.ViewModels
 
         public ICommand SetUnderlineCommand { get; }
 
-        private bool CanSetUnderlineCommandExecute(object p) => SelectedTask != null;
+        private bool CanSetUnderlineCommandExecute(object p) => SelectedModel != null;
 
         private void OnSetUnderlineCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            ApplicationUnitSingleton.RecreateUnit();
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB task = unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).FirstOrDefault();
             if (task == null)
             {
                 MessageBox.Show("Выбранная строка была удалена");
@@ -993,9 +1052,8 @@ namespace CP_2021.ViewModels
             {
                 task.Formatting.IsUnderline = task.Formatting.IsUnderline == true ? false : true;
             }
-            Unit.Commit();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, task);
+            unit.Commit();
+            InitData();
         }
 
         #endregion
@@ -1013,8 +1071,8 @@ namespace CP_2021.ViewModels
                 //Unit.Refresh();
                 using(ApplicationContext context = new ApplicationContext())
                 {
-                    ProductionTaskDB task = context.Production_Plan.Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                    //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                    ProductionTaskDB task = context.Production_Plan.Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
+                    //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                     if (task == null)
                     {
                         MessageBox.Show("Изделие было удалено");
@@ -1025,7 +1083,7 @@ namespace CP_2021.ViewModels
                         task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                         context.SaveChanges();
                         DataWindowViewModel paymentVM = new DataWindowViewModel();
-                        paymentVM.SetEditableTask(SelectedTask.Task);
+                        paymentVM.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                         PaymentWindow paymentWindow = new PaymentWindow();
                         paymentWindow.Closed += Window_Closed;
                         paymentWindow.DataContext = paymentVM;
@@ -1066,7 +1124,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (task == null)
                 {
                     MessageBox.Show("Изделие было удалено");
@@ -1077,7 +1135,7 @@ namespace CP_2021.ViewModels
                     task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                     Unit.Commit();
                     DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
+                    laborVm.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                     LaborCostsWindow laborWindow = new LaborCostsWindow();
                     laborWindow.Closed += Window_Closed;
                     laborWindow.DataContext = laborVm;
@@ -1117,7 +1175,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (task == null)
                 {
                     MessageBox.Show("Изделие было удалено");
@@ -1128,7 +1186,7 @@ namespace CP_2021.ViewModels
                     task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                     Unit.Commit();
                     DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
+                    laborVm.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                     DocumentWindow window = new DocumentWindow();
                     window.Closed += Window_Closed;
                     window.DataContext = laborVm;
@@ -1157,7 +1215,7 @@ namespace CP_2021.ViewModels
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
             //Update();
             //SelectedTask = ProductionTask.FindByTask(Model,task);
         }
@@ -1168,7 +1226,7 @@ namespace CP_2021.ViewModels
 
         public ICommand SelectionChangedCommand { get; }
 
-        private bool CanSelectionChangedCommandExecute(object p) => SelectedTask!=null;
+        private bool CanSelectionChangedCommandExecute(object p) => SelectedModel!=null;
 
         private void OnSelectionChangedCommandExecuted(object p)
         {
@@ -1178,10 +1236,10 @@ namespace CP_2021.ViewModels
                 case MessageBoxResult.Yes:
                     BindingExpression be = ((ComboBox)p).GetBindingExpression(ComboBox.SelectedIndexProperty);
                     be.UpdateSource();
-                    switch (SelectedTask.Task.Completion)
+                    switch (((ProductionTaskDB)SelectedModel.Data).Completion)
                     {
                         case (short)TaskCompletion.VKOnStorage:
-                            SelectedTask.Task.Complectation.ComplectationDate = DateTime.Now;
+                            ((ProductionTaskDB)SelectedModel.Data).Complectation.ComplectationDate = DateTime.Now;
                             break;
                     }
                     break;
@@ -1203,7 +1261,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (task == null)
                 {
                     MessageBox.Show("Изделие было удалено");
@@ -1214,7 +1272,7 @@ namespace CP_2021.ViewModels
                     task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                     Unit.Commit();
                     DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
+                    laborVm.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                     ComplectationWindow window = new ComplectationWindow();
                     window.Closed += Window_Closed;
                     window.DataContext = laborVm;
@@ -1254,7 +1312,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (task == null)
                 {
                     MessageBox.Show("Изделие было удалено");
@@ -1265,7 +1323,7 @@ namespace CP_2021.ViewModels
                     task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                     Unit.Commit();
                     DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
+                    laborVm.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                     GivingWindow window = new GivingWindow();
                     window.Closed += Window_Closed;
                     window.DataContext = laborVm;
@@ -1305,7 +1363,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (task == null)
                 {
                     MessageBox.Show("Изделие было удалено");
@@ -1316,7 +1374,7 @@ namespace CP_2021.ViewModels
                     task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                     Unit.Commit();
                     DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
+                    laborVm.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                     ManufactureWindow window = new ManufactureWindow();
                     window.Closed += Window_Closed;
                     window.DataContext = laborVm;
@@ -1356,7 +1414,7 @@ namespace CP_2021.ViewModels
             try
             {
                 Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)SelectedModel.Data).Id).SingleOrDefault();
                 if (task == null)
                 {
                     MessageBox.Show("Изделие было удалено");
@@ -1367,7 +1425,7 @@ namespace CP_2021.ViewModels
                     task.EditingBy = UserDataSingleton.GetInstance().user.Login;
                     Unit.Commit();
                     DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
+                    laborVm.SetEditableTask(((ProductionTaskDB)SelectedModel.Data));
                     InProductionWindow window = new InProductionWindow();
                     window.Closed += Window_Closed;
                     window.DataContext = laborVm;
@@ -1406,11 +1464,11 @@ namespace CP_2021.ViewModels
         {
             try
             {
-                if (p is ProductionTask)
+                if (p is DataGridHierarchialDataModel)
                 {
-                    ProductionTask task = (ProductionTask)p;
-                    task.Task.Expanded = false;
-                    Unit.Commit();
+                    ApplicationUnitSingleton.RecreateUnit();
+                    ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t => t.Id == ((ProductionTaskDB)((DataGridHierarchialDataModel)p).Data).Id).First().Expanded = false;
+                    ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
                 }
             }
             catch (Exception ex)
@@ -1429,42 +1487,55 @@ namespace CP_2021.ViewModels
 
         private void OnOnExpandingCommandExecuted(object p)
         {
-            try
-            {
-                if (p is ProductionTask)
-                {
-                    ProductionTask task = (ProductionTask)p;
-                    task.Task.Expanded = true;
-                    Unit.Commit();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::OnExpandingCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
+            //try
+            //{
+            //    if (p is DataGridHierarchialDataModel)
+            //    {
+            //        ApplicationUnitSingleton.RecreateUnit();
+            //        ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.Get().Where(t=>t.Id == ((ProductionTaskDB)((DataGridHierarchialDataModel)p).Data).Id).First().Expanded = true;
+            //        ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Неизвестная ошибка. Обновите базу");
+            //    _log.Error("UNKNOWN | ProductionPlanControlViewModel::OnExpandingCommand | " + ex.GetType().Name + " | " + ex.Message);
+            //}
         }
 
         #endregion
+
         #endregion
 
         #region Методы
 
         private void Update()
         {
-            try
+        }
+        private void InitData()
+        {
+
+            Data = new DataGridHierarchialData();
+            AsyncDBUnit unit = AsyncUnitSingleton.GetInstance().dbUnit;
+            
+            var tasks = unit.Tasks.Items.ToList();
+            
+            Debug.WriteLine("Before load: " + DateTime.Now.ToLongTimeString());
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Data loop start");
+            foreach (ProductionTaskDB root in tasks.Where(t => t.MyParent.Parent == null).OrderBy(t=>t.MyParent.LineOrder))
             {
-                ApplicationUnitSingleton.RecreateUnit();
-                Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-                ProductionTasks = Unit.Tasks.Get().ToList();
-                Model = ProductionTask.InitModel(ProductionTasks);
-                _undoManager = new UndoRedoManager();
+                DataGridHierarchialDataModel rootModel = new DataGridHierarchialDataModel() { Data = root, DataManager = Data };
+                rootModel.IsExpanded = root.Expanded;
+                //Thread thread = new Thread(new ThreadStart(rootModel.AddChildren));
+                //thread.Start();
+                Debug.WriteLine(DateTime.Now.ToLongTimeString() + " New thread started");
+                rootModel.AddChildren();
+                rootModel.IsVisible = true;
+                Data.RawData.Add(rootModel);
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::UpdateModelCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Data loop end");
+            Data.Initialize();
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Data initialized");
         }
 
         #endregion
@@ -1509,15 +1580,63 @@ namespace CP_2021.ViewModels
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
             FontFamilies = new List<string> { "Arial", "Calibre", "Times New Roman" };
             User = UserDataSingleton.GetInstance().user;
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            ProductionTasks = Unit.Tasks.Get().ToList();
-            Model = ProductionTask.InitModel(ProductionTasks);
             searchManager = new SearchManager();
             _undoManager = new UndoRedoManager();
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             string filepath = Directory.GetCurrentDirectory() + "\\Data\\Configs\\log4net.config";
             XmlConfigurator.Configure(logRepo, new FileInfo(filepath));
+            bgWorker = new BackgroundWorker() { WorkerReportsProgress = true, WorkerSupportsCancellation = true };
+            bgWorker.DoWork += LoadData;
+            bgWorker.RunWorkerCompleted += InitializeData;
+            bgWorker.ProgressChanged += ReportProgress;
+            bgWorker.RunWorkerAsync();
+        }
+
+        private void ReportProgress(object sender, ProgressChangedEventArgs e)
+        {
+            StatusMessage = "Загрузка данных: " + e.ProgressPercentage.ToString() + "%";
+        }
+
+        private void InitializeData(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Data.Initialize();
+            StatusMessage = "Данные загружены";
+        }
+
+        private int activeThreadCount = 0;
+
+        private void LoadData(object sender, DoWorkEventArgs e)
+        {
+            Data = new DataGridHierarchialData();
+            AsyncDBUnit unit = AsyncUnitSingleton.GetInstance().dbUnit;
+
+            var tasks = unit.Tasks._set.ToList().Where(t => t.MyParent.Parent == null).OrderBy(t => t.MyParent.LineOrder);
+
+            Debug.WriteLine("Before load: " + DateTime.Now.ToLongTimeString());
+            Debug.WriteLine(DateTime.Now.ToLongTimeString() + " Data loop start");
+            int count = unit.Tasks.Items.Count();
+            int currentItem = 1;
+            foreach (ProductionTaskDB root in tasks)
+            {
+                DataGridHierarchialDataModel rootModel = new DataGridHierarchialDataModel() { Data = root, DataManager = Data };
+                rootModel.IsExpanded = root.Expanded;
+                activeThreadCount++;
+
+                //ThreadPool.QueueUserWorkItem((object state)=> { rootModel.AddChildren(); });
+                //Debug.WriteLine("New Thread");
+                rootModel.AddChildren();
+                rootModel.IsVisible = true;
+                Data.RawData.Add(rootModel);
+                bgWorker.ReportProgress((int)(((float)currentItem/count)*100));
+                currentItem++;
+            }
+            Debug.WriteLine("Loop end. Active Thread count = " + activeThreadCount);
+            //while (activeThreadCount != 0)
+            //{
+            //    Thread.Sleep(50);
+            //    Debug.WriteLine(activeThreadCount);
+            //}
         }
     }
 }

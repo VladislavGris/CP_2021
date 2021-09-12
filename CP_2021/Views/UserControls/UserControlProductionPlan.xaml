@@ -26,6 +26,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="{Binding User.Position, Converter={StaticResource PannelVisibilityConverter}}"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               Background="{StaticResource BackgroundBrush}">
@@ -639,5 +640,8 @@
                 </ie:EventTrigger>
             </ie:Interaction.Triggers>
         </DataGrid>
+        <Grid Grid.Row="2" Background="{StaticResource BackgroundBrush}">
+            <TextBlock Text="{Binding StatusMessage}" Style="{StaticResource SmallButtonTextStyle}" FontSize="18"/>
+        </Grid>
     </Grid>
 </UserControl>

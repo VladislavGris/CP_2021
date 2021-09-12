@@ -13,7 +13,7 @@ namespace CP_2021.Infrastructure.Repositories.Base
     class DbRepository<T> : IAsyncRepository<T> where T : Entity, new()
     {
         private readonly ApplicationContext _context;
-        private readonly DbSet<T> _set;
+        public readonly DbSet<T> _set;
 
         public bool AutoSaveChanges { get; set; } = true;
 

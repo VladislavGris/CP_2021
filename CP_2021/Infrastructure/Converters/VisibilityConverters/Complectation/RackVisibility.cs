@@ -14,7 +14,7 @@ namespace CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is ProductionTaskDB)
+            if (value is ProductionTaskDB)
             {
                 if (String.IsNullOrEmpty(((ProductionTaskDB)value).Complectation.Rack))
                 {
@@ -29,6 +29,7 @@ namespace CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation
             {
                 return Visibility.Hidden;
             }
+            return Visibility.Visible;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
