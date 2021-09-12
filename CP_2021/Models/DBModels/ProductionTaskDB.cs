@@ -1,6 +1,7 @@
 ﻿using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Models.Base;
+using CP_2021.Models.Hierarchy;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -96,7 +97,7 @@ namespace CP_2021.Models.DBModels
             taskDB.LaborCosts = this.LaborCosts.Clone();
             taskDB.Completion = this.Completion;
             taskDB.Note = this.Note;
-
+            taskDB.EditingBy = "default";
             return taskDB;
         }
 
@@ -149,6 +150,23 @@ namespace CP_2021.Models.DBModels
             }
             unit.Tasks.Delete(this);
             unit.Commit();
+        }
+        public void AddChildTask(DataGridHierarchialDataModel task)
+        {
+            ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            ProductionTaskDB dbChild = ((ProductionTaskDB)task.Data).Clone();
+            dbChild.MyParent = new HierarchyDB(this, dbChild);
+            dbChild.MyParent.LineOrder = ((ProductionTaskDB)task.Data).MyParent.LineOrder;
+            unit.Tasks.Insert(dbChild);
+            unit.Commit();
+
+            if (task.HasChildren)
+            {
+                foreach(DataGridHierarchialDataModel child in task.Children)
+                {
+                    dbChild.AddChildTask(child);
+                }
+            }
         }
     }
 
