@@ -65,8 +65,9 @@ namespace CP_2021.Infrastructure.Repositories.Base
 
         public virtual void Update(T entityToUpdate)
         {
-            dbSet.Attach(entityToUpdate);
-            context.Entry(entityToUpdate).State = EntityState.Modified;
+            //dbSet.Attach(entityToUpdate);
+            //context.Entry(entityToUpdate).State = EntityState.Modified;
+            dbSet.Update(entityToUpdate);
         }
     }
 }
