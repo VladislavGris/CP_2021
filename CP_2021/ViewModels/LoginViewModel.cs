@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using CP_2021.Infrastructure.Commands;
-using CP_2021.ViewModels;
 using CP_2021.Views.Windows;
 using CP_2021.ViewModels.Base;
 using CP_2021.Infrastructure.Units;
-using CP_2021.Data;
-using System.Windows.Data;
 using Microsoft.Data.SqlClient;
 using System.Windows;
 using CP_2021.Infrastructure;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Models.DBModels;
-using System.Diagnostics;
-using System.ComponentModel;
 using System.Threading;
 
 namespace CP_2021.ViewModels
@@ -25,7 +17,7 @@ namespace CP_2021.ViewModels
     class LoginViewModel : ViewModelBase
     {
         #region Свойства
-
+        private ApplicationUnit _unit;
         Thread _backgroundThread;
 
         #region Login
@@ -121,7 +113,7 @@ namespace CP_2021.ViewModels
             {
                 try
                 {
-                    UserDB user = ApplicationUnitSingleton.GetInstance().dbUnit.DBUsers.Get().Where(u => u.Login == Login).FirstOrDefault();
+                    UserDB user = _unit.DBUsers.Get().Where(u => u.Login == Login).FirstOrDefault();
 
                     if (user != null && PasswordHashing.ValidatePassword(Password, user.Password))
                     {
@@ -175,6 +167,7 @@ namespace CP_2021.ViewModels
             OpenRegistrationWindowCommand = new LambdaCommand(OnOpenRegistrationWindowCommandExecuted, CanOpenRegistrationWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
 
+            _unit = ApplicationUnitSingleton.GetInstance().dbUnit;
             _backgroundThread = new Thread(new ThreadStart(()=>Console.Write("")));
             _backgroundThread.IsBackground = true;
         }

@@ -94,6 +94,7 @@
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
         <Setter Property="CanUserResizeColumns" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
         <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="RowHeaderWidth" Value="0"/>
