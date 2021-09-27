@@ -2,11 +2,7 @@
 using CP_2021.Infrastructure.Repositories.Base;
 using CP_2021.Infrastructure.Units.Base;
 using CP_2021.Models.DBModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using CP_2021.Models.ViewEntities;
 
 namespace CP_2021.Infrastructure.Units
 {
@@ -25,6 +21,19 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<FormattingDB> _formatting;
         private BaseRepository<PaymentDB> _payment;
         private BaseRepository<LaborCostsDB> _labor;
+
+        private BaseRepository<HeadTasks> _headTasks;
+        private BaseRepository<ManufactureNames> _manufactureNames;
+        private BaseRepository<NoSpecifications> _noSpec;
+        private BaseRepository<SpecificationsOnControl> _onControl;
+        private BaseRepository<SpecificationsInVipisk> _inVipisk;
+        private BaseRepository<CoopWork> _coopWork;
+        private BaseRepository<InProgressView> _inProgressView;
+        private BaseRepository<DocumentationView> _docView;
+        private BaseRepository<SKBCheck> _skbCheck;
+        private BaseRepository<OETSStorage> _oetsStorage;
+        private BaseRepository<GivingStorage> _givingStorage;
+        private BaseRepository<GivingReports> _givingReports;
 
         public ApplicationUnit(ApplicationContext context)
         {
@@ -139,6 +148,94 @@ namespace CP_2021.Infrastructure.Units
             }
         }
 
+        public IRepository<NoSpecifications> NoSpec
+        {
+            get
+            {
+                return _noSpec ?? (_noSpec = new BaseRepository<NoSpecifications>(_context));
+            }
+        }
+        public IRepository<SpecificationsOnControl> OnControl
+        {
+            get
+            {
+                return _onControl ?? (_onControl = new BaseRepository<SpecificationsOnControl>(_context));
+            }
+        }
+        public IRepository<SpecificationsInVipisk> InVipisk
+        {
+            get
+            {
+                return _inVipisk ?? (_inVipisk = new BaseRepository<SpecificationsInVipisk>(_context));
+            }
+        }
+        public IRepository<CoopWork> CoopWork
+        {
+            get
+            {
+                return _coopWork ?? (_coopWork = new BaseRepository<CoopWork>(_context));
+            }
+        }
+
+        public IRepository<HeadTasks> HeadTasks
+        {
+            get
+            {
+                return _headTasks ?? (_headTasks = new BaseRepository<HeadTasks>(_context));
+            }
+        }
+        public IRepository<ManufactureNames> ManufactureNames
+        {
+            get
+            {
+                return _manufactureNames ?? (_manufactureNames = new BaseRepository<ManufactureNames>(_context));
+            }
+        }
+        public IRepository<InProgressView> InProgress
+        {
+            get
+            {
+                return _inProgressView ?? (_inProgressView = new BaseRepository<InProgressView>(_context));
+            }
+        }
+        public IRepository<DocumentationView> Documentation
+        {
+            get
+            {
+                return _docView ?? (_docView = new BaseRepository<DocumentationView>(_context));
+            }
+        }
+        public IRepository<SKBCheck> SKBCheck
+        {
+            get
+            {
+                return _skbCheck ?? (_skbCheck = new BaseRepository<SKBCheck>(_context));
+            }
+        }
+
+        public IRepository<OETSStorage> OETSStorage
+        {
+            get
+            {
+                return _oetsStorage ?? (_oetsStorage = new BaseRepository<OETSStorage>(_context));
+            }
+        }
+
+        public IRepository<GivingStorage> GivingStorage
+        {
+            get
+            {
+                return _givingStorage ?? (_givingStorage = new BaseRepository<GivingStorage>(_context));
+            }
+        }
+
+        public IRepository<GivingReports> GivingReports
+        {
+            get
+            {
+                return _givingReports ?? (_givingReports = new BaseRepository<GivingReports>(_context));
+            }
+        }
         public void Commit()
         {
              _context.SaveChanges();
