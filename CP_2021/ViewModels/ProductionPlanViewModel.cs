@@ -11,12 +11,24 @@ using System.Diagnostics;
 using CP_2021.Views.Windows;
 using System;
 using CP_2021.Infrastructure.Singletons;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
 
 namespace CP_2021.ViewModels
 {
     internal class ProductionPlanViewModel : ViewModelBase
     {
         #region Свойства
+        #region SelectedIndex
+
+        private int _selectedIndex;
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set => Set(ref _selectedIndex, value);
+        }
+
+        #endregion
 
         #region ContentContainerContent
 
@@ -228,6 +240,7 @@ namespace CP_2021.ViewModels
             if (PlanControl is null)
             {
                 PlanControl = new UserControlProductionPlan();
+                SendIdToPlan += ((ProductionPlanControlViewModel)(PlanControl.DataContext)).SetSelectedTaskFromReport;
             }
             ContentContainerContent = PlanControl;
         }
@@ -263,10 +276,23 @@ namespace CP_2021.ViewModels
             if(ReportsControl is null)
             {
                 ReportsControl = new UserControlReports();
+                ((ReportsViewModel)(ReportsControl.DataContext)).SendTaskIdToMainWindow += SetSelectedTaskForPlan;
             }
             
             ContentContainerContent = ReportsControl;
         }
+        public void SetSelectedTaskForPlan(object sender, TaskIdEventArgs e)
+        {
+            SelectedIndex = 0;
+            OnSendIdToPlan(e);
+        }
+        public event EventHandler<TaskIdEventArgs> SendIdToPlan;
+        protected virtual void OnSendIdToPlan(TaskIdEventArgs e)
+        {
+            EventHandler<TaskIdEventArgs> handler = SendIdToPlan;
+            handler?.Invoke(this, e);
+        }
+
         private void SetHelpCurrent()
         {
             if(HelpControl is null)

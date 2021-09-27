@@ -3,19 +3,17 @@ using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.PDF;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
 using CP_2021.Models.Classes;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
-using MigraDoc.DocumentObjectModel;
-using MigraDoc.DocumentObjectModel.Tables;
-using MigraDoc.Rendering;
+using CP_2021.ViewModels.Reports;
+using CP_2021.Views.UserControls.Reports;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace CP_2021.ViewModels
@@ -26,111 +24,29 @@ namespace CP_2021.ViewModels
         #region Свойства
 
         private ApplicationUnit Unit;
+        #region UserControls
 
-        #region NoSpecification
-
-        private ObservableCollection<ProductionTaskDB> _noSpecification;
-
-        public ObservableCollection<ProductionTaskDB> NoSpecification
-        {
-            get => _noSpecification;
-            set => Set(ref _noSpecification, value);
-        }
-
-        #endregion
-
-        #region GivingReports
-
-        private ObservableCollection<ProductionTaskDB> _givingReports;
-
-        public ObservableCollection<ProductionTaskDB> GivingReports
-        {
-            get => _givingReports;
-            set => Set(ref _givingReports, value);
-        }
+        private NoSpecificationReport _noSpec = new NoSpecificationReport();
+        private SpecificationsOnControlReport _onControl = new SpecificationsOnControlReport();
+        private SpecInVipiskReport _inVipisk = new SpecInVipiskReport();
+        private CoopWorkReport _coopWork = new CoopWorkReport();
+        private InProgressReport _inProgress = new InProgressReport();
+        private DocumentationReport _doc = new DocumentationReport();
+        private SKBCheckReport _skbCheck = new SKBCheckReport();
+        private OETSStoreageReport _oetsStorage = new OETSStoreageReport();
+        private GivingStorageReport _givingStorage = new GivingStorageReport();
+        private GivingReportsReport _givingReports = new GivingReportsReport();
 
         #endregion
 
-        #region GivingAvailability
+        #region Content
 
-        private TreeGridModel _givingAvailability = new TreeGridModel();
+        private ContentControl _content;
 
-        public TreeGridModel GivingAvailability
+        public ContentControl Content
         {
-            get => _givingAvailability;
-            set => Set(ref _givingAvailability, value);
-        }
-
-        #endregion
-
-        #region InProduction
-
-        private TreeGridModel _inProduction = new TreeGridModel();
-
-        public TreeGridModel InProduction
-        {
-            get => _inProduction;
-            set => Set(ref _inProduction, value);
-        }
-
-        #endregion
-
-        #region ExecutorInProduction
-
-        private TreeGridModel _executorInProduction = new TreeGridModel();
-
-        public TreeGridModel ExecutorInProduction
-        {
-            get => _executorInProduction;
-            set => Set(ref _executorInProduction, value);
-        }
-
-        #endregion
-
-        #region ExecutorCompleted
-
-        private TreeGridModel _executorCompleted = new TreeGridModel();
-
-        public TreeGridModel ExecutorCompleted
-        {
-            get => _executorCompleted;
-            set => Set(ref _executorCompleted, value);
-        }
-
-        #endregion
-
-        #region DateFrom
-
-        private DateTime _dateFrom = DateTime.Today;
-
-        public DateTime DateFrom
-        {
-            get => _dateFrom;
-            set => Set(ref _dateFrom, value);
-        }
-
-        #endregion
-
-        #region DateTo
-
-        private DateTime _dateTo = DateTime.Today;
-
-        public DateTime DateTo
-        {
-            get => _dateTo;
-            set => Set(ref _dateTo, value);
-        }
-
-        #endregion
-
-        #region ExecutorName
-
-        private string _executorName;
-
-        public string ExecutorName
-        {
-            get => _executorName;
-            set => Set(ref _executorName, value);
+            get => _content;
+            set => Set(ref _content, value);
         }
 
         #endregion
@@ -139,264 +55,163 @@ namespace CP_2021.ViewModels
 
         #region Команды
 
-        #region Генерация отчетов в приложении
+        #region Отчеты
+        #region Команды отчетов
+        #region ShowNoSpecCommand
 
-        #region GenerateNoSpecificationReportCommand
+        public ICommand ShowNoSpecCommand { get; }
 
-        public ICommand GenerateNoSpecificationReportCommand { get; }
+        private bool CanShowNoSpecCommandExecute(object p) => true;
 
-        private bool CanGenerateNoSpecificationReportCommandExecute(object p) => true;
-
-        private void OnGenerateNoSpecificationReportCommandExecuted(object p)
+        private void OnShowNoSpecCommandExecuted(object p)
         {
-            NoSpecification = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().
-                Where(t => String.IsNullOrEmpty(t.Manufacture.SpecNum) &&
-                            !String.IsNullOrEmpty(t.Manufacture.Name) &&
-                            !String.IsNullOrEmpty(t.Manufacture.LetterNum)));
+            Content = _noSpec;
+            
         }
 
         #endregion
 
-        #region GenerateGivingReportsCommand
+        #region ShowSpecOnControlCommand
 
-        public ICommand GenerateGivingReportsCommand { get; }
+        public ICommand ShowSpecOnControlCommand { get; }
 
-        private bool CanGenerateGivingReportsCommandExecute(object p) => true;
+        private bool CanShowSpecOnControlCommandExecute(object p) => true;
 
-        private void OnGenerateGivingReportsCommandExecuted(object p)
+        private void OnShowSpecOnControlCommandExecuted(object p)
         {
-            GivingReports = new ObservableCollection<ProductionTaskDB>(Unit.Tasks.Get().
-                Where(t => String.IsNullOrEmpty(t.Giving.Report) &&
-                            !String.IsNullOrEmpty(t.Giving.Bill) &&
-                            !String.IsNullOrEmpty(t.Manufacture.SpecNum)));
+            Content = _onControl;
+            
+        }
+
+        #endregion
+        #region ShowSpecOnVipiskCommand
+
+        public ICommand ShowSpecOnVipiskCommand { get; }
+
+        private bool CanShowSpecOnVipiskCommandExecute(object p) => true;
+
+        private void OnShowSpecOnVipiskCommandExecuted(object p)
+        {
+            Content = _inVipisk;
+        }
+
+        #endregion
+        #region ShowCoopWorkCommand
+
+        public ICommand ShowCoopWorkCommand { get; }
+
+        private bool CanShowCoopWorkCommandExecute(object p) => true;
+
+        private void OnShowCoopWorkCommandExecuted(object p)
+        {
+            Content = _coopWork;
         }
 
         #endregion
 
-        #region GenerateGivingAvailabilityCommand
+        #region ShowInProgressCommand
 
-        public ICommand GenerateGivingAvailabilityCommand { get; }
+        public ICommand ShowInProgressCommand { get; }
 
-        private bool CanGenerateGivingAvailabilityCommandExecute(object p) => true;
+        private bool CanShowInProgressCommandExecute(object p) => true;
 
-        private void OnGenerateGivingAvailabilityCommandExecuted(object p)
+        private void OnShowInProgressCommandExecuted(object p)
         {
-            GivingAvailability = new TreeGridModel();
-            foreach (var task in Unit.Tasks.Get().ToList())
-            {
-                if (task.Giving.State.HasValue && task.Giving.State.Value == true && 
-                    task.Giving.ReceivingDate.HasValue && task.Giving.ReceivingDate >= DateFrom && task.Giving.ReceivingDate <= DateTo &&
-                    String.IsNullOrEmpty(task.Giving.Report) && String.IsNullOrEmpty(task.Giving.Bill) &&  String.IsNullOrEmpty(task.Giving.ReturnReport))
-                {
-                    ProductionTask selectedTask = new ProductionTask(task);
-                    ProductionTask parent = new ProductionTask();
-                    if (task.MyParent.Parent != null)
-                    {
-                        parent = new ProductionTask(task.MyParent.Parent);
-                        if (!GivingAvailability.Contains(parent))
-                        {
-                            GivingAvailability.Add(parent);
-                        }
-                        parent.Children.Add(selectedTask);
-                        parent.HasChildren = true;
-                    }
-                    else
-                    {
-                        GivingAvailability.Add(selectedTask);
-                    }
+            Content = _inProgress;
+        }
 
-                }
-            }
+        #endregion
+        #region ShowDocumentationCommand
+
+        public ICommand ShowDocumentationCommand { get; }
+
+        private bool CanShowDocumentationCommandExecute(object p) => true;
+
+        private void OnShowDocumentationCommandExecuted(object p)
+        {
+            Content = _doc;
         }
 
         #endregion
 
-        #region GenerateInProductionCommand
+        #region ShowSKBCheckCommand
 
-        public ICommand GenerateInProductionCommand { get; }
+        public ICommand ShowSKBCheckCommand { get; }
 
-        private bool CanGenerateInProductionCommandExecute(object p) => true;
+        private bool CanShowSKBCheckCommandExecute(object p) => true;
 
-        private void OnGenerateInProductionCommandExecuted(object p)
+        private void OnShowSKBCheckCommandExecuted(object p)
         {
-            InProduction = new TreeGridModel();
-            foreach (var task in Unit.Tasks.Get().ToList())
-            {
-                if (task.Completion == 3)
-                {
-                    ProductionTask selectedTask = new ProductionTask(task);
-                    ProductionTask parent = new ProductionTask();
-                    if (task.MyParent.Parent != null)
-                    {
-                        parent = new ProductionTask(task.MyParent.Parent);
-                        if (!InProduction.Contains(parent))
-                        {
-                            InProduction.Add(parent);
-                        }
-                        parent.Children.Add(selectedTask);
-                        parent.HasChildren = true;
-                    }
-                    else
-                    {
-                        InProduction.Add(selectedTask);
-                    }
-                }
-            }
+            Content = _skbCheck;
         }
 
         #endregion
 
-        #region GenerateExecutorInProductionCommand
+        #region ShowOETSStorageCommand
 
-        public ICommand GenerateExecutorInProductionCommand { get; }
+        public ICommand ShowOETSStorageCommand { get; }
 
-        private bool CanGenerateExecutorInProductionCommandExecute(object p) => ExecutorName != null;
+        private bool CanShowOETSStorageCommandExecute(object p) => true;
 
-        private void OnGenerateExecutorInProductionCommandExecuted(object p)
+        private void OnShowOETSStorageCommandExecuted(object p)
         {
-            var tasks = Unit.Tasks.Get().
-                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) ||
-                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) &&
-                            t.InProduction.CompletionDate == null &&
-                            t.InProduction.GivingDate != null &&
-                            t.InProduction.GivingDate >= DateFrom &&
-                            t.InProduction.GivingDate <= DateTo);
-            ExecutorInProduction = new TreeGridModel();
-            foreach (var task in tasks)
-            {
-                ProductionTask selectedTask = new ProductionTask(task);
-                if (task.MyParent.Parent != null)
-                {
-                    ProductionTask parent = new ProductionTask(task.MyParent.Parent);
-                    ExecutorInProduction.Add(parent);
-                    parent.Children.Add(selectedTask);
-                    parent.HasChildren = true;
-                }
-                else
-                {
-                    ExecutorInProduction.Add(selectedTask);
-                }
-            }
+            Content = _oetsStorage;
         }
 
         #endregion
 
-        #region GenerateExecutorCompletedCommand
+        #region ShowGivingStorageCommand
 
-        public ICommand GenerateExecutorCompletedCommand { get; }
+        public ICommand ShowGivingStorageCommand { get; }
 
-        private bool CanGenerateExecutorCompletedCommandExecute(object p) => ExecutorName != null;
+        private bool CanShowGivingStorageCommandExecute(object p) => true;
 
-        private void OnGenerateExecutorCompletedCommandExecuted(object p)
+        private void OnShowGivingStorageCommandExecuted(object p)
         {
-            var tasks = Unit.Tasks.Get().
-                Where(t => (String.Equals(t.InProduction.ExecutorName?.ToLower(), ExecutorName.ToLower()) ||
-                            String.Equals(t.InProduction.ExecutorName2?.ToLower(), ExecutorName.ToLower())) &&
-                            t.InProduction.CompletionDate != null &&
-                            t.InProduction.CompletionDate >= DateFrom &&
-                            t.InProduction.CompletionDate <= DateTo);
-            ExecutorCompleted = new TreeGridModel();
-            foreach (var task in tasks)
-            {
-                ProductionTask selectedTask = new ProductionTask(task);
-                if (task.MyParent.Parent != null)
-                {
-                    ProductionTask parent = new ProductionTask(task.MyParent.Parent);
-                    ExecutorCompleted.Add(parent);
-                    parent.Children.Add(selectedTask);
-                    parent.HasChildren = true;
-                }
-                else
-                {
-                    ExecutorCompleted.Add(selectedTask);
-                }
-            }
+            Content = _givingStorage;
         }
 
         #endregion
 
-        #endregion
+        #region ShowGivingReportsCommand
 
-        #region Генерация PDF отчетов
+        public ICommand ShowGivingReportsCommand { get; }
 
-        #region GenerateNoSpecPDFCommand
+        private bool CanShowGivingReportsCommandExecute(object p) => true;
 
-        public ICommand GenerateNoSpecPDFCommand { get; }
-
-        private bool CanGenerateNoSpecPDFCommandExecute(object p) => NoSpecification != null;
-
-        private void OnGenerateNoSpecPDFCommandExecuted(object p)
+        private void OnShowGivingReportsCommandExecuted(object p)
         {
-            PdfDocument.GenerateNoSpecificationReport(NoSpecification);
+            Content = _givingReports;
+        }
+
+        #endregion
+        #endregion
+        #region События отчетов
+
+        #region События
+
+        public event EventHandler<TaskIdEventArgs> SendTaskIdToMainWindow;
+        // Отправка Id на главное окно
+        protected void OnSendTaskIdToMainWindow(TaskIdEventArgs e)
+        {
+            EventHandler<TaskIdEventArgs> handler = SendTaskIdToMainWindow;
+            handler?.Invoke(this, e);
         }
 
         #endregion
 
-        #region GenerateGivingReportsPDFCommand
-
-        public ICommand GenerateGivingReportsPDFCommand { get; }
-
-        private bool CanGenerateGivingReportsPDFCommandExecute(object p) => GivingReports != null;
-
-        private void OnGenerateGivingReportsPDFCommandExecuted(object p)
+        #region Обработчики событий
+        // Получение Id от VM отчетов
+        public void GetTaskIdFromReport(object sender, TaskIdEventArgs e)
         {
-            PdfDocument.GenerateGivingReportsPDF(GivingReports);
+            Debug.WriteLine("Id:" + e.Id);
+            OnSendTaskIdToMainWindow(e);
         }
-
         #endregion
 
-        #region GenerateGivingAvailabilityPDFCommand
 
-        public ICommand GenerateGivingAvailabilityPDFCommand { get; }
-
-        private bool CanGenerateGivingAvailabilityPDFCommandExecute(object p) => GivingAvailability != null;
-
-        private void OnGenerateGivingAvailabilityPDFCommandExecuted(object p)
-        {
-            PdfDocument.GenerateGivingAvailabilityPDF(GivingAvailability, DateFrom, DateTo);
-        }
 
         #endregion
-
-        #region GenerateInProductionPDFCommand
-
-        public ICommand GenerateInProductionPDFCommand { get; }
-
-        private bool CanGenerateInProductionPDFCommandExecute(object p) => InProduction != null;
-
-        private void OnGenerateInProductionPDFCommandExecuted(object p)
-        {
-            PdfDocument.GenerateInProductionPDF(InProduction);
-        }
-
-        #endregion
-
-        #region GenerateExecutorInProductionPDFCommand
-
-        public ICommand GenerateExecutorInProductionPDFCommand { get; }
-
-        private bool CanGenerateExecutorInProductionPDFCommandExecute(object p) => ExecutorInProduction != null;
-
-        private void OnGenerateExecutorInProductionPDFCommandExecuted(object p)
-        {
-            PdfDocument.GenerateExecutorInProductionPDF(ExecutorInProduction, DateFrom, DateTo, ExecutorName);
-        }
-
-        #endregion
-
-        #region GenerateExecutorCompletedPDFCommand
-
-        public ICommand GenerateExecutorCompletedPDFCommand { get; }
-
-        private bool CanGenerateExecutorCompletedPDFCommandExecute(object p) => ExecutorCompleted != null;
-
-        private void OnGenerateExecutorCompletedPDFCommandExecuted(object p)
-        {
-            PdfDocument.GenerateExecutorCompletedPDF(ExecutorCompleted, DateFrom, DateTo, ExecutorName);
-        }
-
-        #endregion
-
         #endregion
 
         #endregion
@@ -404,21 +219,31 @@ namespace CP_2021.ViewModels
         public ReportsViewModel() 
         {
             #region Команды
-            GenerateNoSpecificationReportCommand = new LambdaCommand(OnGenerateNoSpecificationReportCommandExecuted, CanGenerateNoSpecificationReportCommandExecute);
-            GenerateGivingReportsCommand = new LambdaCommand(OnGenerateGivingReportsCommandExecuted, CanGenerateGivingReportsCommandExecute);
-            GenerateGivingAvailabilityCommand = new LambdaCommand(OnGenerateGivingAvailabilityCommandExecuted, CanGenerateGivingAvailabilityCommandExecute);
-            GenerateInProductionCommand = new LambdaCommand(OnGenerateInProductionCommandExecuted, CanGenerateInProductionCommandExecute);
-            GenerateExecutorInProductionCommand = new LambdaCommand(OnGenerateExecutorInProductionCommandExecuted, CanGenerateExecutorInProductionCommandExecute);
-            GenerateExecutorCompletedCommand = new LambdaCommand(OnGenerateExecutorCompletedCommandExecuted, CanGenerateExecutorCompletedCommandExecute);
-            GenerateNoSpecPDFCommand = new LambdaCommand(OnGenerateNoSpecPDFCommandExecuted, CanGenerateNoSpecPDFCommandExecute);
-            GenerateGivingReportsPDFCommand = new LambdaCommand(OnGenerateGivingReportsPDFCommandExecuted, CanGenerateGivingReportsPDFCommandExecute);
-            GenerateGivingAvailabilityPDFCommand = new LambdaCommand(OnGenerateGivingAvailabilityPDFCommandExecuted, CanGenerateGivingAvailabilityPDFCommandExecute);
-            GenerateInProductionPDFCommand = new LambdaCommand(OnGenerateInProductionPDFCommandExecuted, CanGenerateInProductionPDFCommandExecute);
-            GenerateExecutorInProductionPDFCommand = new LambdaCommand(OnGenerateExecutorInProductionPDFCommandExecuted, CanGenerateExecutorInProductionPDFCommandExecute);
-            GenerateExecutorCompletedPDFCommand = new LambdaCommand(OnGenerateExecutorCompletedPDFCommandExecuted, CanGenerateExecutorCompletedPDFCommandExecute);
+            ShowNoSpecCommand = new LambdaCommand(OnShowNoSpecCommandExecuted, CanShowNoSpecCommandExecute);
+            ShowSpecOnControlCommand = new LambdaCommand(OnShowSpecOnControlCommandExecuted, CanShowSpecOnControlCommandExecute);
+            ShowSpecOnVipiskCommand = new LambdaCommand(OnShowSpecOnVipiskCommandExecuted, CanShowSpecOnVipiskCommandExecute);
+            ShowCoopWorkCommand = new LambdaCommand(OnShowCoopWorkCommandExecuted, CanShowCoopWorkCommandExecute);
+            ShowInProgressCommand = new LambdaCommand(OnShowInProgressCommandExecuted, CanShowInProgressCommandExecute);
+            ShowDocumentationCommand = new LambdaCommand(OnShowDocumentationCommandExecuted, CanShowDocumentationCommandExecute);
+            ShowSKBCheckCommand = new LambdaCommand(OnShowSKBCheckCommandExecuted, CanShowSKBCheckCommandExecute);
+            ShowOETSStorageCommand = new LambdaCommand(OnShowOETSStorageCommandExecuted, CanShowOETSStorageCommandExecute);
+            ShowGivingStorageCommand = new LambdaCommand(OnShowGivingStorageCommandExecuted, CanShowGivingStorageCommandExecute);
+            ShowGivingReportsCommand = new LambdaCommand(OnShowGivingReportsCommandExecuted, CanShowGivingReportsCommandExecute);
+
             #endregion
 
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            #region Subscribe
+            ((NoSpecVM)(_noSpec.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((SpecificationsOnControlVM)(_onControl.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((SpecificationsInVipiskVM)(_inVipisk.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((CoopWorkVM)(_coopWork.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((InProgressVM)(_inProgress.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((DocumentationVM)(_doc.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((SKBCkeckVM)(_skbCheck.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((OETSStorageVM)(_oetsStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((GivingStorageVM)(_givingStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((GivingReportsVM)(_givingReports.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            #endregion
         }
     }
 }

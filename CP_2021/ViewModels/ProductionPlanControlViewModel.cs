@@ -31,6 +31,7 @@ using System.Reflection;
 using CP_2021.ViewModels.DataWindowViewModels;
 using CP_2021.Views.Windows.DataWindows;
 using System.Windows.Data;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
 
 namespace CP_2021.ViewModels
 {
@@ -43,6 +44,18 @@ namespace CP_2021.ViewModels
         private UndoRedoManager _undoManager;
         private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
+
+        #region DataTable
+
+        private DataGrid _dataTable;
+
+        public DataGrid DataTable
+        {
+            get => _dataTable;
+            set => Set(ref _dataTable, value);
+        }
+
+        #endregion
         #region User
 
         private UserDB _user;
@@ -1446,6 +1459,18 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #region GetDatagrid
+
+        public ICommand GetDatagrid { get; }
+
+        private bool CanGetDatagridExecute(object p) => true;
+
+        private void OnGetDatagridExecuted(object p)
+        {
+            DataTable = (DataGrid)p;
+        }
+
+        #endregion
         #endregion
 
         #region Методы
@@ -1468,6 +1493,14 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        public void SetSelectedTaskFromReport(object sender, TaskIdEventArgs e)
+        {
+            SelectedTask = ProductionTask.FindByTask(Model, ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.GetByID(e.Id));
+            SelectedTask.ExpandFromChildToParent();
+            DataTable.UpdateLayout();
+            DataTable.ScrollIntoView(SelectedTask);
+        }
 
         public ProductionPlanControlViewModel()
         {
@@ -1504,6 +1537,7 @@ namespace CP_2021.ViewModels
             OpenManufactureWindowCommand = new LambdaCommand(OnOpenManufactureWindowCommandExecuted, CanOpenManufactureWindowCommandExecute);
             OpenInProductionWindowCommand = new LambdaCommand(OnOpenInProductionWindowCommandExecuted, CanOpenInProductionWindowCommandExecute);
             SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
+            GetDatagrid = new LambdaCommand(OnGetDatagridExecuted, CanGetDatagridExecute);
             #endregion
 
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
