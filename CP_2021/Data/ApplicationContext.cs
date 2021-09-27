@@ -1,15 +1,10 @@
 ﻿using CP_2021.Infrastructure;
 using CP_2021.Models.DBModels;
-using Microsoft.Data.SqlClient;
+using CP_2021.Models.ViewEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 
 namespace CP_2021.Data
 {
@@ -27,6 +22,19 @@ namespace CP_2021.Data
         public virtual DbSet<PaymentDB> Payment { get; set; }
         public virtual DbSet<ReportDB> Reports { get; set; }
         public virtual DbSet<TaskDB> Tasks { get; set; }
+
+        public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
+        public virtual DbSet<HeadTasks> HeadTasks { get; set; }
+        public virtual DbSet<NoSpecifications> NoSpecifications { get; set; }
+        public virtual DbSet<SpecificationsOnControl> SpecOnControl { get; set; }
+        public virtual DbSet<SpecificationsInVipisk> SpecInVipisk { get; set; }
+        public virtual DbSet<CoopWork> CoopWork { get; set; }
+        public virtual DbSet<InProgressView> InProductionView { get; set; }
+        public virtual DbSet<DocumentationView> DocumentationView { get; set; }
+        public virtual DbSet<SKBCheck> SKBCkecks {  get; set; }
+        public virtual DbSet<OETSStorage> OETSStorage { get; set; }
+        public virtual DbSet<GivingStorage> GivingStorage { get; set; }
+        public virtual DbSet<GivingReports> GivingReports { get; set; }
 
         public ApplicationContext() : base() {
             //Database.EnsureDeleted();
@@ -67,6 +75,67 @@ namespace CP_2021.Data
 
             modelBuilder.Entity<LaborCostsDB>().HasIndex(t => t.ProductionTaskId).IsUnique();
             modelBuilder.Entity<LaborCostsDB>().HasOne<ProductionTaskDB>(t => t.ProductionTask).WithOne(t => t.LaborCosts);
+
+            #region Views
+            modelBuilder.Entity<HeadTasks>(c => {
+                c.HasNoKey();
+                c.ToView("HeadTasks");
+            });
+            modelBuilder.Entity<ManufactureNames>(c => {
+                c.HasNoKey();
+                c.ToView("ManufactureNames");
+            });
+            modelBuilder.Entity<NoSpecifications>(ns =>
+            {
+                ns.HasNoKey();
+                ns.ToView("NoSpecifications");
+
+            });
+            modelBuilder.Entity<SpecificationsOnControl>(c =>
+            {
+                c.HasNoKey();
+                c.ToView("SpecificationsOnControl");
+            });
+            modelBuilder.Entity<SpecificationsInVipisk>(s =>
+            {
+                s.HasNoKey();
+                s.ToView("SpecificationsInVipisk");
+            });
+            modelBuilder.Entity<CoopWork>(c=> {
+                c.HasNoKey();
+                c.ToView("CoopWork");
+            });
+            modelBuilder.Entity<InProgressView>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("InProgress");
+            });
+            modelBuilder.Entity<DocumentationView>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("Documentation");
+            });
+            modelBuilder.Entity<SKBCheck>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("SKBCheck");
+            });
+            modelBuilder.Entity<OETSStorage>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("OETSStorage");
+            });
+            modelBuilder.Entity<GivingStorage>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("GivingStorage");
+            });
+            modelBuilder.Entity<GivingReports>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("GivingReports");
+            });
+            #endregion
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
