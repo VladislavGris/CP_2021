@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:CP_2021.Views.UserControls"
              xmlns:vm="clr-namespace:CP_2021.ViewModels"
              xmlns:fa="http://schemas.fontawesome.com/icons/"
+              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -29,519 +30,108 @@
                        VerticalAlignment="Center"
                        FontSize="24"/>
         </Grid>
-        <TabControl Grid.Row="1"
-                    FontSize="16">
-            <TabControl.Resources>
-                <Style TargetType="TabItem">
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="TabItem">
-                                <Grid Name="Panel">
-                                    <ContentPresenter x:Name="ContentSite"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Center"
-                                        ContentSource="Header"
-                                        Margin="10,2"/>
-                                </Grid>
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Panel" Property="Background" Value="White" />
-                                    </Trigger>
-                                    <Trigger Property="IsSelected" Value="False">
-                                        <Setter TargetName="Panel" Property="Background" Value="#368433" />
-                                        <Setter Property="TextElement.Foreground" Value="White"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </TabControl.Resources>
-            <TabItem Header="Отсутствие спецификации">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid Background="{StaticResource BackgroundBrush}"
-                          Grid.Row="0">
-                        <Label Content="Отчет отсутствия спецификации"
-                               Style="{StaticResource LabelStyle}"
-                               VerticalAlignment="Center"/>
-                        <Button ToolTip="Сохранить как PDF"
-                                Margin="0 3 200 3"
-                                Width="50"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource ButtonRestyling}"
-                                Background="{StaticResource ButtonBackground}"
-                                Command="{Binding GenerateNoSpecPDFCommand}">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="Solid_Save"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Width="20"/>
-                            </Button.Content>
-                        </Button>
-                        <Button Content="Сформировать очтет"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource EnterButton}"
-                                Margin="5"
-                                Command="{Binding GenerateNoSpecificationReportCommand}"/>
-                    </Grid>
-                    <DataGrid Style="{StaticResource ExampleStyle}"
-                              ItemsSource="{Binding NoSpecification}"
-                              ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                              Grid.Row="1"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Распорядительный документ"
-                                                Binding="{Binding ManagDoc}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Изделие"
-                                                Binding="{Binding Name}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Количество"
-                                                Binding="{Binding Count}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Предприятие изготовитель"
-                                                Binding="{Binding Manufacture.Name}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Номер письма"
-                                                Binding="{Binding Manufacture.LetterNum}"
-                                                Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Наличие на складе предприятия давальческого">
-                <Grid Background="{StaticResource BackgroundBrush}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Grid>
-                            <Label Content="Отчет о наличии на складе предприятия давальческого для передачи"
-                               Style="{StaticResource LabelStyle}"
-                               VerticalAlignment="Center"/>
-                            <Button ToolTip="Сохранить как PDF"
-                                Margin="0 3 200 3"
-                                Width="50"
-                                HorizontalAlignment="Right"
-                                    Style="{StaticResource ButtonRestyling}"
-                                Background="{StaticResource ButtonBackground}"
-                                Command="{Binding GenerateGivingAvailabilityPDFCommand}">
-                                <Button.Content>
-                                    <fa:ImageAwesome Icon="Solid_Save"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Width="20"/>
-                                </Button.Content>
-                            </Button>
-                            <Button Content="Сформировать очтет"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource EnterButton}"
-                                Margin="5"
-                                Command="{Binding GenerateGivingAvailabilityCommand}"/>
-                        </Grid>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Срок закупки с "
-                                   Style="{StaticResource LabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DateFrom, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="110"
-                                        VerticalAlignment="Center"/>
-                            <Label Content=" по "
-                                   Style="{StaticResource LabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DateTo, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="110"
-                                        VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <DataGrid Style="{StaticResource ExampleStyle}"
-                              ItemsSource="{Binding GivingAvailability.FlatModel}"
-                              ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                              Grid.Row="1"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Распорядительный документ"
-                                                Binding="{Binding Task.ManagDoc}"
-                                                Width="*"/>
-                            <DataGridTemplateColumn Header="Изделие"
-                                                    Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Level, Converter={StaticResource LevelSpaceConverter}}"/>
-                                                <ColumnDefinition Width="{StaticResource TreeToggleWidth}"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Expander Grid.Column="1"
-                                          IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
-                                          Background="Transparent"
-                                          Height="48"/>
-                                            <TextBlock Text="{Binding Task.Name}"
-                                           Grid.Column="2"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="200"/>
-
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Количество"
-                                                Binding="{Binding Task.Count}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Ведомость комплектации"
-                                                Binding="{Binding Task.Complectation.Complectation}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Срок закупки"
-                                                Binding="{Binding Task.Giving.ReceivingDate, Mode=TwoWay}"
-                                                Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="О предоставлении давальческих отчетов">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid Background="{StaticResource BackgroundBrush}"
-                          Grid.Row="0">
-                        <Label Content="О предоставлении давальческих отчетов"
-                               Style="{StaticResource LabelStyle}"
-                               VerticalAlignment="Center"/>
-                        <Button ToolTip="Сохранить как PDF"
-                                Margin="0 3 200 3"
-                                Width="50"
-                                Style="{StaticResource ButtonRestyling}"
-                                Background="{StaticResource ButtonBackground}"
-                                HorizontalAlignment="Right"
-                                Command="{Binding GenerateGivingReportsPDFCommand}">
-                            <Button.Content>
-                                <fa:ImageAwesome Icon="Solid_Save"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Width="20"/>
-                            </Button.Content>
-                        </Button>
-                        <Button Content="Сформировать очтет"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource EnterButton}"
-                                Margin="5"
-                                Command="{Binding GenerateGivingReportsCommand}"/>
-                    </Grid>
-                    <DataGrid Style="{StaticResource ExampleStyle}"
-                              ItemsSource="{Binding GivingReports}"
-                              ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                              Grid.Row="1"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Распорядительный документ"
-                                                Binding="{Binding ManagDoc}"
-                                                Width="0.2*"/>
-                            <DataGridTextColumn Header="Изделие"
-                                                Binding="{Binding Name}"
-                                                Width="0.35*"/>
-                            <DataGridTextColumn Header="Количество"
-                                                Binding="{Binding Count}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Предприятие изготовитель"
-                                                Binding="{Binding Manufacture.Name}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Номер спецификации"
-                                                Binding="{Binding Manufacture.SpecNum}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Срок закупки"
-                                                Binding="{Binding Giving.ReceivingDate}"
-                                                Width="0.15*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Наличие изделий в работе">
-                <Grid Background="{StaticResource BackgroundBrush}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Grid>
-                            <Label Content="Отчет о наличии изделий в работе"
-                               Style="{StaticResource LabelStyle}"
-                               VerticalAlignment="Center"/>
-                            <Button ToolTip="Сохранить как PDF"
-                                Margin="0 3 200 3"
-                                Width="50"
-                                    Style="{StaticResource ButtonRestyling}"
-                                Background="{StaticResource ButtonBackground}"
-                                HorizontalAlignment="Right"
-                                Command="{Binding GenerateInProductionPDFCommand}">
-                                <Button.Content>
-                                    <fa:ImageAwesome Icon="Solid_Save"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Width="20"/>
-                                </Button.Content>
-                            </Button>
-                            <Button Content="Сформировать очтет"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource EnterButton}"
-                                Margin="5"
-                                Command="{Binding GenerateInProductionCommand}"/>
-                        </Grid>
-                    </StackPanel>
-                    <DataGrid Style="{StaticResource ExampleStyle}"
-                              ItemsSource="{Binding InProduction.FlatModel}"
-                              ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                              Grid.Row="1"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Распорядительный документ"
-                                                Binding="{Binding Task.ManagDoc}"
-                                                Width="0.2*"/>
-                            <DataGridTemplateColumn Header="Изделие"
-                                                    Width="0.2*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Level, Converter={StaticResource LevelSpaceConverter}}"/>
-                                                <ColumnDefinition Width="{StaticResource TreeToggleWidth}"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Expander Grid.Column="1"
-                                          IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
-                                          Background="Transparent"
-                                          Height="48"/>
-                                            <TextBlock Text="{Binding Task.Name}"
-                                           Grid.Column="2"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="200"/>
-
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Количество"
-                                                Binding="{Binding Task.Count}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Номер МСЛ"
-                                                Binding="{Binding Task.InProduction.Number}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Дата выдачи в работу"
-                                                Binding="{Binding Task.InProduction.GivingDate, Converter={StaticResource DateConverter}}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Сборка"
-                                                Binding="{Binding Task.InProduction.ExecutorName}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Электромонтаж"
-                                                Binding="{Binding Task.InProduction.ExecutorName2}"
-                                                Width="0.1*"/>
-                            <DataGridTextColumn Header="Дата готовности"
-                                                Binding="{Binding Task.InProduction.CompletionDate, Converter={StaticResource DateConverter}}"
-                                                Width="0.1*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Изделия в работе по исполнителю">
-                <Grid Background="{StaticResource BackgroundBrush}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Grid>
-                            <Label Content="Отчет по изделиям в работе у исполнителя"
-                               Style="{StaticResource LabelStyle}"
-                               VerticalAlignment="Center"/>
-                            <Button ToolTip="Сохранить как PDF"
-                                Margin="0 3 200 3"
-                                Width="50"
-                                    Style="{StaticResource ButtonRestyling}"
-                                Background="{StaticResource ButtonBackground}"
-                                HorizontalAlignment="Right"
-                                Command="{Binding GenerateExecutorInProductionPDFCommand}">
-                                <Button.Content>
-                                    <fa:ImageAwesome Icon="Solid_Save"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Width="20"/>
-                                </Button.Content>
-                            </Button>
-                            <Button Content="Сформировать очтет"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource EnterButton}"
-                                Margin="5"
-                                Command="{Binding GenerateExecutorInProductionCommand}"/>
-                        </Grid>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Дата выдачи с "
-                                   Style="{StaticResource LabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DateFrom, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="110"
-                                        VerticalAlignment="Center"/>
-                            <Label Content=" по "
-                                   Style="{StaticResource LabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DateTo, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="110"
-                                        VerticalAlignment="Center"/>
-                            <Label Content="Исполнитель"
-                                   Style="{StaticResource LabelStyle}"/>
-                            <TextBox Text="{Binding ExecutorName, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource TextBoxStyle}"
-                                     Width="100"
-                                     VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <DataGrid Style="{StaticResource ExampleStyle}"
-                              ItemsSource="{Binding ExecutorInProduction.FlatModel}"
-                              ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                              Grid.Row="1"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Распорядительный документ"
-                                                Binding="{Binding Task.ManagDoc}"
-                                                Width="*"/>
-                            <DataGridTemplateColumn Header="Изделие"
-                                                    Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Level, Converter={StaticResource LevelSpaceConverter}}"/>
-                                                <ColumnDefinition Width="{StaticResource TreeToggleWidth}"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Expander Grid.Column="1"
-                                          IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
-                                          Background="Transparent"
-                                          Height="48"/>
-                                            <TextBlock Text="{Binding Task.Name}"
-                                           Grid.Column="2"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="200"/>
-
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Количество"
-                                                Binding="{Binding Task.Count}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Сборка"
-                                                Binding="{Binding Task.InProduction.ExecutorName}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Электромонтаж"
-                                                Binding="{Binding Task.InProduction.ExecutorName2}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Ведомость комплектации"
-                                                Binding="{Binding Task.Complectation.Complectation}"
-                                                Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Готовые изделия по исполнителю">
-                <Grid Background="{StaticResource BackgroundBrush}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="70"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Grid.Row="0">
-                        <Grid>
-                            <Label Content="Отчет по готовым изделиям у исполнителя"
-                               Style="{StaticResource LabelStyle}"
-                               VerticalAlignment="Center"/>
-                            <Button ToolTip="Сохранить как PDF"
-                                Margin="0 3 200 3"
-                                    Style="{StaticResource ButtonRestyling}"
-                                Background="{StaticResource ButtonBackground}"
-                                Width="50"
-                                HorizontalAlignment="Right"
-                                Command="{Binding GenerateExecutorCompletedPDFCommand}">
-                                <Button.Content>
-                                    <fa:ImageAwesome Icon="Solid_Save"
-                                     Foreground="{StaticResource ForegroundBrush}"
-                                     Width="20"/>
-                                </Button.Content>
-                            </Button>
-                            <Button Content="Сформировать очтет"
-                                HorizontalAlignment="Right"
-                                Style="{StaticResource EnterButton}"
-                                Margin="5"
-                                Command="{Binding GenerateExecutorCompletedCommand}"/>
-                        </Grid>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Дата выдачи с "
-                                   Style="{StaticResource LabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DateFrom, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="110"
-                                        VerticalAlignment="Center"/>
-                            <Label Content=" по "
-                                   Style="{StaticResource LabelStyle}"/>
-                            <DatePicker SelectedDate="{Binding DateTo, UpdateSourceTrigger=PropertyChanged}"
-                                        Width="110"
-                                        VerticalAlignment="Center"/>
-                            <Label Content="Исполнитель"
-                                   Style="{StaticResource LabelStyle}"/>
-                            <TextBox Text="{Binding ExecutorName, UpdateSourceTrigger=PropertyChanged}"
-                                     Style="{StaticResource TextBoxStyle}"
-                                     Width="100"
-                                     VerticalAlignment="Center"/>
-                        </StackPanel>
-                    </StackPanel>
-                    <DataGrid Style="{StaticResource ExampleStyle}"
-                              ItemsSource="{Binding ExecutorCompleted.FlatModel}"
-                              ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
-                              Grid.Row="1"
-                              IsReadOnly="True">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Распорядительный документ"
-                                                Binding="{Binding Task.ManagDoc}"
-                                                Width="*"/>
-                            <DataGridTemplateColumn Header="Изделие"
-                                                    Width="*">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding Level, Converter={StaticResource LevelSpaceConverter}}"/>
-                                                <ColumnDefinition Width="{StaticResource TreeToggleWidth}"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Expander Grid.Column="1"
-                                          IsExpanded="{Binding IsExpanded, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                          Visibility="{Binding HasChildren, Converter={StaticResource TreeToggleConverter}}" 
-                                          Background="Transparent"
-                                          Height="48"/>
-                                            <TextBlock Text="{Binding Task.Name}"
-                                           Grid.Column="2"
-                                           TextWrapping="Wrap"
-                                           MaxWidth="200"/>
-
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                            <DataGridTextColumn Header="Количество"
-                                                Binding="{Binding Task.Count}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Сборка"
-                                                Binding="{Binding Task.InProduction.ExecutorName}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Электромонтаж"
-                                                Binding="{Binding Task.InProduction.ExecutorName2}"
-                                                Width="*"/>
-                            <DataGridTextColumn Header="Ведомость комплектации"
-                                                Binding="{Binding Task.Complectation.Complectation}"
-                                                Width="*"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-        </TabControl>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TreeView Grid.Column="0">
+                <TextBlock HorizontalAlignment="Center">Отчеты</TextBlock>
+                <TreeViewItem Header="ДВИЖЕНИЕ ИЗДЕЛИЯ ПРИ ИЗГОТОВЛЕНИИ">
+                    <TreeViewItem Header="Отчет Отсутствие номера спецификации">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowNoSpecCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Спецификации на контроле">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowSpecOnControlCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Спецификации к выписке">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowSpecOnVipiskCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет В работе по кооперации">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowCoopWorkCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Наличие изделий в работе">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowInProgressCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Отработка документации">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowDocumentationCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Формирование актов"/>
+                    <TreeViewItem Header="Отчет Проверка СКБ">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowSKBCheckCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Склад ОЭЦ">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowOETSStorageCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Собрано по акту"/>
+                </TreeViewItem>
+                <TreeViewItem Header="ФИНАНСОВОЕ ПЛАНИРОВАНИЕ"/>
+                <TreeViewItem Header="ОТЧЕТЫ ИЗГОТОВЛЕНИЯ">
+                    <TreeViewItem Header="Отчет Изделия в работе по исполнителю"/>
+                    <TreeViewItem Header="Отчет Готовые изделия по исполнителю"/>
+                    <TreeViewItem Header="Отчет Изготовленные изделия за период"/>
+                </TreeViewItem>
+                <TreeViewItem Header="ДАВАЛЬЧЕСКОЕ ИМУЩЕСТВО">
+                    <TreeViewItem Header="Отчет Наличие на складе предприятия давальческого для передачи">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowGivingStorageCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Предоставление давальческих отчетов">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowGivingReportsCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                </TreeViewItem>
+                <TreeViewItem Header="ПЛАН ПРОИЗВОДСТВА"/>
+            </TreeView>
+            <GridSplitter Grid.Column="1"
+                      ShowsPreview="False"
+                      Width="3"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch"/>
+            <ContentControl Grid.Column="2" Content="{Binding Content}"/>
+        </Grid>
+        
+        
     </Grid>
     
 </UserControl>

@@ -161,7 +161,8 @@
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                           Background="Transparent"
                           BorderBrush="Transparent"
-                          Foreground="{StaticResource ForegroundBrush}">
+                          Foreground="{StaticResource ForegroundBrush}"
+                          SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
                     <ListView.Resources>
                         <Style x:Key="FocusVisual">
                             <Setter Property="Control.Template">
@@ -281,14 +282,14 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
-                    <!--<ListViewItem x:Name="ItemHelp" Height="60">
+                    <ListViewItem x:Name="ItemHelp" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_Question"
                                              Style="{StaticResource TooltipIconStyle}"/>
                             <TextBlock Text="Помощь"
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
-                    </ListViewItem>-->
+                    </ListViewItem>
                     <ListViewItem x:Name="ItemLogOut" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_SignOutAlt"
