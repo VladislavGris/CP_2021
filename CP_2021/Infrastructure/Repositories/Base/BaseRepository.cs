@@ -39,7 +39,7 @@ namespace CP_2021.Infrastructure.Repositories.Base
             return dbSet.ToList();
         }
 
-        public virtual T GetByID(int id)
+        public virtual T GetByID(Guid id)
         {
             return dbSet.Find(id);
         }

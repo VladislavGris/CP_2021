@@ -11,7 +11,7 @@ namespace CP_2021.Infrastructure.Repositories.Base
         void Delete(T entityToDelete);
         void Delete(int id);
         IEnumerable<T> Get();
-        T GetByID(int id);
+        T GetByID(Guid id);
         IEnumerable<T> GetWithRawSql(string query, params object[] parameters);
         void Insert(T entity);
         void Update(T entityToUpdate);
