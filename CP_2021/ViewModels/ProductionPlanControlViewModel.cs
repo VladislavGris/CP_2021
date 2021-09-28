@@ -1,37 +1,31 @@
-﻿using CP_2021.Data;
-using CP_2021.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CP_2021.Models.DBModels;
-using Microsoft.EntityFrameworkCore;
-using Common.Wpf.Data;
-using CP_2021.Models.Classes;
-using System.Windows.Input;
+﻿using Common.Wpf.Data;
+using CP_2021.Data;
 using CP_2021.Infrastructure.Commands;
-using CP_2021.Infrastructure.Units;
-using System.Diagnostics;
-using System.Windows.Controls;
-using System.Windows;
+using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Infrastructure.Search;
 using CP_2021.Infrastructure.Search.SearchStrategies;
-using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Infrastructure.Singletons;
-using System.Collections.ObjectModel;
 using CP_2021.Infrastructure.UndoRedo;
-using CP_2021.Infrastructure.UndoRedo.UndoCommands;
-using System.Threading;
-using CP_2021.Infrastructure.Threading;
-using log4net;
-using log4net.Config;
-using System.Reflection;
+using CP_2021.Infrastructure.Units;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Models.Classes;
+using CP_2021.Models.DBModels;
+using CP_2021.ViewModels.Base;
 using CP_2021.ViewModels.DataWindowViewModels;
 using CP_2021.Views.Windows.DataWindows;
+using log4net;
+using log4net.Config;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
-using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using System.Windows.Input;
 
 namespace CP_2021.ViewModels
 {
@@ -1256,6 +1250,24 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region OpenActWindowCommand
+
+        public ICommand OpenActWindowCommand { get; }
+
+        private bool CanOpenActWindowCommandExecute(object p) => true;
+
+        private void OnOpenActWindowCommandExecuted(object p)
+        {
+            DataWindowViewModel actVm = new DataWindowViewModel();
+            actVm.SetEditableTask(SelectedTask.Task);
+            ConsumeActWindow window = new ConsumeActWindow();
+            window.Closed += Window_Closed;
+            window.DataContext = actVm;
+            window.Show();
+        }
+
+        #endregion
+
         #region OpenGivingWindowCommand
 
         public ICommand OpenGivingWindowCommand { get; }
@@ -1538,6 +1550,7 @@ namespace CP_2021.ViewModels
             OpenInProductionWindowCommand = new LambdaCommand(OnOpenInProductionWindowCommandExecuted, CanOpenInProductionWindowCommandExecute);
             SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
             GetDatagrid = new LambdaCommand(OnGetDatagridExecuted, CanGetDatagridExecute);
+            OpenActWindowCommand = new LambdaCommand(OnOpenActWindowCommandExecuted, CanOpenActWindowCommandExecute);
             #endregion
 
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };

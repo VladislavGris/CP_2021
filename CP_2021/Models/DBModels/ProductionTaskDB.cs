@@ -40,6 +40,8 @@ namespace CP_2021.Models.DBModels
         [Column("Expend_Num", TypeName = "nvarchar(MAX)")]
         public string ExpendNum { get; set; }
 
+        //public bool? ActCreation { get; set; }
+
         [Column("Note", TypeName = "nvarchar(MAX)")]
         public string Note { get; set; }
 
@@ -60,6 +62,7 @@ namespace CP_2021.Models.DBModels
         public virtual FormattingDB Formatting { get; set; }
         public virtual PaymentDB Payment { get; set; }
         public virtual LaborCostsDB LaborCosts { get; set; }
+        public virtual ActDB Act { get; set; }
 
         public ProductionTaskDB() { }
 
@@ -96,7 +99,7 @@ namespace CP_2021.Models.DBModels
             taskDB.LaborCosts = this.LaborCosts.Clone();
             taskDB.Completion = this.Completion;
             taskDB.Note = this.Note;
-
+            taskDB.Act = this.Act;
             return taskDB;
         }
 

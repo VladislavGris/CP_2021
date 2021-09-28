@@ -22,6 +22,7 @@ namespace CP_2021.Data
         public virtual DbSet<PaymentDB> Payment { get; set; }
         public virtual DbSet<ReportDB> Reports { get; set; }
         public virtual DbSet<TaskDB> Tasks { get; set; }
+        public virtual DbSet<ActDB> Act { get; set; }
 
         public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
         public virtual DbSet<HeadTasks> HeadTasks { get; set; }
@@ -59,6 +60,7 @@ namespace CP_2021.Data
             modelBuilder.Entity<ManufactureDB>().HasIndex(m => m.ProductionTaskId).IsUnique();
             modelBuilder.Entity<ReportDB>().HasIndex(r => r.TaskId).IsUnique();
             modelBuilder.Entity<FormattingDB>().HasIndex(f => f.ProductionTaskId).IsUnique();
+            modelBuilder.Entity<ActDB>().HasIndex(f => f.ProductionTaskId).IsUnique();
             #endregion
             string passwordHash = PasswordHashing.CreateHash("8558286");
             modelBuilder.Entity<UserDB>().HasData(new UserDB("grishkevichai", passwordHash, "Алексей", "Гришкевич") {Id = Guid.NewGuid(), Position = 2 });
@@ -66,6 +68,7 @@ namespace CP_2021.Data
 
             modelBuilder.Entity<HierarchyDB>().HasOne<ProductionTaskDB>(h => h.Child).WithOne(t => t.MyParent);
             modelBuilder.Entity<FormattingDB>().HasOne<ProductionTaskDB>(t => t.ProductionTask).WithOne(t => t.Formatting);
+            modelBuilder.Entity<ActDB>().HasOne<ProductionTaskDB>(t => t.ProductionTask).WithOne(t => t.Act);
 
             modelBuilder.Entity<PaymentDB>().HasIndex(t => t.ProductionTaskId).IsUnique();
             modelBuilder.Entity<PaymentDB>().Property(t => t.IsFirstPayment).HasDefaultValue(false);

@@ -254,6 +254,16 @@ namespace CP_2021.Models.Classes
                 this.IsExpanded = false;
             }
         }
+
+        public void ExpandFromChildToParent()
+        {
+            if(this.Parent == null)
+            {
+                return;
+            }
+            this.Parent.IsExpanded = true;
+            ((ProductionTask)(this.Parent)).ExpandFromChildToParent();
+        }
         
         public ProductionTask Clone()
         {
