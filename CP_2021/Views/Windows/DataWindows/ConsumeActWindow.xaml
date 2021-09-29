@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CP_2021.Views.Windows.DataWindows"
         xmlns:vm="clr-namespace:CP_2021.ViewModels.DataWindowViewModels"
+        xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="ConsumeActWindow" Height="383" Width="600" WindowStyle="None"
         Style="{StaticResource WindowStyle}"
@@ -56,14 +57,26 @@
                     <TextBlock Text="Формирование акта" FontSize="18" Grid.Column="0" Grid.Row="2" Margin="10 0 0 0"/>
                     <TextBlock Text="Дата акта" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="10 0 0 0"/>
 
-                    <TextBox Text="{Binding EditableTask.Act.ActNumber, Mode=TwoWay}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0"/>
-                    <DatePicker FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" SelectedDate="{Binding EditableTask.Act.ActDate, Mode=TwoWay}"/>
-                    <CheckBox IsChecked="{Binding EditableTask.Act.ActCreation}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left">
+                    <TextBox Text="{Binding EditableTask.Act.ActNumber, Mode=TwoWay}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="TextChanged">
+                                <ie:InvokeCommandAction Command="{Binding SetActCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TextBox>
+                    <DatePicker FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" SelectedDate="{Binding EditableTask.Act.ActDate, Mode=TwoWay}">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="CalendarClosed">
+                                <ie:InvokeCommandAction Command="{Binding SetActCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </DatePicker>
+                        <CheckBox IsChecked="{Binding EditableTask.Act.ActCreation}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
                     </CheckBox>
-                    <CheckBox IsChecked="{Binding EditableTask.Act.ByAct}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left">
+                    <CheckBox IsChecked="{Binding EditableTask.Act.ByAct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>

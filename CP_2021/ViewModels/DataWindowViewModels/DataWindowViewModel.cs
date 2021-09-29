@@ -34,53 +34,6 @@ namespace CP_2021.ViewModels.DataWindowViewModels
 
         #region Команды
 
-        #region SaveCommand
-
-        public ICommand SavePaymentCommand { get; }
-
-        private bool CanSavePaymentCommandExecute(object p) => true;
-
-        private void OnSavePaymentCommandExecuted(object p)
-        {
-            MessageBoxResult result = MessageBox.Show("Вы действительно хотите сохранить изменения?", "Сохранить", MessageBoxButton.YesNoCancel);
-            if (result == MessageBoxResult.Yes)
-            {
-                ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
-                ((Window)p).Close();
-            }else if(result == MessageBoxResult.No)
-            {
-                _editableTask.Payment = _baseTask.Payment.Clone();
-                ((Window)p).Close();
-            }
-            
-        }
-
-        #endregion
-
-        #region SaveLaborCostsCommand
-
-        public ICommand SaveLaborCostsCommand { get; }
-
-        private bool CanSaveLaborCostsCommandExecute(object p) => true;
-
-        private void OnSaveLaborCostsCommandExecuted(object p)
-        {
-            MessageBoxResult result = MessageBox.Show("Вы действительно хотите сохранить изменения?", "Сохранить", MessageBoxButton.YesNoCancel);
-            if (result == MessageBoxResult.Yes)
-            {
-                ApplicationUnitSingleton.GetInstance().dbUnit.Commit();
-                ((Window)p).Close();
-            }
-            else if (result == MessageBoxResult.No)
-            {
-                _editableTask.LaborCosts = _baseTask.LaborCosts.Clone();
-                ((Window)p).Close();
-            }
-
-        }
-
-        #endregion
-
         #region SetExecutionTermCommand
 
         public ICommand SetExecutionTermCommand { get; }
@@ -107,6 +60,23 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                         _editableTask.Manufacture.ExecutionTerm = WorkingDays.AddWorkingDays(DateTime.Now, days);
                     }
                 }
+            }
+        }
+
+        #endregion
+
+        #region SetActCommand
+
+        public ICommand SetActCommand { get; }
+
+        private bool CanSetActCommandExecute(object p) => true;
+
+        private void OnSetActCommandExecuted(object p)
+        {
+            if(!String.IsNullOrEmpty(_editableTask.Act.ActNumber) && _editableTask.Act.ActDate.HasValue)
+            {
+                _editableTask.Act.ByAct = true;
+                _editableTask.Act.ActCreation = false;
             }
         }
 
@@ -158,10 +128,9 @@ namespace CP_2021.ViewModels.DataWindowViewModels
 
         public DataWindowViewModel()
         {
-            SavePaymentCommand = new LambdaCommand(OnSavePaymentCommandExecuted, CanSavePaymentCommandExecute);
-            SaveLaborCostsCommand = new LambdaCommand(OnSaveLaborCostsCommandExecuted, CanSaveLaborCostsCommandExecute);
             SaveCommand = new LambdaCommand(OnSaveCommandExecuted, CanSaveCommandExecute);
             SetExecutionTermCommand = new LambdaCommand(OnSetExecutionTermCommandExecuted, CanSetExecutionTermCommandExecute);
+            SetActCommand = new LambdaCommand(OnSetActCommandExecuted, CanSetActCommandExecute);
         }
     }
 }
