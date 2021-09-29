@@ -1016,49 +1016,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenPaymentWindowCommandExecuted(object p)
         {
-            try
-            {
-                //Unit.Refresh();
-                using(ApplicationContext context = new ApplicationContext())
-                {
-                    ProductionTaskDB task = context.Production_Plan.Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                    //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                    if (task == null)
-                    {
-                        MessageBox.Show("Изделие было удалено");
-                        Update();
-                    }
-                    if (task.EditingBy == "default")
-                    {
-                        task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                        context.SaveChanges();
-                        DataWindowViewModel paymentVM = new DataWindowViewModel();
-                        paymentVM.SetEditableTask(SelectedTask.Task);
-                        PaymentWindow paymentWindow = new PaymentWindow();
-                        paymentWindow.Closed += Window_Closed;
-                        paymentWindow.DataContext = paymentVM;
-                        paymentWindow.Show();
-                    }
-                    else
-                    {
-                        UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                        if (user == null)
-                        {
-                            MessageBox.Show($"Строка уже редактируется");
-                        }
-                        else
-                        {
-                            MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                        }
-
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenPaymentWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            PaymentWindow window = new PaymentWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         #endregion
@@ -1071,45 +1034,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenLaborCostsWindowCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
-                {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
-                    LaborCostsWindow laborWindow = new LaborCostsWindow();
-                    laborWindow.Closed += Window_Closed;
-                    laborWindow.DataContext = laborVm;
-                    laborWindow.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
-                    {
-                        MessageBox.Show($"Строка уже редактируется");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
-
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenLaborCostsWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            LaborCostsWindow window = new LaborCostsWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         #endregion
@@ -1122,45 +1052,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenDocumentWindowCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
-                {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
-                    DocumentWindow window = new DocumentWindow();
-                    window.Closed += Window_Closed;
-                    window.DataContext = laborVm;
-                    window.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
-                    {
-                        MessageBox.Show($"Строка уже редактируется");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenDocumentWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            DocumentWindow window = new DocumentWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -1208,45 +1105,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenComplectationWindowCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
-                {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
-                    ComplectationWindow window = new ComplectationWindow();
-                    window.Closed += Window_Closed;
-                    window.DataContext = laborVm;
-                    window.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
-                    {
-                        MessageBox.Show($"Строка уже редактируется");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenComplectationWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            ComplectationWindow window = new ComplectationWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         #endregion
@@ -1277,45 +1141,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenGivingWindowCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
-                {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
-                    GivingWindow window = new GivingWindow();
-                    window.Closed += Window_Closed;
-                    window.DataContext = laborVm;
-                    window.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
-                    {
-                        MessageBox.Show($"Строка уже редактируется");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenGivingWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            GivingWindow window = new GivingWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         #endregion
@@ -1328,45 +1159,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenManufactureWindowCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
-                {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
-                    ManufactureWindow window = new ManufactureWindow();
-                    window.Closed += Window_Closed;
-                    window.DataContext = laborVm;
-                    window.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
-                    {
-                        MessageBox.Show($"Строка уже редактируется");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenManufactureWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            ManufactureWindow window = new ManufactureWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         #endregion
@@ -1379,45 +1177,12 @@ namespace CP_2021.ViewModels
 
         private void OnOpenInProductionWindowCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Refresh();
-                ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (task == null)
-                {
-                    MessageBox.Show("Изделие было удалено");
-                    Update();
-                }
-                if (task.EditingBy == "default")
-                {
-                    task.EditingBy = UserDataSingleton.GetInstance().user.Login;
-                    Unit.Commit();
-                    DataWindowViewModel laborVm = new DataWindowViewModel();
-                    laborVm.SetEditableTask(SelectedTask.Task);
-                    InProductionWindow window = new InProductionWindow();
-                    window.Closed += Window_Closed;
-                    window.DataContext = laborVm;
-                    window.Show();
-                }
-                else
-                {
-                    UserDB user = Unit.DBUsers.Get().Where(u => u.Login == task.EditingBy).SingleOrDefault();
-                    if (user == null)
-                    {
-                        MessageBox.Show($"Строка уже редактируется");
-                    }
-                    else
-                    {
-                        MessageBox.Show($"Строка уже редактируется пользователем {user.Surname} {user.Name}");
-                    }
-
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("OpenInProductionWindowCommand " + ex.Message);
-            }
+            DataWindowViewModel vm = new DataWindowViewModel();
+            vm.SetEditableTask(SelectedTask.Task);
+            InProductionWindow window = new InProductionWindow();
+            window.DataContext = vm;
+            window.Closed += Window_Closed;
+            window.Show();
         }
 
         #endregion
