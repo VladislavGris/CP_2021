@@ -40,6 +40,7 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<ActForm> _actForm;
 
         private BaseRepository<SearchProcResult> _searchResults;
+        private BaseRepository<ByAct> _byAct;
 
         public ApplicationUnit(ApplicationContext context)
         {
@@ -256,6 +257,14 @@ namespace CP_2021.Infrastructure.Units
             get
             {
                 return _searchResults ?? (_searchResults = new BaseRepository<SearchProcResult>(_context));
+            }
+        }
+
+        public IRepository<ByAct> ByAct
+        {
+            get
+            {
+                return _byAct ?? (_byAct = new BaseRepository<ByAct>(_context));
             }
         }
 

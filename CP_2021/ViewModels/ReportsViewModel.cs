@@ -30,6 +30,7 @@ namespace CP_2021.ViewModels
         private GivingStorageReport _givingStorage = new GivingStorageReport();
         private GivingReportsReport _givingReports = new GivingReportsReport();
         private ActFormReport _actFormReport = new ActFormReport();
+        private ByActReport _byActReport = new ByActReport();
 
         #endregion
 
@@ -192,6 +193,19 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        #region ShowByActCommand
+
+        public ICommand ShowByActCommand { get; }
+
+        private bool CanShowByActCommandExecute(object p) => true;
+
+        private void OnShowByActCommandExecuted(object p)
+        {
+            Content = _byActReport;
+        }
+
+        #endregion
         #endregion
         #region События отчетов
 
@@ -237,6 +251,7 @@ namespace CP_2021.ViewModels
             ShowGivingStorageCommand = new LambdaCommand(OnShowGivingStorageCommandExecuted, CanShowGivingStorageCommandExecute);
             ShowGivingReportsCommand = new LambdaCommand(OnShowGivingReportsCommandExecuted, CanShowGivingReportsCommandExecute);
             ShowActFormCommand = new LambdaCommand(OnShowActFormCommandExecuted, CanShowActFormCommandExecute);
+            ShowByActCommand = new LambdaCommand(OnShowByActCommandExecuted, CanShowByActCommandExecute);
             #endregion
 
             #region Subscribe
@@ -251,6 +266,7 @@ namespace CP_2021.ViewModels
             ((GivingStorageVM)(_givingStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((GivingReportsVM)(_givingReports.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((ActFormVM)(_actFormReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((ByActVM)(_byActReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             #endregion
         }
     }

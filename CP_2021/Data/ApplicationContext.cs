@@ -40,6 +40,7 @@ namespace CP_2021.Data
         public virtual DbSet<ActForm> ActForm { get; set; }
 
         public virtual DbSet<SearchProcResult> SearchResults { get; set; }
+        public virtual DbSet<ByAct> ByAct { get; set; }
 
         public ApplicationContext() : base() {
             //Database.EnsureDeleted();

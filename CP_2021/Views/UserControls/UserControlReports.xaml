@@ -37,7 +37,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <TreeView Grid.Column="0">
+            <TreeView Grid.Column="0" FontSize="16">
                 <TextBlock HorizontalAlignment="Center">Отчеты</TextBlock>
                 <TreeViewItem Header="ДВИЖЕНИЕ ИЗДЕЛИЯ ПРИ ИЗГОТОВЛЕНИИ">
                     <TreeViewItem Header="Отчет Отсутствие номера спецификации">
@@ -103,7 +103,13 @@
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
                     </TreeViewItem>
-                    <TreeViewItem Header="Отчет Собрано по акту"/>
+                    <TreeViewItem Header="Отчет Собрано по акту">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowByActCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem Header="ФИНАНСОВОЕ ПЛАНИРОВАНИЕ"/>
                 <TreeViewItem Header="ОТЧЕТЫ ИЗГОТОВЛЕНИЯ">
