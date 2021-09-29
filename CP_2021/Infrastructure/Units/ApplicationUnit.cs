@@ -2,7 +2,10 @@
 using CP_2021.Infrastructure.Repositories.Base;
 using CP_2021.Infrastructure.Units.Base;
 using CP_2021.Models.DBModels;
+using CP_2021.Models.ProcedureResuts;
 using CP_2021.Models.ViewEntities;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace CP_2021.Infrastructure.Units
 {
@@ -34,6 +37,8 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<OETSStorage> _oetsStorage;
         private BaseRepository<GivingStorage> _givingStorage;
         private BaseRepository<GivingReports> _givingReports;
+
+        private BaseRepository<SearchProcResult> _searchResults;
 
         public ApplicationUnit(ApplicationContext context)
         {
@@ -236,6 +241,15 @@ namespace CP_2021.Infrastructure.Units
                 return _givingReports ?? (_givingReports = new BaseRepository<GivingReports>(_context));
             }
         }
+
+        public IRepository<SearchProcResult> SearchResults
+        {
+            get
+            {
+                return _searchResults ?? (_searchResults = new BaseRepository<SearchProcResult>(_context));
+            }
+        }
+
         public void Commit()
         {
              _context.SaveChanges();

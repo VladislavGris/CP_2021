@@ -76,6 +76,7 @@ namespace CP_2021.Models.DBModels
             Formatting = new FormattingDB();
             Payment = new PaymentDB();
             LaborCosts = new LaborCostsDB();
+            Act = new ActDB();
             EditingBy = "default";
         }
 

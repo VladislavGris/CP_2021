@@ -12,6 +12,7 @@ using CP_2021.Models.Classes;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using CP_2021.ViewModels.DataWindowViewModels;
+using CP_2021.Views.Windows;
 using CP_2021.Views.Windows.DataWindows;
 using log4net;
 using log4net.Config;
@@ -1421,6 +1422,21 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region OpenSearchWindowCommand
+
+        public ICommand OpenSearchWindowCommand { get; }
+
+        private bool CanOpenSearchWindowCommandExecute(object p) => true;
+
+        private void OnOpenSearchWindowCommandExecuted(object p)
+        {
+            SearchWindow window = new SearchWindow();
+            ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
+            window.Show();
+        }
+
+        #endregion
+
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
@@ -1551,6 +1567,7 @@ namespace CP_2021.ViewModels
             SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
             GetDatagrid = new LambdaCommand(OnGetDatagridExecuted, CanGetDatagridExecute);
             OpenActWindowCommand = new LambdaCommand(OnOpenActWindowCommandExecuted, CanOpenActWindowCommandExecute);
+            OpenSearchWindowCommand = new LambdaCommand(OnOpenSearchWindowCommandExecuted, CanOpenSearchWindowCommandExecute);
             #endregion
 
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
