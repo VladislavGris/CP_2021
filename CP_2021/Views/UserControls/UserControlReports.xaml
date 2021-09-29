@@ -82,7 +82,13 @@
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
                     </TreeViewItem>
-                    <TreeViewItem Header="Отчет Формирование актов"/>
+                    <TreeViewItem Header="Отчет Формирование актов">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowActFormCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
                     <TreeViewItem Header="Отчет Проверка СКБ">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="Selected">

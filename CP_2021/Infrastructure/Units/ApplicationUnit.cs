@@ -37,6 +37,7 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<OETSStorage> _oetsStorage;
         private BaseRepository<GivingStorage> _givingStorage;
         private BaseRepository<GivingReports> _givingReports;
+        private BaseRepository<ActForm> _actForm;
 
         private BaseRepository<SearchProcResult> _searchResults;
 
@@ -239,6 +240,14 @@ namespace CP_2021.Infrastructure.Units
             get
             {
                 return _givingReports ?? (_givingReports = new BaseRepository<GivingReports>(_context));
+            }
+        }
+
+        public IRepository<ActForm> ActForm
+        {
+            get
+            {
+                return _actForm ?? (_actForm = new BaseRepository<ActForm>(_context));
             }
         }
 

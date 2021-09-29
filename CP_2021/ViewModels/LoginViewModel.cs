@@ -143,7 +143,11 @@ namespace CP_2021.ViewModels
                 {
                     // Ошибка подключения к базе данных
                     MessageBox.Show(e.Message);
-                    Application.Current.Shutdown();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        Application.Current.Shutdown();
+                    });
+                    
                 }
             }
             else

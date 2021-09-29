@@ -37,6 +37,7 @@ namespace CP_2021.Data
         public virtual DbSet<OETSStorage> OETSStorage { get; set; }
         public virtual DbSet<GivingStorage> GivingStorage { get; set; }
         public virtual DbSet<GivingReports> GivingReports { get; set; }
+        public virtual DbSet<ActForm> ActForm { get; set; }
 
         public virtual DbSet<SearchProcResult> SearchResults { get; set; }
 
@@ -140,6 +141,11 @@ namespace CP_2021.Data
             {
                 i.HasNoKey();
                 i.ToView("GivingReports");
+            });
+            modelBuilder.Entity<ActForm>(i =>
+            {
+                i.HasNoKey();
+                i.ToView("ActForm");
             });
             #endregion
         }

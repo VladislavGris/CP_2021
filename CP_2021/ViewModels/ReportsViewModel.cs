@@ -1,18 +1,11 @@
-﻿using Common.Wpf.Data;
-using CP_2021.Infrastructure.Commands;
-using CP_2021.Infrastructure.PDF;
-using CP_2021.Infrastructure.Singletons;
+﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
-using CP_2021.Models.Classes;
-using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using CP_2021.ViewModels.Reports;
 using CP_2021.Views.UserControls.Reports;
 using System;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -36,6 +29,7 @@ namespace CP_2021.ViewModels
         private OETSStoreageReport _oetsStorage = new OETSStoreageReport();
         private GivingStorageReport _givingStorage = new GivingStorageReport();
         private GivingReportsReport _givingReports = new GivingReportsReport();
+        private ActFormReport _actFormReport = new ActFormReport();
 
         #endregion
 
@@ -185,6 +179,19 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        #region ShowActFormCommand
+
+        public ICommand ShowActFormCommand { get; }
+
+        private bool CanShowActFormCommandExecute(object p) => true;
+
+        private void OnShowActFormCommandExecuted(object p)
+        {
+            Content = _actFormReport;
+        }
+
+        #endregion
         #endregion
         #region События отчетов
 
@@ -229,7 +236,7 @@ namespace CP_2021.ViewModels
             ShowOETSStorageCommand = new LambdaCommand(OnShowOETSStorageCommandExecuted, CanShowOETSStorageCommandExecute);
             ShowGivingStorageCommand = new LambdaCommand(OnShowGivingStorageCommandExecuted, CanShowGivingStorageCommandExecute);
             ShowGivingReportsCommand = new LambdaCommand(OnShowGivingReportsCommandExecuted, CanShowGivingReportsCommandExecute);
-
+            ShowActFormCommand = new LambdaCommand(OnShowActFormCommandExecuted, CanShowActFormCommandExecute);
             #endregion
 
             #region Subscribe
@@ -243,6 +250,7 @@ namespace CP_2021.ViewModels
             ((OETSStorageVM)(_oetsStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((GivingStorageVM)(_givingStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((GivingReportsVM)(_givingReports.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((ActFormVM)(_actFormReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             #endregion
         }
     }

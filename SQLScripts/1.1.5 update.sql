@@ -1,4 +1,4 @@
-use CompanyPlannerDB12
+use CompanyPlannerDB0
 go
 -- Добавление "Собрано по акту"
 --alter table Production_Plan
@@ -245,4 +245,37 @@ end
 close ParentTasks
 
 deallocate ParentTasks
+go
+-- Процедура поиска
+create proc Search(@parm nvarchar(max))
+as
+select p.Id as Id, Task_Name as Name from Production_Plan p
+inner join Act a on a.ProductionTaskId = p.Id
+inner join Complectation c on c.Production_Task_Id = p.Id
+inner join Giving g on g.Production_Task_Id = p.Id
+inner join In_Production i on i.Production_Task_Id = p.Id
+inner join LaborCosts l on l.ProductionTaskId = p.Id
+inner join Manufacture m on m.Production_Task_Id = p.Id
+inner join Payment py on py.ProductionTaskId = p.Id
+where Inc_Doc like @parm or Manag_Doc like @parm or M_Name like @parm or Task_Name like @parm or Expend_Num like @parm or ActNumber like @parm or Complectation like @parm or
+Bill like @parm or Report like @parm or Return_Report like @parm or Letter_Num like @parm or Specification_Num like @parm
+go
+-- Представление Формирование актов
+create view ActForm as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		p1.Manag_Doc as ManagDoc,
+		p1.P_Count as Count,
+		c.Complectation as Complectation,
+		a.ActNumber as ActNumber,
+		a.ActDate as ActDate,
+		a.Note as Note
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join Complectation c on p1.Id = c.Production_Task_Id
+inner join Act a on p1.Id = a.ProductionTaskId
+where a.ActCreation = 1
 go

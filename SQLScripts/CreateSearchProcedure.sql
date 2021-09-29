@@ -14,5 +14,3 @@ where Inc_Doc like @parm or Manag_Doc like @parm or M_Name like @parm or Task_Na
 Bill like @parm or Report like @parm or Return_Report like @parm or Letter_Num like @parm or Specification_Num like @parm
 
 exec Search @parm = '%изделие%'
-drop proc Search
-drop function Search
