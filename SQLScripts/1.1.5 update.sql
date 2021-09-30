@@ -1,4 +1,4 @@
-use CompanyPlannerDB0
+use CompanyPlannerDB01
 go
 -- Добавление "Собрано по акту"
 --alter table Production_Plan
@@ -8,17 +8,17 @@ go
 --set  ActCreation = 0
 --where ActCreation is null
 go
---alter table Production_Plan
---add EditingBy nvarchar(max) default('default')
---go
---update Production_Plan
---set EditingBy='default'
---where EditingBy is null
---go
+alter table Production_Plan
+add EditingBy nvarchar(max) default('default')
+go
+update Production_Plan
+set EditingBy='default'
+where EditingBy is null
+go
 -- Изменения статуса из Формирование актов в Склад
---update Production_Plan
---set Completion = 9
---where Completion = 5
+update Production_Plan
+set Completion = 9
+where Completion = 5
 go
 -- Создание функции получения верхнего проекта в иерархии
 create function GetParent(@ChildId uniqueidentifier) returns table
@@ -257,8 +257,9 @@ inner join In_Production i on i.Production_Task_Id = p.Id
 inner join LaborCosts l on l.ProductionTaskId = p.Id
 inner join Manufacture m on m.Production_Task_Id = p.Id
 inner join Payment py on py.ProductionTaskId = p.Id
-where Inc_Doc like @parm or Manag_Doc like @parm or M_Name like @parm or Task_Name like @parm or Expend_Num like @parm or ActNumber like @parm or Complectation like @parm or
-Bill like @parm or Report like @parm or Return_Report like @parm or Letter_Num like @parm or Specification_Num like @parm
+where Inc_Doc like @parm or py.Contract like @parm or c.StateNumber like @parm or Manag_Doc like @parm or M_Name like @parm or Task_Name like @parm or Expend_Num like @parm or ActNumber like @parm or Complectation like @parm or
+Bill like @parm or Report like @parm or Return_Report like @parm or Letter_Num like @parm or Specification_Num like @parm or i.Number like @parm
+--drop proc Search
 go
 -- Представление Формирование актов
 create view ActForm as
