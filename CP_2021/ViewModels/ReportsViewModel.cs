@@ -3,7 +3,9 @@ using CP_2021.Infrastructure.Units;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
 using CP_2021.ViewModels.Base;
 using CP_2021.ViewModels.Reports;
+using CP_2021.ViewModels.Reports.Payment;
 using CP_2021.Views.UserControls.Reports;
+using CP_2021.Views.UserControls.Reports.Payment;
 using System;
 using System.Diagnostics;
 using System.Windows.Controls;
@@ -31,7 +33,7 @@ namespace CP_2021.ViewModels
         private GivingReportsReport _givingReports = new GivingReportsReport();
         private ActFormReport _actFormReport = new ActFormReport();
         private ByActReport _byActReport = new ByActReport();
-
+        private FirstPaymentReport _firstPaymentReport = new FirstPaymentReport();
         #endregion
 
         #region Content
@@ -206,6 +208,19 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        #region ShowFirstPaymentCommand
+
+        public ICommand ShowFirstPaymentCommand { get; }
+
+        private bool CanShowFirstPaymentCommandExecute(object p) => true;
+
+        private void OnShowFirstPaymentCommandExecuted(object p)
+        {
+            Content = _firstPaymentReport;
+        }
+
+        #endregion
         #endregion
         #region События отчетов
 
@@ -252,6 +267,7 @@ namespace CP_2021.ViewModels
             ShowGivingReportsCommand = new LambdaCommand(OnShowGivingReportsCommandExecuted, CanShowGivingReportsCommandExecute);
             ShowActFormCommand = new LambdaCommand(OnShowActFormCommandExecuted, CanShowActFormCommandExecute);
             ShowByActCommand = new LambdaCommand(OnShowByActCommandExecuted, CanShowByActCommandExecute);
+            ShowFirstPaymentCommand = new LambdaCommand(OnShowFirstPaymentCommandExecuted, CanShowFirstPaymentCommandExecute);
             #endregion
 
             #region Subscribe
@@ -267,6 +283,7 @@ namespace CP_2021.ViewModels
             ((GivingReportsVM)(_givingReports.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((ActFormVM)(_actFormReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((ByActVM)(_byActReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((FirstPaymentVM)(_firstPaymentReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             #endregion
         }
     }

@@ -111,7 +111,17 @@
                         </ie:Interaction.Triggers>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="ФИНАНСОВОЕ ПЛАНИРОВАНИЕ"/>
+                <TreeViewItem Header="ФИНАНСОВОЕ ПЛАНИРОВАНИЕ">
+                    <TreeViewItem Header="Отчет Оплата 50% 1 часть">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="Selected">
+                                <ie:InvokeCommandAction Command="{Binding ShowFirstPaymentCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </TreeViewItem>
+                    <TreeViewItem Header="Отчет Оплата 50% 2 часть"/>
+                    <TreeViewItem Header="Отчет Оплата 100%"/>
+                </TreeViewItem>
                 <TreeViewItem Header="ОТЧЕТЫ ИЗГОТОВЛЕНИЯ">
                     <TreeViewItem Header="Отчет Изделия в работе по исполнителю"/>
                     <TreeViewItem Header="Отчет Готовые изделия по исполнителю"/>

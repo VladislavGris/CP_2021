@@ -3,6 +3,7 @@ using CP_2021.Infrastructure.Repositories.Base;
 using CP_2021.Infrastructure.Units.Base;
 using CP_2021.Models.DBModels;
 using CP_2021.Models.ProcedureResuts;
+using CP_2021.Models.ProcedureResuts.PaymentReports;
 using CP_2021.Models.ViewEntities;
 using System.Collections;
 using System.Collections.Generic;
@@ -41,6 +42,7 @@ namespace CP_2021.Infrastructure.Units
 
         private BaseRepository<SearchProcResult> _searchResults;
         private BaseRepository<ByAct> _byAct;
+        private BaseRepository<PaymentFirstPart> _firstPayment;
 
         public ApplicationUnit(ApplicationContext context)
         {
@@ -265,6 +267,14 @@ namespace CP_2021.Infrastructure.Units
             get
             {
                 return _byAct ?? (_byAct = new BaseRepository<ByAct>(_context));
+            }
+        }
+
+        public IRepository<PaymentFirstPart> FirstPayment
+        {
+            get
+            {
+                return _firstPayment ?? (_firstPayment = new BaseRepository<PaymentFirstPart>(_context));
             }
         }
 

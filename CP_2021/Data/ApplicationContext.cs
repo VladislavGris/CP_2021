@@ -1,6 +1,7 @@
 ﻿using CP_2021.Infrastructure;
 using CP_2021.Models.DBModels;
 using CP_2021.Models.ProcedureResuts;
+using CP_2021.Models.ProcedureResuts.PaymentReports;
 using CP_2021.Models.ViewEntities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -41,6 +42,7 @@ namespace CP_2021.Data
 
         public virtual DbSet<SearchProcResult> SearchResults { get; set; }
         public virtual DbSet<ByAct> ByAct { get; set; }
+        public virtual DbSet<PaymentFirstPart> PaymentFirstParts { get; set; }
 
         public ApplicationContext() : base() {
             //Database.EnsureDeleted();
