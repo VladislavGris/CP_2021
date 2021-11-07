@@ -16,13 +16,15 @@ using CP_2021.Models.DBModels;
 using CP_2021.Infrastructure;
 using CP_2021.Infrastructure.Singletons;
 using Microsoft.EntityFrameworkCore;
+using CP_2021.Infrastructure.Utils.DB;
+using CP_2021.Models.Base;
 
 namespace CP_2021.ViewModels
 {
     class RegistrationViewModel : ViewModelBase
     {
         #region Свойства
-
+        ApplicationContext _context;
         #region Login
 
         private String _login;
@@ -99,27 +101,22 @@ namespace CP_2021.ViewModels
                                                             !string.IsNullOrEmpty(Name) && 
                                                             !string.IsNullOrEmpty(Surname);
 
-        private void OnSubmitCommandExecuted(object p)
+        private void OnSubmitCommandExecuted(object currentWindow)
         {
             CheckLoginPasswordLength();
             CheckNameSurnameLength();
             try
             {
-                ApplicationUnit unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-                UserDB user = unit.DBUsers.Get().Where(u=>u.Login == Login).FirstOrDefault();
-                if (user != null)
+
+                if (UserOperations.UserExists(Login))
                 {
                     MessageBox.Show("Такой логин уже существует");
                     return;
                 }
-                string passwordHash = PasswordHashing.CreateHash(Password);
-                UserDB newUser = new UserDB(Login, passwordHash, Name, Surname);
-                unit.DBUsers.Insert(newUser);
-                unit.Commit();
-                UserDataSingleton.GetInstance().SetUser(newUser);
-                ProductionPlan plan = new ProductionPlan();
-                ((RegistrationScreen)p).Close();
-                plan.Show();
+                UserDataSingleton.GetInstance().SetUser(UserOperations.RegisterUser(Login, Password, Name, Surname));
+                //ProductionPlan planWindow = new ProductionPlan();
+                //((RegistrationScreen)currentWindow).Close();
+                //planWindow.Show();
             }
             catch(SqlException ex)
             {
@@ -160,6 +157,7 @@ namespace CP_2021.ViewModels
             OpenLoginWindowCommand = new LambdaCommand(OnOpenLoginWindowCommandExecuted, CanOpenLoginWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
             #endregion
+            _context = new ApplicationContext();
         }
     }
 }

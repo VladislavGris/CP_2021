@@ -19,6 +19,7 @@ using CP_2021.Models.DBModels;
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Threading;
+using CP_2021.Infrastructure.Utils.DB;
 
 namespace CP_2021.ViewModels
 {
@@ -27,6 +28,7 @@ namespace CP_2021.ViewModels
         #region Свойства
 
         Thread _backgroundThread;
+        private ApplicationContext _context;
 
         #region Login
 
@@ -103,62 +105,22 @@ namespace CP_2021.ViewModels
 
         private void OnSubmitCommandExecuted(object p)
         {
-            if (!_backgroundThread.IsAlive)
+            try
             {
-                // Отображение вращающего элемента, изображающего загрузку
-                LoadingVisibility = Visibility.Visible;
-                // Созадние потока для входа в систему
-                _backgroundThread = new Thread(new ThreadStart(() => TryLogin((Window)p)));
-                _backgroundThread.Start();
-            }
-            
-            //await Task.Run(() => TryLogin((Window)p));
-        }
-
-        private void TryLogin(Window currentWindow)
-        {
-            if (!LoginOrPasswordHasIncorrectLength())
-            {
-                try
+                UserDB user = UserOperations.CheckUserCreditionals(Login, Password);
+                if (user == null)
                 {
-                    UserDB user = ApplicationUnitSingleton.GetInstance().dbUnit.DBUsers.Get().Where(u => u.Login == Login).FirstOrDefault();
+                    MessageBox.Show("Логин или пароль введены неверно");
+                    return;
+                }
+                UserDataSingleton.GetInstance().SetUser(UserOperations.GetEnteredUser(Login));
+                MessageBox.Show("Success");
 
-                    if (user != null && PasswordHashing.ValidatePassword(Password, user.Password))
-                    {
-                        UserDataSingleton.GetInstance().SetUser(user);
-                        // Вызов через диспетчер приложения т.к. ЭУ изменяется и создается только из главного потока
-                        Application.Current.Dispatcher.Invoke(() =>
-                        {
-                            var plan = new ProductionPlan();
-                            plan.Show();
-                            currentWindow.Close();
-                        });
-                    }
-                    else
-                    {
-                        MessageBox.Show("Логин или пароль введены неверно");
-                    }
-                }
-                catch (SqlException e)
-                {
-                    // Ошибка подключения к базе данных
-                    MessageBox.Show(e.Message);
-                    Application.Current.Dispatcher.Invoke(() =>
-                    {
-                        Application.Current.Shutdown();
-                    });
-                    
-                }
             }
-            else
-            {
-                MessageBox.Show("Логин и пароль должны содержать от 4 до 15 символов");
+            catch(SqlException ex){
+                MessageBox.Show(ex.Message);
+                Application.Current.Shutdown();
             }
-            // Остановка отображения загрузки
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                LoadingVisibility = Visibility.Hidden;
-            });
         }
 
         #endregion
@@ -179,8 +141,7 @@ namespace CP_2021.ViewModels
             OpenRegistrationWindowCommand = new LambdaCommand(OnOpenRegistrationWindowCommandExecuted, CanOpenRegistrationWindowCommandExecute);
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
 
-            _backgroundThread = new Thread(new ThreadStart(()=>Console.Write("")));
-            _backgroundThread.IsBackground = true;
+            _context = new ApplicationContext();
         }
     }
 }
