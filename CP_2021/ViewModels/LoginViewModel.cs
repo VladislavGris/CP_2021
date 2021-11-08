@@ -114,7 +114,9 @@ namespace CP_2021.ViewModels
                     return;
                 }
                 UserDataSingleton.GetInstance().SetUser(UserOperations.GetEnteredUser(Login));
-                MessageBox.Show("Success");
+                ProductionPlan planWindow = new ProductionPlan();
+                ((LoginScreen)p).Close();
+                planWindow.Show();
 
             }
             catch(SqlException ex){

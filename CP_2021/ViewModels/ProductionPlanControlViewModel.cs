@@ -1338,11 +1338,12 @@ namespace CP_2021.ViewModels
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
             FontFamilies = new List<string> { "Arial", "Calibre", "Times New Roman" };
             User = UserDataSingleton.GetInstance().user;
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            ProductionTasks = Unit.Tasks.Get().ToList();
-            Model = ProductionTask.InitModel(ProductionTasks);
+            //Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
+            //ProductionTasks = Unit.Tasks.Get().ToList();
+            //Model = ProductionTask.InitModel(ProductionTasks);
+            Model = ProductionTask.InitRootsModel();
             searchManager = new SearchManager();
-            _undoManager = new UndoRedoManager();
+            //_undoManager = new UndoRedoManager();
 
             var logRepo = LogManager.GetRepository(Assembly.GetEntryAssembly());
             string filepath = Directory.GetCurrentDirectory() + "\\Data\\Configs\\log4net.config";

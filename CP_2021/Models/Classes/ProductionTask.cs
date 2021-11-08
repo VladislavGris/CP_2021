@@ -1,16 +1,13 @@
 ﻿using Common.Wpf.Data;
+using CP_2021.Data;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.DBModels;
-using System;
+using CP_2021.Models.ProcedureResuts.Plan;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CP_2021.Models.Classes
 {
@@ -18,12 +15,37 @@ namespace CP_2021.Models.Classes
     {
 
         public ProductionTaskDB Task { get; set; }
+        public Task_Hierarchy_Formatting data{get;set;}
 
         public ProductionTask() { }
 
         public ProductionTask(ProductionTaskDB task)
         {
-            this.Task = task;
+            Task = task;
+        }
+
+        public ProductionTask(Task_Hierarchy_Formatting data)
+        {
+            this.data = data;
+        }
+
+        /// <summary>
+        /// Функция получает все задачи верхнего уровня(parentId = NULL) из БД и формирует модель 
+        /// </summary>
+        /// <returns>Модель, заполненная задачами верхнего уровня</returns>
+        public static TreeGridModel InitRootsModel()
+        {
+            TreeGridModel model = new TreeGridModel();
+            List<Task_Hierarchy_Formatting> tasks = TasksOperations.GetTasksByParent(null);
+
+            foreach(Task_Hierarchy_Formatting task in tasks)
+            {
+                ProductionTask root = new ProductionTask(task);
+                if (task.ChildrenCount > 0)
+                    root.HasChildren = true;
+                model.Add(root);
+            }
+            return model;
         }
 
         public static TreeGridModel InitModel(List<ProductionTaskDB> tasks)

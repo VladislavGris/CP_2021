@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CP_2021.Infrastructure.Utils.DB
+﻿namespace CP_2021.Infrastructure.Utils.DB
 {
     internal class Procedures
     {
@@ -18,5 +12,8 @@ namespace CP_2021.Infrastructure.Utils.DB
         public static string CheckUserCreditionals = "exec {0} = CheckUserCreditionals {1}, {2}";
         /// <summary>Login</summary>
         public static string GetUserByLogin = "exec GetUserByLogin {0}";
+
+        /// <summary>ParentId</summary>
+        public static string GetTasksByParent = "exec GetTasksByParent {0}";
     }
 }

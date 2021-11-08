@@ -1,10 +1,6 @@
-﻿using CP_2021.Models.DBModels;
+﻿using CP_2021.Models.ProcedureResuts.Plan;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Data;
 
@@ -14,9 +10,9 @@ namespace CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is ProductionTaskDB)
+            if(value is Task_Hierarchy_Formatting)
             {
-                if (String.IsNullOrEmpty(((ProductionTaskDB)value).Complectation.Shelf))
+                if (String.IsNullOrEmpty(((Task_Hierarchy_Formatting)value).Shelf))
                 {
                     return Visibility.Hidden;
                 }

@@ -303,43 +303,43 @@
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="1">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="1">
                             <Setter Property="Background" Value="#F60395"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="2">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="2">
                             <Setter Property="Background" Value="#DAE1DF"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="3">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="3">
                             <Setter Property="Background" Value="#DF8B74"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="4">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="4">
                             <Setter Property="Background" Value="Yellow"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="5">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="5">
                             <Setter Property="Background" Value="#4CA243"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="6">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="6">
                             <Setter Property="Background" Value="#E696E6"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="7">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="7">
                             <Setter Property="Background" Value="#EBBC46"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="8">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="8">
                             <Setter Property="Background" Value="#4955FF"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="9">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="9">
                             <Setter Property="Background" Value="#98C072"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Completion}" Value="10">
+                        <DataTrigger Binding="{Binding data.Completion}" Value="10">
                             <Setter Property="Background" Value="#32EB21"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Formatting.IsBold}" Value="True">
+                        <DataTrigger Binding="{Binding data.IsBold}" Value="True">
                             <Setter Property="FontWeight" Value="Bold"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Formatting.IsItalic}" Value="True">
+                        <DataTrigger Binding="{Binding data.IsItalic}" Value="True">
                             <Setter Property="FontStyle" Value="Italic"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding Task.Formatting.IsUnderline}" Value="True">
+                        <DataTrigger Binding="{Binding data.IsUnderline}" Value="True">
                             <Setter Property="TextBlock.TextDecorations" Value="Underline"/>
                         </DataTrigger>
                         <!--E55151  7A67E6-->
@@ -350,13 +350,13 @@
                 <DataGridTemplateColumn Header="Статус" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding Task.Completion, Converter={StaticResource CompletionConverter}}"
+                            <TextBlock Text="{Binding data.Completion, Converter={StaticResource CompletionConverter}}"
                                        HorizontalAlignment="Left" TextWrapping="Wrap"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox SelectedIndex="{Binding Task.Completion, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                            <ComboBox SelectedIndex="{Binding data.Completion, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
                                       Background="Transparent"
                                       Style="{StaticResource SearchBoxStyle}">
                                 <ComboBoxItem Content="Не задано"/>
@@ -397,7 +397,7 @@
                             <Grid>
                                 <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
-                                       Text="{Binding Task.ManagDoc, Mode=TwoWay}"/>
+                                       Text="{Binding data.ManagDoc, Mode=TwoWay}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenDocumentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
@@ -428,7 +428,7 @@
                                         </ie:EventTrigger>
                                     </ie:Interaction.Triggers>
                                 </Expander>
-                                <TextBlock Text="{Binding Task.Name}"
+                                <TextBlock Text="{Binding data.Name}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="200"/>
@@ -438,7 +438,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding Task.Name, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox Text="{Binding data.Name, UpdateSourceTrigger=PropertyChanged}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MaxWidth="200"/>
@@ -447,13 +447,13 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Количество"
-                                    Binding="{Binding Task.Count, UpdateSourceTrigger=PropertyChanged}"
+                                    Binding="{Binding data.Count, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="145"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
 
                 <DataGridTextColumn Header="Цена за единицу без НДС"
-                                    Binding="{Binding Task.SpecCost, UpdateSourceTrigger=PropertyChanged}"
+                                    Binding="{Binding data.SpecCost, UpdateSourceTrigger=PropertyChanged}"
                                     Width="100"
                                     ElementStyle="{StaticResource DatagridCenterCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
@@ -482,16 +482,16 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding Task.Complectation.Complectation}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"/>
-                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding Task, Converter={StaticResource PercentageVisibility}}">
-                                    <TextBlock Text="{Binding Task.Complectation.Percentage,Converter={StaticResource AddingPercentage}}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
+                                <TextBlock Text="{Binding data.Complectation}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"/>
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data, Converter={StaticResource PercentageVisibility}}">
+                                    <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
                                 </Border>
 
-                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1" Background="Yellow" Visibility="{Binding Task, Converter={StaticResource RackVisibility}}">
-                                    <TextBlock Text="{Binding Task.Complectation.Rack}" HorizontalAlignment="Center"/>
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1" Background="Yellow" Visibility="{Binding data, Converter={StaticResource RackVisibility}}">
+                                    <TextBlock Text="{Binding data.Rack}" HorizontalAlignment="Center"/>
                                 </Border>
-                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="2" BorderThickness="1" Background="Yellow" Visibility="{Binding Task, Converter={StaticResource ShelfVisibility}}">
-                                    <TextBlock Text="{Binding Task.Complectation.Shelf}" HorizontalAlignment="Center"/>
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="2" BorderThickness="1" Background="Yellow" Visibility="{Binding data, Converter={StaticResource ShelfVisibility}}">
+                                    <TextBlock Text="{Binding data.Shelf}" HorizontalAlignment="Center"/>
                                 </Border>
                                 <Button Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenComplectationWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
@@ -514,7 +514,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <CheckBox IsChecked="{Binding Task.Giving.State, UpdateSourceTrigger=PropertyChanged}"
+                                <CheckBox IsChecked="{Binding data.State, UpdateSourceTrigger=PropertyChanged}"
                                       HorizontalAlignment="Center"
                                       Command="{Binding DataContext.RowEditingEndingCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
                                       IsHitTestVisible="False">
@@ -544,7 +544,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock Text="{Binding Task.Manufacture.Name}"
+                                <TextBlock Text="{Binding data.M_Name}"
                                        HorizontalAlignment="Center"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenManufactureWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
@@ -573,7 +573,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Приходный документ"
-                                    Binding="{Binding Task.IncDoc, UpdateSourceTrigger=PropertyChanged}"
+                                    Binding="{Binding data.IncDoc, UpdateSourceTrigger=PropertyChanged}"
                                     MaxWidth="120"
                                     MinWidth="100"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
@@ -597,45 +597,12 @@
                             <Grid>
                                 <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
-                                       Text="{Binding Task.Act.ActNumber, Mode=TwoWay}"/>
+                                       Text="{Binding data.ActNumber, Mode=TwoWay}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenActWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-
-                <!--<DataGridTemplateColumn Width="120">
-                    <DataGridTemplateColumn.HeaderTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="Solid_PencilAlt"
-                                                 Foreground="{StaticResource FontColor}"
-                                                 Width="12"
-                                                 Height="12"/>
-                                <TextBlock Text="Номер и дата акта расходования" TextWrapping="Wrap" MaxWidth="120"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.HeaderTemplate>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <TextBlock Text="{Binding Task.ExpendNum}"/>
-                                <CheckBox IsChecked="{Binding Task.ActCreation}" HorizontalAlignment="Right"/>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                    <DataGridTemplateColumn.CellEditingTemplate>
-                        <DataTemplate>
-                            <TextBox Text="{Binding Task.ExpendNum}"/>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellEditingTemplate>
-                </DataGridTemplateColumn>-->
-                
-                <!--<DataGridTextColumn Header="Номер и дата акта расходования"
-                                    Binding="{Binding Task.ExpendNum, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="135"
-                                    ElementStyle="{StaticResource DatagridCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>-->
 
                 <DataGridTemplateColumn Width="120">
                     <DataGridTemplateColumn.HeaderTemplate>
@@ -672,7 +639,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock Text="{Binding Task.InProduction.GivingDate, Converter={StaticResource DateConverter}}"
+                                <TextBlock Text="{Binding data.GivingDate, Converter={StaticResource DateConverter}}"
                                        HorizontalAlignment="Center"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenInProductionWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
@@ -681,7 +648,7 @@
                 </DataGridTemplateColumn>
 
                 <DataGridTextColumn Header="Примечания"
-                                    Binding="{Binding Task.Note, UpdateSourceTrigger=PropertyChanged}"
+                                    Binding="{Binding data.Note, UpdateSourceTrigger=PropertyChanged}"
                                     ElementStyle="{StaticResource DatagridCellStyle}"
                                     EditingElementStyle="{StaticResource EditingDatagridCellStyle}"
                                     Width="300"/>
