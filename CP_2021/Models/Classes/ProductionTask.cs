@@ -47,6 +47,28 @@ namespace CP_2021.Models.Classes
             }
             return model;
         }
+        /// <summary>
+        /// Функция подгрузки дочерних элеметов для задачи
+        /// </summary>
+        public void LoadChildren()
+        {
+            List<Task_Hierarchy_Formatting> children = TasksOperations.GetTasksByParent(this.data.Id);
+
+            foreach(Task_Hierarchy_Formatting child in children)
+            {
+                ProductionTask cTask = new ProductionTask(child);
+                if (child.ChildrenCount > 0)
+                    cTask.HasChildren = true;
+                this.Children.Add(cTask);
+            }
+        }
+        /// <summary>
+        /// Функция выгрузки дочерних элементов для задачи
+        /// </summary>
+        public void UnloadChildren()
+        {
+            this.Children.Clear();
+        }
 
         public static TreeGridModel InitModel(List<ProductionTaskDB> tasks)
         {

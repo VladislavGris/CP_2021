@@ -10,6 +10,7 @@ using CP_2021.Infrastructure.Units;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
 using CP_2021.Models.Classes;
 using CP_2021.Models.DBModels;
+using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.ViewModels.Base;
 using CP_2021.ViewModels.DataWindowViewModels;
 using CP_2021.Views.Windows;
@@ -475,7 +476,7 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelDownCommand { get; }
 
-        private bool CanLevelDownCommandExecute(object p) => SelectedTask != null && SelectedTask.Task.MyParent.LineOrder != 1;
+        private bool CanLevelDownCommandExecute(object p) => /*SelectedTask != null && SelectedTask.Task.MyParent.LineOrder != 1;*/ true;
 
         private void OnLevelDownCommandExecuted(object p)
         {
@@ -817,7 +818,7 @@ namespace CP_2021.ViewModels
 
         public ICommand UpTaskCommand { get; }
 
-        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.Task.MyParent.LineOrder != 1 && SelectedTask!=null;
+        private bool CanUpTaskCommandExecute(object p) => /*SelectedTask?.Task.MyParent.LineOrder != 1 && SelectedTask!=null;*/ true;
 
         private void OnUpTaskCommandExecuted(object p)
         {
@@ -851,20 +852,20 @@ namespace CP_2021.ViewModels
 
         public ICommand DownTaskCommand { get; }
 
-        private bool CanDownTaskCommandExecute(object p)
-        {
-            if (SelectedTask != null)
-            {
-                int selecetedTaskLineOrder = SelectedTask.Task.MyParent.LineOrder;
-                int maxLineOrderByParent = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent).Max(t => t.MyParent.LineOrder);
-                Debug.WriteLine("selected = " + selecetedTaskLineOrder + "; max = " + maxLineOrderByParent);
-                return selecetedTaskLineOrder != maxLineOrderByParent;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        private bool CanDownTaskCommandExecute(object p) => true;
+        //{
+        //    if (SelectedTask != null)
+        //    {
+        //        int selecetedTaskLineOrder = SelectedTask.Task.MyParent.LineOrder;
+        //        int maxLineOrderByParent = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent).Max(t => t.MyParent.LineOrder);
+        //        Debug.WriteLine("selected = " + selecetedTaskLineOrder + "; max = " + maxLineOrderByParent);
+        //        return selecetedTaskLineOrder != maxLineOrderByParent;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
 
         private void OnDownTaskCommandExecuted(object p)
         {
@@ -1210,19 +1211,10 @@ namespace CP_2021.ViewModels
 
         private void OnOnCollapsingCommandExecuted(object p)
         {
-            try
+            // TODO: Добавить сохранение сворачивания в БД
+            if (p is ProductionTask)
             {
-                if (p is ProductionTask)
-                {
-                    ProductionTask task = (ProductionTask)p;
-                    task.Task.Expanded = false;
-                    Unit.Commit();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::OnCollapsingCommand | " + ex.GetType().Name + " | " + ex.Message);
+                ((ProductionTask)p).UnloadChildren();
             }
         }
 
@@ -1235,19 +1227,10 @@ namespace CP_2021.ViewModels
 
         private void OnOnExpandingCommandExecuted(object p)
         {
-            try
+            // TODO: Добавить сохранение разворачивания в БД
+            if (p is ProductionTask)
             {
-                if (p is ProductionTask)
-                {
-                    ProductionTask task = (ProductionTask)p;
-                    task.Task.Expanded = true;
-                    Unit.Commit();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::OnExpandingCommand | " + ex.GetType().Name + " | " + ex.Message);
+                ((ProductionTask)p).LoadChildren();
             }
         }
 
