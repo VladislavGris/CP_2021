@@ -14,7 +14,12 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         public static List<Task_Hierarchy_Formatting> GetTasksByParent(Guid? parentId)
         {
-            return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetTasksByParent, parentId).ToList();
+            return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetTasksByParent, parentId).AsNoTracking().ToList();
+        }
+
+        public static Task_Hierarchy_Formatting InsertEmptyTask(Guid? parentId, int lineOrder)
+        {
+            return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.InsertEmptyTask, parentId, lineOrder).AsNoTracking().ToList().FirstOrDefault();
         }
 
         static TasksOperations()

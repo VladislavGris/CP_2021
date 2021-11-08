@@ -27,7 +27,7 @@ namespace CP_2021.Infrastructure.Utils.DB
         public static UserDB RegisterUser(string login, string password, string name, string surname)
         {
             string passwordHash = PasswordHashing.CreateHash(password);
-            UserDB user = _context.Users.FromSqlRaw(Procedures.RegisterUser, login, passwordHash, name, surname).ToList().FirstOrDefault();
+            UserDB user = _context.Users.FromSqlRaw(Procedures.RegisterUser, login, passwordHash, name, surname).AsNoTracking().ToList().FirstOrDefault();
             return user;
         }
 
@@ -41,7 +41,7 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         public static UserDB GetEnteredUser(string login)
         {
-            return _context.Users.FromSqlRaw(Procedures.GetUserByLogin, login).ToList().FirstOrDefault();
+            return _context.Users.FromSqlRaw(Procedures.GetUserByLogin, login).AsNoTracking().ToList().FirstOrDefault();
         }
 
         static UserOperations()

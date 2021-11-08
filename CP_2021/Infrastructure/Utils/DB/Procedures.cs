@@ -15,5 +15,7 @@
 
         /// <summary>ParentId</summary>
         public static string GetTasksByParent = "exec GetTasksByParent {0}";
+        /// <summary>ParentId, LineOrder</summary>
+        public static string InsertEmptyTask = "exec InsertEmptyTask {0}, {1}";
     }
 }

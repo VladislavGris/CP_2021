@@ -69,6 +69,30 @@ namespace CP_2021.Models.Classes
         {
             this.Children.Clear();
         }
+        /// <summary>
+        /// Перемещает на 1 позицию ниже все задачи модели, которые имеют LineOrder больше, чем this
+        /// </summary>
+        /// <param name="model"></param>
+        public void DownTasksModel(TreeGridModel model)
+        {
+            foreach(ProductionTask task in model)
+            {
+                if (task.data.LineOrder > this.data.LineOrder)
+                    task.data.LineOrder++;
+            }
+        }
+        /// <summary>
+        /// Перемещает на 1 позицию ниже все задачи подзадачи, которые имеют LineOrder больше, чем this
+        /// </summary>
+        /// <param name="parentTask"></param>
+        public void DownTasksChildren(ProductionTask parentTask)
+        {
+            foreach(ProductionTask child in parentTask.Children)
+            {
+                if (child.data.LineOrder > this.data.LineOrder)
+                    child.data.LineOrder++;
+            }
+        }
 
         public static TreeGridModel InitModel(List<ProductionTaskDB> tasks)
         {

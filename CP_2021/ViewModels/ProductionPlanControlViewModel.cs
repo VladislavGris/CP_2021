@@ -8,6 +8,7 @@ using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.UndoRedo;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.Classes;
 using CP_2021.Models.DBModels;
 using CP_2021.Models.ProcedureResuts.Plan;
@@ -216,7 +217,7 @@ namespace CP_2021.ViewModels
 
         public ICommand ExpandAllCommand { get; }
 
-        private bool CanExpandAllCommandExecute(object p) => true;
+        private bool CanExpandAllCommandExecute(object p) => /*true;*/ false;
 
         private void OnExpandAllCommandExecuted(object p)
         {
@@ -236,12 +237,11 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region RollUpAllCommand
 
         public ICommand RollUpAllCommand { get; }
 
-        private bool CanRollUpAllCommandExecute(object p) => true;
+        private bool CanRollUpAllCommandExecute(object p) => /*true;*/ false;
 
         private void OnRollUpAllCommandExecuted(object p)
         {
@@ -262,7 +262,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region AddProductionTaskCommand
 
         public ICommand AddProductionTaskCommand { get; }
@@ -271,85 +270,42 @@ namespace CP_2021.ViewModels
 
         private void OnAddProductionTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            //Если база данных пустая
-            try
+            // Пустая БД
+            if(Model.Count == 0)
             {
-                if (Unit.Tasks.Get().Count() == 0)
+                Task_Hierarchy_Formatting insertedTask = TasksOperations.InsertEmptyTask(null, 1);
+                if(insertedTask == null)
                 {
-                    dbTask.MyParent = new HierarchyDB(dbTask);
-                    dbTask.MyParent.LineOrder = 1;
+                    MessageBox.Show("При вставке нового значения произошла ошибка");
+                    return;
                 }
-                else
-                {
-                    //Команда не выполняется без выбранной задачи
-                    if (SelectedTask == null)
-                    {
-                        MessageBox.Show("Не выбран элемент для добавления");
-                        return;
-                    }
-                    //Добавление головного изделия, иначе изделие в Children к Parent
-                    if (SelectedTask.Task.MyParent.Parent != null)
-                    {
-                        ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.MyParent.ParentId).Single();
-                        parent.Expanded = true;
-                        dbTask.MyParent = new HierarchyDB(parent, dbTask);
-                        dbTask.MyParent.LineOrder = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
-                    }
-                    else
-                    {
-                        dbTask.MyParent = new HierarchyDB(dbTask);
-                        //Выборка элемента с Id выбранного элемента
-                        ProductionTaskDB upperTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).Single();
-                        dbTask.MyParent.LineOrder = upperTask.MyParent.LineOrder + 1;
-                        dbTask.DownTaskBelow();
-                    }
-                }
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
+                Model.Add(new ProductionTask(insertedTask));
+                return;
             }
-            catch(InvalidOperationException ex)
+            if (SelectedTask == null)
             {
-                MessageBox.Show("Выбранный вами элемент был удален");
-                _log.Warn("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.Message);
+                MessageBox.Show("Не выбран элемент для добавления");
+                return;
             }
-            catch(Exception ex)
+            
+            // Добавить задачу на тот же уровень под выбранную задачу
+            Task_Hierarchy_Formatting task = TasksOperations.InsertEmptyTask(SelectedTask.data.ParentId, SelectedTask.data.LineOrder+1);
+            ProductionTask pTask = new ProductionTask(task);
+            // Корневая задача или дочерняя
+            if (SelectedTask.Parent == null)
             {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::AddProductionTaskCommand " + ex.ToString());
+                SelectedTask.DownTasksModel(Model);
+                Model.Insert(task.LineOrder - 1, pTask);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
+            else
+            {
+                SelectedTask.DownTasksChildren((ProductionTask)SelectedTask.Parent);
+                SelectedTask.Parent.Children.Insert(task.LineOrder - 1, pTask);
+            }
+            SelectedTask = pTask;
         }
 
         #endregion
-
-        #region RowEditingEndingCommand
-
-        public ICommand RowEditingEndingCommand { get; }
-
-        private bool CanRowEditingEndingCommandExecute(object p) => true;
-
-        private void OnRowEditingEndingCommandExecuted(object p)
-        {
-            try
-            {
-                Unit.Commit();
-            }
-            catch(DbUpdateConcurrencyException ex)
-            {
-                MessageBox.Show("Редактируемая строка была удалена. Обновите базу");
-                _log.Warn("ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-            //Update();
-        }
-
-        #endregion
-
         #region AddChildCommand
 
         public ICommand AddChildCommand { get; }
@@ -377,7 +333,7 @@ namespace CP_2021.ViewModels
                 Unit.Tasks.Insert(dbTask);
                 Unit.Commit();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show("Неизвестная ошибка");
                 _log.Error("ProductionPlanControlViewModel::OnAddChildCommandExecuted " + ex.Message);
@@ -387,7 +343,31 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #region RowEditingEndingCommand
 
+        public ICommand RowEditingEndingCommand { get; }
+
+        private bool CanRowEditingEndingCommandExecute(object p) => true;
+
+        private void OnRowEditingEndingCommandExecuted(object p)
+        {
+            try
+            {
+                Unit.Commit();
+            }
+            catch(DbUpdateConcurrencyException ex)
+            {
+                MessageBox.Show("Редактируемая строка была удалена. Обновите базу");
+                _log.Warn("ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
+            }catch(Exception ex)
+            {
+                MessageBox.Show("Неизвестная ошибка. Обновите базу");
+                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
+            }
+            //Update();
+        }
+
+        #endregion
         #region DeleteProductionTaskCommand
 
         public ICommand DeleteProductionTaskCommand { get; }
@@ -424,7 +404,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region LevelUpCommand
 
         public ICommand LevelUpCommand { get; }
@@ -471,7 +450,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region LevelDownCommand
 
         public ICommand LevelDownCommand { get; }
@@ -509,7 +487,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region UpdateModelCommand
 
         public ICommand UpdateModelCommand { get; }
@@ -518,11 +495,10 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateModelCommandExecuted(object p)
         {
-            Update();
+            Model = ProductionTask.InitRootsModel();
         }
 
         #endregion
-
         #region CopyTaskCommand
 
         public ICommand CopyTaskCommand { get; }
@@ -544,7 +520,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region CutTaskCommand
 
         public ICommand CutTaskCommand { get; }
@@ -584,7 +559,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region PasteTaskCommand
 
         public ICommand PasteTaskCommand { get; }
@@ -630,7 +604,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SearchCommands
 
         #region SearchCommand
@@ -813,7 +786,6 @@ namespace CP_2021.ViewModels
 
         #endregion
         #endregion
-
         #region UpTaskCommand
 
         public ICommand UpTaskCommand { get; }
@@ -847,7 +819,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region DownTaskCommand
 
         public ICommand DownTaskCommand { get; }
@@ -894,7 +865,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region UndoCommand
 
         public ICommand UndoCommand { get; }
@@ -915,7 +885,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region RedoCommand
 
         public ICommand RedoCommand { get; }
@@ -936,7 +905,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SetBoldCommand
 
         public ICommand SetBoldCommand { get; }
@@ -960,7 +928,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SetItalicCommand
 
         public ICommand SetItalicCommand { get; }
@@ -984,7 +951,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SetUnderlineCommand
 
         public ICommand SetUnderlineCommand { get; }
@@ -1008,7 +974,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenPaymentWindowCommand
 
         public ICommand OpenPaymentWindowCommand { get; }
@@ -1026,7 +991,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenLaborCostsWindowCommand
 
         public ICommand OpenLaborCostsWindowCommand { get; }
@@ -1044,7 +1008,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenDocumentWindowCommand
 
         public ICommand OpenDocumentWindowCommand { get; }
@@ -1069,7 +1032,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SelectionChangedCommand
 
         public ICommand SelectionChangedCommand { get; }
@@ -1097,7 +1059,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenComplectationWindowCommand
 
         public ICommand OpenComplectationWindowCommand { get; }
@@ -1115,7 +1076,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenActWindowCommand
 
         public ICommand OpenActWindowCommand { get; }
@@ -1133,7 +1093,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenGivingWindowCommand
 
         public ICommand OpenGivingWindowCommand { get; }
@@ -1151,7 +1110,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenManufactureWindowCommand
 
         public ICommand OpenManufactureWindowCommand { get; }
@@ -1169,7 +1127,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenInProductionWindowCommand
 
         public ICommand OpenInProductionWindowCommand { get; }
@@ -1187,7 +1144,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OpenSearchWindowCommand
 
         public ICommand OpenSearchWindowCommand { get; }
@@ -1202,7 +1158,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region OnCollapsingCommand
 
         public ICommand OnCollapsingCommand { get; }
