@@ -21,6 +21,7 @@ using log4net.Config;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -314,32 +315,23 @@ namespace CP_2021.ViewModels
 
         private void OnAddChildCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = new ProductionTaskDB("Новое изделие");
-            try
-            {
-                ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).Single();
-                parent.Expanded = true;
-                dbTask.MyParent = new HierarchyDB(parent, dbTask);
+            int line;
+            // Добавляется первый дочерний элемент или нет
+            if (SelectedTask.data.ChildrenCount == 0)
+                line = 1;
+            else
+                line = SelectedTask.data.ChildrenCount + 1;
+            // Добавить задачу как дочернюю к SelectedItem в БД
+            Task_Hierarchy_Formatting task = TasksOperations.InsertEmptyTask(SelectedTask.data.Id, line);
+            ProductionTask pTask = new ProductionTask(task);
 
-                if (Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Count() != 0)
-                {
-                    dbTask.MyParent.LineOrder = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == parent.Id).Max(t => t.MyParent.LineOrder) + 1;
-                }
-                else
-                {
-                    dbTask.MyParent.LineOrder = 1;
-                }
-
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
-            }
-            catch (Exception ex)
+            SelectedTask.data.ChildrenCount += 1;
+            SelectedTask.HasChildren = true;
+            if (SelectedTask.IsExpanded)
             {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::OnAddChildCommandExecuted " + ex.Message);
+                SelectedTask.Children.Add(pTask);
+                SelectedTask = pTask;
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
