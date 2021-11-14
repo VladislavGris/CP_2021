@@ -323,6 +323,11 @@ namespace CP_2021.ViewModels
                 line = SelectedTask.data.ChildrenCount + 1;
             // Добавить задачу как дочернюю к SelectedItem в БД
             Task_Hierarchy_Formatting task = TasksOperations.InsertEmptyTask(SelectedTask.data.Id, line);
+            if(task == null)
+            {
+                MessageBox.Show("При вставке нового значения произошла ошибка");
+                return;
+            }
             ProductionTask pTask = new ProductionTask(task);
 
             SelectedTask.data.ChildrenCount += 1;
@@ -343,20 +348,7 @@ namespace CP_2021.ViewModels
 
         private void OnRowEditingEndingCommandExecuted(object p)
         {
-            try
-            {
-                Unit.Commit();
-            }
-            catch(DbUpdateConcurrencyException ex)
-            {
-                MessageBox.Show("Редактируемая строка была удалена. Обновите базу");
-                _log.Warn("ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RowEditingEndingCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-            //Update();
+            TasksOperations.UpdateProductionPlan(SelectedTask.data.Id, SelectedTask.data.IncDoc, SelectedTask.data.Name, SelectedTask.data.Count, SelectedTask.data.SpecCost, SelectedTask.data.Note, SelectedTask.data.Expanded, SelectedTask.data.Completion, SelectedTask.data.EditingBy);
         }
 
         #endregion
@@ -491,6 +483,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #region Cut, Copy, Paste
         #region CopyTaskCommand
 
         public ICommand CopyTaskCommand { get; }
@@ -508,7 +501,7 @@ namespace CP_2021.ViewModels
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::CopyTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
             }
-            
+
         }
 
         #endregion
@@ -516,7 +509,7 @@ namespace CP_2021.ViewModels
 
         public ICommand CutTaskCommand { get; }
 
-        private bool CanCutTaskCommandExecute(object p) => SelectedTask!=null;
+        private bool CanCutTaskCommandExecute(object p) => SelectedTask != null;
 
         private void OnCutTaskCommandExecuted(object p)
         {
@@ -595,6 +588,7 @@ namespace CP_2021.ViewModels
             SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
+        #endregion
         #endregion
         #region SearchCommands
 
@@ -857,6 +851,7 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #region Undo/Redo
         #region UndoCommand
 
         public ICommand UndoCommand { get; }
@@ -893,19 +888,21 @@ namespace CP_2021.ViewModels
             {
                 MessageBox.Show("Неизвестная ошибка. Обновите базу");
                 _log.Error("UNKNOWN | ProductionPlanControlViewModel::RedoCommand | " + ex.GetType().Name + " | " + ex.Message);
-            } 
+            }
         }
 
         #endregion
+        #endregion
+        #region Formatting
         #region SetBoldCommand
 
         public ICommand SetBoldCommand { get; }
 
-        private bool CanSetBoldCommandExecute(object p) => SelectedTask!=null;
+        private bool CanSetBoldCommandExecute(object p) => SelectedTask != null;
 
         private void OnSetBoldCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t=>t.Id == SelectedTask.Task.Id).FirstOrDefault();
+            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
             if (task == null)
             {
                 MessageBox.Show("Выбранная строка была удалена");
@@ -966,6 +963,8 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #endregion
+        #region Windows
         #region OpenPaymentWindowCommand
 
         public ICommand OpenPaymentWindowCommand { get; }
@@ -1021,33 +1020,6 @@ namespace CP_2021.ViewModels
             //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
             //Update();
             //SelectedTask = ProductionTask.FindByTask(Model,task);
-        }
-
-        #endregion
-        #region SelectionChangedCommand
-
-        public ICommand SelectionChangedCommand { get; }
-
-        private bool CanSelectionChangedCommandExecute(object p) => SelectedTask!=null;
-
-        private void OnSelectionChangedCommandExecuted(object p)
-        {
-            MessageBoxResult result = MessageBox.Show("Вы хотите изменить статус?", "Изменение статуса", MessageBoxButton.YesNo);
-            switch (result)
-            {
-                case MessageBoxResult.Yes:
-                    BindingExpression be = ((ComboBox)p).GetBindingExpression(ComboBox.SelectedIndexProperty);
-                    be.UpdateSource();
-                    switch (SelectedTask.Task.Completion)
-                    {
-                        case (short)TaskCompletion.VKOnStorage:
-                            SelectedTask.Task.Complectation.ComplectationDate = DateTime.Now;
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
         }
 
         #endregion
@@ -1147,6 +1119,28 @@ namespace CP_2021.ViewModels
             SearchWindow window = new SearchWindow();
             ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
             window.Show();
+        }
+
+        #endregion
+        #endregion
+        #region SelectionChangedCommand
+
+        public ICommand SelectionChangedCommand { get; }
+
+        private bool CanSelectionChangedCommandExecute(object p) => SelectedTask!=null;
+
+        private void OnSelectionChangedCommandExecuted(object p)
+        {
+            MessageBoxResult result = MessageBox.Show("Вы хотите изменить статус?", "Изменение статуса", MessageBoxButton.YesNo);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    BindingExpression be = ((ComboBox)p).GetBindingExpression(ComboBox.SelectedIndexProperty);
+                    be.UpdateSource();
+                    break;
+                default:
+                    break;
+            }
         }
 
         #endregion

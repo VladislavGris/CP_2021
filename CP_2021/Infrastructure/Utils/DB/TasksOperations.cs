@@ -22,6 +22,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.InsertEmptyTask, parentId, lineOrder).AsNoTracking().ToList().FirstOrDefault();
         }
 
+        public static void UpdateProductionPlan(Guid id, string incDoc, string taskName, int? count, string specCost, string note, bool expanded, short completion, string editingBy)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateProductionPlan, id, incDoc, taskName, count, specCost, note, expanded, completion, editingBy);
+        }
+
         static TasksOperations()
         {
             _context = ApplicationUnitSingleton.GetInstance().context;
