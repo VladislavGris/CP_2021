@@ -360,31 +360,29 @@ namespace CP_2021.ViewModels
 
         private void OnDeleteProductionTaskCommandExecuted(object p)
         {
-            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить элемент {SelectedTask.Task.Name}?", "Удаление", MessageBoxButton.YesNo);
+
+            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить элемент {SelectedTask.data.Name}?", "Удаление", MessageBoxButton.YesNo);
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                    if (dbTask != null)
+                    TasksOperations.DropTaskBtId(SelectedTask.data.Id);
+                    if(SelectedTask.Parent == null)
                     {
-                        try
-                        {
-                            dbTask.UpOrderBelow();
-                            dbTask.Remove();
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show("Неизвестная ошибка");
-                            _log.Error("ProductionPlanControlViewModel::DeleteProductionTaskCommand " + ex.Message);
-                        }
-            }
+                        SelectedTask.UpTasksModel(Model);
+                        Model.Remove(SelectedTask);
+                    }
                     else
                     {
-                        MessageBox.Show("Выбранный элемент уже был удален");
+                        ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+                        SelectedTask.UpTasksChildren(parent);
+                        SelectedTask.Parent.Children.Remove(SelectedTask);
+                        if (parent.Children.Count == 0)
+                        {
+                            parent.HasChildren = parent.IsExpanded = false;
+                        }
                     }
                     break;
             }
-            Update();
         }
 
         #endregion

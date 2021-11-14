@@ -19,5 +19,7 @@
         public static string InsertEmptyTask = "exec InsertEmptyTask {0}, {1}";
         /// <summary>Id, IncDoc, TaskName, Count, SpecCost, Note, Expanded, Completion, EditingBy</summary>
         public static string UpdateProductionPlan = "exec Update_Production_Plan {0},{1},{2},{3},{4},{5},{6},{7},{8}";
+        /// <summary>Id</summary>
+        public static string DropTaskById = "exec DropTaskById {0}";
     }
 }

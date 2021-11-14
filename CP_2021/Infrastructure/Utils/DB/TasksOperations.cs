@@ -27,6 +27,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             _context.Database.ExecuteSqlRaw(Procedures.UpdateProductionPlan, id, incDoc, taskName, count, specCost, note, expanded, completion, editingBy);
         }
 
+        public static void DropTaskBtId(Guid id)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.DropTaskById, id);
+        }
+
         static TasksOperations()
         {
             _context = ApplicationUnitSingleton.GetInstance().context;

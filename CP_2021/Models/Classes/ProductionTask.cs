@@ -72,7 +72,7 @@ namespace CP_2021.Models.Classes
         /// <summary>
         /// Перемещает на 1 позицию ниже все задачи модели, которые имеют LineOrder больше, чем this
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Иерархическая модель</param>
         public void DownTasksModel(TreeGridModel model)
         {
             foreach(ProductionTask task in model)
@@ -84,13 +84,37 @@ namespace CP_2021.Models.Classes
         /// <summary>
         /// Перемещает на 1 позицию ниже все задачи подзадачи, которые имеют LineOrder больше, чем this
         /// </summary>
-        /// <param name="parentTask"></param>
+        /// <param name="parentTask">Родительская задача</param>
         public void DownTasksChildren(ProductionTask parentTask)
         {
             foreach(ProductionTask child in parentTask.Children)
             {
                 if (child.data.LineOrder > this.data.LineOrder)
                     child.data.LineOrder++;
+            }
+        }
+        /// <summary>
+        /// Повышает на 1 позицию выше все задачи модели, которые имеют LineOrder больше, чем this
+        /// </summary>
+        /// <param name="model">Иерархическая модель</param>
+        public void UpTasksModel(TreeGridModel model)
+        {
+            foreach(ProductionTask task in model)
+            {
+                if (task.data.LineOrder > this.data.LineOrder)
+                    task.data.LineOrder--;
+            }
+        }
+        /// <summary>
+        /// Повышает на 1 позицию выше все задачи подзадачи, которые имеют LineOrder больше, чем this
+        /// </summary>
+        /// <param name="parent"></param>
+        public void UpTasksChildren(ProductionTask parent)
+        {
+            foreach (ProductionTask child in parent.Children)
+            {
+                if (child.data.LineOrder > this.data.LineOrder)
+                    child.data.LineOrder--;
             }
         }
 
