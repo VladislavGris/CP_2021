@@ -4,6 +4,7 @@ using CP_2021.Models.ProcedureResuts.Plan;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CP_2021.Infrastructure.Utils.DB
@@ -12,9 +13,17 @@ namespace CP_2021.Infrastructure.Utils.DB
     {
         private static ApplicationContext _context;
 
-        public static List<Task_Hierarchy_Formatting> GetTasksByParent(Guid? parentId)
+        public static IEnumerable<Task_Hierarchy_Formatting> GetTasksByParent(Guid? parentId)
         {
-            return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetTasksByParent, parentId).AsNoTracking().ToList();
+            var result = _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetTasksByParent, parentId).AsNoTracking();
+            return result;
+        }
+
+        public static IEnumerable<Task_Hierarchy_Formatting> GetTasksByParentNULL()
+        {
+            var result = _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetTasksByParentNULL).AsNoTracking();
+            return result;
+
         }
 
         public static Task_Hierarchy_Formatting InsertEmptyTask(Guid? parentId, int lineOrder)
@@ -32,9 +41,31 @@ namespace CP_2021.Infrastructure.Utils.DB
             _context.Database.ExecuteSqlRaw(Procedures.DropTaskById, id);
         }
 
+        public static void UpTask(Guid taskToUp, Guid taskToDown)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpTask, taskToUp, taskToDown);
+        }
+
+        public static void DownTask(Guid taskToDown, Guid taskToUp)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.DownTask, taskToDown, taskToUp);
+        }
+
+        public static void LevelUpTask(Guid id, int lineOrder, Guid? parentId, int parentLineOrder)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.LevelUpTask, id, lineOrder, parentId, parentLineOrder);
+        }
+
+        public static void LevelDownTask(Guid id, int lineOrder, Guid? parentId, Guid newParentId)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.LevelDownTask, id, lineOrder, parentId, newParentId);
+        }
+
         static TasksOperations()
         {
-            _context = ApplicationUnitSingleton.GetInstance().context;
+            Debug.WriteLine("Constructor start:" + DateTime.Now.TimeOfDay);
+            _context = ApplicationUnitSingleton.GetApplicationContext();
+            Debug.WriteLine("Constructor end:" + DateTime.Now.TimeOfDay);
         }
     }
 }

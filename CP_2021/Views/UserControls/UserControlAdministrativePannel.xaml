@@ -18,11 +18,25 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
               Background="{StaticResource BackgroundBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition Width="1.5*"/>
+                <ColumnDefinition Width="1.5*"/>
+            </Grid.ColumnDefinitions>
             <TextBlock Text="Зарегистрированные пользователи"
                        Foreground="{StaticResource ForegroundBrush}"
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
-                       FontSize="24"/>
+                       FontSize="24" Grid.Column="0"/>
+            <Button Content="Экспорт" Style="{StaticResource EnterButton}" 
+                    Margin="10"
+                    Width="100"
+                    Grid.Column="1"
+                    Command="{Binding ExportDataCommand}"></Button>
+            <Button Content="Импорт" Style="{StaticResource EnterButton}" 
+                    Margin="10"
+                    Width="100"
+                    Grid.Column="2"></Button>
         </Grid>
 
         <DataGrid ItemsSource="{Binding Users}"

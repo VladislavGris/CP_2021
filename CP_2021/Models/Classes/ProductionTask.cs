@@ -6,7 +6,9 @@ using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.DBModels;
 using CP_2021.Models.ProcedureResuts.Plan;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace CP_2021.Models.Classes
@@ -36,15 +38,15 @@ namespace CP_2021.Models.Classes
         public static TreeGridModel InitRootsModel()
         {
             TreeGridModel model = new TreeGridModel();
-            List<Task_Hierarchy_Formatting> tasks = TasksOperations.GetTasksByParent(null);
-
-            foreach(Task_Hierarchy_Formatting task in tasks)
+            var tasks = TasksOperations.GetTasksByParentNULL();
+            foreach (Task_Hierarchy_Formatting task in tasks)
             {
                 ProductionTask root = new ProductionTask(task);
                 if (task.ChildrenCount > 0)
                     root.HasChildren = true;
                 model.Add(root);
             }
+            Debug.WriteLine($"After Model:{DateTime.Now.TimeOfDay}");
             return model;
         }
         /// <summary>
@@ -52,7 +54,7 @@ namespace CP_2021.Models.Classes
         /// </summary>
         public void LoadChildren()
         {
-            List<Task_Hierarchy_Formatting> children = TasksOperations.GetTasksByParent(this.data.Id);
+            var children = TasksOperations.GetTasksByParent(this.data.Id);
 
             foreach(Task_Hierarchy_Formatting child in children)
             {

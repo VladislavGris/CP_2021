@@ -4,6 +4,7 @@ using CP_2021.Models.ProcedureResuts;
 using CP_2021.Models.ProcedureResuts.PaymentReports;
 using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.Models.ViewEntities;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -46,6 +47,8 @@ namespace CP_2021.Data
         //public virtual DbSet<SearchProcResult> SearchResults { get; set; }
         //public virtual DbSet<ByAct> ByAct { get; set; }
         //public virtual DbSet<PaymentFirstPart> PaymentFirstParts { get; set; }
+
+        public SqlConnection connection;
 
         public ApplicationContext() : base() {
             //Database.EnsureDeleted();
@@ -166,6 +169,8 @@ namespace CP_2021.Data
             builder.AddJsonFile("appsettings.json");
             var config = builder.Build();
             optionsBuilder./*UseLazyLoadingProxies().*/UseSqlServer(config.GetConnectionString("DefaultConnection"));
+            connection = new SqlConnection(config.GetConnectionString("DefaultConnection"));
+            connection.Open();
         }
     }
 }

@@ -40,8 +40,6 @@ namespace CP_2021.Models.DBModels
         [Column("Expend_Num", TypeName = "nvarchar(MAX)")]
         public string ExpendNum { get; set; }
 
-        //public bool? ActCreation { get; set; }
-
         [Column("Note", TypeName = "nvarchar(MAX)")]
         public string Note { get; set; }
 

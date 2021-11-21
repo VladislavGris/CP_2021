@@ -6,7 +6,7 @@ namespace CP_2021.Infrastructure.Singletons
     class ApplicationUnitSingleton
     {
         public ApplicationUnit dbUnit;
-        public ApplicationContext context;
+        private static ApplicationContext context;
         private static ApplicationUnitSingleton _instance;
 
         public static ApplicationUnitSingleton GetInstance()
@@ -16,6 +16,15 @@ namespace CP_2021.Infrastructure.Singletons
                 _instance = new ApplicationUnitSingleton();
             }
             return _instance;
+        }
+
+        public static ApplicationContext GetApplicationContext()
+        {
+            if(context == null)
+            {
+                context = new ApplicationContext();
+            }
+            return context;
         }
 
         private ApplicationUnitSingleton()

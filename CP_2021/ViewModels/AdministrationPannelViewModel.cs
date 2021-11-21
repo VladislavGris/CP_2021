@@ -1,6 +1,7 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.DBModels;
 using CP_2021.ViewModels.Base;
 using System;
@@ -90,6 +91,19 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region ExportDataCommand
+
+        public ICommand ExportDataCommand { get; }
+
+        private bool CanExportDataCommandExecute(object p) => true;
+
+        private void OnExportDataCommandExecuted(object p)
+        {
+            XMLOperations.ExportTasks();
+        }
+
+        #endregion
+
         #endregion
 
         public AdministrationPannelViewModel() 
@@ -98,6 +112,7 @@ namespace CP_2021.ViewModels
 
             DownPositionCommand = new LambdaCommand(OnDownPositionCommandExecuted, CanDownPositionCommandExecute);
             RisePositionCommand = new LambdaCommand(OnRisePositionCommandExecuted, CanRisePositionCommandExecute);
+            ExportDataCommand = new LambdaCommand(OnExportDataCommandExecuted, CanExportDataCommandExecute);
 
             #endregion
 

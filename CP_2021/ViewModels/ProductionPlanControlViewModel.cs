@@ -1,5 +1,4 @@
 ﻿using Common.Wpf.Data;
-using CP_2021.Data;
 using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Exceptions;
 using CP_2021.Infrastructure.Search;
@@ -18,10 +17,11 @@ using CP_2021.Views.Windows;
 using CP_2021.Views.Windows.DataWindows;
 using log4net;
 using log4net.Config;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -37,12 +37,9 @@ namespace CP_2021.ViewModels
     {
 
         #region Свойства
-
         private ApplicationUnit Unit;
         private UndoRedoManager _undoManager;
         private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
-
-
         #region DataTable
 
         private DataGrid _dataTable;
@@ -65,7 +62,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region FontSizes
 
         private List<int> _fontSizes;
@@ -77,7 +73,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region FontFamilies
 
         private List<string> _fontFamilies;
@@ -89,7 +84,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region TaskToCopy
 
         private ProductionTask _taskToCopy;
@@ -101,7 +95,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region ProductionTasks
         private List<ProductionTaskDB> _productionTasks;
 
@@ -112,7 +105,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SelectedTask
         private ProductionTask _selectedTask;
 
@@ -123,7 +115,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region Model
 
         private TreeGridModel _model;
@@ -135,7 +126,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SearchString
 
         private string _searchString;
@@ -147,7 +137,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SelectedSearchIndex
 
         private int _selectedSearchIndex = 0;
@@ -159,7 +148,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SearchResults
 
         private List<ProductionTask> _searchResults;
@@ -171,7 +159,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SearchResultString
 
         private string _searchResultString;
@@ -183,7 +170,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region SearchComboBoxContent
 
         private List<string> _searchComboBoxContent = new List<string> { "Изделие", "Распорядительный документ", "Количество", "Стоимость по спецификации", "Приходный документ", "Желаемая дата", "Реальная дата", "Ведомость комплектации", "Дата комплектации", "Процент получения", "Номер МСЛ", "Сборка", "Электромонтаж", "Дата выдачи", "Дата готовности(п)", "Дата готовности", "Предприятие изготовитель", "Номер письма", "Номер спецификации", "Накладная", "Отчет", "Накладная возврата", "Дата поступления на склад", "Номер и дата акта расходования", "Примечания" };
@@ -195,7 +181,6 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         #region UpdatingMessage
 
         private string _updatingMessage;
@@ -207,62 +192,9 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-
         private SearchManager searchManager;
-
         #endregion
-
         #region Команды
-
-        #region ExpandAllCommand
-
-        public ICommand ExpandAllCommand { get; }
-
-        private bool CanExpandAllCommandExecute(object p) => /*true;*/ false;
-
-        private void OnExpandAllCommandExecuted(object p)
-        {
-            try
-            {
-                foreach(ProductionTaskDB task in Unit.Tasks.Get()){
-                    task.Expanded = true;
-                }
-                Unit.Commit();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::ExpandAllCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-            Update();
-        }
-
-        #endregion
-        #region RollUpAllCommand
-
-        public ICommand RollUpAllCommand { get; }
-
-        private bool CanRollUpAllCommandExecute(object p) => /*true;*/ false;
-
-        private void OnRollUpAllCommandExecuted(object p)
-        {
-            try
-            {
-                foreach (ProductionTaskDB task in Unit.Tasks.Get())
-                {
-                    task.Expanded = false;
-                }
-                Unit.Commit();
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RollUpAllCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-            Update();
-        }
-
-        #endregion
         #region AddProductionTaskCommand
 
         public ICommand AddProductionTaskCommand { get; }
@@ -390,45 +322,34 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelUpCommand { get; }
 
-        private bool CanLevelUpCommandExecute(object p) => SelectedTask?.Parent != null && SelectedTask != null;
+        private bool CanLevelUpCommandExecute(object p) => SelectedTask?.Parent != null;
 
         private void OnLevelUpCommandExecuted(object p)
         {
-            try
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            ProductionTask parentParent = (ProductionTask)SelectedTask.Parent.Parent;
+            ProductionTask task = SelectedTask;
+            
+            
+            parent.Children.Remove(SelectedTask);
+            if (parent.Children.Count == 0)
+                parent.IsExpanded = parent.HasChildren = false;
+            
+            if (parentParent == null)
             {
-                ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (dbTask == null)
-                {
-                    MessageBox.Show("Выделенная строка была удалена");
-                }
-                else
-                {
-                    dbTask.UpOrderBelow();
-                    if (dbTask.MyParent.Parent.MyParent.Parent == null)
-                    {
-                        int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
-                        dbTask.MyParent = new HierarchyDB(dbTask);
-                        dbTask.MyParent.LineOrder = lineOrder;
-                        Unit.Commit();
-                        dbTask.DownTaskBelow();
-                    }
-                    else
-                    {
-                        int lineOrder = dbTask.MyParent.Parent.MyParent.LineOrder + 1;
-                        dbTask.MyParent = new HierarchyDB(dbTask.MyParent.Parent.MyParent.Parent, dbTask);
-                        dbTask.MyParent.LineOrder = lineOrder;
-                        Unit.Commit();
-                        dbTask.DownTaskBelow();
-                    }
-                    Unit.Commit();
-                }
+                TasksOperations.LevelUpTask(task.data.Id, task.data.LineOrder, parent.data.Id, parent.data.LineOrder + 1);
+                parent.DownTasksModel(Model);
+                Model.Insert(parent.data.LineOrder, task);
             }
-            catch(Exception ex)
+            else
             {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::LevelUpCommand " + ex.Message);
+                TasksOperations.LevelUpTask(task.data.Id, task.data.LineOrder, parent.data.Id, parent.data.LineOrder + 1);
+                parent.DownTasksChildren(parentParent);
+                parentParent.Children.Insert(parent.data.LineOrder, task);
             }
-            Update();
+            task.IsExpanded = false;
+            task.UpTasksChildren(parent);
+            task.data.LineOrder = parent.data.LineOrder + 1;
         }
 
         #endregion
@@ -436,36 +357,46 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelDownCommand { get; }
 
-        private bool CanLevelDownCommandExecute(object p) => /*SelectedTask != null && SelectedTask.Task.MyParent.LineOrder != 1;*/ true;
+        private bool CanLevelDownCommandExecute(object p) => SelectedTask?.data.LineOrder != 1;
 
         private void OnLevelDownCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t=>t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            ProductionTask task = SelectedTask;
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            ProductionTask newParent = null;
             try
             {
-                if (dbTask == null)
+                if (parent == null)
                 {
-                    MessageBox.Show("Выделенная строка была удалена");
+                    newParent = (ProductionTask)Model.ElementAt(task.data.LineOrder - 2);
+                    TasksOperations.LevelDownTask(task.data.Id, task.data.LineOrder, null, newParent.data.Id);
+                    task.UpTasksModel(Model);
+                    Model.Remove(SelectedTask);
+                    
                 }
                 else
                 {
-                    dbTask.UpOrderBelow();
-                    ProductionTaskDB parent = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == dbTask.MyParent.ParentId && t.MyParent.LineOrder == dbTask.MyParent.LineOrder - 1).Single();
-                    parent.Expanded = true;
-                    dbTask.MyParent = new HierarchyDB(parent, dbTask);
-                    dbTask.MyParent.LineOrder = 1;
-                    Unit.Commit();
-                    dbTask.DownTaskBelow();
-                    Unit.Commit();
+                    newParent = (ProductionTask)parent.Children.ElementAt(task.data.LineOrder - 2);
+                    TasksOperations.LevelDownTask(task.data.Id, task.data.LineOrder, parent.data.Id, newParent.data.Id);
+                    task.UpTasksChildren(parent);
+                    parent.Children.Remove(SelectedTask);
                 }
+                if (!newParent.IsExpanded)
+                {
+                    newParent.IsExpanded = true;
+                    newParent.LoadChildren();
+                }
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                MessageBox.Show("Внутренняя ошибка. Обновите базу.");
+                _log.Error(ex.Message);
             }
             catch(Exception ex)
             {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::LevelDownCommand " + ex.Message);
+                MessageBox.Show(ex.Message);
+                _log.Error(ex.Message);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion
@@ -774,32 +705,47 @@ namespace CP_2021.ViewModels
 
         public ICommand UpTaskCommand { get; }
 
-        private bool CanUpTaskCommandExecute(object p) => /*SelectedTask?.Task.MyParent.LineOrder != 1 && SelectedTask!=null;*/ true;
+        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.data.LineOrder!=1;
 
         private void OnUpTaskCommandExecuted(object p)
         {
-            ProductionTaskDB taskToUp = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-            try
+            int taskToUpOrder = SelectedTask.data.LineOrder;
+            Guid taskToUpId = SelectedTask.data.Id;
+            Guid taskToDownId;
+
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            ProductionTask taskToUp = SelectedTask;
+            ProductionTask taskToDown = null;
+            if (parent == null)
+                taskToDown = Model.Cast<ProductionTask>().Where(t => t.data.LineOrder == taskToUpOrder - 1).SingleOrDefault();
+            else
+                taskToDown = parent.Children.Cast<ProductionTask>().Where(t => t.data.LineOrder == taskToUpOrder - 1).SingleOrDefault();
+
+            if (taskToDown != null)
             {
-                ProductionTaskDB taskToDown = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToUp.MyParent.ParentId && t.MyParent.LineOrder == taskToUp.MyParent.LineOrder - 1).SingleOrDefault();
-                if (taskToUp == null)
+                taskToDownId = taskToDown.data.Id;
+
+                TasksOperations.UpTask(taskToUpId, taskToDownId);
+                SelectedTask.data.LineOrder -= 1;
+                taskToDown.data.LineOrder += 1;
+                if(parent == null)
                 {
-                    MessageBox.Show("Выбранная строка была удалена");
+                    Model.Remove(taskToDown);
+                    Model.Remove(taskToUp);
+                    Model.Insert(taskToUp.data.LineOrder - 1, taskToUp);
+                    Model.Insert(taskToDown.data.LineOrder - 1, taskToDown);
                 }
                 else
                 {
-                    taskToUp.MyParent.LineOrder--;
-                    taskToDown.MyParent.LineOrder++;
-                    Unit.Commit();
+                    parent.Children.Remove(taskToDown);
+                    parent.Children.Remove(taskToUp);
+                    parent.Children.Insert(taskToUp.data.LineOrder - 1, taskToUp);
+                    parent.Children.Insert(taskToDown.data.LineOrder - 1, taskToDown);
                 }
+                
+                return;
             }
-            catch(Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::UpTaskCommand " + ex.Message);
-            }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, taskToUp);
+            MessageBox.Show("Не удалось выполнить операцию. Обновите базу");
         }
 
         #endregion
@@ -807,89 +753,48 @@ namespace CP_2021.ViewModels
 
         public ICommand DownTaskCommand { get; }
 
-        private bool CanDownTaskCommandExecute(object p) => true;
-        //{
-        //    if (SelectedTask != null)
-        //    {
-        //        int selecetedTaskLineOrder = SelectedTask.Task.MyParent.LineOrder;
-        //        int maxLineOrderByParent = Unit.Tasks.Get().Where(t => t.MyParent.Parent == SelectedTask.Task.MyParent.Parent).Max(t => t.MyParent.LineOrder);
-        //        Debug.WriteLine("selected = " + selecetedTaskLineOrder + "; max = " + maxLineOrderByParent);
-        //        return selecetedTaskLineOrder != maxLineOrderByParent;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
+        private bool CanDownTaskCommandExecute(object p) => SelectedTask?.data.LineOrder < (SelectedTask?.Parent == null? Model?.Cast<ProductionTask>().Max(t => t.data.LineOrder): SelectedTask?.Parent?.Children.Cast<ProductionTask>().Max(t => t.data.LineOrder));
 
         private void OnDownTaskCommandExecuted(object p)
         {
-            ProductionTaskDB taskToDown = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-            try
+            int taskToDownOrder = SelectedTask.data.LineOrder;
+            Guid taskToDownId = SelectedTask.data.Id;
+            Guid taskToUpId;
+
+            ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+            ProductionTask taskToDown = SelectedTask;
+            ProductionTask taskToUp = null;
+            if(parent == null)
+                taskToUp = Model.Cast<ProductionTask>().Where(t => t.data.LineOrder == taskToDownOrder + 1).SingleOrDefault();
+            else
+                taskToUp = parent.Children.Cast<ProductionTask>().Where(t => t.data.LineOrder == taskToDownOrder + 1).SingleOrDefault();
+            if (taskToUp != null)
             {
-                ProductionTaskDB taskToUp = Unit.Tasks.Get().Where(t => t.MyParent.ParentId == taskToDown.MyParent.ParentId && t.MyParent.LineOrder == taskToDown.MyParent.LineOrder + 1).SingleOrDefault();
-                if (taskToDown == null)
+                taskToUpId = taskToUp.data.Id;
+
+                TasksOperations.DownTask(taskToDownId, taskToUpId);
+                SelectedTask.data.LineOrder += 1;
+                taskToUp.data.LineOrder -= 1;
+                if(parent == null)
                 {
-                    MessageBox.Show("Выбранная строка была удалена");
+                    Model.Remove(taskToUp);
+                    Model.Remove(taskToDown);
+                    Model.Insert(taskToUp.data.LineOrder - 1, taskToUp);
+                    Model.Insert(taskToDown.data.LineOrder - 1, taskToDown);
                 }
                 else
                 {
-                    taskToUp.MyParent.LineOrder--;
-                    taskToDown.MyParent.LineOrder++;
-                    Unit.Commit();
+                    parent.Children.Remove(taskToUp);
+                    parent.Children.Remove(taskToDown);
+                    parent.Children.Insert(taskToUp.data.LineOrder - 1, taskToUp);
+                    parent.Children.Insert(taskToDown.data.LineOrder - 1, taskToDown);
                 }
+                
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка");
-                _log.Error("ProductionPlanControlViewModel::DownTaskCommand " + ex.Message);
-            }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, taskToDown);
+            MessageBox.Show("Не удалось выполнить операцию. Обновите базу");
         }
 
-        #endregion
-        #region Undo/Redo
-        #region UndoCommand
-
-        public ICommand UndoCommand { get; }
-
-        private bool CanUndoCommandExecute(object p) => _undoManager.UndoStackEmpty();
-
-        private void OnUndoCommandExecuted(object p)
-        {
-            try
-            {
-                _undoManager.ExecuteUndoCommand();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::UndoCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-        }
-
-        #endregion
-        #region RedoCommand
-
-        public ICommand RedoCommand { get; }
-
-        private bool CanRedoCommandExecute(object p) => _undoManager.RedoStackEmpty();
-
-        private void OnRedoCommandExecuted(object p)
-        {
-            try
-            {
-                _undoManager.ExecuteRedoCommand();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::RedoCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-        }
-
-        #endregion
         #endregion
         #region Formatting
         #region SetBoldCommand
@@ -1167,7 +1072,7 @@ namespace CP_2021.ViewModels
         private void OnOnExpandingCommandExecuted(object p)
         {
             // TODO: Добавить сохранение разворачивания в БД
-            if (p is ProductionTask)
+            if (p is ProductionTask && p == SelectedTask && ((ProductionTask)p).Children.Count == 0)
             {
                 ((ProductionTask)p).LoadChildren();
             }
@@ -1186,8 +1091,31 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
-        #endregion
+        #region ExportTaskCommand
 
+        public ICommand ExportTaskCommand { get; }
+
+        private bool CanExportTaskCommandExecute(object p) => SelectedTask.data!=null;
+
+        private void OnExportTaskCommandExecuted(object p)
+        {
+            XMLOperations.ExportTaskById(SelectedTask.data.Id);
+        }
+
+        #endregion
+        #region ImportTaskCommand
+
+        public ICommand ImportTaskCommand { get; }
+
+        private bool CanImportTaskCommandExecute(object p) => true;
+
+        private void OnImportTaskCommandExecuted(object p)
+        {
+            
+        }
+
+        #endregion
+        #endregion
         #region Методы
 
         private void Update()
@@ -1220,8 +1148,6 @@ namespace CP_2021.ViewModels
         public ProductionPlanControlViewModel()
         {
             #region Команды
-            ExpandAllCommand = new LambdaCommand(OnExpandAllCommandExecuted, CanExpandAllCommandExecute);
-            RollUpAllCommand = new LambdaCommand(OnRollUpAllCommandExecuted, CanRollUpAllCommandExecute);
             AddProductionTaskCommand = new LambdaCommand(OnAddProductionTaskCommandExecuted, CanAddProductionTaskCommandExecute);
             AddChildCommand = new LambdaCommand(OnAddChildCommandExecuted, CanAddChildCommandExecute);
             DeleteProductionTaskCommand = new LambdaCommand(OnDeleteProductionTaskCommandExecuted, CanDeleteProductionTaskCommandExecute);
@@ -1239,8 +1165,6 @@ namespace CP_2021.ViewModels
             OnExpandingCommand = new LambdaCommand(OnOnExpandingCommandExecuted, CanOnExpandingCommandExecute);
             UpTaskCommand = new LambdaCommand(OnUpTaskCommandExecuted, CanUpTaskCommandExecute);
             DownTaskCommand = new LambdaCommand(OnDownTaskCommandExecuted, CanDownTaskCommandExecute);
-            UndoCommand = new LambdaCommand(OnUndoCommandExecuted, CanUndoCommandExecute);
-            RedoCommand = new LambdaCommand(OnRedoCommandExecuted, CanRedoCommandExecute);
             SetBoldCommand = new LambdaCommand(OnSetBoldCommandExecuted, CanSetBoldCommandExecute);
             SetItalicCommand = new LambdaCommand(OnSetItalicCommandExecuted, CanSetItalicCommandExecute);
             SetUnderlineCommand = new LambdaCommand(OnSetUnderlineCommandExecuted, CanSetUnderlineCommandExecute);
@@ -1255,14 +1179,18 @@ namespace CP_2021.ViewModels
             GetDatagrid = new LambdaCommand(OnGetDatagridExecuted, CanGetDatagridExecute);
             OpenActWindowCommand = new LambdaCommand(OnOpenActWindowCommandExecuted, CanOpenActWindowCommandExecute);
             OpenSearchWindowCommand = new LambdaCommand(OnOpenSearchWindowCommandExecuted, CanOpenSearchWindowCommandExecute);
+            ExportTaskCommand = new LambdaCommand(OnExportTaskCommandExecuted, CanExportTaskCommandExecute);
+            ImportTaskCommand = new LambdaCommand(OnImportTaskCommandExecuted, CanImportTaskCommandExecute);
             #endregion
 
             FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
             FontFamilies = new List<string> { "Arial", "Calibre", "Times New Roman" };
             User = UserDataSingleton.GetInstance().user;
-            //Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            //ProductionTasks = Unit.Tasks.Get().ToList();
+
             //Model = ProductionTask.InitModel(ProductionTasks);
+            //Process.Start("explorer.exe", "G:\\4_Sem\\ПЗ.docx");
+            //Process.Start("explorer.exe", "G:\\4_Sem\\CP_2021\\CP_2021\\bin\\Debug\\net5.0-windows\\Report.pdf");
+
             Model = ProductionTask.InitRootsModel();
             searchManager = new SearchManager();
             //_undoManager = new UndoRedoManager();

@@ -19,15 +19,10 @@ namespace CP_2021.Models.DBModels
 
         [Column("Comp_Percentage", TypeName = "float")]
         public float? Percentage { get; set; }
-        //Дата поступления на склад(%70)
         public DateTime? OnStorageDate { get; set; }
-        //Номер заявления
         public string StateNumber { get; set; }
-        //Стелаж
         public string Rack { get; set; }
-        //Полка
         public string Shelf { get; set; }
-        //Примечание
         public string Note { get; set; }
 
         [Column("Production_Task_Id")]
