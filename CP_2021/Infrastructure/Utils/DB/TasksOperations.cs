@@ -1,5 +1,6 @@
 ﻿using CP_2021.Data;
 using CP_2021.Infrastructure.Singletons;
+using CP_2021.Models.DataWindowEntities;
 using CP_2021.Models.ProcedureResuts.Plan;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -31,6 +32,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.InsertEmptyTask, parentId, lineOrder).AsNoTracking().ToList().FirstOrDefault();
         }
 
+        public static Task_Hierarchy_Formatting GetTaskById(Guid id)
+        {
+            return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetTaskById, id).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
         public static void UpdateProductionPlan(Guid id, string incDoc, string taskName, int? count, string specCost, string note, bool expanded, short completion, string editingBy)
         {
             _context.Database.ExecuteSqlRaw(Procedures.UpdateProductionPlan, id, incDoc, taskName, count, specCost, note, expanded, completion, editingBy);
@@ -60,6 +66,21 @@ namespace CP_2021.Infrastructure.Utils.DB
         {
             _context.Database.ExecuteSqlRaw(Procedures.LevelDownTask, id, lineOrder, parentId, newParentId);
         }
+
+        #region DataWindows
+        #region Complectation
+        public static ComplectationWindowEntity GetComplectationWindowEntity(Guid taskId)
+        {
+            return _context.ComplectationData.FromSqlRaw(Procedures.GetComplectationWindowData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+        public static void UpdateComplectationWindowData(Guid id, string complectation, string stateNumber, DateTime? complectationDate, DateTime? onStorageDate, double? percentage, string rack, string shelf, string note)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateComplectationWindowData, id, complectation, complectationDate, percentage, onStorageDate, stateNumber, rack, shelf, note);
+        }
+        #endregion
+
+
+        #endregion
 
         static TasksOperations()
         {

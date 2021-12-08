@@ -1,14 +1,9 @@
 ﻿using CP_2021.Infrastructure.Commands;
-using CP_2021.Infrastructure.Singletons;
-using CP_2021.Infrastructure.Units;
-using CP_2021.Models.DBModels;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.ViewModels.Base;
+using CP_2021.Infrastructure.Utils.DB;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -16,95 +11,57 @@ namespace CP_2021.ViewModels
 {
     class SendReportViewModel : ViewModelBase
     {
-        #region Свойства
+        #region Task
 
-        private ApplicationUnit Unit;
+        private TaskReport _task;
 
-        #region MyTasksVM
-
-        private MyTasksViewModel _myTasksVM;
-
-        public MyTasksViewModel MyTasksVM
+        public TaskReport Task
         {
-            get => _myTasksVM;
-            set => Set(ref _myTasksVM, value);
+            get => _task;
+            set => Set(ref _task, value);
         }
 
         #endregion
-
-        #region Report
-
-        private ReportDB _report;
-
-        public ReportDB Report
-        {
-            get => _report;
-            set => Set(ref _report, value);
-        }
-
-        #endregion
-
-        #region User
-
-        private UserDB _user;
-
-        public UserDB User
-        {
-            get => _user;
-            set => Set(ref _user, value);
-        }
-
-        #endregion
-
-        #endregion
-
-        #region Команды
 
         #region SubmitCommand
 
         public ICommand SubmitCommand { get; }
 
-        private bool CanSubmitCommandExecute(object p) => !String.IsNullOrEmpty(Report.Description);
+        private bool CanSubmitCommandExecute(object p) => !String.IsNullOrEmpty(Task?.ReportDescription);
 
         private void OnSubmitCommandExecuted(object p)
         {
-            Report.State = true;
-            Unit.Commit();
-            Unit.Refresh();
-            switch (MyTasksVM.FilterSelection)
-            {
-                case 0:
-                    MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
-                    break;
-                case 1:
-                    MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
-                    break;
-                case 2:
-                    MyTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
-                    break;
-                default:
-                    break;
-            }
+            Task.ReportState = true;
+
+            UserTaskOperations.AddReportToTask(Task.Id, Task.ReportDescription);
+
+            UserTaskEventArgs args = new UserTaskEventArgs();
+            args.Task = Task;
+            OnSendTaskIdToMainWindow(args);
+
             ((Window)p).Close();
         }
 
         #endregion
 
+        #region OnTaskAddedEvent
+
+        public event EventHandler<UserTaskEventArgs> OnTaskAdded;
+        // Отправка task на окно тасков
+        protected void OnSendTaskIdToMainWindow(UserTaskEventArgs e)
+        {
+            EventHandler<UserTaskEventArgs> handler = OnTaskAdded;
+            handler?.Invoke(this, e);
+        }
+
         #endregion
 
-        public SendReportViewModel() { }
-
-        public SendReportViewModel(ReportDB report, MyTasksViewModel vm)
-        {
+        public SendReportViewModel(TaskReport task) {
             #region Команды
-
             SubmitCommand = new LambdaCommand(OnSubmitCommandExecuted, CanSubmitCommandExecute);
-
             #endregion
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            User = UserDataSingleton.GetInstance().user;
-            Report = report;
-            MyTasksVM = vm;
+
+            Task = task;
         }
     }
 }

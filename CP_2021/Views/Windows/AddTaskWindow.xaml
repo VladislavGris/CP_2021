@@ -59,8 +59,17 @@
                          Text="{Binding Task.Header, UpdateSourceTrigger=PropertyChanged}"/>
                 <Label Content="Исполнитель"
                        Style="{StaticResource LabelStyle}"></Label>
-                <ComboBox ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox ItemsSource="{Binding UserNames, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged}">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Content="{Binding Surname}"/>
+                                <Label Content="{Binding Name}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
                 <Label Content="Дата выполнения"
                        Style="{StaticResource LabelStyle}"></Label>
                 <DatePicker SelectedDate="{Binding Task.CompleteDate, UpdateSourceTrigger=PropertyChanged}"/>

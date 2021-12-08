@@ -1,54 +1,30 @@
 ﻿using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
 using CP_2021.Models.DBModels;
+using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CP_2021.ViewModels
 {
     class ViewReportViewModel : ViewModelBase
     {
+        #region Task
 
-        #region Свойтсва
-        private ApplicationUnit Unit;
+        private TaskReport _task;
 
-        #region User
-
-        private UserDB _user;
-
-        public UserDB User
+        public TaskReport Task
         {
-            get => _user;
-            set => Set(ref _user, value);
+            get => _task;
+            set => Set(ref _task, value);
         }
-
-        #endregion
-
-        #region Report
-
-        private ReportDB _report;
-
-        public ReportDB Report
-        {
-            get => _report;
-            set => Set(ref _report, value);
-        }
-
-        #endregion
 
         #endregion
 
         public ViewReportViewModel() { }
 
-        public ViewReportViewModel(ReportDB report)
+        public ViewReportViewModel(TaskReport task)
         {
-            Report = report;
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            User = UserDataSingleton.GetInstance().user;
+            Task = task;
         }
     }
 }

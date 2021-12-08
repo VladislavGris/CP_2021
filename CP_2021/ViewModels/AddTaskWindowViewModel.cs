@@ -1,7 +1,11 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.DBModels;
+using CP_2021.Models.ProcedureResuts;
+using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.ViewModels.Base;
 using System;
 using System.Collections.Generic;
@@ -18,37 +22,11 @@ namespace CP_2021.ViewModels
     {
         #region Свойства
 
-        private ApplicationUnit Unit;
-
-        #region User
-
-        private UserDB _user;
-
-        public UserDB User
-        {
-            get => _user;
-            set => Set(ref _user, value);
-        }
-
-        #endregion
-
-        #region GivenTasksVM
-
-        private GivenTasksViewModel _givenTasksVM;
-
-        public GivenTasksViewModel GivenTasksVM
-        {
-            get => _givenTasksVM;
-            set => Set(ref _givenTasksVM, value);
-        }
-
-        #endregion
-
         #region SelectedUser
 
-        private UserDB _selectedUser;
+        private UserNames _selectedUser;
 
-        public UserDB SelectedUser
+        public UserNames SelectedUser
         {
             get => _selectedUser;
             set => Set(ref _selectedUser, value);
@@ -58,9 +36,9 @@ namespace CP_2021.ViewModels
 
         #region Task
 
-        private TaskDB _task;
+        private TaskReport _task = new TaskReport() { CompleteDate = DateTime.Now};
 
-        public TaskDB Task
+        public TaskReport Task
         {
             get => _task;
             set => Set(ref _task, value);
@@ -68,14 +46,26 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region Users
+        //#region Users
 
-        private ObservableCollection<UserDB> _users;
+        //private ObservableCollection<UserDB> _users;
 
-        public ObservableCollection<UserDB> Users
+        //public ObservableCollection<UserDB> Users
+        //{
+        //    get => _users;
+        //    set => Set(ref _users, value);
+        //}
+
+        //#endregion
+
+        #region UserNames
+
+        private ObservableCollection<UserNames> _userNames;
+
+        public ObservableCollection<UserNames> UserNames
         {
-            get => _users;
-            set => Set(ref _users, value);
+            get => _userNames;
+            set => Set(ref _userNames, value);
         }
 
         #endregion
@@ -92,7 +82,13 @@ namespace CP_2021.ViewModels
 
         private void OnCancelCommandExecuted(object p)
         {
-            ((Window)p).Close();
+            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите отменить создание задачи?", "Отмена", MessageBoxButton.YesNo);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    ((Window)p).Close();
+                    break;
+            }
         }
 
         #endregion
@@ -105,57 +101,49 @@ namespace CP_2021.ViewModels
 
         private void OnAddTaskCommandExecuted(object p)
         {
-            if (SelectedUser == null || Task.Description == null || Task.CompleteDate == null || Task.Header == null)
-            { 
+            if (SelectedUser == null || Task.Description == null || Task.Header == null)
+            {
                 MessageBox.Show("Все поля должны быть заполнены");
                 return;
             }
-            Task.To = SelectedUser;
-            ReportDB report = new ReportDB(User, Task);
-            Task.Report = report;
-            Unit.UserTasks.Insert(Task);
-            Unit.Commit();
-            Unit.Refresh();
-            switch (GivenTasksVM.FilterSelection)
-            {
-                case 0:
-                    GivenTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
-                    break;
-                case 1:
-                    GivenTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User) && t.Report.State == true));
-                    break;
-                case 2:
-                    GivenTasksVM.Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User) && t.Report.State == false));
-                    break;
-                default:
-                    break;
-            }
+            Task.ToId = SelectedUser.Id;
+            Task.Name = SelectedUser.Name;
+            Task.Surname = SelectedUser.Surname;
+            UserTaskOperations.CreateNewTask(Task,UserDataSingleton.GetInstance().user.Id);
+
+            UserTaskEventArgs args = new UserTaskEventArgs();
+            args.Task = Task;
+            OnSendTaskIdToMainWindow(args);
+
             ((Window)p).Close();
         }
 
         #endregion
 
         #endregion
-        
-        public AddTaskWindowViewModel() 
-        { 
-            
+
+        #region Events
+
+        public event EventHandler<UserTaskEventArgs> OnTaskAdded;
+        // Отправка task на окно тасков
+        protected void OnSendTaskIdToMainWindow(UserTaskEventArgs e)
+        {
+            EventHandler<UserTaskEventArgs> handler = OnTaskAdded;
+            handler?.Invoke(this, e);
+        }
+
+        #endregion
+
+        public AddTaskWindowViewModel() {
+            AddTaskCommand = new LambdaCommand(OnAddTaskCommandExecuted, CanAddTaskCommandExecute);
+            CancelCommand = new LambdaCommand(OnCancelCommandExecuted, CanCancelCommandExecute);
+
+            UserNames = new ObservableCollection<UserNames>(UserTaskOperations.GetUserNames(UserDataSingleton.GetInstance().user.Id));
         }
 
         public AddTaskWindowViewModel(GivenTasksViewModel vm)
         {
-            #region Команды
-
-            CancelCommand = new LambdaCommand(OnCancelCommandExecuted, CanCancelCommandExecute);
-            AddTaskCommand = new LambdaCommand(OnAddTaskCommandExecuted, CanAddTaskCommandExecute);
-
-            #endregion
-
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            User = UserDataSingleton.GetInstance().user;
-            GivenTasksVM = vm;
-            Users = new ObservableCollection<UserDB>(Unit.DBUsers.Get().Where(u => !u.Equals(User) && u.Position != 2));
-            Task = new TaskDB();
+            
         }
     }
 }

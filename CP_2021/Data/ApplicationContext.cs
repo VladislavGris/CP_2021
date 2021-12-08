@@ -1,13 +1,11 @@
-﻿using CP_2021.Infrastructure;
+﻿using CP_2021.Models.DataWindowEntities;
 using CP_2021.Models.DBModels;
 using CP_2021.Models.ProcedureResuts;
-using CP_2021.Models.ProcedureResuts.PaymentReports;
 using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.Models.ViewEntities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.IO;
 
 namespace CP_2021.Data
@@ -29,6 +27,9 @@ namespace CP_2021.Data
         public virtual DbSet<ActDB> Act { get; set; }
 
         public virtual DbSet<Task_Hierarchy_Formatting> Task_Hierarchy_Formatting { get; set; }
+        public virtual DbSet<TaskReport> TaskReport { get; set; }
+        public virtual DbSet<ComplectationWindowEntity> ComplectationData { get; set; }
+        public virtual DbSet<UserNames> UserNames { get; set; }
 
         //public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
         //public virtual DbSet<HeadTasks> HeadTasks { get; set; }

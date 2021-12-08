@@ -29,6 +29,7 @@
     <convertComp:RackVisibility x:Key="RackVisibility"/>
     <convertComp:ShelfVisibility x:Key="ShelfVisibility"/>
     <convertUtil:AddingPercentage x:Key="AddingPercentage"/>
+    <convert:UserNamesConverter x:Key="UserNamesConverter"/>
 
     <!--Brushes #575757 -->
     <SolidColorBrush x:Key="ForegroundBrush" Color="White" />

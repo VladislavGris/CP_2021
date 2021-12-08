@@ -15,7 +15,8 @@
 
         /// <summary>ParentId</summary>
         public static string GetTasksByParent = "exec GetTasksByParent {0}";
-        public static string GetTasksByParentNULL = "exec GetTasksByParent with recompile";
+        public static string GetTasksByParentNULL = "exec GetTasksByParent";
+        public static string GetTaskById = "exec GetTaskById {0}";
         /// <summary>ParentId, LineOrder</summary>
         public static string InsertEmptyTask = "exec InsertEmptyTask {0}, {1}";
         /// <summary>Id, IncDoc, TaskName, Count, SpecCost, Note, Expanded, Completion, EditingBy</summary>
@@ -35,5 +36,25 @@
         public static string ExportTasksXML = "exec ExportTasksXML";
         /// <summary>Id</summary>
         public static string ExportTaskById = "exec ExportTaskById {0}";
+
+        /// <summary>TaskId</summary>
+        public static string GetComplectationWindowData = "exec GetComplectationData {0}";
+        /// <summary>Id Complectation C_Date Comp_Percentage OnStorageDate StateNumber Rack Shelf Note</summary>
+        public static string UpdateComplectationWindowData = "exec UpdataComplecationData {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}";
+
+        // Given tasks
+        public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
+        public static string GetAllCompletedTasksByUser = "exec GetAllCompletedTasksByUser {0}";
+        public static string GetAllIncompetedTasksByUser = "exec GetAllIncompetedTasksByUser {0}";
+        // ToDo tasks
+        public static string GetAllToDoTasks = "exec GetAllToDoTasks {0}";
+        public static string GetAllToDoTasksNoReport = "exec GetAllToDoTasksNoReport {0}";
+        public static string GetAllToDoTasksWithReport = "exec GetAllToDoTasksWithReport {0}";
+        public static string GetUserNames = "exec GetUserNames {0}";
+        /// <summary>GivenUserId Id, header, completeDate, description</summary>
+        public static string CreateNewTask = "exec CreateTaskToUser {0},{1},{2},{3},{4}";
+        public static string DropUserTask = "exec DropUserTaskById {0}";
+        /// <summary>TaskId ReportDescription</summary>
+        public static string AddReportToTask = "exec AddReportToTask {0},{1}";
     }
 }

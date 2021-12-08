@@ -1,15 +1,13 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Singletons;
-using CP_2021.Infrastructure.Units;
-using CP_2021.Models.DBModels;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Infrastructure.Utils.DB;
+using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.ViewModels.Base;
 using CP_2021.Views.Windows;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 
@@ -20,37 +18,23 @@ namespace CP_2021.ViewModels
 
         #region Свойства
 
-        private ApplicationUnit Unit;
+        #region GivenTasks
 
-        #region User
+        private ObservableCollection<TaskReport> _givenTasks;
 
-        private UserDB _user;
-
-        public UserDB User
+        public ObservableCollection<TaskReport> GivenTasks
         {
-            get => _user;
-            set => Set(ref _user, value);
-        }
-
-        #endregion
-
-        #region Tasks
-
-        private ObservableCollection<TaskDB> _tasks;
-
-        public ObservableCollection<TaskDB> Tasks
-        {
-            get => _tasks;
-            set => Set(ref _tasks, value);
+            get => _givenTasks;
+            set => Set(ref _givenTasks, value);
         }
 
         #endregion
 
         #region SelectedTask
 
-        private TaskDB _selectedTask;
+        private TaskReport _selectedTask;
 
-        public TaskDB SelectedTask
+        public TaskReport SelectedTask
         {
             get => _selectedTask;
             set => Set(ref _selectedTask, value);
@@ -72,6 +56,16 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        // Event handler for task addition
+        public void GetAddedTask(object sender, UserTaskEventArgs e)
+        {
+            // 0 -all
+            // 1 - completed
+            // 2 - incomplete
+            if(FilterSelection == 2 || FilterSelection == 0)
+                GivenTasks.Add(e.Task);
+        }
+
         #region Команды
 
         #region OpenShowReportWindowCommand
@@ -83,7 +77,7 @@ namespace CP_2021.ViewModels
         private void OnOpenShowReportWindowCommandExecuted(object p)
         {
             ViewReportWindow window = new ViewReportWindow();
-            window.DataContext = new ViewReportViewModel((ReportDB)p);
+            window.DataContext = new ViewReportViewModel((TaskReport)p);
             window.Show();
         }
 
@@ -97,9 +91,10 @@ namespace CP_2021.ViewModels
 
         private void OnOpenAddTaskWindowExecuted(object p)
         {
-               
+
             AddTaskWindow window = new AddTaskWindow();
-            window.DataContext = new AddTaskWindowViewModel((GivenTasksViewModel)p);
+            window.DataContext = new AddTaskWindowViewModel();
+            ((AddTaskWindowViewModel)window.DataContext).OnTaskAdded += GetAddedTask;
             window.Show();
         }
 
@@ -113,13 +108,19 @@ namespace CP_2021.ViewModels
 
         private void OnRemoveTaskCommandExecuted(object p)
         {
-            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить задачу {((TaskDB)p).Header}?", "Удаление", MessageBoxButton.YesNo);
+            MessageBoxResult result = MessageBox.Show($"Вы действительно хотите удалить задачу {((TaskReport)p).Header}?", "Удаление", MessageBoxButton.YesNo);
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    Unit.UserTasks.Delete((TaskDB)p);
-                    Unit.Commit();
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+                    try
+                    {
+                        UserTaskOperations.DeleteTaskById(((TaskReport)p).Id);
+
+                        GivenTasks.Remove((TaskReport)p);
+                    }catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
                     break;
             }
         }
@@ -134,21 +135,7 @@ namespace CP_2021.ViewModels
 
         private void OnUpdateCollectionCommandExecuted(object p)
         {
-            Unit.Refresh();
-            switch (FilterSelection)
-            {
-                case 0:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
-                    break;
-                case 1:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User) && t.Report.State == true));
-                    break;
-                case 2:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User) && t.Report.State == false));
-                    break;
-                default:
-                    break;
-            }
+            Update();
         }
 
         #endregion
@@ -161,24 +148,28 @@ namespace CP_2021.ViewModels
 
         private void OnFilterSelectionChangedExecuted(object p)
         {
-            Unit.Refresh();
+            Update();
+        }
+
+        #endregion
+
+        private void Update()
+        {
             switch (FilterSelection)
             {
                 case 0:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+                    GivenTasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllGivenTasksByUser(UserDataSingleton.GetInstance().user.Id));
                     break;
                 case 1:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User) && t.Report.State==true));
+                    GivenTasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllCompletedTasksByUser(UserDataSingleton.GetInstance().user.Id));
                     break;
                 case 2:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User) && t.Report.State == false));
+                    GivenTasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllIncompetedTasksByUser(UserDataSingleton.GetInstance().user.Id));
                     break;
                 default:
                     break;
             }
         }
-
-        #endregion
 
         #endregion
 
@@ -192,10 +183,7 @@ namespace CP_2021.ViewModels
             FilterSelectionChanged = new LambdaCommand(OnFilterSelectionChangedExecuted, CanFilterSelectionChangedExecute);
 
             #endregion
-
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            User = UserDataSingleton.GetInstance().user;
-            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.Report.To.Equals(User)));
+            GivenTasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllGivenTasksByUser(UserDataSingleton.GetInstance().user.Id));
         }
     }
 }

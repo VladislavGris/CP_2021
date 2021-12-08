@@ -1,7 +1,10 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Units;
+using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.DBModels;
+using CP_2021.Models.ProcedureResuts.Plan;
 using CP_2021.ViewModels.Base;
 using CP_2021.Views.Windows;
 using Notifications.Wpf;
@@ -20,25 +23,11 @@ namespace CP_2021.ViewModels
 
         #region Свойства
 
-        private ApplicationUnit Unit;
-
-        #region User
-
-        private UserDB _user;
-
-        public UserDB User
-        {
-            get => _user;
-            set => Set(ref _user, value);
-        }
-
-        #endregion
-
         #region Tasks
 
-        private ObservableCollection<TaskDB> _tasks;
+        private ObservableCollection<TaskReport> _tasks;
 
-        public ObservableCollection<TaskDB> Tasks
+        public ObservableCollection<TaskReport> Tasks
         {
             get => _tasks;
             set => Set(ref _tasks, value);
@@ -60,6 +49,19 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        public void GetAddedReport(object sender, UserTaskEventArgs e)
+        {
+            foreach(var task in Tasks)
+            {
+                if(task.Id == e.Task.Id)
+                {
+                    task.ReportState = true;
+                    task.ReportDescription = e.Task.ReportDescription;
+                }
+            }
+
+        }
+
         #region Команды
 
         #region OpenSendReportWindowCommand
@@ -71,7 +73,8 @@ namespace CP_2021.ViewModels
         private void OnOpenSendReportWindowCommandExecuted(object p)
         {
             SendReportWindow window = new SendReportWindow();
-            window.DataContext = new SendReportViewModel((ReportDB)p, this);
+            window.DataContext = new SendReportViewModel((TaskReport)p);
+            ((SendReportViewModel)window.DataContext).OnTaskAdded += GetAddedReport;
             window.Show();
         }
 
@@ -86,7 +89,7 @@ namespace CP_2021.ViewModels
         private void OnOpenShowReportWindowCommandExecuted(object p)
         {
             ViewReportWindow window = new ViewReportWindow();
-            window.DataContext = new ViewReportViewModel((ReportDB)p);
+            window.DataContext = new ViewReportViewModel((TaskReport)p);
             window.Show();
         }
 
@@ -100,49 +103,7 @@ namespace CP_2021.ViewModels
 
         private void OnRefreshCommandExecuted(object p)
         {
-            Unit.Refresh();
-            var notificationManager = new NotificationManager();
-            switch (FilterSelection)
-            {
-                case 0:
-                    if(Tasks.ToList().Count < Unit.UserTasks.Get().Where(t => t.To.Equals(User)).ToList().Count)
-                    {
-                        notificationManager.Show(new NotificationContent
-                        {
-                            Title = "Задачи",
-                            Message = "У вас появились новые задачи",
-                            Type = NotificationType.Information
-                        });
-                    }
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
-                    break;
-                case 1:
-                    if (Tasks.ToList().Count < Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true).ToList().Count)
-                    {
-                        notificationManager.Show(new NotificationContent
-                        {
-                            Title = "Задачи",
-                            Message = "У вас появились новые задачи",
-                            Type = NotificationType.Information
-                        });
-                    }
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
-                    break;
-                case 2:
-                    if (Tasks.ToList().Count < Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false).ToList().Count)
-                    {
-                        notificationManager.Show(new NotificationContent
-                        {
-                            Title = "Задачи",
-                            Message = "У вас появились новые задачи",
-                            Type = NotificationType.Information
-                        });
-                    }
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
-                    break;
-                default:
-                    break;
-            }
+            Update();
         }
 
         #endregion
@@ -155,26 +116,30 @@ namespace CP_2021.ViewModels
 
         private void OnFilterSelectionChangedExecuted(object p)
         {
-            Unit.Refresh();
-            switch (FilterSelection)
-            {
-                case 0:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User)));
-                    break;
-                case 1:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == true));
-                    break;
-                case 2:
-                    Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(t => t.To.Equals(User) && t.Report.State == false));
-                    break;
-                default:
-                    break;
-            }
+            Update();
         }
 
         #endregion
 
         #endregion
+
+        private void Update()
+        {
+            switch (FilterSelection)
+            {
+                case 0:
+                    Tasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllToDoTasks(UserDataSingleton.GetInstance().user.Id));
+                    break;
+                case 1:
+                    Tasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllToDoTasksWithReport(UserDataSingleton.GetInstance().user.Id));
+                    break;
+                case 2:
+                    Tasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllToDoTasksNoReport(UserDataSingleton.GetInstance().user.Id));
+                    break;
+                default:
+                    break;
+            }
+        }
 
         public MyTasksViewModel() 
         {
@@ -186,10 +151,14 @@ namespace CP_2021.ViewModels
             FilterSelectionChanged = new LambdaCommand(OnFilterSelectionChangedExecuted, CanFilterSelectionChangedExecute);
 
             #endregion
-
-            Unit = ApplicationUnitSingleton.GetInstance().dbUnit;
-            User = UserDataSingleton.GetInstance().user;
-            Tasks = new ObservableCollection<TaskDB>(Unit.UserTasks.Get().Where(u => u.To.Equals(User)));
+            Tasks = new ObservableCollection<TaskReport>(UserTaskOperations.GetAllToDoTasks(UserDataSingleton.GetInstance().user.Id));
+            //var notificationManager = new NotificationManager();
+            //notificationManager.Show(new NotificationContent
+            //{
+            //    Title = "Задачи",
+            //    Message = "У вас появились новые задачи",
+            //    Type = NotificationType.Information
+            //});
         }
     }
 }

@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="ViewReportWindow" Height="320" Width="400" ResizeMode="NoResize" WindowStyle="None"
         Style="{StaticResource WindowStyle}"
-        Background="{StaticResource BackgroundBrush}"
+        Background="{StaticResource InnerBackground}"
         WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png">
     <Grid>
         <Grid.RowDefinitions>
@@ -43,14 +43,14 @@
                        VerticalAlignment="Bottom"/>
         </Grid>
         <Border CornerRadius="20"
-                Background="{StaticResource LightBackgroundBrush}"
+                Background="{StaticResource BackgroundBrush}"
                 Grid.Row="1"
                 Margin="10">
             <StackPanel Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Задача"
                        Style="{StaticResource LabelStyle}"></Label>
-                    <TextBlock Text="{Binding Report.Task.Header}"
+                    <TextBlock Text="{Binding Task.Header}"
                        FontSize="18"
                        Foreground="White"
                        TextWrapping="Wrap"
@@ -60,7 +60,19 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Отправитель отчета"
                        Style="{StaticResource LabelStyle}"></Label>
-                    <TextBlock Text="{Binding Report.Task.To, Converter={StaticResource ExecutorConverter}}"
+                    <TextBlock Text="{Binding Task.Surname}"
+                       FontSize="18"
+                               VerticalAlignment="Center"
+                       Foreground="White"
+                       TextWrapping="Wrap"
+                               TextDecorations="Underline"/>
+                    <TextBlock Text=" "
+                       FontSize="18"
+                               VerticalAlignment="Center"
+                       Foreground="White"
+                       TextWrapping="Wrap"
+                               TextDecorations="Underline"/>
+                    <TextBlock Text="{Binding Task.Name}"
                        FontSize="18"
                                VerticalAlignment="Center"
                        Foreground="White"
@@ -70,7 +82,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Срок выполнения"
                        Style="{StaticResource LabelStyle}"></Label>
-                    <TextBlock Text="{Binding Report.Task.CompleteDate, Converter={StaticResource DateConverter}}"
+                    <TextBlock Text="{Binding Task.CompleteDate, Converter={StaticResource DateConverter}}"
                        FontSize="18"
                                VerticalAlignment="Center"
                        Foreground="White"
@@ -85,8 +97,8 @@
                         BorderThickness="1">
                     <TextBlock FontSize="18"
                      Background="{StaticResource ForegroundBrush}"
-                     Foreground="White"
-                     Text="{Binding Report.Description, UpdateSourceTrigger=PropertyChanged}"
+                     Foreground="Black"
+                     Text="{Binding Task.ReportDescription, UpdateSourceTrigger=PropertyChanged}"
                      Height="100"
                      TextWrapping="Wrap"/>
                 </Border>

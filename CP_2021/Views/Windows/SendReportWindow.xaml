@@ -12,9 +12,9 @@
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}"
         WindowStartupLocation="CenterScreen" Icon="/Views/Windows/icon.png">
-    <Window.DataContext>
+    <!--<Window.DataContext>
         <vm:SendReportViewModel/>
-    </Window.DataContext>
+    </Window.DataContext>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -55,7 +55,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Задача"
                        Style="{StaticResource LabelStyle}"></Label>
-                    <TextBlock Text="{Binding Report.Task.Header}"
+                    <TextBlock Text="{Binding Task.Header}"
                                VerticalAlignment="Center"
                                 FontSize="18"
                                 TextDecorations="Underline"
@@ -65,7 +65,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Получатель отчета"
                        Style="{StaticResource LabelStyle}"/>
-                    <TextBlock Text="{Binding Report.To, Converter={StaticResource ExecutorConverter}}"
+                    <TextBlock Text="{Binding Task.ReportToName}"
                        FontSize="18"
                                VerticalAlignment="Center"
                        Foreground="White"
@@ -75,7 +75,7 @@
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Срок выполнения"
                        Style="{StaticResource LabelStyle}"/>
-                    <TextBlock Text="{Binding Report.Task.CompleteDate, Converter={StaticResource DateConverter}}"
+                    <TextBlock Text="{Binding Task.CompleteDate, Converter={StaticResource DateConverter}}"
                        FontSize="18"
                        Foreground="White"
                                VerticalAlignment="Center"
@@ -89,8 +89,8 @@
                          Margin="5"
                      Background="{StaticResource ForegroundBrush}"
                      BorderBrush="White"
-                     Foreground="White"
-                     Text="{Binding Report.Description, UpdateSourceTrigger=PropertyChanged}"
+                     Foreground="Black"
+                     Text="{Binding Task.ReportDescription, UpdateSourceTrigger=PropertyChanged}"
                      Height="70"
                      TextWrapping="Wrap"/>
                 <Grid>

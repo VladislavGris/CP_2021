@@ -52,7 +52,7 @@
             </StackPanel>
             
         </Grid>
-        <ListView ItemsSource="{Binding Tasks}"
+        <ListView ItemsSource="{Binding GivenTasks}"
                   Grid.Row="1"
                   Background="{StaticResource ForegroundBrush}"
                   Foreground="White"
@@ -78,7 +78,13 @@
                                             Margin="10 0 0 0">
                                     <TextBlock Text="Исполнитель "
                                                FontSize="16"/>
-                                    <TextBlock Text="{Binding To, Converter={StaticResource ExecutorConverter}}"
+                                    <TextBlock Text="{Binding Surname}"
+                                               FontSize="16"
+                                               TextDecorations="Underline"/>
+                                    <TextBlock Text=" "
+                                               FontSize="16"
+                                               TextDecorations="Underline"/>
+                                    <TextBlock Text="{Binding Name}"
                                                FontSize="16"
                                                TextDecorations="Underline"/>
                                 </StackPanel>
@@ -113,7 +119,7 @@
                             <StackPanel Orientation="Horizontal"
                                     Grid.Column="2"
                                         HorizontalAlignment="Center">
-                                <Button IsEnabled="{Binding Report.State, Converter={StaticResource ReportConverter}}"
+                                <Button IsEnabled="{Binding ReportState, Converter={StaticResource ReportConverter}}"
                                         Style="{StaticResource CircleButton}"
                                         HorizontalAlignment="Center"
                                         Height="30"
@@ -121,7 +127,7 @@
                                         Margin="5"
                                         ToolTip="Отчет"
                                         Command="{Binding DataContext.OpenShowReportWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"
-                                        CommandParameter="{Binding Report}">
+                                        CommandParameter="{Binding .}">
                                     <Button.Content>
                                         <fa:ImageAwesome Icon="Solid_Scroll"
                                                          Foreground="{StaticResource ForegroundBrush}"

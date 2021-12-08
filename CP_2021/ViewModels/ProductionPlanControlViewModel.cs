@@ -17,12 +17,9 @@ using CP_2021.Views.Windows;
 using CP_2021.Views.Windows.DataWindows;
 using log4net;
 using log4net.Config;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -386,6 +383,14 @@ namespace CP_2021.ViewModels
                     newParent.IsExpanded = true;
                     newParent.LoadChildren();
                 }
+                else
+                {
+                    newParent.Children.Add(task);
+                    if (newParent.Children.Count == 0)
+                        task.data.LineOrder = 1;
+                    else
+                        task.data.LineOrder = newParent.Children.Cast<ProductionTask>().Max(t => t.data.LineOrder) + 1;
+                }
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -395,7 +400,6 @@ namespace CP_2021.ViewModels
             catch(Exception ex)
             {
                 MessageBox.Show(ex.Message);
-                _log.Error(ex.Message);
             }
         }
 
@@ -868,6 +872,36 @@ namespace CP_2021.ViewModels
         #endregion
         #endregion
         #region Windows
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
+            //Update();
+            //SelectedTask = ProductionTask.FindByTask(Model,task);
+        }
+        public void GetTaskIdFromReport(object sender, WindowEventArgs e)
+        {
+            
+            switch (e.dataWindow)
+            {
+                case DataWindow.Complectation:
+                    var result = TasksOperations.GetTaskById(e.taskId);
+                    if(result!= null)
+                    {
+                        var task = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == result.Id).FirstOrDefault();
+                        if(task != null)
+                        {
+                            task.data.Rack = result.Rack;
+                            task.data.Shelf = result.Shelf;
+                            task.data.Percentage = result.Percentage;
+                            task.data.Complectation = result.Complectation;
+                            task.Focus();
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
         #region OpenPaymentWindowCommand
 
         public ICommand OpenPaymentWindowCommand { get; }
@@ -918,13 +952,6 @@ namespace CP_2021.ViewModels
             window.Show();
         }
 
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            //ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-            //Update();
-            //SelectedTask = ProductionTask.FindByTask(Model,task);
-        }
-
         #endregion
         #region OpenComplectationWindowCommand
 
@@ -934,9 +961,9 @@ namespace CP_2021.ViewModels
 
         private void OnOpenComplectationWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
             ComplectationWindow window = new ComplectationWindow();
+            ComplectationWindowVM vm = new ComplectationWindowVM(TasksOperations.GetComplectationWindowEntity(SelectedTask.data.Id), SelectedTask, window);
+            vm.SendIdToPlan += GetTaskIdFromReport;
             window.DataContext = vm;
             window.Closed += Window_Closed;
             window.Show();
