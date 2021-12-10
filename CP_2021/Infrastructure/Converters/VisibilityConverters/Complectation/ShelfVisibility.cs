@@ -10,9 +10,9 @@ namespace CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if(value is Task_Hierarchy_Formatting)
+            if(value is string)
             {
-                if (String.IsNullOrEmpty(((Task_Hierarchy_Formatting)value).Shelf))
+                if (String.IsNullOrEmpty((string)value))
                 {
                     return Visibility.Hidden;
                 }

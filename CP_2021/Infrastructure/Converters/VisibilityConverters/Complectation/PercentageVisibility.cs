@@ -10,9 +10,9 @@ namespace CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is Task_Hierarchy_Formatting)
+            if (value is float?)
             {
-                if (((Task_Hierarchy_Formatting)value).Percentage == null || ((Task_Hierarchy_Formatting)value).Percentage.Value == 0)
+                if (!((float?)value).HasValue || ((float?)value).Value == 0)
                 {
                     return Visibility.Hidden;
                 }

@@ -1,13 +1,14 @@
-﻿using System;
+﻿using CP_2021.Models.Base;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CP_2021.Models.ProcedureResuts.Plan
 {
-    internal class Task_Hierarchy_Formatting
+    internal class Task_Hierarchy_Formatting : NotifiedEntity
     {
-        // ProductionTask
-        public Guid Id { get; set; }
+        //// ProductionTask
+        //public Guid Id { get; set; }
         [Column("Inc_Doc", TypeName = "nvarchar(MAX)")]
         public string IncDoc { get; set; }
         [Column("Manag_Doc", TypeName = "nvarchar(MAX)")]
@@ -39,12 +40,32 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         public string FontFamily { get; set; }
         public int FontSize { get; set; }
         // Complectation
+        [NotMapped]
+        private string _complectation;
         [Column("Complectation", TypeName = "nvarchar(MAX)")]
-        public string Complectation { get; set; }
+        public string Complectation {
+            get => _complectation;
+            set => Set(ref _complectation, value);
+        }
+        [NotMapped]
+        private float? _percentage;
         [Column("Comp_Percentage", TypeName = "float")]
-        public float? Percentage { get; set; }
-        public string Rack { get; set; }
-        public string Shelf { get; set; }
+        public float? Percentage {
+            get => _percentage;
+            set => Set(ref _percentage, value);
+        }
+        [NotMapped]
+        private string _rack;
+        public string Rack {
+            get => _rack;
+            set => Set(ref _rack, value);
+        }
+        [NotMapped]
+        private string _shelf;
+        public string Shelf {
+            get => _shelf;
+            set => Set(ref _shelf, value);
+        }
         // Giving
         [Column("G_State", TypeName = "bit")]
         public bool? State { get; set; }

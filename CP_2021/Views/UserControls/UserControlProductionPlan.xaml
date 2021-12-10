@@ -498,17 +498,17 @@
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding data.Complectation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"/>
-                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data, Converter={StaticResource PercentageVisibility}, UpdateSourceTrigger=LostFocus}">
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Percentage, Converter={StaticResource PercentageVisibility}, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
                                 </Border>
 
-                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1" Background="Yellow" Visibility="{Binding data, Converter={StaticResource RackVisibility}}">
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Rack, Converter={StaticResource RackVisibility}, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock Text="{Binding data.Rack}" HorizontalAlignment="Center"/>
                                 </Border>
-                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="2" BorderThickness="1" Background="Yellow" Visibility="{Binding data, Converter={StaticResource ShelfVisibility}}">
+                                <Border BorderBrush="Black" Grid.Row="1" Grid.Column="2" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Shelf, Converter={StaticResource ShelfVisibility},UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock Text="{Binding data.Shelf}" HorizontalAlignment="Center"/>
                                 </Border>
-                                <Button Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenComplectationWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                                <Button Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenComplectationWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
