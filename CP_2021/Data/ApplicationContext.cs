@@ -29,6 +29,7 @@ namespace CP_2021.Data
         public virtual DbSet<Task_Hierarchy_Formatting> Task_Hierarchy_Formatting { get; set; }
         public virtual DbSet<TaskReport> TaskReport { get; set; }
         public virtual DbSet<ComplectationWindowEntity> ComplectationData { get; set; }
+        public virtual DbSet<ConsumeActWindowEntity> ConsumeActData { get; set; }
         public virtual DbSet<UserNames> UserNames { get; set; }
 
         //public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }

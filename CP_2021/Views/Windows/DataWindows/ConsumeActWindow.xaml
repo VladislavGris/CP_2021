@@ -11,7 +11,7 @@
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:DataWindowViewModel/>
+        <vm:ConsumeActWindowVM/>
     </Window.DataContext>
     <Border Background="White"
                 CornerRadius="20"
@@ -57,26 +57,26 @@
                     <TextBlock Text="Формирование акта" FontSize="18" Grid.Column="0" Grid.Row="2" Margin="10 0 0 0"/>
                     <TextBlock Text="Дата акта" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="10 0 0 0"/>
 
-                    <TextBox Text="{Binding EditableTask.Act.ActNumber, Mode=TwoWay}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0">
+                    <TextBox Text="{Binding Entity.ActNumber, Mode=TwoWay}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="TextChanged">
                                 <ie:InvokeCommandAction Command="{Binding SetActCommand}"/>
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
                     </TextBox>
-                    <DatePicker FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" SelectedDate="{Binding EditableTask.Act.ActDate, Mode=TwoWay}">
+                    <DatePicker FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0" SelectedDate="{Binding Entity.ActDate, Mode=TwoWay}">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="CalendarClosed">
                                 <ie:InvokeCommandAction Command="{Binding SetActCommand}"/>
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
                     </DatePicker>
-                        <CheckBox IsChecked="{Binding EditableTask.Act.ActCreation}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left">
+                        <CheckBox IsChecked="{Binding Entity.ActCreation}" Grid.Column="1" Grid.Row="2" HorizontalAlignment="Left">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
                     </CheckBox>
-                    <CheckBox IsChecked="{Binding EditableTask.Act.ByAct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left">
+                    <CheckBox IsChecked="{Binding Entity.ByAct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True}" Grid.Column="1" Grid.Row="3" HorizontalAlignment="Left">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
@@ -84,7 +84,7 @@
                 </Grid>
                 <StackPanel>
                     <TextBlock Text="Примечание" HorizontalAlignment="Center" FontSize="18" TextWrapping="Wrap"/>
-                    <TextBox Width="500" Height="100" FontSize="16" Text="{Binding EditableTask.Act.Note, Mode=TwoWay}" TextWrapping="Wrap"/>
+                    <TextBox Width="500" Height="100" FontSize="16" Text="{Binding Entity.Note, Mode=TwoWay}" TextWrapping="Wrap"/>
                 </StackPanel>
                 <Button Content="Сохранить" Width="150" Margin="0 10 10 0" HorizontalAlignment="Right" FontSize="18" Command="{Binding SaveCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
             </StackPanel>

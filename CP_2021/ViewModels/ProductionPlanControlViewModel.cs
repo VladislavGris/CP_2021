@@ -894,7 +894,6 @@ namespace CP_2021.ViewModels
                             task.data.Shelf = result.Shelf;
                             task.data.Percentage = result.Percentage;
                             task.data.Complectation = result.Complectation;
-                            task.Focus();
                         }
                     }
                     break;
@@ -965,7 +964,7 @@ namespace CP_2021.ViewModels
             ComplectationWindowVM vm = new ComplectationWindowVM(TasksOperations.GetComplectationWindowEntity(SelectedTask.data.Id), SelectedTask, window);
             vm.SendIdToPlan += GetTaskIdFromReport;
             window.DataContext = vm;
-            window.Closed += Window_Closed;
+            //window.Closed += Window_Closed;
             window.Show();
         }
 
@@ -978,11 +977,11 @@ namespace CP_2021.ViewModels
 
         private void OnOpenActWindowCommandExecuted(object p)
         {
-            DataWindowViewModel actVm = new DataWindowViewModel();
-            actVm.SetEditableTask(SelectedTask.Task);
             ConsumeActWindow window = new ConsumeActWindow();
-            window.Closed += Window_Closed;
-            window.DataContext = actVm;
+            ConsumeActWindowVM vm = new ConsumeActWindowVM(TasksOperations.GetConsumeActWindowEntity(SelectedTask.data.Id), SelectedTask, window);
+            vm.SendIdToPlan += GetTaskIdFromReport;
+            window.DataContext = vm;
+            //window.Closed += Window_Closed;
             window.Show();
         }
 

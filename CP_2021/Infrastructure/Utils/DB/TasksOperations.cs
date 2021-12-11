@@ -79,6 +79,19 @@ namespace CP_2021.Infrastructure.Utils.DB
         }
         #endregion
 
+        #region ConsumeAct
+        
+        public static ConsumeActWindowEntity GetConsumeActWindowEntity(Guid taskId)
+        {
+            return _context.ConsumeActData.FromSqlRaw(Procedures.GetConsumeActData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateConsumeActData(Guid id, string actNumber, DateTime actDate, bool actCreation, bool byAct, string note)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateConsumeAct, id, actNumber, actDate, actCreation, byAct, note);
+        }
+        
+        #endregion
 
         #endregion
 

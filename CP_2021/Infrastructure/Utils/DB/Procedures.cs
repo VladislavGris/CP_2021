@@ -41,6 +41,10 @@
         public static string GetComplectationWindowData = "exec GetComplectationData {0}";
         /// <summary>Id Complectation C_Date Comp_Percentage OnStorageDate StateNumber Rack Shelf Note</summary>
         public static string UpdateComplectationWindowData = "exec UpdataComplecationData {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}";
+        /// <summary>TaskId</summary>
+        public static string GetConsumeActData = "exec GetConsumeActDate {0}";
+        /// <summary>Id ActNumber ActDate ActCreation ByAct Note</summary>
+        public static string UpdateConsumeAct = "exec UpdateConsumeAct {0},{1},{2},{3},{4},{5}";
 
         // Given tasks
         public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
