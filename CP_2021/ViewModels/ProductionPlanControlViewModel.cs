@@ -880,26 +880,33 @@ namespace CP_2021.ViewModels
         }
         public void GetTaskIdFromReport(object sender, WindowEventArgs e)
         {
-            
-            switch (e.dataWindow)
+            var result = TasksOperations.GetTaskById(e.taskId);
+            if (result != null)
             {
-                case DataWindow.Complectation:
-                    var result = TasksOperations.GetTaskById(e.taskId);
-                    if(result!= null)
+                var task = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == result.Id).FirstOrDefault();
+                if(task!= null)
+                {
+                    switch (e.dataWindow)
                     {
-                        var task = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == result.Id).FirstOrDefault();
-                        if(task != null)
-                        {
+                        case DataWindow.Complectation:
                             task.data.Rack = result.Rack;
                             task.data.Shelf = result.Shelf;
                             task.data.Percentage = result.Percentage;
                             task.data.Complectation = result.Complectation;
-                        }
+                            break;
+                        case DataWindow.ConsumeAct:
+                            task.data.ActNumber = result.ActNumber;
+                            break;
+                        case DataWindow.Document:
+                            task.data.ManagDoc = result.ManagDoc;
+                            break;
+                        default:
+                            break;
                     }
-                    break;
-                default:
-                    break;
+                }
+                
             }
+            
         }
         #region OpenPaymentWindowCommand
 
@@ -943,12 +950,15 @@ namespace CP_2021.ViewModels
 
         private void OnOpenDocumentWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
             DocumentWindow window = new DocumentWindow();
-            window.DataContext = vm;
-            window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetDocumentationData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                DocumentWindowVM vw = new DocumentWindowVM(entity, SelectedTask, window);
+                vw.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vw;
+                window.Show();
+            }
         }
 
         #endregion
@@ -961,11 +971,20 @@ namespace CP_2021.ViewModels
         private void OnOpenComplectationWindowCommandExecuted(object p)
         {
             ComplectationWindow window = new ComplectationWindow();
-            ComplectationWindowVM vm = new ComplectationWindowVM(TasksOperations.GetComplectationWindowEntity(SelectedTask.data.Id), SelectedTask, window);
-            vm.SendIdToPlan += GetTaskIdFromReport;
-            window.DataContext = vm;
-            //window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetComplectationWindowEntity(SelectedTask.data.Id);
+            if(entity != null)
+            {
+                ComplectationWindowVM vm = new ComplectationWindowVM(entity, SelectedTask, window);
+                vm.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vm;
+                //window.Closed += Window_Closed;
+                window.Show();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить данные. Обновите базу");
+            }
+            
         }
 
         #endregion
@@ -978,11 +997,20 @@ namespace CP_2021.ViewModels
         private void OnOpenActWindowCommandExecuted(object p)
         {
             ConsumeActWindow window = new ConsumeActWindow();
-            ConsumeActWindowVM vm = new ConsumeActWindowVM(TasksOperations.GetConsumeActWindowEntity(SelectedTask.data.Id), SelectedTask, window);
-            vm.SendIdToPlan += GetTaskIdFromReport;
-            window.DataContext = vm;
-            //window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetConsumeActWindowEntity(SelectedTask.data.Id);
+            if(entity != null)
+            {
+                ConsumeActWindowVM vm = new ConsumeActWindowVM(entity, SelectedTask, window);
+                vm.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vm;
+                //window.Closed += Window_Closed;
+                window.Show();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить данные. Обновите базу");
+            }
+            
         }
 
         #endregion

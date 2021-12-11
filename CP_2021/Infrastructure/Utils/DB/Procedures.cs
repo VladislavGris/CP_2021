@@ -45,7 +45,10 @@
         public static string GetConsumeActData = "exec GetConsumeActDate {0}";
         /// <summary>Id ActNumber ActDate ActCreation ByAct Note</summary>
         public static string UpdateConsumeAct = "exec UpdateConsumeAct {0},{1},{2},{3},{4},{5}";
-
+        /// <summary>TaskId</summary>
+        public static string GetDocumentData = "exec GetDocumentData {0}";
+        /// <summary>TaskId, ManagDoc, VishDate, RealDate</summary>
+        public static string UpdateDocumentData = "exec UpdateDocumentData {0},{1},{2},{3}";
         // Given tasks
         public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
         public static string GetAllCompletedTasksByUser = "exec GetAllCompletedTasksByUser {0}";

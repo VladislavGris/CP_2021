@@ -14,10 +14,10 @@ using System.Windows.Input;
 
 namespace CP_2021.ViewModels.DataWindowViewModels
 {
-    internal class ConsumeActWindowVM : ViewModelBase
+    internal class DocumentWindowVM : ViewModelBase
     {
-        private ConsumeActWindowEntity _entity;
-        public ConsumeActWindowEntity Entity
+        private DocumentWindowEntity _entity;
+        public DocumentWindowEntity Entity
         {
             get => _entity;
             set => Set(ref _entity, value);
@@ -39,18 +39,17 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                 case MessageBoxResult.Yes:
                     try
                     {
-                        TasksOperations.UpdateConsumeActData(Entity.Id, 
-                            Entity.ActNumber, 
-                            Entity.ActDate.HasValue ? Entity.ActDate.Value : null, 
-                            Entity.ActCreation, 
-                            Entity.ByAct, 
-                            Entity.Note);
-                        _task.data.ActNumber = Entity.ActNumber;
-                    }catch(Exception ex)
+                        TasksOperations.UpdateDocumentData(Entity.Id, 
+                            Entity.ManagDoc, 
+                            Entity.VishDate.HasValue ? Entity.VishDate.Value : null, 
+                            Entity.RealDate.HasValue ? Entity.RealDate.Value : null);
+                        _task.data.ManagDoc= Entity.ManagDoc;
+                    }
+                    catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
-                    
+
                     ((Window)p).Close();
                     break;
                 case MessageBoxResult.No:
@@ -74,14 +73,14 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         void DataWindow_Closing(object sender, CancelEventArgs e)
         {
             WindowEventArgs args = new WindowEventArgs();
-            args.dataWindow = DataWindow.ConsumeAct;
+            args.dataWindow = DataWindow.Document;
             args.taskId = _task.data.Id;
             OnSendTaskIdToReportVM(args);
         }
 
-        public ConsumeActWindowVM() { }
+        public DocumentWindowVM() { }
 
-        public ConsumeActWindowVM(ConsumeActWindowEntity entity, ProductionTask task, ConsumeActWindow window)
+        public DocumentWindowVM(DocumentWindowEntity entity, ProductionTask task, DocumentWindow window)
         {
             SaveCommand = new LambdaCommand(OnSaveCommandExecuted, CanSaveCommandExecute);
 

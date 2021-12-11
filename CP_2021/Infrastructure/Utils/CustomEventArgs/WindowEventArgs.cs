@@ -4,7 +4,9 @@ namespace CP_2021.Infrastructure.Utils.CustomEventArgs
 {
     enum DataWindow
     {
-        Complectation
+        Complectation,
+        ConsumeAct,
+        Document
     }
 
     internal class WindowEventArgs : EventArgs

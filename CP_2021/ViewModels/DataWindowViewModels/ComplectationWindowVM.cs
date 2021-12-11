@@ -38,8 +38,23 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             switch (result)
             {
                 case MessageBoxResult.Yes:
-                    TasksOperations.UpdateComplectationWindowData(_entity.Id, _entity.Complectation, _entity.StateNumber, _entity.ComplectationDate, _entity.OnStorageDate, _entity.Percentage, _entity.Rack, _entity.Shelf, _entity.Note);
-                    _task.data.Complectation = _entity.Complectation;
+                    try
+                    {
+                        TasksOperations.UpdateComplectationWindowData(Entity.Id, 
+                            Entity.Complectation, 
+                            Entity.StateNumber, 
+                            Entity.ComplectationDate.HasValue?Entity.ComplectationDate.Value:null, 
+                            Entity.OnStorageDate.HasValue?Entity.OnStorageDate.Value:null, 
+                            Entity.Percentage, 
+                            Entity.Rack, 
+                            Entity.Shelf, 
+                            Entity.Note);
+                        _task.data.Complectation = _entity.Complectation;
+                    }catch(Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                    
                     ((Window)p).Close();
                     break;
                 case MessageBoxResult.No:

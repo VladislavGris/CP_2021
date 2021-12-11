@@ -11,8 +11,13 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         //public Guid Id { get; set; }
         [Column("Inc_Doc", TypeName = "nvarchar(MAX)")]
         public string IncDoc { get; set; }
+        [NotMapped]
+        private string _managDoc;
         [Column("Manag_Doc", TypeName = "nvarchar(MAX)")]
-        public string ManagDoc { get; set; }
+        public string ManagDoc {
+            get => _managDoc;
+            set => Set(ref _managDoc, value);
+        }
         [Required]
         [Column("Task_Name", TypeName = "nvarchar(MAX)")]
         public string Name { get; set; }
@@ -72,7 +77,12 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         // Manufacture
         public string M_Name { get; set; }
         // Act
-        public string ActNumber { get; set; }
+        [NotMapped]
+        private string _actNumber;
+        public string ActNumber {
+            get=> _actNumber;
+            set => Set(ref _actNumber, value);
+        }
         // In_Production
         [Column("Giving_Date", TypeName = "date")]
         public DateTime? GivingDate { get; set; }

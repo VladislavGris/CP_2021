@@ -86,11 +86,25 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.ConsumeActData.FromSqlRaw(Procedures.GetConsumeActData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
         }
 
-        public static void UpdateConsumeActData(Guid id, string actNumber, DateTime actDate, bool actCreation, bool byAct, string note)
+        public static void UpdateConsumeActData(Guid id, string actNumber, DateTime? actDate, bool actCreation, bool byAct, string note)
         {
             _context.Database.ExecuteSqlRaw(Procedures.UpdateConsumeAct, id, actNumber, actDate, actCreation, byAct, note);
         }
+
+        #endregion
+
+        #region Documentation
         
+        public static DocumentWindowEntity GetDocumentationData(Guid taskId)
+        {
+            return _context.DocumentationData.FromSqlRaw(Procedures.GetDocumentData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateDocumentData(Guid taskId, string managDoc, DateTime? vishDate, DateTime? realDate)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateDocumentData, taskId, managDoc, vishDate, realDate);
+        }
+
         #endregion
 
         #endregion
