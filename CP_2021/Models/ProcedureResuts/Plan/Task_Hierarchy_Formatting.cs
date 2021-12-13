@@ -94,8 +94,13 @@ namespace CP_2021.Models.ProcedureResuts.Plan
             set => Set(ref _actNumber, value);
         }
         // In_Production
+        [NotMapped]
+        private DateTime? _givingDate;
         [Column("Giving_Date", TypeName = "date")]
-        public DateTime? GivingDate { get; set; }
+        public DateTime? GivingDate {
+            get => _givingDate;
+            set => Set(ref _givingDate, value);
+        }
 
         public int ChildrenCount { get; set; }
     }

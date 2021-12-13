@@ -152,6 +152,20 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         #endregion
 
+        #region In_Production
+
+        public static InProductionWindowEntity GetInProductionData(Guid taskId)
+        {
+            return _context.InProductionData.FromSqlRaw(Procedures.GetInProductionData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateInProductionData(Guid id, string number, DateTime? givingDate, string execName, string instExecName, DateTime? completionDate, DateTime? projectedDate, string note)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateInProductionData, id, number, givingDate, execName, instExecName, completionDate, projectedDate, note);
+        }
+
+        #endregion
+
         #endregion
 
         static TasksOperations()

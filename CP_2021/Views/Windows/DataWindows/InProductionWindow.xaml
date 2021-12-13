@@ -10,7 +10,7 @@
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:DataWindowViewModel/>
+        <vm:InProductionWindowVM/>
     </Window.DataContext>
     <Border Background="White"
                 CornerRadius="20"
@@ -59,16 +59,16 @@
                     <TextBlock Text="Дата выдачи в работу" FontSize="18" Grid.Column="0" Grid.Row="3" Margin="10 0 0 0"/>
                     <TextBlock Text="Дата готовности (планируемая)" FontSize="18" Grid.Column="0" Grid.Row="4" Margin="10 0 0 0"/>
                     <TextBlock Text="Дата готовности (фактическая)" FontSize="18" Grid.Column="0" Grid.Row="5" Margin="10 0 0 0"/>
-                    <TextBox Text="{Binding EditableTask.InProduction.Number}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding EditableTask.InProduction.ExecutorName}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding EditableTask.InProduction.ExecutorName2}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="2" Margin="0 0 10 0"/>
-                    <DatePicker Grid.Row="3" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding EditableTask.InProduction.GivingDate, Mode=TwoWay}"/>
-                    <DatePicker Grid.Row="4" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding EditableTask.InProduction.ProjectedDate, Mode=TwoWay}"/>
-                    <DatePicker Grid.Row="5" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding EditableTask.InProduction.CompletionDate, Mode=TwoWay}"/>
+                    <TextBox Text="{Binding Entity.Number}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0"/>
+                    <TextBox Text="{Binding Entity.Executor}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0"/>
+                    <TextBox Text="{Binding Entity.InstallExecutor}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="2" Margin="0 0 10 0"/>
+                    <DatePicker Grid.Row="3" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding Entity.GivingDate, Mode=TwoWay}"/>
+                    <DatePicker Grid.Row="4" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding Entity.ProjectedDate, Mode=TwoWay}"/>
+                    <DatePicker Grid.Row="5" Grid.Column="1" Margin="2.5 0 12.5 0" FontSize="16" SelectedDate="{Binding Entity.CompletionDate, Mode=TwoWay}"/>
                 </Grid>
                 <StackPanel>
                     <TextBlock Text="Примечание" HorizontalAlignment="Center" FontSize="18"/>
-                    <TextBox Width="500" Height="100" FontSize="16" Text="{Binding EditableTask.InProduction.Note, Mode=TwoWay}"/>
+                    <TextBox Width="500" Height="100" FontSize="16" Text="{Binding Entity.Note, Mode=TwoWay}"/>
                 </StackPanel>
                 <Button Content="Сохранить" Width="150" Margin="0 10 10 0" HorizontalAlignment="Right" FontSize="18" Command="{Binding SaveCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
             </StackPanel>

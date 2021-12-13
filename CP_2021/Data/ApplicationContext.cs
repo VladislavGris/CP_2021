@@ -34,6 +34,7 @@ namespace CP_2021.Data
         public virtual DbSet<ConsumeActWindowEntity> ConsumeActData { get; set; }
         public virtual DbSet<DocumentWindowEntity> DocumentationData { get; set; }
         public virtual DbSet<GivingWindowEntity> GivingData { get; set; }
+        public virtual DbSet<InProductionWindowEntity> InProductionData { get; set; }
         public virtual DbSet<UserNames> UserNames { get; set; }
 
         public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }

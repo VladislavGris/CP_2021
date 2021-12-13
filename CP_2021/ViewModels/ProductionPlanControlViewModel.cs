@@ -905,6 +905,9 @@ namespace CP_2021.ViewModels
                         case DataWindow.Giving:
                             task.data.State = result.State;
                             break;
+                        case DataWindow.InProduction:
+                            task.data.GivingDate = result.GivingDate;
+                            break;
                         default:
                             break;
                     }
@@ -1068,12 +1071,19 @@ namespace CP_2021.ViewModels
 
         private void OnOpenInProductionWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
             InProductionWindow window = new InProductionWindow();
-            window.DataContext = vm;
-            window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetInProductionData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                InProductionWindowVM vm = new InProductionWindowVM(entity, SelectedTask, window);
+                vm.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vm;
+                window.Show();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить данные. Обновите базу");
+            }
         }
 
         #endregion

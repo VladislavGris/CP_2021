@@ -7,7 +7,8 @@ namespace CP_2021.Infrastructure.Utils.CustomEventArgs
         Complectation,
         ConsumeAct,
         Document,
-        Giving
+        Giving,
+        InProduction
     }
 
     internal class WindowEventArgs : EventArgs

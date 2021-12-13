@@ -56,6 +56,10 @@
         /// <summary>state, bill, report, return report, receiving date, returnGiving, purchaseGoods, note, taskId</summary>
         public static string UpdateGivingData = "exec UpdateGivingData {0},{1},{2},{3},{4},{5},{6},{7},{8}";
 
+        public static string GetInProductionData = "exec GetInProductionData {0}";
+        /// <summary>id, number, givingDate, execName, instExecName, completDate, projDate, note</summary>
+        public static string UpdateInProductionData = "exec UpdateInProductionData {0},{1},{2},{3},{4},{5},{6},{7}";
+
 
 
         // Given tasks

@@ -8,9 +8,9 @@ namespace CP_2021.Models.DataWindowEntities
         public string Number { get; set; }
         public string Executor { get; set; }
         public string InstallExecutor { get; set; }
-        public DateTime GivingDate { get; set; }
-        public DateTime ProjectedDate { get; set; }
-        public DateTime CompletionDate { get; set; }
+        public DateTime? GivingDate { get; set; }
+        public DateTime? ProjectedDate { get; set; }
+        public DateTime? CompletionDate { get; set; }
         public string Note { get; set; }
     }
 }
