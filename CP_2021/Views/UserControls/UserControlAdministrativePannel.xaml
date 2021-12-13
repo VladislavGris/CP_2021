@@ -28,15 +28,6 @@
                        HorizontalAlignment="Center"
                        VerticalAlignment="Center"
                        FontSize="24" Grid.Column="0"/>
-            <Button Content="Экспорт" Style="{StaticResource EnterButton}" 
-                    Margin="10"
-                    Width="100"
-                    Grid.Column="1"
-                    Command="{Binding ExportDataCommand}"></Button>
-            <Button Content="Импорт" Style="{StaticResource EnterButton}" 
-                    Margin="10"
-                    Width="100"
-                    Grid.Column="2"></Button>
         </Grid>
 
         <DataGrid ItemsSource="{Binding Users}"

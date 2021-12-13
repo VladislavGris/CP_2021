@@ -137,7 +137,7 @@
                     </Button.Content>
                 </Button>
             </Grid>
-            <Grid Grid.Column="1" Margin="10 0 0 0">
+            <!--<Grid Grid.Column="1" Margin="10 0 0 0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -177,7 +177,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
-            </Grid>
+            </Grid>-->
             <Grid Grid.Column="2" Margin="10 0 0 0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
@@ -188,7 +188,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBox Style="{StaticResource SearchStrStyle}"
+                <!--<TextBox Style="{StaticResource SearchStrStyle}"
                      Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
                      Grid.Row="1"
                          Grid.Column="0" Grid.ColumnSpan="2"
@@ -207,9 +207,10 @@
                           IsEditable="True"
                           Margin="0 2 0 0"
                           FontSize="18">
-                </ComboBox>
+                </ComboBox>-->
+                <Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left">
-                    <Button Style="{StaticResource CircleButton}"
+                    <!--<Button Style="{StaticResource CircleButton}"
                     Height="30"
                     Width="30"
                     VerticalAlignment="Center"
@@ -254,8 +255,8 @@
                                      Height="30"
                                      Width="30"/>
                         </Button.Content>
-                    </Button>
-                    <Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
+                    </Button>-->
+                    
                 </StackPanel>
             </Grid>
         </Grid>

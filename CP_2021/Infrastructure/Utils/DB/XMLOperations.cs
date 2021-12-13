@@ -43,6 +43,11 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         }
 
+        public static Guid? ImportFromXML(string filepath, Guid? parentId, int lineOrder)
+        {
+            return _context.Entities.FromSqlRaw(Procedures.ImportFromXML, filepath, parentId, lineOrder).AsNoTracking().AsEnumerable().FirstOrDefault()?.Id;
+        }
+
         static XMLOperations()
         {
             _context = ApplicationUnitSingleton.GetApplicationContext();

@@ -1,4 +1,5 @@
-﻿using CP_2021.Models.DataWindowEntities;
+﻿using CP_2021.Models.Base;
+using CP_2021.Models.DataWindowEntities;
 using CP_2021.Models.DBModels;
 using CP_2021.Models.ProcedureResuts;
 using CP_2021.Models.ProcedureResuts.Plan;
@@ -12,6 +13,7 @@ namespace CP_2021.Data
 {
     class ApplicationContext : DbContext
     {
+        public virtual DbSet<Ids> Entities { get; set; }
         public virtual DbSet<ProductionTaskDB> Production_Plan { get; set; }
         public virtual DbSet<ComplectationDB> Complectation { get; set; }
         public virtual DbSet<GivingDB> Giving { get; set; }

@@ -17,9 +17,11 @@ using CP_2021.Views.Windows;
 using CP_2021.Views.Windows.DataWindows;
 using log4net;
 using log4net.Config;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -1165,7 +1167,40 @@ namespace CP_2021.ViewModels
 
         private void OnImportTaskCommandExecuted(object p)
         {
-            
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "XML files (*.xml)|*.xml";
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    var p1 = dialog.FileName.Replace(@"\\", @"\");
+                    var taskId = XMLOperations.ImportFromXML(dialog.FileName, SelectedTask.data.ParentId, SelectedTask.data.LineOrder + 1);
+                    
+                    //if(taskId != null)
+                    //{
+                        
+                    //    var task = TasksOperations.GetTaskById(taskId.Value);
+                    //    ProductionTask pTask = new ProductionTask(task);
+                    //    if (SelectedTask.Parent == null)
+                    //    {
+                    //        SelectedTask.DownTasksModel(Model);
+                    //        Model.Insert(SelectedTask.data.LineOrder, pTask);
+                    //    }
+                    //    else
+                    //    {
+                    //        SelectedTask.DownTasksChildren((ProductionTask)SelectedTask.Parent);
+                    //        SelectedTask.Parent.Children.Insert(SelectedTask.data.LineOrder, pTask);
+                    //    }
+                    //}
+                    //else
+                    //{
+                    //    MessageBox.Show("Не удалось импортировать данные");
+                    //}
+                }catch(Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+            }
         }
 
         #endregion

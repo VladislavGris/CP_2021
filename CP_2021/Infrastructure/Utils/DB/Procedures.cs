@@ -33,6 +33,8 @@
         public static string LevelDownTask = "exec LevelDownTask {0},{1},{2},{3}";
 
         public static string ExportTaskWithChildren = "exec ExportTaskWithChildren {0}, {1} output";
+        /// <summary>Filepath, parentId, lineOrder</summary>
+        public static string ImportFromXML = "exec ImportFromXML {0},{1},{2}";
         public static string ExportTasksXML = "exec ExportTasksXML";
         /// <summary>Id</summary>
         public static string ExportTaskById = "exec ExportTaskById {0}";

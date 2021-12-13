@@ -31,9 +31,14 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         public string Note { get; set; }
         public bool Expanded { get; set; }
         public string EditingBy { get; set; }
+        [NotMapped]
+        private short _completion;
         [Required]
         [Column("Completion", TypeName = "smallint")]
-        public short Completion { get; set; }
+        public short Completion {
+            get => _completion;
+            set => Set(ref _completion, value);
+        }
         // HierarchyDB
         public Guid? ParentId { get; set; }
         public Guid ChildId { get; set; }
