@@ -1151,7 +1151,7 @@ namespace CP_2021.ViewModels
 
         public ICommand ExportTaskCommand { get; }
 
-        private bool CanExportTaskCommandExecute(object p) => SelectedTask.data!=null;
+        private bool CanExportTaskCommandExecute(object p) => SelectedTask?.data!=null;
 
         private void OnExportTaskCommandExecuted(object p)
         {

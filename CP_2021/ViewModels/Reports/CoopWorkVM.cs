@@ -1,5 +1,6 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Singletons;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.ViewEntities;
 using CP_2021.ViewModels.Base;
 using System;
@@ -23,13 +24,15 @@ namespace CP_2021.ViewModels.Reports
 
         private void OnGenerateReportCommandExecuted(object p)
         {
-            var heads = ApplicationUnitSingleton.GetInstance().dbUnit.HeadTasks.Get().OrderBy(t => t.Task);
+            var heads = TasksOperations.GetHeadTasks();
             HeadTasks = new ObservableCollection<string>();
+            //var heads = ApplicationUnitSingleton.GetInstance().dbUnit.HeadTasks.Get().OrderBy(t => t.Task);
+            //HeadTasks = new ObservableCollection<string>();
             foreach (var head in heads)
             {
                 HeadTasks.Add(head.Task);
             }
-            FullContent = Content = new ObservableCollection<CoopWork>(ApplicationUnitSingleton.GetInstance().dbUnit.CoopWork.Get());
+            FullContent = Content = new ObservableCollection<CoopWork>(TasksOperations.GetCoopWork());
         }
 
         #endregion

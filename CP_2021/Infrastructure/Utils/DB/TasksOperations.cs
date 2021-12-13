@@ -2,6 +2,7 @@
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Models.DataWindowEntities;
 using CP_2021.Models.ProcedureResuts.Plan;
+using CP_2021.Models.ViewEntities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -65,6 +66,36 @@ namespace CP_2021.Infrastructure.Utils.DB
         public static void LevelDownTask(Guid id, int lineOrder, Guid? parentId, Guid newParentId)
         {
             _context.Database.ExecuteSqlRaw(Procedures.LevelDownTask, id, lineOrder, parentId, newParentId);
+        }
+
+        public static IEnumerable<HeadTasks> GetHeadTasks()
+        {
+            return _context.HeadTasks.FromSqlRaw(Procedures.GetHeadTasks).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<ManufactureNames> GetManufactureNames()
+        {
+            return _context.ManufactureNames.FromSqlRaw(Procedures.GetManufactureNames).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<CoopWork> GetCoopWork()
+        {
+            return _context.CoopWork.FromSqlRaw(Procedures.GetCoopWork).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<SpecificationsOnControl> GetSpecificationsOnControl()
+        {
+            return _context.SpecOnControl.FromSqlRaw(Procedures.GetSpecificationsOnControl).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<SpecificationsInVipisk> GetSpecificationsInVipisk()
+        {
+            return _context.SpecInVipisk.FromSqlRaw(Procedures.GetSpecificationsInVipisk).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<InProgressView> GetTasksInProgress()
+        {
+            return _context.InProductionView.FromSqlRaw(Procedures.GetTasksInProgress).AsNoTracking().AsEnumerable();
         }
 
         #region DataWindows

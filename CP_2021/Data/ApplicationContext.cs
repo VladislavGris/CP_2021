@@ -35,13 +35,13 @@ namespace CP_2021.Data
         public virtual DbSet<DocumentWindowEntity> DocumentationData { get; set; }
         public virtual DbSet<UserNames> UserNames { get; set; }
 
-        //public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
-        //public virtual DbSet<HeadTasks> HeadTasks { get; set; }
+        public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
+        public virtual DbSet<HeadTasks> HeadTasks { get; set; }
         //public virtual DbSet<NoSpecifications> NoSpecifications { get; set; }
-        //public virtual DbSet<SpecificationsOnControl> SpecOnControl { get; set; }
-        //public virtual DbSet<SpecificationsInVipisk> SpecInVipisk { get; set; }
-        //public virtual DbSet<CoopWork> CoopWork { get; set; }
-        //public virtual DbSet<InProgressView> InProductionView { get; set; }
+        public virtual DbSet<SpecificationsOnControl> SpecOnControl { get; set; }
+        public virtual DbSet<SpecificationsInVipisk> SpecInVipisk { get; set; }
+        public virtual DbSet<CoopWork> CoopWork { get; set; }
+        public virtual DbSet<InProgressView> InProductionView { get; set; }
         //public virtual DbSet<DocumentationView> DocumentationView { get; set; }
         //public virtual DbSet<SKBCheck> SKBCkecks {  get; set; }
         //public virtual DbSet<OETSStorage> OETSStorage { get; set; }

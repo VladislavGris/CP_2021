@@ -65,5 +65,12 @@
         public static string DropUserTask = "exec DropUserTaskById {0}";
         /// <summary>TaskId ReportDescription</summary>
         public static string AddReportToTask = "exec AddReportToTask {0},{1}";
+
+        public static string GetHeadTasks = "exec GetHeadTasks";
+        public static string GetManufactureNames = "exec GetManufactureNames";
+        public static string GetCoopWork = "exec GetCoopWork";
+        public static string GetTasksInProgress = "exec GetTasksInProgress";
+        public static string GetSpecificationsOnControl = "exec GetSpecificationsOnControl";
+        public static string GetSpecificationsInVipisk = "exec GetSpecificationsInVipisk";
     }
 }

@@ -40,13 +40,13 @@
             <TreeView Grid.Column="0" FontSize="16">
                 <TextBlock HorizontalAlignment="Center">Отчеты</TextBlock>
                 <TreeViewItem Header="ДВИЖЕНИЕ ИЗДЕЛИЯ ПРИ ИЗГОТОВЛЕНИИ">
-                    <TreeViewItem Header="Отчет Отсутствие номера спецификации">
+                    <!--<TreeViewItem Header="Отчет Отсутствие номера спецификации">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="Selected">
                                 <ie:InvokeCommandAction Command="{Binding ShowNoSpecCommand}"/>
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
-                    </TreeViewItem>
+                    </TreeViewItem>-->
                     <TreeViewItem Header="Отчет Спецификации на контроле">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="Selected">
@@ -75,7 +75,7 @@
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
                     </TreeViewItem>
-                    <TreeViewItem Header="Отчет Отработка документации">
+                    <!--<TreeViewItem Header="Отчет Отработка документации">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="Selected">
                                 <ie:InvokeCommandAction Command="{Binding ShowDocumentationCommand}"/>
@@ -109,9 +109,9 @@
                                 <ie:InvokeCommandAction Command="{Binding ShowByActCommand}"/>
                             </ie:EventTrigger>
                         </ie:Interaction.Triggers>
-                    </TreeViewItem>
+                    </TreeViewItem>-->
                 </TreeViewItem>
-                <TreeViewItem Header="ФИНАНСОВОЕ ПЛАНИРОВАНИЕ">
+                <!--<TreeViewItem Header="ФИНАНСОВОЕ ПЛАНИРОВАНИЕ">
                     <TreeViewItem Header="Отчет Оплата 50% 1 часть">
                         <ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="Selected">
@@ -143,7 +143,7 @@
                         </ie:Interaction.Triggers>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="ПЛАН ПРОИЗВОДСТВА"/>
+                <TreeViewItem Header="ПЛАН ПРОИЗВОДСТВА"/>-->
             </TreeView>
             <GridSplitter Grid.Column="1"
                       ShowsPreview="False"
