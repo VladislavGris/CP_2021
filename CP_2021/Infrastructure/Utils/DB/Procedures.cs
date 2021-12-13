@@ -51,6 +51,13 @@
         public static string GetDocumentData = "exec GetDocumentData {0}";
         /// <summary>TaskId, ManagDoc, VishDate, RealDate</summary>
         public static string UpdateDocumentData = "exec UpdateDocumentData {0},{1},{2},{3}";
+
+        public static string GetGivingData = "exec GetGivingData {0}";
+        /// <summary>state, bill, report, return report, receiving date, returnGiving, purchaseGoods, note, taskId</summary>
+        public static string UpdateGivingData = "exec UpdateGivingData {0},{1},{2},{3},{4},{5},{6},{7},{8}";
+
+
+
         // Given tasks
         public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
         public static string GetAllCompletedTasksByUser = "exec GetAllCompletedTasksByUser {0}";

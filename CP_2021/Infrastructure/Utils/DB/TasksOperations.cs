@@ -138,6 +138,20 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         #endregion
 
+        #region Giving
+
+        public static GivingWindowEntity GetGivingData(Guid taskId)
+        {
+            return _context.GivingData.FromSqlRaw(Procedures.GetGivingData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateGivingData(bool state, string bill, string report, string returnReport, DateTime? receivingDate, bool returnGiving, string purchaseGoods, string note, Guid taskId)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateGivingData,state, bill, report, returnReport, receivingDate, returnGiving, purchaseGoods, note, taskId);
+        }
+
+        #endregion
+
         #endregion
 
         static TasksOperations()

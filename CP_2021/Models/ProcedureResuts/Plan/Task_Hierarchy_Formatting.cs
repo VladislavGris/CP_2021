@@ -77,8 +77,13 @@ namespace CP_2021.Models.ProcedureResuts.Plan
             set => Set(ref _shelf, value);
         }
         // Giving
+        [NotMapped]
+        private bool? _state;
         [Column("G_State", TypeName = "bit")]
-        public bool? State { get; set; }
+        public bool? State {
+            get => _state;
+            set => Set(ref _state, value);
+        }
         // Manufacture
         public string M_Name { get; set; }
         // Act

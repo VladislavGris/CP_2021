@@ -902,6 +902,9 @@ namespace CP_2021.ViewModels
                         case DataWindow.Document:
                             task.data.ManagDoc = result.ManagDoc;
                             break;
+                        case DataWindow.Giving:
+                            task.data.State = result.State;
+                            break;
                         default:
                             break;
                     }
@@ -1024,12 +1027,19 @@ namespace CP_2021.ViewModels
 
         private void OnOpenGivingWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
             GivingWindow window = new GivingWindow();
-            window.DataContext = vm;
-            window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetGivingData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                GivingWindowVM vm = new GivingWindowVM(entity, SelectedTask, window);
+                vm.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vm;
+                window.Show();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить данные. Обновите базу");
+            }
         }
 
         #endregion
