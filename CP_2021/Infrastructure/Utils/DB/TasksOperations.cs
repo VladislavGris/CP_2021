@@ -166,6 +166,20 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         #endregion
 
+        #region LaborCosts
+
+        public static LaborCostsWindowEntity GetLaborCostsData(Guid taskId)
+        {
+            return _context.LaborCostsData.FromSqlRaw(Procedures.GetLaborCostsData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateLaborCostsData(Guid id, string project, string subcont, string markingRank, float? markingHours, string assemblyRank, float? assemblyHours, string settingsRank, float? settingsHours, DateTime? date)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateLaborCostsData, id, project, subcont, markingRank, markingHours, assemblyRank, assemblyHours,settingsRank, settingsHours, date);
+        }
+
+        #endregion
+
         #endregion
 
         static TasksOperations()

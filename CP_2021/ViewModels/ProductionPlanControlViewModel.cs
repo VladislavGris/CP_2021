@@ -941,12 +941,15 @@ namespace CP_2021.ViewModels
 
         private void OnOpenLaborCostsWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
             LaborCostsWindow window = new LaborCostsWindow();
-            window.DataContext = vm;
-            window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetLaborCostsData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                LaborCostsWindowVM vw = new LaborCostsWindowVM(entity, SelectedTask, window);
+                vw.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vw;
+                window.Show();
+            }
         }
 
         #endregion

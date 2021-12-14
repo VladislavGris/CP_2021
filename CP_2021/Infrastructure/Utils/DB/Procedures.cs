@@ -60,7 +60,9 @@
         /// <summary>id, number, givingDate, execName, instExecName, completDate, projDate, note</summary>
         public static string UpdateInProductionData = "exec UpdateInProductionData {0},{1},{2},{3},{4},{5},{6},{7}";
 
-
+        public static string GetLaborCostsData = "exec GetLaborCostsData {0}";
+        /// <summary>id, project, subcont, markingrank, markinghours, assemblyrank,assemblyhours,settingsrank,settingshours,date</summary>
+        public static string UpdateLaborCostsData = "exec UpdateLaborCostsData {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}";
 
         // Given tasks
         public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
