@@ -180,6 +180,34 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         #endregion
 
+        #region Manufacture
+
+        public static ManufactureWindowEnity GetManufactureData(Guid taskId)
+        {
+            return _context.ManufactureData.FromSqlRaw(Procedures.GetManufactureData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateManufactureData(Guid id, string name, string letterNum, string specNum, bool onControl, bool vipiskSpec, DateTime? predictDate, DateTime? factDate, bool execAct, DateTime? execTerm, string calendarDays, string workingDays, string note)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateManufactureData, id, name, letterNum, specNum, onControl, vipiskSpec, predictDate,factDate, execAct, execTerm, calendarDays, workingDays, note);
+        }
+
+        #endregion
+
+        #region Payment
+
+        public static PaymentWindowEntity GetPaymentData(Guid taskId)
+        {
+            return _context.PaymentData.FromSqlRaw(Procedures.GetPaymentData, taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdatePaymentData(Guid id, string contract, string specSum, string project, string price, string note, bool isFP, string FPSum, DateTime? FPDate, bool isSP, string SPSum, DateTime? SPDate, bool isFuP, string FuPSum, DateTime? FuPDate)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdatePaymentData, id, contract, specSum,project, price, note, isFP, FPSum, FPDate, isSP, SPSum, SPDate, isFuP, FuPSum, FuPDate);
+        }
+
+        #endregion
+
         #endregion
 
         static TasksOperations()

@@ -908,6 +908,9 @@ namespace CP_2021.ViewModels
                         case DataWindow.InProduction:
                             task.data.GivingDate = result.GivingDate;
                             break;
+                        case DataWindow.Manufacture:
+                            task.data.M_Name = result.M_Name;
+                            break;
                         default:
                             break;
                     }
@@ -924,12 +927,15 @@ namespace CP_2021.ViewModels
 
         private void OnOpenPaymentWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
             PaymentWindow window = new PaymentWindow();
-            window.DataContext = vm;
-            window.Closed += Window_Closed;
-            window.Show();
+            var entity = TasksOperations.GetPaymentData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                PaymentWindowVM vw = new PaymentWindowVM(entity, SelectedTask, window);
+                vw.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vw;
+                window.Show();
+            }
         }
 
         #endregion
@@ -1057,12 +1063,19 @@ namespace CP_2021.ViewModels
 
         private void OnOpenManufactureWindowCommandExecuted(object p)
         {
-            DataWindowViewModel vm = new DataWindowViewModel();
-            vm.SetEditableTask(SelectedTask.Task);
-            ManufactureWindow window = new ManufactureWindow();
-            window.DataContext = vm;
-            window.Closed += Window_Closed;
-            window.Show();
+             ManufactureWindow window = new ManufactureWindow();
+            var entity = TasksOperations.GetManufactureData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                ManufactureWindowVM vm = new ManufactureWindowVM(entity, SelectedTask, window);
+                vm.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vm;
+                window.Show();
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить данные. Обновите базу");
+            }
         }
 
         #endregion

@@ -16,6 +16,6 @@ namespace CP_2021.Models.DataWindowEntities
         public bool ExecutionAct { get; set; }
         public DateTime? FactDate { get; set; }
         public DateTime? ExecutionTerm { get; set; }
-        
+        public DateTime? PredictDate {  get; set; }
     }
 }

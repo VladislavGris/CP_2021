@@ -10,6 +10,7 @@ namespace CP_2021.Models.DataWindowEntities
         public string Project { get; set; }
         public string PriceWithoutVAT { get; set; }
         public string Note { get; set; }
+        public string SpecNum { get; set; }
 
         public bool IsFirstPayment { get; set; }
         public string FirstPaymentSum { get; set; }

@@ -11,7 +11,7 @@
         Style="{StaticResource WindowStyle}"
         Background="{StaticResource BackgroundBrush}" WindowStartupLocation="CenterScreen">
     <Window.DataContext>
-        <vm:DataWindowViewModel/>
+        <vm:PaymentWindowVM/>
     </Window.DataContext>
     <Border Background="White"
                 CornerRadius="20"
@@ -56,10 +56,10 @@
                     <TextBlock Text="Сумма спецификации" FontSize="18" Grid.Column="0" Grid.Row="3" Margin="10 0 0 0"/>
                     <TextBlock Text="Проект" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="10 0 0 0"/>
                     <TextBlock Text="Номер спецификации" FontSize="18" Grid.Column="0" Grid.Row="2" Margin="10 0 0 0"/>
-                    <TextBox Text="{Binding EditableTask.Payment.Contract}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding EditableTask.Payment.SpecificationSum}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="3" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding EditableTask.Payment.Project}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0"/>
-                    <TextBox Text="{Binding EditableTask.Manufacture.SpecNum}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="2" Margin="0 0 10 0" IsReadOnly="True"/>
+                    <TextBox Text="{Binding Entity.Contract}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="0" Margin="0 0 10 0"/>
+                    <TextBox Text="{Binding Entity.SpecificationSum}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="3" Margin="0 0 10 0"/>
+                    <TextBox Text="{Binding Entity.Project}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="1" Margin="0 0 10 0"/>
+                    <TextBox Text="{Binding Entity.SpecNum}" Height="25" Width="280" FontSize="16" Grid.Column="1" Grid.Row="2" Margin="0 0 10 0" IsReadOnly="True"/>
                 </Grid>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -74,22 +74,22 @@
                         <RowDefinition/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <CheckBox Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsFirstPayment, Mode=TwoWay}">
+                    <CheckBox Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding Entity.IsFirstPayment, Mode=TwoWay}">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
-                        <ie:Interaction.Triggers>
+                        <!--<ie:Interaction.Triggers>
                             <ie:EventTrigger EventName="Checked">
                                 <ie:InvokeCommandAction Command="{Binding SetExecutionTermCommand}"/>
                             </ie:EventTrigger>
-                        </ie:Interaction.Triggers>
+                        </ie:Interaction.Triggers>-->
                     </CheckBox>
-                    <CheckBox Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsSecondPayment, Mode=TwoWay}">
+                    <CheckBox Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding Entity.IsSecondPayment, Mode=TwoWay}">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
                     </CheckBox>
-                    <CheckBox Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding EditableTask.Payment.IsFullPayment, Mode=TwoWay}">
+                    <CheckBox Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10 0 10 0" IsChecked="{Binding Entity.IsFullPayment, Mode=TwoWay}">
                         <CheckBox.LayoutTransform>
                             <ScaleTransform ScaleX="2" ScaleY="2"/>
                         </CheckBox.LayoutTransform>
@@ -100,18 +100,18 @@
                     <TextBlock Text="Оплата 100%" Grid.Row="3" Grid.Column="1" FontSize="18"/>
 
                     <TextBlock Text="Сумма" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" FontSize="18"/>
-                    <TextBox Width="150" Text="{Binding EditableTask.Payment.FirstPaymentSum, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" FontSize="16"/>
-                    <TextBox Width="150" Text="{Binding EditableTask.Payment.SecondPaymentSum, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" FontSize="16"/>
-                    <TextBox Width="150" Text="{Binding EditableTask.Payment.FullPaymentSum, Mode=TwoWay}" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" FontSize="16"/>
+                    <TextBox Width="150" Text="{Binding Entity.FirstPaymentSum, Mode=TwoWay}" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" FontSize="16"/>
+                    <TextBox Width="150" Text="{Binding Entity.SecondPaymentSum, Mode=TwoWay}" Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" FontSize="16"/>
+                    <TextBox Width="150" Text="{Binding Entity.FullPaymentSum, Mode=TwoWay}" Grid.Row="3" Grid.Column="2" HorizontalAlignment="Center" FontSize="16"/>
 
                     <TextBlock Text="Дата" Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" FontSize="18"/>
-                    <DatePicker Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" SelectedDate="{Binding EditableTask.Payment.FirstPaymentDate, Mode=TwoWay}"/>
-                    <DatePicker Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" SelectedDate="{Binding EditableTask.Payment.SecondPaymentDate, Mode=TwoWay}"/>
-                    <DatePicker Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" SelectedDate="{Binding EditableTask.Payment.FullPaymentDate, Mode=TwoWay}"/>
+                    <DatePicker Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" SelectedDate="{Binding Entity.FirstPaymentDate, Mode=TwoWay}"/>
+                    <DatePicker Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" SelectedDate="{Binding Entity.SecondPaymentDate, Mode=TwoWay}"/>
+                    <DatePicker Grid.Row="3" Grid.Column="3" HorizontalAlignment="Center" FontSize="16" SelectedDate="{Binding Entity.FullPaymentDate, Mode=TwoWay}"/>
                 </Grid>
                 <StackPanel>
                     <TextBlock Text="Примечание" HorizontalAlignment="Center" FontSize="18"/>
-                    <TextBox Width="500" Height="100" FontSize="16" Text="{Binding EditableTask.Payment.Note, Mode=TwoWay}"/>
+                    <TextBox Width="500" Height="100" FontSize="16" Text="{Binding Entity.Note, Mode=TwoWay}"/>
                 </StackPanel>
                 <Button Content="Сохранить" Width="150" Margin="0 10 10 0" HorizontalAlignment="Right" FontSize="18" Command="{Binding SaveCommand}" CommandParameter="{Binding ., RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
             </StackPanel>

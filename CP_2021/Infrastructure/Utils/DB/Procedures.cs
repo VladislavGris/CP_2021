@@ -64,6 +64,12 @@
         /// <summary>id, project, subcont, markingrank, markinghours, assemblyrank,assemblyhours,settingsrank,settingshours,date</summary>
         public static string UpdateLaborCostsData = "exec UpdateLaborCostsData {0},{1},{2},{3},{4},{5},{6},{7},{8},{9}";
 
+        public static string GetManufactureData = "exec GetManufactureData {0}";
+        public static string UpdateManufactureData = "exec UpdateManufactureData {0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12}";
+
+        public static string GetPaymentData = "exec GetPaymentData {0}";
+        public static string UpdatePaymentData = "exec UpdatePaymentData {0},{1},{2},{3},{4},{5},{6},{7},{8},{9},{10},{11},{12},{13},{14}";
+
         // Given tasks
         public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
         public static string GetAllCompletedTasksByUser = "exec GetAllCompletedTasksByUser {0}";

@@ -78,7 +78,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         void DataWindow_Closing(object sender, CancelEventArgs e)
         {
             WindowEventArgs args = new WindowEventArgs();
-            args.dataWindow = DataWindow.Document;
+            args.dataWindow = DataWindow.Giving;
             args.taskId = _task.data.Id;
             OnSendTaskIdToReportVM(args);
         }

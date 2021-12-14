@@ -18,10 +18,10 @@ using System.Windows.Input;
 
 namespace CP_2021.ViewModels.DataWindowViewModels
 {
-    internal class InProductionWindowVM : ViewModelBase
+    internal class PaymentWindowVM : ViewModelBase
     {
-        private InProductionWindowEntity _entity;
-        public InProductionWindowEntity Entity
+        private PaymentWindowEntity _entity;
+        public PaymentWindowEntity Entity
         {
             get => _entity;
             set => Set(ref _entity, value);
@@ -43,13 +43,21 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                 case MessageBoxResult.Yes:
                     try
                     {
-                        TasksOperations.UpdateInProductionData(Entity.Id, Entity.Number, Entity.GivingDate.HasValue ? Entity.GivingDate : null,
-                            Entity.Executor,
-                            Entity.InstallExecutor,
-                            Entity.CompletionDate.HasValue ? Entity.CompletionDate : null,
-                            Entity.ProjectedDate.HasValue ? Entity.ProjectedDate:null,
-                            Entity.Note);
-                        _task.data.GivingDate = Entity.GivingDate;
+                        TasksOperations.UpdatePaymentData(Entity.Id,
+                            Entity.Contract,
+                            Entity.SpecificationSum,
+                            Entity.Project,
+                            Entity.PriceWithoutVAT,
+                            Entity.Note,
+                            Entity.IsFirstPayment,
+                            Entity.FirstPaymentSum,
+                            Entity.FirstPaymentDate.HasValue ? Entity.FullPaymentDate.Value : null,
+                            Entity.IsSecondPayment,
+                            Entity.SecondPaymentSum,
+                            Entity.SecondPaymentDate.HasValue ? Entity.SecondPaymentDate.Value : null,
+                            Entity.IsFullPayment,
+                            Entity.FullPaymentSum,
+                            Entity.FullPaymentDate.HasValue ? Entity.FullPaymentDate.Value : null);
                     }
                     catch (Exception ex)
                     {
@@ -79,14 +87,14 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         void DataWindow_Closing(object sender, CancelEventArgs e)
         {
             WindowEventArgs args = new WindowEventArgs();
-            args.dataWindow = DataWindow.InProduction;
+            args.dataWindow = DataWindow.Payment;
             args.taskId = _task.data.Id;
             OnSendTaskIdToReportVM(args);
         }
 
-        public InProductionWindowVM() { }
+        public PaymentWindowVM() { }
 
-        public InProductionWindowVM(InProductionWindowEntity entity, ProductionTask task, InProductionWindow window)
+        public PaymentWindowVM(PaymentWindowEntity entity, ProductionTask task, PaymentWindow window)
         {
             SaveCommand = new LambdaCommand(OnSaveCommandExecuted, CanSaveCommandExecute);
 

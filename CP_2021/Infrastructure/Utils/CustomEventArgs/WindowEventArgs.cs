@@ -8,7 +8,10 @@ namespace CP_2021.Infrastructure.Utils.CustomEventArgs
         ConsumeAct,
         Document,
         Giving,
-        InProduction
+        InProduction,
+        LaborCosts,
+        Manufacture,
+        Payment
     }
 
     internal class WindowEventArgs : EventArgs

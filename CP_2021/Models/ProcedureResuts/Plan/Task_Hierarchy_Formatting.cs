@@ -85,7 +85,12 @@ namespace CP_2021.Models.ProcedureResuts.Plan
             set => Set(ref _state, value);
         }
         // Manufacture
-        public string M_Name { get; set; }
+        [NotMapped]
+        private string _mName;
+        public string M_Name {
+            get => _mName;
+            set => Set(ref _mName, value);
+        }
         // Act
         [NotMapped]
         private string _actNumber;

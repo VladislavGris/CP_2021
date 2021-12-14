@@ -18,10 +18,10 @@ using System.Windows.Input;
 
 namespace CP_2021.ViewModels.DataWindowViewModels
 {
-    internal class InProductionWindowVM : ViewModelBase
+    internal class ManufactureWindowVM : ViewModelBase
     {
-        private InProductionWindowEntity _entity;
-        public InProductionWindowEntity Entity
+        private ManufactureWindowEnity _entity;
+        public ManufactureWindowEnity Entity
         {
             get => _entity;
             set => Set(ref _entity, value);
@@ -43,13 +43,20 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                 case MessageBoxResult.Yes:
                     try
                     {
-                        TasksOperations.UpdateInProductionData(Entity.Id, Entity.Number, Entity.GivingDate.HasValue ? Entity.GivingDate : null,
-                            Entity.Executor,
-                            Entity.InstallExecutor,
-                            Entity.CompletionDate.HasValue ? Entity.CompletionDate : null,
-                            Entity.ProjectedDate.HasValue ? Entity.ProjectedDate:null,
+                        TasksOperations.UpdateManufactureData(Entity.Id,
+                            Entity.Name,
+                            Entity.LetterNum,
+                            Entity.SpecNum,
+                            Entity.OnControl,
+                            Entity.VipiskSpec,
+                            Entity.PredictDate.HasValue ? Entity.PredictDate.Value : null,
+                            Entity.FactDate.HasValue ? Entity.FactDate.Value : null,
+                            Entity.ExecutionAct,
+                            Entity.ExecutionTerm.HasValue ? Entity.ExecutionTerm.Value : null,
+                            Entity.CalendarDays,
+                            Entity.WorkingDays,
                             Entity.Note);
-                        _task.data.GivingDate = Entity.GivingDate;
+                        _task.data.M_Name = Entity.Name;
                     }
                     catch (Exception ex)
                     {
@@ -79,14 +86,14 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         void DataWindow_Closing(object sender, CancelEventArgs e)
         {
             WindowEventArgs args = new WindowEventArgs();
-            args.dataWindow = DataWindow.InProduction;
+            args.dataWindow = DataWindow.Manufacture;
             args.taskId = _task.data.Id;
             OnSendTaskIdToReportVM(args);
         }
 
-        public InProductionWindowVM() { }
+        public ManufactureWindowVM() { }
 
-        public InProductionWindowVM(InProductionWindowEntity entity, ProductionTask task, InProductionWindow window)
+        public ManufactureWindowVM(ManufactureWindowEnity entity, ProductionTask task, ManufactureWindow window)
         {
             SaveCommand = new LambdaCommand(OnSaveCommandExecuted, CanSaveCommandExecute);
 
