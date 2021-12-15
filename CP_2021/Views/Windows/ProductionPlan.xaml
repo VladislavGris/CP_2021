@@ -273,7 +273,7 @@
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemAdministrativePannel" Height="60"
+                    <!--<ListViewItem x:Name="ItemAdministrativePannel" Height="60"
                                   Visibility="{Binding User.Position, Converter={StaticResource AdministrativeConverter}}">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_PeopleArrows"
@@ -289,7 +289,7 @@
                             <TextBlock Text="Помощь"
                                        Style="{StaticResource TooltipTextblockStyle}"/>
                         </StackPanel>
-                    </ListViewItem>
+                    </ListViewItem>-->
                     <ListViewItem x:Name="ItemLogOut" Height="60">
                         <StackPanel Orientation="Horizontal">
                             <fa:ImageAwesome Icon="Solid_SignOutAlt"

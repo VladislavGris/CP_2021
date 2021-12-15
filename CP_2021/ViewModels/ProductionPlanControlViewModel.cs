@@ -346,6 +346,7 @@ namespace CP_2021.ViewModels
                 parent.DownTasksChildren(parentParent);
                 parentParent.Children.Insert(parent.data.LineOrder, task);
             }
+            
             task.IsExpanded = false;
             task.UpTasksChildren(parent);
             task.data.LineOrder = parent.data.LineOrder + 1;
@@ -734,8 +735,11 @@ namespace CP_2021.ViewModels
                 TasksOperations.UpTask(taskToUpId, taskToDownId);
                 SelectedTask.data.LineOrder -= 1;
                 taskToDown.data.LineOrder += 1;
+                
                 if(parent == null)
                 {
+                    taskToDown.IsExpanded = false;
+                    taskToUp.IsExpanded = false;
                     Model.Remove(taskToDown);
                     Model.Remove(taskToUp);
                     Model.Insert(taskToUp.data.LineOrder - 1, taskToUp);
@@ -783,6 +787,8 @@ namespace CP_2021.ViewModels
                 taskToUp.data.LineOrder -= 1;
                 if(parent == null)
                 {
+                    taskToUp.IsExpanded = false;
+                    taskToDown.IsExpanded = false;
                     Model.Remove(taskToUp);
                     Model.Remove(taskToDown);
                     Model.Insert(taskToUp.data.LineOrder - 1, taskToUp);
