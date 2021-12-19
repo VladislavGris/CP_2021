@@ -208,7 +208,7 @@
                           Margin="0 2 0 0"
                           FontSize="18">
                 </ComboBox>-->
-                <!--<Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>-->
+                <Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
                 <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left">
                     <!--<Button Style="{StaticResource CircleButton}"
                     Height="30"
@@ -276,7 +276,7 @@
                             <fa:ImageAwesome Icon="Solid_Cut"
                                              Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
-                    </MenuItem>
+                    </MenuItem>-->
                     <MenuItem Header="Копировать"
                               Command="{Binding CopyTaskCommand}">
                         <MenuItem.Icon>
@@ -290,7 +290,7 @@
                             <fa:ImageAwesome Icon="Solid_Paste"
                                              Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
-                    </MenuItem>-->
+                    </MenuItem>
                     <Separator/>
                     <MenuItem Header="Удалить"
                               Command="{Binding DeleteProductionTaskCommand}">

@@ -31,6 +31,8 @@
         public static string LevelUpTask = "exec LevelUpTask {0},{1},{2},{3}";
         /// <summary>Id, LineOrder, ParentId, NewParentId</summary>
         public static string LevelDownTask = "exec LevelDownTask {0},{1},{2},{3}";
+        /// <summary>TaskId, ParentId, LineOrder</summary>
+        public static string PasteTask = "exec PasteTask {0},{1},{2}";
 
         public static string ExportTaskWithChildren = "exec ExportTaskWithChildren {0}, {1} output";
         /// <summary>Filepath, parentId, lineOrder</summary>

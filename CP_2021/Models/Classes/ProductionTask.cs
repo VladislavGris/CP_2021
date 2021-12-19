@@ -29,6 +29,7 @@ namespace CP_2021.Models.Classes
         public ProductionTask(Task_Hierarchy_Formatting data)
         {
             this.data = data;
+            HasChildren = data.ChildrenCount > 0;
         }
 
         /// <summary>

@@ -39,6 +39,7 @@ namespace CP_2021.ViewModels
         private ApplicationUnit Unit;
         private UndoRedoManager _undoManager;
         private readonly ILog _log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private Guid? _taskToCopyId = null;
         #region DataTable
 
         private DataGrid _dataTable;
@@ -424,20 +425,11 @@ namespace CP_2021.ViewModels
 
         public ICommand CopyTaskCommand { get; }
 
-        private bool CanCopyTaskCommandExecute(object p) => SelectedTask != null;
+        private bool CanCopyTaskCommandExecute(object p) => SelectedTask?.data != null;
 
         private void OnCopyTaskCommandExecuted(object p)
         {
-            try
-            {
-                TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::CopyTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-
+            _taskToCopyId = SelectedTask.data.Id;
         }
 
         #endregion
@@ -449,34 +441,7 @@ namespace CP_2021.ViewModels
 
         private void OnCutTaskCommandExecuted(object p)
         {
-            try
-            {
-                TaskToCopy = ProductionTask.InitTask(SelectedTask.Task);
-                ProductionTaskDB dbTask = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).SingleOrDefault();
-                if (dbTask != null)
-                {
-                    try
-                    {
-                        dbTask.UpOrderBelow();
-                        dbTask.Remove();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Неизвестная ошибка");
-                        _log.Error("ProductionPlanControlViewModel::DeleteProductionTaskCommand " + ex.Message);
-                    }
-                }
-                else
-                {
-                    MessageBox.Show("Выбранный элемент уже был удален");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::CutTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
-            }
-            Update();
+            
         }
 
         #endregion
@@ -484,44 +449,29 @@ namespace CP_2021.ViewModels
 
         public ICommand PasteTaskCommand { get; }
 
-        private bool CanPasteTaskCommandExecute(object p) => TaskToCopy != null;
+        private bool CanPasteTaskCommandExecute(object p) => _taskToCopyId.HasValue;
 
         private void OnPasteTaskCommandExecuted(object p)
         {
-            ProductionTaskDB dbTask = TaskToCopy.Task.Clone();
             try
             {
-                ProductionTask task = new ProductionTask(dbTask);
-                SelectedTask.Task.DownTaskBelow();
-
-                if (SelectedTask.Parent == null)
+                ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+                if(parent == null)
                 {
-                    dbTask.MyParent = new HierarchyDB(dbTask);
+                    var task = TasksOperations.PasteTask(_taskToCopyId.Value, null, SelectedTask.data.LineOrder + 1);
+                    SelectedTask.DownTasksModel(Model);
+                    Model.Insert(SelectedTask.data.LineOrder, new ProductionTask(task));
                 }
                 else
                 {
-                    dbTask.MyParent = new HierarchyDB(SelectedTask.Task.MyParent.Parent, dbTask);
+                    var task = TasksOperations.PasteTask(_taskToCopyId.Value, parent.data.Id, SelectedTask.data.LineOrder + 1);
+                    SelectedTask.DownTasksChildren(parent);
+                    parent.Children.Insert(SelectedTask.data.LineOrder, new ProductionTask(task));
                 }
-                dbTask.MyParent.LineOrder = SelectedTask.Task.MyParent.LineOrder + 1;
-
-                Unit.Tasks.Insert(dbTask);
-                Unit.Commit();
-
-                if (TaskToCopy.HasChildren)
-                {
-                    foreach (ProductionTask child in TaskToCopy.Children)
-                    {
-                        task.AddChild(child);
-                    }
-                }
-            }
-            catch (Exception ex)
+            }catch(Exception ex)
             {
-                MessageBox.Show("Неизвестная ошибка. Обновите базу");
-                _log.Error("UNKNOWN | ProductionPlanControlViewModel::PasteTaskCommand | " + ex.GetType().Name + " | " + ex.Message);
+                MessageBox.Show(ex.Message);
             }
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, dbTask);
         }
 
         #endregion

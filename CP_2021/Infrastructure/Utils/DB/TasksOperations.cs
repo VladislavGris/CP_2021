@@ -68,6 +68,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             _context.Database.ExecuteSqlRaw(Procedures.LevelDownTask, id, lineOrder, parentId, newParentId);
         }
 
+        public static Task_Hierarchy_Formatting PasteTask(Guid taskId, Guid? parentId, int lineOrder)
+        {
+            return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.PasteTask, taskId, parentId, lineOrder).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
         public static IEnumerable<HeadTasks> GetHeadTasks()
         {
             return _context.HeadTasks.FromSqlRaw(Procedures.GetHeadTasks).AsNoTracking().AsEnumerable();
