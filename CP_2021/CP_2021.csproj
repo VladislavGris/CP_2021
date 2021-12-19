@@ -38,6 +38,7 @@
   <ItemGroup>
     <Page Remove="Data\doc\NalichieNaSklade.xaml" />
     <Page Remove="Data\doc\NoSpecificationNumber.xaml" />
+    <Page Remove="Data\doc\SearchDescriptions.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -143,6 +144,10 @@
     </None>
     <None Include="Data\doc\NoSpecificationNumber.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\SearchDescriptions.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Generator>MSBuild:Compile</Generator>
     </None>
   </ItemGroup>
 

@@ -1216,14 +1216,67 @@ namespace CP_2021.ViewModels
             }
         }
 
+        private bool ExpandTask(Guid id)
+        {
+            var task = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == id).FirstOrDefault();
+            if (task != null)
+            {
+                if (task.IsExpanded == false)
+                {
+                    task.IsExpanded = true;
+                    task.LoadChildren();
+                }
+                    
+                return true;
+            }
+            return false;
+        }
+
         #endregion
 
         public void SetSelectedTaskFromReport(object sender, TaskIdEventArgs e)
         {
-            SelectedTask = ProductionTask.FindByTask(Model, ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.GetByID(e.Id));
-            SelectedTask.ExpandFromChildToParent();
+            var parents = TasksOperations.GetAllParents(e.Id);
+            ProductionTask task = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == e.Id).FirstOrDefault();
+            if (task != null)
+            {
+                SelectedTask = task;
+            }
+            else
+            {
+                int parentCount = parents.Count();
+                for(int i = 0; i < parentCount; i++)
+                {
+                    var parent = parents.ElementAt(i);
+                    if (parent.Position != 1)
+                    {
+                        var ltask = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == parent.Id).FirstOrDefault();
+                        if (!ExpandTask(parent.Id))
+                        {
+                            MessageBox.Show("Ошибка при попытке перехода к задаче.");
+                            return;
+                        }
+                    }
+                }
+                //foreach(var parent in parents)
+                //{
+                    
+                //}
+                task = Model.FlatModel.Cast<ProductionTask>().Where(t => t.data.Id == e.Id).FirstOrDefault();
+                if(task == null)
+                {
+                    MessageBox.Show("Не удалось найти задачу");
+                    return;
+                }
+                SelectedTask = task;
+            }
+
             DataTable.UpdateLayout();
             DataTable.ScrollIntoView(SelectedTask);
+
+            //SelectedTask = ProductionTask.FindByTask(Model, ApplicationUnitSingleton.GetInstance().dbUnit.Tasks.GetByID(e.Id));
+            //SelectedTask.ExpandFromChildToParent();
+            
         }
 
         public ProductionPlanControlViewModel()

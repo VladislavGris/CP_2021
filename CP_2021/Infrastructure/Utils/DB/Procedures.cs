@@ -93,5 +93,15 @@
         public static string GetTasksInProgress = "exec GetTasksInProgress";
         public static string GetSpecificationsOnControl = "exec GetSpecificationsOnControl";
         public static string GetSpecificationsInVipisk = "exec GetSpecificationsInVipisk";
+
+        public static string SearchProductionPlan = "exec SearchProductionPlan {0}";
+        public static string SearchAct = "exec SearchAct {0}";
+        public static string SearchComplectation = "exec SearchComplectation {0}";
+        public static string SearchGiving = "exec SearchGiving {0}";
+        public static string SearchIn_Production = "exec SearchIn_Production {0}";
+        public static string SearchLaborCosts = "exec SearchLaborCosts {0}";
+        public static string SearchManufacture = "exec SearchManufacture {0}";
+        public static string SearchPayment = "exec SearchPayment {0}";
+        public static string GetAllParents = "exec GetAllParents {0}";
     }
 }

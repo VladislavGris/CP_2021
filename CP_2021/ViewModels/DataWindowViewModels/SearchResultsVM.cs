@@ -2,6 +2,7 @@
 using CP_2021.Infrastructure.Search;
 using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.ProcedureResuts;
 using CP_2021.ViewModels.Base;
 using System;
@@ -24,6 +25,18 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         {
             get => _searchString;
             set => Set(ref _searchString, value);
+        }
+
+        #endregion
+
+        #region SelectedIndex
+
+        private int _selectedIndex = 0;
+
+        public int SelectedIndex
+        {
+            get => _selectedIndex;
+            set => Set(ref _selectedIndex, value);
         }
 
         #endregion
@@ -59,12 +72,48 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         private bool CanSearchCommandExecute(object p) => true;
 
         private void OnSearchCommandExecuted(object p)
-        {
-            if (SearchString != null)
+        { 
+            try
             {
-                SearchResults = new ObservableCollection<SearchProcResult>(ApplicationUnitSingleton.GetInstance().dbUnit.SearchResults.GetWithRawSql(_executeProcedure, "%" + SearchString + "%"));
-                MessageBox.Show("Количество совпадений: " + SearchResults.Count);
+                if (SearchString != null)
+                {
+                    switch (SelectedIndex)
+                    {
+                        case 0:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchProductionTask($"\"{SearchString}*\""));
+                            break;
+                        case 1:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchAct($"\"{SearchString}*\""));
+                            break;
+                        case 2:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchComplectation($"\"{SearchString}*\""));
+                            break;
+                        case 3:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchGiving($"\"{SearchString}*\""));
+                            break;
+                        case 4:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchIn_Production($"\"{SearchString}*\""));
+                            break;
+                        case 5:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchLaborCosts($"\"{SearchString}*\""));
+                            break;
+                        case 6:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchManufacture($"\"{SearchString}*\""));
+                            break;
+                        case 7:
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchPayment($"\"{SearchString}*\""));
+                            break;
+                        default:
+                            break;
+                    }
+                    MessageBox.Show("Количество совпадений: " + SearchResults.Count);
+                }
             }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            
         }
 
         #endregion

@@ -1,0 +1,28 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:local="clr-namespace:CP_2021.Data.doc"
+              ColumnWidth="400" FontSize="14" FontFamily="Georgia">
+    <Paragraph>
+        <Bold>План</Bold> ; поля "Документ", "Приходный документ" и "Название"
+    </Paragraph>
+    <Paragraph>
+        <Bold>Акт</Bold> ; поле "Номер акта"
+    </Paragraph>
+    <Paragraph>
+        <Bold>Комплектация</Bold> ; поля "Ведомость комплектации", "Номер заявки"
+    </Paragraph>
+    <Paragraph>
+        <Bold>Давальческое</Bold> ; поля "Накладная на передачу имущества", "Отчет использования давальч. имущества", "Накладная на возврат имущества" и "Закупаемое имущество"
+    </Paragraph>
+    <Paragraph>
+        <Bold>В производстве</Bold> ; поле "Номер МСЛ"
+    </Paragraph>
+    <Paragraph>
+        <Bold>Трудозатраты</Bold> ; поле "Проект"
+    </Paragraph>
+    <Paragraph>
+        <Bold>Изготовитель</Bold> ; поле "Изготовитель", "Номер письма" и "Номер спецификации"
+    </Paragraph>
+    <Paragraph>
+        <Bold>Оплата</Bold> ; поля "Договор", "Проект"
+    </Paragraph>
+</FlowDocument>

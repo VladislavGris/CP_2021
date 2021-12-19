@@ -47,6 +47,7 @@
                         </ie:InvokeCommandAction>
                     </ie:EventTrigger>
                 </ie:Interaction.Triggers>
+                <ListViewItem x:Name="SearchDescriptions" Content="Поиск"/>
                 <ListViewItem x:Name="NoSpecNum"
                               Content="Отсутствие номера спецификации"/>
                 <ListViewItem x:Name="NalichieNaSklade" Content="Наличие на складе предприятия давальческого для передачи"/>

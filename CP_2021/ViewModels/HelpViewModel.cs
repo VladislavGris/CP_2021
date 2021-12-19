@@ -20,6 +20,7 @@ namespace CP_2021.ViewModels
 
         private static string _basePath = "Data/doc/";
         private string _noSpecNumberPath =  $"{_basePath}NoSpecificationNumber.xaml";
+        private string _searchDescriptionPath = $"{_basePath}SearchDescriptions.xaml";
         private string _nalichieNaSkladePath = $"{_basePath}NalichieNaSklade.xaml";
 
         #region ContentContainerContent
@@ -49,6 +50,9 @@ namespace CP_2021.ViewModels
             var list = (ListViewItem)p;
             switch (list.Name)
             {
+                case "SearchDescriptions":
+                    LoadDocument(_searchDescriptionPath);
+                    break;
                 case "NoSpecNum":
                     LoadDocument(_noSpecNumberPath);
                     break;

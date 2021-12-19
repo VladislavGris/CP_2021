@@ -39,6 +39,8 @@ namespace CP_2021.Data
         public virtual DbSet<ManufactureWindowEnity> ManufactureData { get; set; }
         public virtual DbSet<PaymentWindowEntity> PaymentData { get; set; }
         public virtual DbSet<UserNames> UserNames { get; set; }
+        public virtual DbSet<SearchProcResult> SearchResults { get; set; }
+        public virtual DbSet<SearchGoTo> SearchGoTo { get; set; }
 
         public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
         public virtual DbSet<HeadTasks> HeadTasks { get; set; }

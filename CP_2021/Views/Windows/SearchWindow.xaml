@@ -18,11 +18,24 @@
         <Grid Background="{StaticResource BackgroundBrush}"
               Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
-            <TextBox Grid.Column="0" Grid.ColumnSpan="2" Margin="5 13" Text="{Binding SearchString, Mode=TwoWay}" FontSize="24"/>
+            <ComboBox Grid.Column="0"
+                      Margin="5"
+                      SelectedIndex="{Binding SelectedIndex}"
+                      FontSize="25">
+                <ComboBoxItem>План</ComboBoxItem>
+                <ComboBoxItem>Акт</ComboBoxItem>
+                <ComboBoxItem>Комплектация</ComboBoxItem>
+                <ComboBoxItem>Давальческое</ComboBoxItem>
+                <ComboBoxItem>В производстве</ComboBoxItem>
+                <ComboBoxItem>Трудозатраты</ComboBoxItem>
+                <ComboBoxItem>Изготовитель</ComboBoxItem>
+                <ComboBoxItem>Оплата</ComboBoxItem>
+            </ComboBox>
+            <TextBox Grid.Column="1" Margin="5 13" Text="{Binding SearchString, Mode=TwoWay}" FontSize="24"/>
             <Button Grid.Column="2" Margin="5" Content="Поиск" Style="{StaticResource EnterButton}" Command="{Binding SearchCommand}"/>
         </Grid>
         <Grid Grid.Row="1">
