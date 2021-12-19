@@ -395,6 +395,7 @@ namespace CP_2021.ViewModels
                     else
                         task.data.LineOrder = newParent.Children.Cast<ProductionTask>().Max(t => t.data.LineOrder) + 1;
                 }
+                newParent.HasChildren = true;
             }
             catch (ArgumentOutOfRangeException ex)
             {
