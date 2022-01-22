@@ -298,14 +298,20 @@ namespace CP_2021.ViewModels
             {
                 case MessageBoxResult.Yes:
                     TasksOperations.DropTaskBtId(SelectedTask.data.Id);
+                    ProductionTask topTask = null;
                     if(SelectedTask.Parent == null)
                     {
+                        if(Model.IndexOf(SelectedTask)!=0)
+                            topTask = (ProductionTask)Model.ElementAt(Model.IndexOf(SelectedTask) - 1);
                         SelectedTask.UpTasksModel(Model);
                         Model.Remove(SelectedTask);
                     }
                     else
                     {
+                        
                         ProductionTask parent = (ProductionTask)SelectedTask.Parent;
+                        if(parent.Children.IndexOf(SelectedTask)!=0)
+                            topTask = (ProductionTask)parent.Children.ElementAt(parent.Children.IndexOf(SelectedTask) - 1);
                         SelectedTask.UpTasksChildren(parent);
                         SelectedTask.Parent.Children.Remove(SelectedTask);
                         if (parent.Children.Count == 0)
@@ -313,6 +319,8 @@ namespace CP_2021.ViewModels
                             parent.HasChildren = parent.IsExpanded = false;
                         }
                     }
+                    if (topTask != null)
+                        SelectedTask = topTask;
                     break;
             }
         }
@@ -358,7 +366,7 @@ namespace CP_2021.ViewModels
 
         public ICommand LevelDownCommand { get; }
 
-        private bool CanLevelDownCommandExecute(object p) => SelectedTask?.data.LineOrder != 1;
+        private bool CanLevelDownCommandExecute(object p) => SelectedTask != null && SelectedTask?.data.LineOrder != 1;
 
         private void OnLevelDownCommandExecuted(object p)
         {
@@ -663,7 +671,7 @@ namespace CP_2021.ViewModels
 
         public ICommand UpTaskCommand { get; }
 
-        private bool CanUpTaskCommandExecute(object p) => SelectedTask?.data.LineOrder!=1;
+        private bool CanUpTaskCommandExecute(object p) => SelectedTask != null && SelectedTask.data.LineOrder != 1;
 
         private void OnUpTaskCommandExecuted(object p)
         {
@@ -703,7 +711,7 @@ namespace CP_2021.ViewModels
                     parent.Children.Insert(taskToUp.data.LineOrder - 1, taskToUp);
                     parent.Children.Insert(taskToDown.data.LineOrder - 1, taskToDown);
                 }
-                
+                SelectedTask = taskToUp;
                 return;
             }
             MessageBox.Show("Не удалось выполнить операцию. Обновите базу");
@@ -752,7 +760,7 @@ namespace CP_2021.ViewModels
                     parent.Children.Insert(taskToUp.data.LineOrder - 1, taskToUp);
                     parent.Children.Insert(taskToDown.data.LineOrder - 1, taskToDown);
                 }
-                
+                SelectedTask = taskToDown;
                 return;
             }
             MessageBox.Show("Не удалось выполнить операцию. Обновите базу");

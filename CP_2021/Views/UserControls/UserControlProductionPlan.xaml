@@ -32,11 +32,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1.5*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                     <ColumnDefinition/>
@@ -64,15 +63,6 @@
                         </Image>
                     </Button.Content>
                 </Button>
-                <!--<Button Grid.Column="2" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Свернуть все" Command="{Binding RollUpAllCommand}">
-                    <Button.Content>
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/roll_up.png"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>-->
                 <Button Grid.Column="0" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Добавить на уровень ниже" Command="{Binding AddChildCommand}">
                     <Button.Content>
                         <Image>
@@ -91,16 +81,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
-                <!--<Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Развернуть все" Command="{Binding ExpandAllCommand}">
-                    <Button.Content>
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/roll_down.png"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>-->
-                <Button Grid.Column="3" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Поднять задачу" Command="{Binding UpTaskCommand}">
+                <Button Grid.Column="2" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Поднять задачу" Command="{Binding UpTaskCommand}">
                     <Button.Content>
                         <Image>
                             <Image.Source>
@@ -109,7 +90,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Опустить задачу" Command="{Binding DownTaskCommand}">
+                <Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Опустить задачу" Command="{Binding DownTaskCommand}">
                     <Button.Content>
                         <Image>
                             <Image.Source>
@@ -118,7 +99,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Удалить задачу" Command="{Binding DeleteProductionTaskCommand}">
+                <Button Grid.Column="3" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Удалить задачу" Command="{Binding DeleteProductionTaskCommand}">
                     <Button.Content>
                         <Image>
                             <Image.Source>
@@ -127,7 +108,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="4" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Обновить" Command="{Binding UpdateModelCommand}">
+                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Обновить" Command="{Binding UpdateModelCommand}">
                     <Button.Content>
                         <Image>
                             <Image.Source>
@@ -137,7 +118,7 @@
                     </Button.Content>
                 </Button>
             </Grid>
-            <!--<Grid Grid.Column="1" Margin="10 0 0 0">
+            <Grid Grid.Column="1" Margin="10 0 0 0">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -148,7 +129,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding FontFamilies}" Style="{StaticResource SearchBoxStyle}"/>
+                <!--<ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding FontFamilies}" Style="{StaticResource SearchBoxStyle}"/>-->
                 <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding FontSizes}" Style="{StaticResource SearchBoxStyle}"/>
                 <Button Grid.Column="1" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Жирный" Command="{Binding SetBoldCommand}">
                     <Button.Content>
@@ -177,88 +158,12 @@
                         </Image>
                     </Button.Content>
                 </Button>
-            </Grid>-->
-            <Grid Grid.Column="2" Margin="10 0 0 0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"/>
-                    <ColumnDefinition Width="2.5*"/>
-                    <ColumnDefinition Width="1.5*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <!--<TextBox Style="{StaticResource SearchStrStyle}"
-                     Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"
-                     Grid.Row="1"
-                         Grid.Column="0" Grid.ColumnSpan="2"
-                         Margin="0 2 0 0"
-                         FontSize="18"/>
-                <Label Content="Поиск по "
-                   Style="{StaticResource LabelStyle}"
-                   Grid.Column="0" Grid.Row="0" HorizontalContentAlignment="Right"/>
-                <ComboBox SelectedIndex="{Binding SelectedSearchIndex, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource SearchBoxStyle}"
-                          ItemContainerStyle="{StaticResource SearchBoxItemStyle}"
-                          ItemsSource="{Binding SearchComboBoxContent}"
-                          Grid.Row="0"
-                          Grid.Column="1"
-                          IsTextSearchEnabled="True"
-                          IsTextSearchCaseSensitive="False"
-                          IsEditable="True"
-                          Margin="0 2 0 0"
-                          FontSize="18">
-                </ComboBox>-->
-                <Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
-                <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Left">
-                    <!--<Button Style="{StaticResource CircleButton}"
-                    Height="30"
-                    Width="30"
-                    VerticalAlignment="Center"
-                    ToolTip="Найти"
-                    Margin="5 0 0 0"
-                    Command="{Binding SearchCommand}"
-                    CommandParameter="{Binding ElementName=Grid}">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Solid_Search"
-                                     Foreground="White"
-                                     Height="20"
-                                     Width="20"/>
-
-                        </Button.Content>
-                    </Button>
-                    <Button Style="{StaticResource CircleButton}"
-                    Height="30"
-                    Width="30"
-                    VerticalAlignment="Center"
-                    ToolTip="Предыдущий результат"
-                    Margin="5 0 0 0"
-                    Command="{Binding MovePreviousResultCommand}"
-                    CommandParameter="{Binding ElementName=Grid}">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Regular_ArrowAltCircleLeft"
-                                     Foreground="White"
-                                     Height="30"
-                                     Width="30"/>
-                        </Button.Content>
-                    </Button>
-                    <Button Style="{StaticResource CircleButton}"
-                    Height="30"
-                    Width="30"
-                    VerticalAlignment="Center"
-                    ToolTip="Следующий результат"
-                    Margin="5 0 0 0"
-                    Command="{Binding MoveNextResultCommand}"
-                    CommandParameter="{Binding ElementName=Grid}">
-                        <Button.Content>
-                            <fa:ImageAwesome Icon="Regular_ArrowAltCircleRight"
-                                     Foreground="White"
-                                     Height="30"
-                                     Width="30"/>
-                        </Button.Content>
-                    </Button>-->
-                    
-                </StackPanel>
             </Grid>
+            <Grid Grid.Column="2">
+                
+                <Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
+            </Grid>
+            
         </Grid>
         <DataGrid Name="Grid"
                   Grid.Row="1"
@@ -367,7 +272,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding data.Completion, Converter={StaticResource CompletionConverter}}"
-                                       HorizontalAlignment="Left" TextWrapping="Wrap"/>
+                                       HorizontalAlignment="Left" 
+                                       TextWrapping="Wrap" 
+                                       FontSize="{Binding data.FontSize}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -411,9 +318,11 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock MaxWidth="140"
+                                <TextBlock 
+                                    MaxWidth="140"
                                        TextWrapping="Wrap"
-                                       Text="{Binding data.ManagDoc, Mode=TwoWay}"/>
+                                       Text="{Binding data.ManagDoc, Mode=TwoWay}"
+                                    FontSize="{Binding data.FontSize}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenDocumentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
@@ -447,7 +356,8 @@
                                 <TextBlock Text="{Binding data.Name}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
-                                           MaxWidth="200"/>
+                                           MaxWidth="200"
+                                           FontSize="{Binding data.FontSize}"/>
 
                             </Grid>
                         </DataTemplate>
@@ -457,23 +367,54 @@
                             <TextBox Text="{Binding data.Name, UpdateSourceTrigger=PropertyChanged}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MaxWidth="200"/>
+                                     MaxWidth="200"
+                                     FontSize="{Binding data.FontSize}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Количество"
-                                    Binding="{Binding data.Count, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="145"
-                                    ElementStyle="{StaticResource DatagridCenterCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
+                <DataGridTemplateColumn Header="Количество" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding data.Count}"
+                                           Grid.Column="2"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="200"
+                                           FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding data.Count, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MaxWidth="200"
+                                     FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Цена за единицу без НДС"
-                                    Binding="{Binding data.SpecCost, UpdateSourceTrigger=PropertyChanged}"
-                                    Width="100"
-                                    ElementStyle="{StaticResource DatagridCenterCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCenterCellStyle}"/>
-                
+                <DataGridTemplateColumn Header="Цена за единицу без НДС" Width="100">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding data.SpecCost}"
+                                           Grid.Column="2"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="200"
+                                           FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding data.SpecCost, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MaxWidth="200"
+                                     FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTemplateColumn MaxWidth="300">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
@@ -498,16 +439,28 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="{Binding data.Complectation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0"/>
+                                <TextBlock Text="{Binding data.Complectation, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" 
+                                           Grid.Column="0" 
+                                           Grid.ColumnSpan="3" 
+                                           Grid.Row="0"
+                                           FontSize="{Binding data.FontSize}"/>
                                 <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Percentage, Converter={StaticResource PercentageVisibility}, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                                               Grid.Row="1" 
+                                               Grid.Column="0" 
+                                               HorizontalAlignment="Center"
+                                               FontSize="{Binding data.FontSize}"/>
                                 </Border>
 
                                 <Border BorderBrush="Black" Grid.Row="1" Grid.Column="1" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Rack, Converter={StaticResource RackVisibility}, UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBlock Text="{Binding data.Rack}" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding data.Rack}" 
+                                               HorizontalAlignment="Center"
+                                               FontSize="{Binding data.FontSize}"/>
                                 </Border>
                                 <Border BorderBrush="Black" Grid.Row="1" Grid.Column="2" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Shelf, Converter={StaticResource ShelfVisibility},UpdateSourceTrigger=PropertyChanged}">
-                                    <TextBlock Text="{Binding data.Shelf}" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="{Binding data.Shelf}" 
+                                               HorizontalAlignment="Center"
+                                               FontSize="{Binding data.FontSize}"/>
                                 </Border>
                                 <Button Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2" Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenComplectationWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}, UpdateSourceTrigger=PropertyChanged}"/>
                             </Grid>
@@ -525,7 +478,9 @@
                                                  Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12" Margin="0 0 3 0"/>
-                                <TextBlock Text="Давальческое имущество" TextWrapping="Wrap" MaxWidth="100"/>
+                                <TextBlock Text="Давальческое имущество" 
+                                           TextWrapping="Wrap" 
+                                           MaxWidth="100"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
@@ -563,7 +518,8 @@
                         <DataTemplate>
                             <Grid>
                                 <TextBlock Text="{Binding data.M_Name}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Center"
+                                           FontSize="{Binding data.FontSize}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenManufactureWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
 
@@ -590,13 +546,26 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Приходный документ"
-                                    Binding="{Binding data.IncDoc, UpdateSourceTrigger=PropertyChanged}"
-                                    MaxWidth="120"
-                                    MinWidth="100"
-                                    ElementStyle="{StaticResource DatagridCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}"/>
-
+                <DataGridTemplateColumn Header="Приходный документ" MinWidth="100" MaxWidth="120">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding data.IncDoc}"
+                                           Grid.Column="2"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="200"
+                                           FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding data.IncDoc, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MaxWidth="200"
+                                     FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.HeaderTemplate>
@@ -615,7 +584,8 @@
                             <Grid>
                                 <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
-                                       Text="{Binding data.ActNumber, Mode=TwoWay}"/>
+                                       Text="{Binding data.ActNumber, Mode=TwoWay}"
+                                           FontSize="{Binding data.FontSize}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenActWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
@@ -658,19 +628,34 @@
                         <DataTemplate>
                             <Grid>
                                 <TextBlock Text="{Binding data.GivingDate, Converter={StaticResource DateConverter}}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Center"
+                                           FontSize="{Binding data.FontSize}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenInProductionWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTextColumn Header="Примечания"
-                                    Binding="{Binding data.Note, UpdateSourceTrigger=PropertyChanged}"
-                                    ElementStyle="{StaticResource DatagridCellStyle}"
-                                    EditingElementStyle="{StaticResource EditingDatagridCellStyle}"
-                                    Width="300"/>
-
+                <DataGridTemplateColumn Header="Примечания" MinWidth="100" MaxWidth="300">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding data.Note}"
+                                           Grid.Column="2"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="200"
+                                           FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
+                        <DataTemplate>
+                            <TextBox Text="{Binding data.Note, UpdateSourceTrigger=PropertyChanged}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     MaxWidth="200"
+                                     FontSize="{Binding data.FontSize}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             <ie:Interaction.Triggers>
                 <ie:EventTrigger EventName="CellEditEnding">
