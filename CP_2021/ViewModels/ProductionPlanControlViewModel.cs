@@ -67,6 +67,17 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+        #region SelectedFontSize
+
+        private int _selectedFontSize;
+
+        public int SelectedFontSize
+        {
+            get => _selectedFontSize;
+            set => Set(ref _selectedFontSize, value);
+        }
+
+        #endregion
         #region FontFamilies
 
         private List<string> _fontFamilies;
@@ -549,68 +560,53 @@ namespace CP_2021.ViewModels
 
         public ICommand SetBoldCommand { get; }
 
-        private bool CanSetBoldCommandExecute(object p) => SelectedTask != null;
+        private bool CanSetBoldCommandExecute(object p) => SelectedTask != null && SelectedTask.data != null;
 
         private void OnSetBoldCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
-            if (task == null)
+            try
             {
-                MessageBox.Show("Выбранная строка была удалена");
+                TasksOperations.SetBold(SelectedTask.data.Id, !SelectedTask.data.IsBold);
             }
-            else
+            catch(Exception ex)
             {
-                task.Formatting.IsBold = task.Formatting.IsBold == true ? false : true;
+                ShowError(ex);
+                return;
             }
-            Unit.Commit();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, task);
+            SelectedTask.data.IsBold = !SelectedTask.data.IsBold;
         }
 
         #endregion
-        #region SetItalicCommand
+        #region SetFontSize
 
-        public ICommand SetItalicCommand { get; }
+        public ICommand SetFontSize { get; }
 
-        private bool CanSetItalicCommandExecute(object p) => SelectedTask != null;
+        private bool CanSetFontSizeCommandExecute(object p) => SelectedTask != null && SelectedTask.data != null;
 
-        private void OnSetItalicCommandExecuted(object p)
+        private void OnSetFontSizeCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
-            if (task == null)
+            try
             {
-                MessageBox.Show("Выбранная строка была удалена");
+                TasksOperations.SetFontSize(SelectedTask.data.Id, SelectedFontSize);
             }
-            else
+            catch(Exception ex)
             {
-                task.Formatting.IsItalic = task.Formatting.IsItalic == true ? false : true;
+                ShowError(ex);
+                return;
             }
-            Unit.Commit();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, task);
+            SelectedTask.data.FontSize = SelectedFontSize;
         }
 
         #endregion
-        #region SetUnderlineCommand
+        #region SetCurrentElementFontSize
 
-        public ICommand SetUnderlineCommand { get; }
+        public ICommand SetCurrentElementFontSize { get; }
 
-        private bool CanSetUnderlineCommandExecute(object p) => SelectedTask != null;
+        private bool CanSetCurrentElementFontSizeCommandExecute(object p) => SelectedTask != null && SelectedTask.data != null;
 
-        private void OnSetUnderlineCommandExecuted(object p)
+        private void OnSetCurrentElementFontSizeCommandExecuted(object p)
         {
-            ProductionTaskDB task = Unit.Tasks.Get().Where(t => t.Id == SelectedTask.Task.Id).FirstOrDefault();
-            if (task == null)
-            {
-                MessageBox.Show("Выбранная строка была удалена");
-            }
-            else
-            {
-                task.Formatting.IsUnderline = task.Formatting.IsUnderline == true ? false : true;
-            }
-            Unit.Commit();
-            Update();
-            SelectedTask = ProductionTask.FindByTask(Model, task);
+            SelectedFontSize = SelectedTask.data.FontSize;
         }
 
         #endregion
@@ -1065,8 +1061,6 @@ namespace CP_2021.ViewModels
             UpTaskCommand = new LambdaCommand(OnUpTaskCommandExecuted, CanUpTaskCommandExecute);
             DownTaskCommand = new LambdaCommand(OnDownTaskCommandExecuted, CanDownTaskCommandExecute);
             SetBoldCommand = new LambdaCommand(OnSetBoldCommandExecuted, CanSetBoldCommandExecute);
-            SetItalicCommand = new LambdaCommand(OnSetItalicCommandExecuted, CanSetItalicCommandExecute);
-            SetUnderlineCommand = new LambdaCommand(OnSetUnderlineCommandExecuted, CanSetUnderlineCommandExecute);
             OpenPaymentWindowCommand = new LambdaCommand(OnOpenPaymentWindowCommandExecuted, CanOpenPaymentWindowCommandExecute);
             OpenLaborCostsWindowCommand = new LambdaCommand(OnOpenLaborCostsWindowCommandExecuted, CanOpenLaborCostsWindowCommandExecute);
             OpenDocumentWindowCommand = new LambdaCommand(OnOpenDocumentWindowCommandExecuted, CanOpenDocumentWindowCommandExecute);
@@ -1080,9 +1074,11 @@ namespace CP_2021.ViewModels
             OpenSearchWindowCommand = new LambdaCommand(OnOpenSearchWindowCommandExecuted, CanOpenSearchWindowCommandExecute);
             ExportTaskCommand = new LambdaCommand(OnExportTaskCommandExecuted, CanExportTaskCommandExecute);
             ImportTaskCommand = new LambdaCommand(OnImportTaskCommandExecuted, CanImportTaskCommandExecute);
+            SetFontSize = new LambdaCommand(OnSetFontSizeCommandExecuted, CanSetFontSizeCommandExecute);
+            SetCurrentElementFontSize = new LambdaCommand(OnSetCurrentElementFontSizeCommandExecuted, CanSetCurrentElementFontSizeCommandExecute);
             #endregion
 
-            FontSizes = new List<int> { 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22 };
+            FontSizes = new List<int> {10, 12, 14, 16, 18, 20, 22 };
             FontFamilies = new List<string> { "Arial", "Calibre", "Times New Roman" };
             User = UserDataSingleton.GetInstance().user;
 

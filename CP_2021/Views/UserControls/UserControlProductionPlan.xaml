@@ -130,30 +130,15 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <!--<ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding FontFamilies}" Style="{StaticResource SearchBoxStyle}"/>-->
-                <ComboBox Grid.Row="1" Grid.Column="0" ItemsSource="{Binding FontSizes}" Style="{StaticResource SearchBoxStyle}"/>
-                <Button Grid.Column="1" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Жирный" Command="{Binding SetBoldCommand}">
+                <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" ItemsSource="{Binding FontSizes}" Style="{StaticResource SearchBoxStyle}" SelectedValue="{Binding SelectedFontSize}"/>
+                <Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Применить шрифт" Command="{Binding SetFontSize}">
+                    <fa:ImageAwesome Icon="Solid_Check" Foreground="{StaticResource ForegroundBrush}"/>
+                </Button>
+                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Жирный" Command="{Binding SetBoldCommand}">
                     <Button.Content>
                         <Image>
                             <Image.Source>
                                 <BitmapImage UriSource="/Resources/Images/bold_button.png"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>
-                <Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Курсив" Command="{Binding SetItalicCommand}">
-                    <Button.Content>
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/italic_button.png"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>
-                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Подчеркнутый" Command="{Binding SetUnderlineCommand}">
-                    <Button.Content>
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/underline_button.png"/>
                             </Image.Source>
                         </Image>
                     </Button.Content>
@@ -204,14 +189,14 @@
                                              Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <Separator/>
+                    <!--<Separator/>
                     <MenuItem Header="Экспорт"
                               Command="{Binding ExportTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Solid_Paste"
                                              Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
-                    </MenuItem>
+                    </MenuItem>-->
                     <!--<MenuItem Header="Импорт"
                               Command="{Binding ImportTaskCommand}">
                         <MenuItem.Icon>
@@ -663,6 +648,9 @@
                 </ie:EventTrigger>
                 <ie:EventTrigger EventName="Loaded">
                     <ie:InvokeCommandAction Command="{Binding GetDatagrid}" CommandParameter="{Binding ElementName=Grid}"/>
+                </ie:EventTrigger>
+                <ie:EventTrigger EventName="SelectionChanged">
+                    <ie:InvokeCommandAction Command="{Binding SetCurrentElementFontSize}"/>
                 </ie:EventTrigger>
             </ie:Interaction.Triggers>
         </DataGrid>

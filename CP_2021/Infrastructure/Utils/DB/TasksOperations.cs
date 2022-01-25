@@ -74,6 +74,16 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.PasteTask, taskId, parentId, lineOrder).AsNoTracking().AsEnumerable().FirstOrDefault();
         }
 
+        public static void SetBold(Guid taskId, bool isBold)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.SetBold, taskId, isBold);
+        }
+
+        public static void SetFontSize(Guid taskId, int fontSize)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.SetFontSize, taskId, fontSize);
+        }
+
         public static IEnumerable<HeadTasks> GetHeadTasks()
         {
             return _context.HeadTasks.FromSqlRaw(Procedures.GetHeadTasks).AsNoTracking().AsEnumerable();

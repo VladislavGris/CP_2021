@@ -44,11 +44,21 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         public Guid ChildId { get; set; }
         public int LineOrder { get; set; }
         // Formatting
-        public bool IsBold { get; set; }
+        private bool _isBold;
+        public bool IsBold
+        {
+            get => _isBold;
+            set => Set(ref _isBold, value);
+        }
         public bool IsItalic { get; set; }
         public bool IsUnderline { get; set; }
         public string FontFamily { get; set; }
-        public int FontSize { get; set; }
+        private int _fontSize;
+        public int FontSize
+        {
+            get => _fontSize;
+            set => Set(ref _fontSize, value);
+        }
         // Complectation
         [NotMapped]
         private string _complectation;

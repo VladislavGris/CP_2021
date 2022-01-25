@@ -33,6 +33,12 @@
         public static string LevelDownTask = "exec LevelDownTask {0},{1},{2},{3}";
         /// <summary>TaskId, ParentId, LineOrder</summary>
         public static string PasteTask = "exec PasteTask {0},{1},{2}";
+        /// <summary>TaskId, BoldValue</summary>
+        public static string SetBold = "exec SetBold {0},{1}";
+        /// <summary>TaskId, UnderlineValue</summary>
+        public static string SetUnderline = "exec SetUnderline {0},{1}";
+        /// <summary>TaskId, FontSizeValue</summary>
+        public static string SetFontSize = "exec SetFontSize {0},{1}";
 
         public static string ExportTaskWithChildren = "exec ExportTaskWithChildren {0}, {1} output";
         /// <summary>Filepath, parentId, lineOrder</summary>
