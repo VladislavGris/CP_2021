@@ -1,0 +1,21 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:local="clr-namespace:CP_2021.Data.doc"
+              ColumnWidth="400" FontSize="14" FontFamily="Georgia">
+    <Paragraph>
+        Склад ОЭЦ
+    </Paragraph>
+    <Paragraph>
+        Условия формирования:
+        - Наличие галочки Склад ОЭЦ(столбец Временная выдача)
+        Сортировка по:
+        - проекту
+    </Paragraph>
+    <Paragraph>
+        Вывод:
+        - Документ
+        - Изделие
+        - Количество
+        - Стелаж(столбец Ведомость комплектации)
+        - Полка(столбец Ведомость комплектации)
+    </Paragraph>
+</FlowDocument>

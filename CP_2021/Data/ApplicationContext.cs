@@ -41,6 +41,7 @@ namespace CP_2021.Data
         public virtual DbSet<UserNames> UserNames { get; set; }
         public virtual DbSet<SearchProcResult> SearchResults { get; set; }
         public virtual DbSet<SearchGoTo> SearchGoTo { get; set; }
+        public virtual DbSet<TimedGivingWindowEntity> TimedGiving { get; set; }
 
         public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
         public virtual DbSet<HeadTasks> HeadTasks { get; set; }

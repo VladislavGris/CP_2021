@@ -500,7 +500,7 @@ namespace CP_2021.ViewModels
 
         public ICommand DownTaskCommand { get; }
 
-        private bool CanDownTaskCommandExecute(object p) => SelectedTask?.data.LineOrder < (SelectedTask?.Parent == null? Model?.Cast<ProductionTask>().Max(t => t.data.LineOrder): SelectedTask?.Parent?.Children.Cast<ProductionTask>().Max(t => t.data.LineOrder));
+        private bool CanDownTaskCommandExecute(object p) => Model.Count != 0 && SelectedTask?.data.LineOrder<(SelectedTask?.Parent == null? Model?.Cast<ProductionTask>().Max(t => t.data.LineOrder) : SelectedTask?.Parent?.Children.Cast<ProductionTask>().Max(t => t.data.LineOrder));
 
         private void OnDownTaskCommandExecuted(object p)
         {
@@ -642,6 +642,11 @@ namespace CP_2021.ViewModels
                             break;
                         case DataWindow.Manufacture:
                             task.data.M_Name = result.M_Name;
+                            break;
+                        case DataWindow.TimedGiving:
+                            task.data.IsTimedGiving = result.IsTimedGiving;
+                            task.data.IsSKBCheck = result.IsSKBCheck;
+                            task.data.IsOECStorage = result.IsOECStorage;
                             break;
                         default:
                             break;
@@ -846,6 +851,26 @@ namespace CP_2021.ViewModels
             SearchWindow window = new SearchWindow();
             ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
             window.Show();
+        }
+
+        #endregion
+        #region OpenTimedGivingWindowCommand
+
+        public ICommand OpenTimedGivingWindowCommand { get; }
+
+        private bool CanOpenTimedGivingWindowCommandExecute(object p) => true;
+
+        private void OnOpenTimedGivingWindowCommandExecuted(object p)
+        {
+            TimedGivingWindow window = new TimedGivingWindow();
+            var entity = TasksOperations.GetTimedGivingData(SelectedTask.data.Id);
+            if (entity != null)
+            {
+                TimedGivingWindowVM vw = new TimedGivingWindowVM(entity, SelectedTask, window);
+                vw.SendIdToPlan += GetTaskIdFromReport;
+                window.DataContext = vw;
+                window.Show();
+            }
         }
 
         #endregion
@@ -1069,6 +1094,7 @@ namespace CP_2021.ViewModels
             OpenManufactureWindowCommand = new LambdaCommand(OnOpenManufactureWindowCommandExecuted, CanOpenManufactureWindowCommandExecute);
             OpenInProductionWindowCommand = new LambdaCommand(OnOpenInProductionWindowCommandExecuted, CanOpenInProductionWindowCommandExecute);
             SelectionChangedCommand = new LambdaCommand(OnSelectionChangedCommandExecuted, CanSelectionChangedCommandExecute);
+            OpenTimedGivingWindowCommand = new LambdaCommand(OnOpenTimedGivingWindowCommandExecuted, CanOpenTimedGivingWindowCommandExecute);
             GetDatagrid = new LambdaCommand(OnGetDatagridExecuted, CanGetDatagridExecute);
             OpenActWindowCommand = new LambdaCommand(OnOpenActWindowCommandExecuted, CanOpenActWindowCommandExecute);
             OpenSearchWindowCommand = new LambdaCommand(OnOpenSearchWindowCommandExecuted, CanOpenSearchWindowCommandExecute);

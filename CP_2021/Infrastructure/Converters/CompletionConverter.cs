@@ -25,13 +25,17 @@ namespace CP_2021.Infrastructure.Converters
                 case 4:
                     return "В работе";
                 case 5:
-                    return "Временная выдача";
+                    //return "Временная выдача";
+                    return "Не задано";
                 case 6:
-                    return "Проверка СКБ";
+                    //return "Проверка СКБ";
+                    return "Не задано";
                 case 7:
-                    return "Склад ОЭЦ";
+                    //return "Склад ОЭЦ";
+                    return "Не задано";
                 case 8:
-                    return "Собрано по акту";
+                    //return "Собрано по акту";
+                    return "Не задано";
                 case 9:
                     return "Склад";
                 case 10:

@@ -224,6 +224,19 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         #endregion
 
+        #region TimedGiving
+
+        public static TimedGivingWindowEntity GetTimedGivingData(Guid taskId)
+        {
+            return _context.TimedGiving.FromSqlRaw(Procedures.GetTimedGivingData,taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+        }
+
+        public static void UpdateTimedGivingData(Guid id, bool isTimedGiving, bool isSKBCheck, bool isOECStorage, string skbNumber, string fio, DateTime? givingDate, string note)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateTimedGivingData, id, isTimedGiving, isSKBCheck, isOECStorage, skbNumber, fio, givingDate, note);
+        }
+
+        #endregion
         #endregion
 
         #region Search

@@ -1,0 +1,24 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:local="clr-namespace:CP_2021.Data.doc"
+              ColumnWidth="400" FontSize="14" FontFamily="Georgia">
+    <Paragraph>
+        Отсутствие спецификации
+    </Paragraph>
+    <Paragraph>
+        Условия формирования:
+        - Наличие номера письма
+        - Отсутствие номера спецификации
+        Сортировка по:
+        - проекту
+        - изготовителю
+    </Paragraph>
+    <Paragraph>
+        Вывод:
+        - Документ
+        - Изделие на уровень выше
+        - Изделие
+        - Изготовитель
+        - Номер письма(из колонки Изготовитель)
+        - Номер спецификации(из колонки Изготовитель)
+    </Paragraph>
+</FlowDocument>

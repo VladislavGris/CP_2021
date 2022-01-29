@@ -1,6 +1,4 @@
-﻿using CP_2021.Data;
-using CP_2021.Infrastructure.Commands;
-using CP_2021.Infrastructure.Singletons;
+﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
 using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.Classes;
@@ -8,21 +6,25 @@ using CP_2021.Models.DataWindowEntities;
 using CP_2021.ViewModels.Base;
 using CP_2021.Views.Windows.DataWindows;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace CP_2021.ViewModels.DataWindowViewModels
 {
-    internal class ComplectationWindowVM : ViewModelBase
+    internal class TimedGivingWindowVM : ViewModelBase
     {
-        private ComplectationWindowEntity _entity;
-        public ComplectationWindowEntity Entity
+        private TimedGivingWindowEntity _entity;
+        public TimedGivingWindowEntity Entity
         {
             get => _entity;
             set => Set(ref _entity, value);
         }
+
         private ProductionTask _task;
 
         #region SaveCommand
@@ -39,32 +41,36 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                 case MessageBoxResult.Yes:
                     try
                     {
-                        TasksOperations.UpdateComplectationWindowData(Entity.Id, 
-                            Entity.Complectation, 
-                            Entity.StateNumber, 
-                            Entity.ComplectationDate.HasValue?Entity.ComplectationDate.Value:null, 
-                            Entity.OnStorageDate.HasValue?Entity.OnStorageDate.Value:null, 
-                            Entity.Percentage, 
-                            Entity.Rack, 
-                            Entity.Shelf, 
+                        TasksOperations.UpdateTimedGivingData(Entity.Id,
+                            Entity.IsTimedGiving,
+                            Entity.IsSKBCheck,
+                            Entity.IsOECStorage,
+                            Entity.SKBNumber,
+                            Entity.FIO,
+                            Entity.GivingDate.HasValue ? Entity.GivingDate.Value : null,
                             Entity.Note);
-                        _task.data.Complectation = _entity.Complectation;
-                    }catch(Exception ex)
+                        _task.data.IsTimedGiving = Entity.IsTimedGiving;
+                        _task.data.IsOECStorage = Entity.IsOECStorage;
+                        _task.data.IsSKBCheck = Entity.IsSKBCheck;
+                    }
+                    catch (Exception ex)
                     {
                         MessageBox.Show(ex.Message);
                     }
-                    
+
                     ((Window)p).Close();
                     break;
                 case MessageBoxResult.No:
                     ((Window)p).Close();
                     break;
-                case MessageBoxResult.Cancel: case MessageBoxResult.None:
+                case MessageBoxResult.Cancel:
+                case MessageBoxResult.None:
                     break;
             }
         }
 
         #endregion
+
         public event EventHandler<WindowEventArgs> SendIdToPlan;
 
         protected virtual void OnSendTaskIdToReportVM(WindowEventArgs e)
@@ -81,9 +87,9 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             OnSendTaskIdToReportVM(args);
         }
 
-        public ComplectationWindowVM() { }
+        public TimedGivingWindowVM() { }
 
-        public ComplectationWindowVM(ComplectationWindowEntity entity, ProductionTask task, ComplectationWindow window)
+        public TimedGivingWindowVM(TimedGivingWindowEntity entity, ProductionTask task, TimedGivingWindow window)
         {
             SaveCommand = new LambdaCommand(OnSaveCommandExecuted, CanSaveCommandExecute);
 

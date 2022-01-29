@@ -1,0 +1,19 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:local="clr-namespace:CP_2021.Data.doc"
+              ColumnWidth="400" FontSize="14" FontFamily="Georgia">
+    <Paragraph>
+        Документация отработана
+    </Paragraph>
+    <Paragraph>
+        Условия формирования:
+        - Наличие статуса Документация отработана
+        Сортировка по:
+        - проекту
+    </Paragraph>
+    <Paragraph>
+        Вывод:
+        - Документ
+        - Изделие
+        - Количество
+    </Paragraph>
+</FlowDocument>

@@ -221,7 +221,7 @@
                         <DataTrigger Binding="{Binding data.Completion}" Value="4">
                             <Setter Property="Background" Value="Yellow"/>
                         </DataTrigger>
-                        <DataTrigger Binding="{Binding data.Completion}" Value="5">
+                        <!--<DataTrigger Binding="{Binding data.Completion}" Value="5">
                             <Setter Property="Background" Value="#4CA243"/>
                         </DataTrigger>
                         <DataTrigger Binding="{Binding data.Completion}" Value="6">
@@ -232,7 +232,7 @@
                         </DataTrigger>
                         <DataTrigger Binding="{Binding data.Completion}" Value="8">
                             <Setter Property="Background" Value="#4955FF"/>
-                        </DataTrigger>
+                        </DataTrigger>-->
                         <DataTrigger Binding="{Binding data.Completion}" Value="9">
                             <Setter Property="Background" Value="#98C072"/>
                         </DataTrigger>
@@ -272,10 +272,30 @@
                                 <ComboBoxItem Content="ВК на склад"/>
                                 <ComboBoxItem Content="В работе по кооперации"/>
                                 <ComboBoxItem Content="В работе"/>
-                                <ComboBoxItem Content="Временная выдача"/>
-                                <ComboBoxItem Content="Проверка СКБ"/>
-                                <ComboBoxItem Content="Склад ОЭЦ"/>
-                                <ComboBoxItem Content="Собрано по акту"/>
+                                <!--Временная выдача-->
+                                <ComboBoxItem>
+                                    <ComboBoxItem.Content>
+                                        <fa:ImageAwesome Icon="Solid_Times" Width="15" Height="15"/>
+                                    </ComboBoxItem.Content>
+                                </ComboBoxItem>
+                                <!--Проверка СКБ-->
+                                <ComboBoxItem>
+                                    <ComboBoxItem.Content>
+                                        <fa:ImageAwesome Icon="Solid_Times" Width="15" Height="15"/>
+                                    </ComboBoxItem.Content>
+                                </ComboBoxItem>
+                                <!--Склад ОЭЦ-->
+                                <ComboBoxItem>
+                                    <ComboBoxItem.Content>
+                                        <fa:ImageAwesome Icon="Solid_Times" Width="15" Height="15"/>
+                                    </ComboBoxItem.Content>
+                                </ComboBoxItem>
+                                <!--Собрано по акту-->
+                                <ComboBoxItem>
+                                    <ComboBoxItem.Content>
+                                        <fa:ImageAwesome Icon="Solid_Times" Width="15" Height="15"/>
+                                    </ComboBoxItem.Content>
+                                </ComboBoxItem>
                                 <ComboBoxItem Content="Склад"/>
                                 <ComboBoxItem Content="Документация отработана"/>
                                 <ie:Interaction.Triggers>
@@ -310,6 +330,33 @@
                                     FontSize="{Binding data.FontSize}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenDocumentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Width="125">
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="Solid_PencilAlt"
+                                                 Foreground="{StaticResource FontColor}"
+                                                 Width="12"
+                                                 Height="12" Margin="0 0 3 0"/>
+                                <TextBlock Text="Временная выдача" 
+                                           TextWrapping="Wrap" 
+                                           MaxWidth="100"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <fa:ImageAwesome Icon="Solid_HandHolding" Width="40" Height="40" Foreground="#4CA243"  Visibility="{Binding data.IsTimedGiving, Converter={StaticResource TreeToggleConverter}}"/>
+                                    <fa:ImageAwesome Icon="Solid_Tools" Width="40" Height="40" Foreground="#E696E6" Visibility="{Binding data.IsSKBCheck,Converter={StaticResource TreeToggleConverter}}"/>
+                                    <fa:ImageAwesome Icon="Solid_ShoppingCart" Width="40" Height="40" Foreground="#EBBC46" Visibility="{Binding data.IsOECStorage,Converter={StaticResource TreeToggleConverter}}"/>
+                                    <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenTimedGivingWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                            </Grid>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

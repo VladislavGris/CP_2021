@@ -118,5 +118,27 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         }
 
         public int ChildrenCount { get; set; }
+        //TimedGiving
+        [NotMapped]
+        private bool _isTimedGiving;
+        public bool IsTimedGiving
+        {
+            get => _isTimedGiving;
+            set => Set(ref _isTimedGiving, value);
+        }
+        [NotMapped]
+        private bool _isSKBCheck;
+        public bool IsSKBCheck
+        {
+            get => _isSKBCheck;
+            set => Set(ref _isSKBCheck, value);
+        }
+        [NotMapped]
+        private bool _isOECStorage;
+        public bool IsOECStorage
+        {
+            get => _isOECStorage;
+            set => Set(ref _isOECStorage, value);
+        }
     }
 }

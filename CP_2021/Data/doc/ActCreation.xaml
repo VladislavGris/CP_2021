@@ -1,0 +1,19 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:local="clr-namespace:CP_2021.Data.doc"
+              ColumnWidth="400" FontSize="14" FontFamily="Georgia">
+    <Paragraph>
+        Формирование актов
+    </Paragraph>
+    <Paragraph>
+        Условия формирования:
+        - Наличие галочки Формирование актв(столбец Акт расходования)
+        Сортировка по:
+        - проекту
+    </Paragraph>
+    <Paragraph>
+        Вывод:
+        - Документ
+        - Изделие
+        - Количество
+    </Paragraph>
+</FlowDocument>

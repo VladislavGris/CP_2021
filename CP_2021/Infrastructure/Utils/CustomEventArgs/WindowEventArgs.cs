@@ -11,7 +11,8 @@ namespace CP_2021.Infrastructure.Utils.CustomEventArgs
         InProduction,
         LaborCosts,
         Manufacture,
-        Payment
+        Payment,
+        TimedGiving
     }
 
     internal class WindowEventArgs : EventArgs
