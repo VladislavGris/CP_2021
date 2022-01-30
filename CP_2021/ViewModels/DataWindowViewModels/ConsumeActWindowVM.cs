@@ -24,6 +24,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         }
         private ApplicationContext _context;
         private ProductionTask _task;
+        private bool _isActEmptyOrNull = false;
 
         #region SaveCommand
 
@@ -39,6 +40,11 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                 case MessageBoxResult.Yes:
                     try
                     {
+                        if(!String.IsNullOrEmpty(Entity.ActNumber) && _isActEmptyOrNull)
+                        {
+                            Entity.ActCreation = false;
+                            Entity.ByAct = true;
+                        }
                         TasksOperations.UpdateConsumeActData(Entity.Id, 
                             Entity.ActNumber, 
                             Entity.ActDate.HasValue ? Entity.ActDate.Value : null, 
@@ -46,6 +52,9 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                             Entity.ByAct, 
                             Entity.Note);
                         _task.data.ActNumber = Entity.ActNumber;
+                        _task.data.ActDate = Entity.ActDate;
+                        _task.data.ActCreation = Entity.ActCreation;
+                        _task.data.ByAct = Entity.ByAct;
                     }catch(Exception ex)
                     {
                         MessageBox.Show(ex.Message);
@@ -89,6 +98,14 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             _task = task;
             _context = ApplicationUnitSingleton.GetApplicationContext();
             window.Closing += DataWindow_Closing;
+            if (String.IsNullOrEmpty(_task.data.ActNumber))
+            {
+                _isActEmptyOrNull = true;
+            }
+            else
+            {
+                _isActEmptyOrNull = false;
+            }
         }
     }
 }

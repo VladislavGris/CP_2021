@@ -351,9 +351,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <fa:ImageAwesome Icon="Solid_HandHolding" Width="40" Height="40" Foreground="#4CA243"  Visibility="{Binding data.IsTimedGiving, Converter={StaticResource TreeToggleConverter}}"/>
-                                    <fa:ImageAwesome Icon="Solid_Tools" Width="40" Height="40" Foreground="#E696E6" Visibility="{Binding data.IsSKBCheck,Converter={StaticResource TreeToggleConverter}}"/>
-                                    <fa:ImageAwesome Icon="Solid_ShoppingCart" Width="40" Height="40" Foreground="#EBBC46" Visibility="{Binding data.IsOECStorage,Converter={StaticResource TreeToggleConverter}}"/>
+                                <fa:ImageAwesome Icon="Solid_HandHolding" Width="40" Height="40" Foreground="#4CA243"  Visibility="{Binding data.IsTimedGiving, Converter={StaticResource TreeToggleConverter}}" ToolTip="Временная выдача"/>
+                                    <fa:ImageAwesome Icon="Solid_Tools" Width="40" Height="40" Foreground="#E696E6" Visibility="{Binding data.IsSKBCheck,Converter={StaticResource TreeToggleConverter}}" ToolTip="Проверка СКБ"/>
+                                    <fa:ImageAwesome Icon="Solid_ShoppingCart" Width="40" Height="40" Foreground="#EBBC46" Visibility="{Binding data.IsOECStorage,Converter={StaticResource TreeToggleConverter}}" ToolTip="Склад ОЭЦ"/>
                                     <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenTimedGivingWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
 
@@ -614,10 +614,17 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock MaxWidth="140"
+                                <StackPanel Visibility="{Binding data.ByAct,Converter={StaticResource TreeToggleConverter}}">
+                                    <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ActNumber, Mode=TwoWay}"
                                            FontSize="{Binding data.FontSize}"/>
+                                    <TextBlock MaxWidth="140"
+                                       TextWrapping="Wrap"
+                                       Text="{Binding data.ActDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"
+                                           FontSize="{Binding data.FontSize}"/>
+                                </StackPanel>
+                                <fa:ImageAwesome Icon="Regular_FolderOpen" Width="40" Height="40" Foreground="Black" Visibility="{Binding data.ActCreation,Converter={StaticResource TreeToggleConverter}}" ToolTip="Формирование акта"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenActWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>

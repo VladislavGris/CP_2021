@@ -143,7 +143,7 @@ begin
 				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
 				g.G_State,
 				m.M_Name,
-				a.ActNumber,
+				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
 				i.Giving_Date,
 				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
 				(select count(*) from HierarchyDB h2 where h2.ParentId = p.Id) ChildrenCount
@@ -173,7 +173,7 @@ begin
 				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
 				g.G_State,
 				m.M_Name,
-				a.ActNumber,
+				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
 				i.Giving_Date,
 				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
 				(select count(*) from HierarchyDB h2 where h2.ParentId = p.Id) ChildrenCount
@@ -196,7 +196,7 @@ begin
 				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
 				g.G_State,
 				m.M_Name,
-				a.ActNumber,
+				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
 				i.Giving_Date,
 				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
 				(select count(*) from HierarchyDB h2 where h2.ParentId = p.Id) ChildrenCount

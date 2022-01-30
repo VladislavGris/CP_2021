@@ -108,6 +108,24 @@ namespace CP_2021.Models.ProcedureResuts.Plan
             get=> _actNumber;
             set => Set(ref _actNumber, value);
         }
+        private bool _actCreation;
+        public bool ActCreation
+        {
+            get => _actCreation;
+            set => Set(ref _actCreation, value);
+        }
+        private DateTime? _actDate;
+        public DateTime? ActDate
+        {
+            get => _actDate;
+            set => Set(ref _actDate, value);
+        }
+        private bool _byAct;
+        public bool ByAct
+        {
+            get => _byAct;
+            set => Set(ref _byAct, value);
+        }
         // In_Production
         [NotMapped]
         private DateTime? _givingDate;

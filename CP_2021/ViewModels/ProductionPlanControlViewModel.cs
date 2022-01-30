@@ -630,6 +630,9 @@ namespace CP_2021.ViewModels
                             break;
                         case DataWindow.ConsumeAct:
                             task.data.ActNumber = result.ActNumber;
+                            task.data.ActCreation = result.ActCreation;
+                            task.data.ActDate = result.ActDate;
+                            task.data.ByAct = result.ByAct;
                             break;
                         case DataWindow.Document:
                             task.data.ManagDoc = result.ManagDoc;
