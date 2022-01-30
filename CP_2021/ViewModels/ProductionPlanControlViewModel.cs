@@ -633,6 +633,7 @@ namespace CP_2021.ViewModels
                             task.data.ActCreation = result.ActCreation;
                             task.data.ActDate = result.ActDate;
                             task.data.ByAct = result.ByAct;
+                            task.data.IsItalic = result.IsItalic;
                             break;
                         case DataWindow.Document:
                             task.data.ManagDoc = result.ManagDoc;

@@ -21,8 +21,10 @@
             <Grid Background="{StaticResource BackgroundBrush}" Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="4*"/>
-                    <ColumnDefinition Width="3*"/>
-                    <ColumnDefinition Width="2.2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Text="В работе по кооперации"
                        Grid.Column="0"
@@ -30,18 +32,31 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="20"/>
-                <ComboBox ItemsSource="{Binding HeadTasks}" Width="200" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedHead}">
+                <ComboBox ItemsSource="{Binding Manufactirers}" Width="200" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedManufacture}">
+                    <ie:Interaction.Triggers>
+                        <ie:EventTrigger EventName="SelectionChanged">
+                            <ie:InvokeCommandAction Command="{Binding ManufactureChangedCommand}"/>
+                        </ie:EventTrigger>
+                    </ie:Interaction.Triggers>
+                </ComboBox>
+                <ComboBox ItemsSource="{Binding HeadTasks}" Width="200" Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedHead}">
                     <ie:Interaction.Triggers>
                         <ie:EventTrigger EventName="SelectionChanged">
                             <ie:InvokeCommandAction Command="{Binding ProjectChangedCommand}"/>
                         </ie:EventTrigger>
                     </ie:Interaction.Triggers>
                 </ComboBox>
-                <Button Content="Сформировать очтет"
+                <Button Content="Сбросить"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
                                 Margin="5"
-                        Grid.Column="2"
+                        Grid.Column="3"
+                        Command="{Binding DropFiltersCommand}"/>
+                <Button Content="Сформировать"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource EnterButton}"
+                                Margin="5"
+                        Grid.Column="4"
                         Command="{Binding GenerateReportCommand}"/>
             </Grid>
             <DataGrid Grid.Row="1"
@@ -61,7 +76,6 @@
                     <DataGridTextColumn Header="Документ" Binding="{Binding ManagDoc}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Изделие на уровень выше" Binding="{Binding ParentTask}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Изделие" Binding="{Binding Task}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
-                    <DataGridTextColumn Header="Количество" Binding="{Binding Count}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Изготовитель" Binding="{Binding Manufacturer}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Номер письма" Binding="{Binding LetterNum}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Номер спецификации" Binding="{Binding SpecNum}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>

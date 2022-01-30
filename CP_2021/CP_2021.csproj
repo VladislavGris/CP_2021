@@ -36,9 +36,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Data\doc\NalichieNaSklade.xaml" />
-    <Page Remove="Data\doc\NoSpecificationNumber.xaml" />
+    <Page Remove="Data\doc\ActCreation.xaml" />
+    <Page Remove="Data\doc\CoopWorkReport.xaml" />
+    <Page Remove="Data\doc\DocumInWorkReport.xaml" />
+    <Page Remove="Data\doc\InWorkReport.xaml" />
+    <Page Remove="Data\doc\NoSpecReport.xaml" />
+    <Page Remove="Data\doc\OECStorage.xaml" />
     <Page Remove="Data\doc\SearchDescriptions.xaml" />
+    <Page Remove="Data\doc\SKBCheck.xaml" />
+    <Page Remove="Data\doc\TimedGivingReport.xaml" />
+    <Page Remove="Data\doc\VKOnStorage.xaml" />
+    <Page Remove="Data\doc\WorkedDocsReport.xaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -132,22 +140,48 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Data\doc\OECStorage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\VKOnStorage.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\WorkedDocsReport.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Resources\Images\bold_button.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Data\doc\NalichieNaSklade.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <None Include="Data\doc\ActCreation.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Data\doc\NoSpecificationNumber.xaml">
+    <None Include="Data\doc\CoopWorkReport.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\DocumInWorkReport.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\InWorkReport.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\NoSpecReport.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Data\doc\SearchDescriptions.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Generator>MSBuild:Compile</Generator>
+    </None>
+    <None Include="Data\doc\SKBCheck.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\doc\TimedGivingReport.xaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 

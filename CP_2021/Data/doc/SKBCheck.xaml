@@ -2,22 +2,36 @@
               xmlns:local="clr-namespace:CP_2021.Data.doc"
               ColumnWidth="400" FontSize="14" FontFamily="Georgia">
     <Paragraph>
-        Проверка СКБ
+        <Bold>Проверка СКБ</Bold>
     </Paragraph>
     <Paragraph>
-        Условия формирования:
-        - Наличие галочки Проверка СКБ(в столбце Временная выдача)
-        Сортировка по:
-        - проекту
+        <Bold>Условия формирования:</Bold>
     </Paragraph>
     <Paragraph>
-        Вывод:
-        - Документ
-        - Изделие на уровень выше
-        - Изделие
-        - Дата выдачи(в столбце Временная выдача)
-        - ФИО получившего(в столбце Временная выдача)
-        - Номер СКБ(в столбце Временная выдача)
-        - Примечание(в столбце Временная выдача)
+        <ListBox>
+            <ListBoxItem>Наличие галочки Проверка СКБ(в столбце Временная выдача)</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Сортировка по:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>проекту</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Вывод:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Документ</ListBoxItem>
+            <ListBoxItem>Изделие на уровень выше</ListBoxItem>
+            <ListBoxItem>Изделие</ListBoxItem>
+            <ListBoxItem>Дата выдачи(в столбце Временная выдача)</ListBoxItem>
+            <ListBoxItem>ФИО получившего(в столбце Временная выдача)</ListBoxItem>
+            <ListBoxItem>Номер СКБ(в столбце Временная выдача)</ListBoxItem>
+            <ListBoxItem>Примечание(в столбце Временная выдача)</ListBoxItem>
+        </ListBox>
     </Paragraph>
 </FlowDocument>

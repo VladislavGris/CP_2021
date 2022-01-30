@@ -2,25 +2,39 @@
               xmlns:local="clr-namespace:CP_2021.Data.doc"
               ColumnWidth="400" FontSize="14" FontFamily="Georgia">
     <Paragraph>
-        Изделия в работе
+        <Bold>Изделия в работе</Bold>
     </Paragraph>
     <Paragraph>
-        Условия формирования:
-        - Статус "В работе"
-        Сортировка по:
-        - проекту
+        <Bold>Условия формирования:</Bold>
     </Paragraph>
     <Paragraph>
-        Вывод:
-        - Документ
-        - Изделие на уровень выше
-        - Изделие
-        - Количество
-        - Ведомость комплектации
-        - Номер МСЛ(из столбца Выдача в производство)
-        - Сборка(из столбца Выдача в производство)
-        - Электромонтаж(из столбца Выдача в производство)
-        - Дата выдачи в работу(из столбца Выдача в производство)
-        - Дата готовности(п)(из столбца Выдача в производство)
+        <ListBox>
+            <ListBoxItem>Статус "В работе"</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Сортировка по:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>проекту</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Вывод:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Документ</ListBoxItem>
+            <ListBoxItem>Изделие на уровень выше</ListBoxItem>
+            <ListBoxItem>Изделие</ListBoxItem>
+            <ListBoxItem>Количество</ListBoxItem>
+            <ListBoxItem>Ведомость комплектации</ListBoxItem>
+            <ListBoxItem>Номер МСЛ(из столбца Выдача в производство)</ListBoxItem>
+            <ListBoxItem>Сборка(из столбца Выдача в производство)</ListBoxItem>
+            <ListBoxItem>Электромонтаж(из столбца Выдача в производство)</ListBoxItem>
+            <ListBoxItem>Дата выдачи в работу(из столбца Выдача в производство)</ListBoxItem>
+            <ListBoxItem>Дата готовности(п)(из столбца Выдача в производство)</ListBoxItem>
+        </ListBox>
     </Paragraph>
 </FlowDocument>

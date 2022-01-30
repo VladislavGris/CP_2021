@@ -8,6 +8,15 @@ where ProductionTaskId = @taskId;
 end
 --drop procedure SetBold;
 go
+create procedure SetItalic @taskId uniqueidentifier, @value bit
+as
+begin
+set nocount on;
+update Formatting
+set IsItalic = @value
+where ProductionTaskId = @taskId;
+end
+go
 create procedure SetUnderline @taskId uniqueidentifier, @value bit
 as
 begin
@@ -91,6 +100,9 @@ on PasteTask
 to user1;
 grant execute
 on PasteChildren
+to user1;
+grant execute
+on SetItalic
 to user1;
 go
 create procedure InsertEmptyTask @parentId uniqueidentifier, @lineOrder int
@@ -407,4 +419,277 @@ end
 close TimedGivingCursor;
 deallocate TimedGivingCursor;
 go
+-------------- Отчеты
+create view ManufactureNames as
+select M_Name as Name
+from Manufacture
+where M_Name is not null and M_Name <> ''
+group by M_Name
+--drop view ManufactureNames
+go
+create procedure GetManufactureNames as
+begin
+	set nocount on
+	select * from ManufactureNames
+end
+--drop procedure GetManufactureNames
+exec GetManufactureNames
 
+create view HeadTasks as
+select Task_Name as Task
+from Production_Plan inner join HierarchyDB on Production_Plan.Id = HierarchyDB.ChildId
+where ParentId is null
+--drop view HeadTasks
+go
+create procedure GetHeadTasks as
+begin
+	set nocount on;
+	select * from HeadTasks;
+end
+--drop procedure GetHeadTasks
+exec GetHeadTasks;
+grant execute any external script
+to user1;
+grant execute to user1;
+go
+-- В работе по кооперации
+create view CoopWork as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		Manufacture.Specification_Num as SpecNum,
+		Manufacture.Letter_Num as LetterNum,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+where Manufacture.Letter_Num is not null and Manufacture.Letter_Num <> '' and (p1.Inc_Doc is null or p1.Inc_Doc = '');
+--drop view CoopWork
+go
+create procedure GetCoopWork as
+begin
+set nocount on;
+select * from CoopWork;
+end
+--drop procedure GetCoopWork
+select * from Production_Plan
+exec GetCoopWork;
+go
+-- Формирование актов
+create view ActCreation as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		p1.P_Count as Count,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join Act a on a.ProductionTaskId = p1.Id
+where a.ActCreation = 1;
+go
+create procedure GetActCreation as
+begin
+set nocount on;
+select * from ActCreation;
+end
+exec GetActCreation;
+-- Отработка документации
+go
+create view DocumInWork as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+where p1.Completion = 1;
+go
+create procedure GetDocumInWork as
+begin
+set nocount on;
+select * from DocumInWork;
+end
+exec GetDocumInWork;
+-- Изделия в работе
+go
+create view InWork as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		p1.P_Count as Count,
+		c.Complectation,
+		i.Number as Number,
+		i.Executor_Name as Executor1,
+		i.Install_Executor_Name as Executor2,
+		i.Giving_Date as GivingDate,
+		i.Completion_Date as CompletionDate
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join Complectation c on c.Production_Task_Id = p1.Id
+inner join In_Production i on i.Production_Task_Id = p1.Id
+where p1.Completion = 4;
+--drop view InWork;
+go
+create procedure GetInWork as
+begin
+set nocount on;
+select * from InWork;
+end
+exec GetInWork;
+-- Отсутствие спецификации
+go
+create view NoSpec as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		Manufacture.Specification_Num as SpecNum,
+		Manufacture.Letter_Num as LetterNum
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+where Manufacture.Letter_Num is not null and Manufacture.Letter_Num <> '' and (Manufacture.Specification_Num is null or Manufacture.Specification_Num = '');
+go
+create procedure GetNoSpec as
+begin
+set nocount on;
+select * from NoSpec;
+end
+exec GetNoSpec;
+-- Склад ОЭЦ
+go
+create view OECStorage as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		c.Rack,
+		c.Shelf
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join TimedGiving t on t.ProductionTaskId = p1.Id
+inner join Complectation c on c.Production_Task_Id = p1.Id
+where t.IsOECStorage = 1
+go
+--drop view OECStorage
+create procedure GetOECStorage as
+begin
+set nocount on;
+select * from OECStorage;
+end
+--drop procedure GetOECStorage
+exec GetOECStorage;
+-- Проверка СКБ
+go
+create view SKBCheck as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		t.GivingDate,
+		t.FIO,
+		t.SKBNumber,
+		t.Note
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join TimedGiving t on t.ProductionTaskId = p1.Id
+where t.IsSKBCheck = 1
+go
+create procedure GetSKBCheck as
+begin
+set nocount on;
+select * from SKBCheck;
+end
+exec GetSKBCheck;
+-- Временная выдача
+go
+create view TimedGivingReport as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		t.GivingDate,
+		t.FIO,
+		t.SKBNumber,
+		t.Note
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join TimedGiving t on t.ProductionTaskId = p1.Id
+where t.IsTimedGiving = 1
+go
+create procedure GetTimedGivingReport as
+begin
+set nocount on;
+select * from TimedGivingReport;
+end
+exec GetTimedGivingReport;
+-- Документация отработана
+go
+create view WorkedDocs as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		p1.P_Count as Count
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+where p1.Completion = 10
+go
+--drop view OECStorage
+create procedure GetWorkedDocs as
+begin
+set nocount on;
+select * from WorkedDocs;
+end
+--drop procedure GetOECStorage
+exec GetWorkedDocs;
+-- ВК на склад
+go
+create view VKOnStorage as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		Manufacture.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		p1.P_Count as Count,
+		c.Complectation
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
+inner join Complectation c on c.Production_Task_Id = p1.Id
+where p1.Completion = 10
+go
+--drop view OECStorage
+create procedure GetVKOnStorage as
+begin
+set nocount on;
+select * from VKOnStorage;
+end
+exec GetVKOnStorage;

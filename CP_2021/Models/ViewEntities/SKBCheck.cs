@@ -8,9 +8,9 @@ namespace CP_2021.Models.ViewEntities
 {
     internal class SKBCheck : BaseViewEntity
     {
-        public int? Count { get; set; }
-        public string ManagDoc { get; set; }
-        public string Complectation { get; set; }
+        public DateTime? GivingDate { get; set; }
+        public string FIO { get; set; }
+        public string SKBNumber { get; set; }
         public string Note { get; set; }
     }
 }

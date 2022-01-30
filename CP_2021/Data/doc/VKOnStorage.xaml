@@ -1,0 +1,35 @@
+﻿<FlowDocument xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:local="clr-namespace:CP_2021.Data.doc"
+              ColumnWidth="400" FontSize="14" FontFamily="Georgia">
+    <Paragraph>
+        <Bold>ВК на склад</Bold>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Условия формирования:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Статус "ВК на склад"</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Сортировка по:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>проекту</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Вывод:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Документ</ListBoxItem>
+            <ListBoxItem>Изделие на уровень выше</ListBoxItem>
+            <ListBoxItem>Изделие</ListBoxItem>
+            <ListBoxItem>Количество</ListBoxItem>
+            <ListBoxItem>Ведомость комплектации</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+</FlowDocument>

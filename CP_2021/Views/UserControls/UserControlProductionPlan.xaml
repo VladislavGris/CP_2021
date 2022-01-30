@@ -389,7 +389,9 @@
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="200"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                           FontStyle="{Binding data.IsItalic, Converter={StaticResource ItalicConverter}}"
+                                           Foreground="{Binding data.IsItalic, Converter={StaticResource ColorFromItalic}}"/>
 
                             </Grid>
                         </DataTemplate>

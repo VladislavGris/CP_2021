@@ -17,23 +17,19 @@ namespace CP_2021.ViewModels
     {
 
         #region Свойства
-
-        private ApplicationUnit Unit;
         #region UserControls
 
-        private NoSpecificationReport _noSpec = new NoSpecificationReport();
-        private SpecificationsOnControlReport _onControl = new SpecificationsOnControlReport();
-        private SpecInVipiskReport _inVipisk = new SpecInVipiskReport();
         private CoopWorkReport _coopWork = new CoopWorkReport();
-        private InProgressReport _inProgress = new InProgressReport();
-        private DocumentationReport _doc = new DocumentationReport();
-        private SKBCheckReport _skbCheck = new SKBCheckReport();
-        private OETSStoreageReport _oetsStorage = new OETSStoreageReport();
-        private GivingStorageReport _givingStorage = new GivingStorageReport();
-        private GivingReportsReport _givingReports = new GivingReportsReport();
-        private ActFormReport _actFormReport = new ActFormReport();
-        private ByActReport _byActReport = new ByActReport();
-        private FirstPaymentReport _firstPaymentReport = new FirstPaymentReport();
+        private ActCreationReport _actCreationReport = new ActCreationReport();
+        private DocumInWorkReport _documInWorkReport = new DocumInWorkReport();
+        private InWorkReport _inWorkReport = new InWorkReport();
+        private NoSpecReport _noSpecReport = new NoSpecReport();
+        private OECStorageReport _oecStorageReport = new OECStorageReport();
+        private SKBChecksReport _skbCheckReport = new SKBChecksReport();
+        private TimedGivingReport _timedGivingReport = new TimedGivingReport();
+        private WorkedDocsReport _workedDocsReport = new WorkedDocsReport();
+        private VKOnStorageReport _vkOnStorageReport = new VKOnStorageReport();
+
         #endregion
 
         #region Content
@@ -54,45 +50,10 @@ namespace CP_2021.ViewModels
 
         #region Отчеты
         #region Команды отчетов
-        #region ShowNoSpecCommand
 
-        public ICommand ShowNoSpecCommand { get; }
 
-        private bool CanShowNoSpecCommandExecute(object p) => true;
 
-        private void OnShowNoSpecCommandExecuted(object p)
-        {
-            Content = _noSpec;
-            
-        }
 
-        #endregion
-
-        #region ShowSpecOnControlCommand
-
-        public ICommand ShowSpecOnControlCommand { get; }
-
-        private bool CanShowSpecOnControlCommandExecute(object p) => true;
-
-        private void OnShowSpecOnControlCommandExecuted(object p)
-        {
-            Content = _onControl;
-            
-        }
-
-        #endregion
-        #region ShowSpecOnVipiskCommand
-
-        public ICommand ShowSpecOnVipiskCommand { get; }
-
-        private bool CanShowSpecOnVipiskCommandExecute(object p) => true;
-
-        private void OnShowSpecOnVipiskCommandExecuted(object p)
-        {
-            Content = _inVipisk;
-        }
-
-        #endregion
         #region ShowCoopWorkCommand
 
         public ICommand ShowCoopWorkCommand { get; }
@@ -106,27 +67,67 @@ namespace CP_2021.ViewModels
 
         #endregion
 
-        #region ShowInProgressCommand
+        #region ShowActCreationCommand
 
-        public ICommand ShowInProgressCommand { get; }
+        public ICommand ShowActCreationCommand { get; }
 
-        private bool CanShowInProgressCommandExecute(object p) => true;
+        private bool CanShowActCreationCommandExecute(object p) => true;
 
-        private void OnShowInProgressCommandExecuted(object p)
+        private void OnShowActCreationCommandExecuted(object p)
         {
-            Content = _inProgress;
+            Content = _actCreationReport;
         }
 
         #endregion
-        #region ShowDocumentationCommand
 
-        public ICommand ShowDocumentationCommand { get; }
+        #region ShowDocumInWorkCommand
 
-        private bool CanShowDocumentationCommandExecute(object p) => true;
+        public ICommand ShowDocumInWorkCommand { get; }
 
-        private void OnShowDocumentationCommandExecuted(object p)
+        private bool CanShowDocumInWorkCommandExecute(object p) => true;
+
+        private void OnShowDocumInWorkCommandExecuted(object p)
         {
-            Content = _doc;
+            Content = _documInWorkReport;
+        }
+
+        #endregion
+
+        #region ShowInWorkCommand
+
+        public ICommand ShowInWorkCommand { get; }
+
+        private bool CanShowInWorkCommandExecute(object p) => true;
+
+        private void OnShowInWorkCommandExecuted(object p)
+        {
+            Content = _inWorkReport;
+        }
+
+        #endregion
+
+        #region ShowNoSpecCommand
+
+        public ICommand ShowNoSpecCommand { get; }
+
+        private bool CanShowNoSpecCommandExecute(object p) => true;
+
+        private void OnShowNoSpecCommandExecuted(object p)
+        {
+            Content = _noSpecReport;
+        }
+
+        #endregion
+
+        #region ShowOECStorageCommand
+
+        public ICommand ShowOECStorageCommand { get; }
+
+        private bool CanShowOECStorageCommandExecute(object p) => true;
+
+        private void OnShowOECStorageCommandExecuted(object p)
+        {
+            Content = _oecStorageReport;
         }
 
         #endregion
@@ -139,88 +140,50 @@ namespace CP_2021.ViewModels
 
         private void OnShowSKBCheckCommandExecuted(object p)
         {
-            Content = _skbCheck;
+            Content = _skbCheckReport;
         }
 
         #endregion
 
-        #region ShowOETSStorageCommand
+        #region ShowTimedGivingCommand
 
-        public ICommand ShowOETSStorageCommand { get; }
+        public ICommand ShowTimedGivingCommand { get; }
 
-        private bool CanShowOETSStorageCommandExecute(object p) => true;
+        private bool CanShowTimedGivingCommandExecute(object p) => true;
 
-        private void OnShowOETSStorageCommandExecuted(object p)
+        private void OnShowTimedGivingCommandExecuted(object p)
         {
-            Content = _oetsStorage;
+            Content = _timedGivingReport;
         }
 
         #endregion
 
-        #region ShowGivingStorageCommand
+        #region ShowWorkedDocsCommand
 
-        public ICommand ShowGivingStorageCommand { get; }
+        public ICommand ShowWorkedDocsCommand { get; }
 
-        private bool CanShowGivingStorageCommandExecute(object p) => true;
+        private bool CanShowWorkedDocsCommandExecute(object p) => true;
 
-        private void OnShowGivingStorageCommandExecuted(object p)
+        private void OnShowWorkedDocsCommandExecuted(object p)
         {
-            Content = _givingStorage;
+            Content = _workedDocsReport;
         }
 
         #endregion
 
-        #region ShowGivingReportsCommand
+        #region ShowVKOnStorageCommand
 
-        public ICommand ShowGivingReportsCommand { get; }
+        public ICommand ShowVKOnStorageCommand { get; }
 
-        private bool CanShowGivingReportsCommandExecute(object p) => true;
+        private bool CanShowVKOnStorageCommandExecute(object p) => true;
 
-        private void OnShowGivingReportsCommandExecuted(object p)
+        private void OnShowVKOnStorageCommandExecuted(object p)
         {
-            Content = _givingReports;
+            Content = _vkOnStorageReport;
         }
 
         #endregion
 
-        #region ShowActFormCommand
-
-        public ICommand ShowActFormCommand { get; }
-
-        private bool CanShowActFormCommandExecute(object p) => true;
-
-        private void OnShowActFormCommandExecuted(object p)
-        {
-            Content = _actFormReport;
-        }
-
-        #endregion
-
-        #region ShowByActCommand
-
-        public ICommand ShowByActCommand { get; }
-
-        private bool CanShowByActCommandExecute(object p) => true;
-
-        private void OnShowByActCommandExecuted(object p)
-        {
-            Content = _byActReport;
-        }
-
-        #endregion
-
-        #region ShowFirstPaymentCommand
-
-        public ICommand ShowFirstPaymentCommand { get; }
-
-        private bool CanShowFirstPaymentCommandExecute(object p) => true;
-
-        private void OnShowFirstPaymentCommandExecuted(object p)
-        {
-            Content = _firstPaymentReport;
-        }
-
-        #endregion
         #endregion
         #region События отчетов
 
@@ -255,35 +218,29 @@ namespace CP_2021.ViewModels
         public ReportsViewModel() 
         {
             #region Команды
-            ShowNoSpecCommand = new LambdaCommand(OnShowNoSpecCommandExecuted, CanShowNoSpecCommandExecute);
-            ShowSpecOnControlCommand = new LambdaCommand(OnShowSpecOnControlCommandExecuted, CanShowSpecOnControlCommandExecute);
-            ShowSpecOnVipiskCommand = new LambdaCommand(OnShowSpecOnVipiskCommandExecuted, CanShowSpecOnVipiskCommandExecute);
             ShowCoopWorkCommand = new LambdaCommand(OnShowCoopWorkCommandExecuted, CanShowCoopWorkCommandExecute);
-            ShowInProgressCommand = new LambdaCommand(OnShowInProgressCommandExecuted, CanShowInProgressCommandExecute);
-            ShowDocumentationCommand = new LambdaCommand(OnShowDocumentationCommandExecuted, CanShowDocumentationCommandExecute);
+            ShowActCreationCommand = new LambdaCommand(OnShowActCreationCommandExecuted, CanShowActCreationCommandExecute);
+            ShowDocumInWorkCommand = new LambdaCommand(OnShowDocumInWorkCommandExecuted, CanShowDocumInWorkCommandExecute);
+            ShowInWorkCommand = new LambdaCommand(OnShowInWorkCommandExecuted, CanShowInWorkCommandExecute);
+            ShowNoSpecCommand = new LambdaCommand(OnShowNoSpecCommandExecuted, CanShowNoSpecCommandExecute);
+            ShowOECStorageCommand = new LambdaCommand(OnShowOECStorageCommandExecuted, CanShowOECStorageCommandExecute);
             ShowSKBCheckCommand = new LambdaCommand(OnShowSKBCheckCommandExecuted, CanShowSKBCheckCommandExecute);
-            ShowOETSStorageCommand = new LambdaCommand(OnShowOETSStorageCommandExecuted, CanShowOETSStorageCommandExecute);
-            ShowGivingStorageCommand = new LambdaCommand(OnShowGivingStorageCommandExecuted, CanShowGivingStorageCommandExecute);
-            ShowGivingReportsCommand = new LambdaCommand(OnShowGivingReportsCommandExecuted, CanShowGivingReportsCommandExecute);
-            ShowActFormCommand = new LambdaCommand(OnShowActFormCommandExecuted, CanShowActFormCommandExecute);
-            ShowByActCommand = new LambdaCommand(OnShowByActCommandExecuted, CanShowByActCommandExecute);
-            ShowFirstPaymentCommand = new LambdaCommand(OnShowFirstPaymentCommandExecuted, CanShowFirstPaymentCommandExecute);
+            ShowTimedGivingCommand = new LambdaCommand(OnShowTimedGivingCommandExecuted, CanShowTimedGivingCommandExecute);
+            ShowWorkedDocsCommand = new LambdaCommand(OnShowWorkedDocsCommandExecuted, CanShowWorkedDocsCommandExecute);
+            ShowVKOnStorageCommand = new LambdaCommand(OnShowVKOnStorageCommandExecuted, CanShowVKOnStorageCommandExecute);
             #endregion
 
             #region Subscribe
-            ((NoSpecVM)(_noSpec.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((SpecificationsOnControlVM)(_onControl.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((SpecificationsInVipiskVM)(_inVipisk.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((CoopWorkVM)(_coopWork.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((InProgressVM)(_inProgress.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((DocumentationVM)(_doc.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((SKBCkeckVM)(_skbCheck.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((OETSStorageVM)(_oetsStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((GivingStorageVM)(_givingStorage.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((GivingReportsVM)(_givingReports.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((ActFormVM)(_actFormReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((ByActVM)(_byActReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
-            ((FirstPaymentVM)(_firstPaymentReport.DataContext)).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((ActCreationReportVM)_actCreationReport.DataContext).SendTaskIdToReportVM +=GetTaskIdFromReport;
+            ((DocumInWorkReportVM)_documInWorkReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((InWorkReportVM)_inWorkReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((NoSpecReportVM)_noSpecReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((OECStorageReportVM)_oecStorageReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((SKBCheckReportVM)_skbCheckReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((TimedGivingReportVM)_timedGivingReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((WorkedDocsReportVM)_workedDocsReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((VKOnStorageReportVM)_vkOnStorageReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
             #endregion
         }
     }

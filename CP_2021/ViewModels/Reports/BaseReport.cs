@@ -52,6 +52,18 @@ namespace CP_2021.ViewModels.Reports
 
         #endregion
 
+        #region Manufactirers
+
+        private ObservableCollection<string> _manufactirers;
+
+        public ObservableCollection<string> Manufactirers
+        {
+            get => _manufactirers;
+            set => Set(ref _manufactirers, value);
+        }
+
+        #endregion
+
         #region SelectedHead
 
         private string _selectedHead;
@@ -60,6 +72,18 @@ namespace CP_2021.ViewModels.Reports
         {
             get => _selectedHead;
             set => Set(ref _selectedHead, value);
+        }
+
+        #endregion
+
+        #region SelectedManufacture
+
+        private string _selectedManufacture;
+
+        public string SelectedManufacture
+        {
+            get => _selectedManufacture;
+            set => Set(ref _selectedManufacture, value);
         }
 
         #endregion
@@ -100,6 +124,27 @@ namespace CP_2021.ViewModels.Reports
         private void OnProjectChangedCommandExecuted(object p)
         {
             Content = new ObservableCollection<T>(FullContent.Where(t => t.Project == SelectedHead));
+            if(!String.IsNullOrEmpty(SelectedManufacture))
+            {
+                Content = new ObservableCollection<T>(Content.Where(t => t.Manufacturer == SelectedManufacture));
+            }
+        }
+
+        #endregion
+
+        #region ManufactureChangedCommand
+
+        public ICommand ManufactureChangedCommand { get; }
+
+        private bool CanManufactureChangedCommandExecute(object p) => true;
+
+        private void OnManufactureChangedCommandExecuted(object p)
+        {
+            Content = new ObservableCollection<T>(FullContent.Where(t => t.Manufacturer == SelectedManufacture));
+            if(!String.IsNullOrEmpty(SelectedHead))
+            {
+                Content = new ObservableCollection<T>(Content.Where(t => t.Project == SelectedHead));
+            }
         }
 
         #endregion
@@ -140,6 +185,7 @@ namespace CP_2021.ViewModels.Reports
             ProjectChangedCommand = new LambdaCommand(OnProjectChangedCommandExecuted, CanProjectChangedCommandExecute);
             GotoTaskCommand = new LambdaCommand(OnGotoTaskCommandExecuted, CanGotoTaskCommandExecute);
             GotoParentTaskCommand = new LambdaCommand(OnGotoParentTaskCommandExecuted, CanGotoParentTaskCommandExecute);
+            ManufactureChangedCommand = new LambdaCommand(OnManufactureChangedCommandExecuted, CanManufactureChangedCommandExecute);
         }
     }
 }

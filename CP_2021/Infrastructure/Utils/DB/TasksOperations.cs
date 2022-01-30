@@ -79,6 +79,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             _context.Database.ExecuteSqlRaw(Procedures.SetBold, taskId, isBold);
         }
 
+        public static void SetItalic(Guid taskId,bool isItalic)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.SetItalic, taskId, isItalic);
+        }
+
         public static void SetFontSize(Guid taskId, int fontSize)
         {
             _context.Database.ExecuteSqlRaw(Procedures.SetFontSize, taskId, fontSize);
@@ -228,7 +233,7 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         public static TimedGivingWindowEntity GetTimedGivingData(Guid taskId)
         {
-            return _context.TimedGiving.FromSqlRaw(Procedures.GetTimedGivingData,taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
+            return _context.TimedGivings.FromSqlRaw(Procedures.GetTimedGivingData,taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
         }
 
         public static void UpdateTimedGivingData(Guid id, bool isTimedGiving, bool isSKBCheck, bool isOECStorage, string skbNumber, string fio, DateTime? givingDate, string note)
@@ -287,6 +292,56 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.SearchGoTo.FromSqlRaw(Procedures.GetAllParents, taskId).AsNoTracking();
         }
         #endregion
+
+        public static IEnumerable<ManufactureNames> GetManufactures()
+        {
+            return _context.ManufactureNames.FromSqlRaw(Procedures.GetManufactureNames).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<ActCreation> GetActCreation()
+        {
+            return _context.ActCreation.FromSqlRaw(Procedures.GetActCreation).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<DocumInWork> GetDocumInWork()
+        {
+            return _context.DocumInWork.FromSqlRaw(Procedures.GetDocumInWork).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<InWork> GetInWork()
+        {
+            return _context.InWork.FromSqlRaw(Procedures.GetInWork).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<NoSpec> GetNoSpec()
+        {
+            return _context.NoSpec.FromSqlRaw(Procedures.GetNoSpec).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<OECStorage> GetOECStorage()
+        {
+            return _context.OECStorage.FromSqlRaw(Procedures.GetOECStorage).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<SKBCheck> GetSKBCheck()
+        {
+            return _context.SKBCheck.FromSqlRaw(Procedures.GetSKBCheck).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<TimedGiving> GetTimedGiving()
+        {
+            return _context.TimedGiving.FromSqlRaw(Procedures.GetTimedGivingReport).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<WorkedDocs> GetWorkedDocs()
+        {
+            return _context.WorkedDocs.FromSqlRaw(Procedures.GetWorkedDocs).AsNoTracking().AsEnumerable();
+        }
+
+        public static IEnumerable<VKOnStorage> GetVKOnStorage()
+        {
+            return _context.VKOnStorage.FromSqlRaw(Procedures.GetVKOnStorage).AsNoTracking().AsEnumerable();
+        }
 
         static TasksOperations()
         {

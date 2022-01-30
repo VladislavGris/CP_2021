@@ -2,20 +2,34 @@
               xmlns:local="clr-namespace:CP_2021.Data.doc"
               ColumnWidth="400" FontSize="14" FontFamily="Georgia">
     <Paragraph>
-        Склад ОЭЦ
+        <Bold>Склад ОЭЦ</Bold>
     </Paragraph>
     <Paragraph>
-        Условия формирования:
-        - Наличие галочки Склад ОЭЦ(столбец Временная выдача)
-        Сортировка по:
-        - проекту
+        <Bold>Условия формирования:</Bold>
     </Paragraph>
     <Paragraph>
-        Вывод:
-        - Документ
-        - Изделие
-        - Количество
-        - Стелаж(столбец Ведомость комплектации)
-        - Полка(столбец Ведомость комплектации)
+        <ListBox>
+            <ListBoxItem>Наличие галочки Склад ОЭЦ(столбец Временная выдача)</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Сортировка по:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>проекту</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Вывод:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Документ</ListBoxItem>
+            <ListBoxItem>Изделие</ListBoxItem>
+            <ListBoxItem>Количество</ListBoxItem>
+            <ListBoxItem>Стелаж(столбец Ведомость комплектации)</ListBoxItem>
+            <ListBoxItem>Полка(столбец Ведомость комплектации)</ListBoxItem>
+        </ListBox>
     </Paragraph>
 </FlowDocument>

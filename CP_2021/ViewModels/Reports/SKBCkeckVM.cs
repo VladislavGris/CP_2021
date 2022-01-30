@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace CP_2021.ViewModels.Reports
 {
-    internal class SKBCkeckVM : BaseReport<SKBCheck>
+    internal class SKBCkeckVM : BaseReport<Models.ViewEntities.SKBCheckReport>
     {
         #region GenerateReportCommand
 
@@ -27,7 +27,7 @@ namespace CP_2021.ViewModels.Reports
             {
                 HeadTasks.Add(head.Task);
             }
-            FullContent = Content = new ObservableCollection<SKBCheck>(ApplicationUnitSingleton.GetInstance().dbUnit.SKBCheck.Get());
+            FullContent = Content = new ObservableCollection<Models.ViewEntities.SKBCheckReport>(ApplicationUnitSingleton.GetInstance().dbUnit.SKBCheck.Get());
         }
 
         #endregion

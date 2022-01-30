@@ -41,10 +41,19 @@ namespace CP_2021.Data
         public virtual DbSet<UserNames> UserNames { get; set; }
         public virtual DbSet<SearchProcResult> SearchResults { get; set; }
         public virtual DbSet<SearchGoTo> SearchGoTo { get; set; }
-        public virtual DbSet<TimedGivingWindowEntity> TimedGiving { get; set; }
+        public virtual DbSet<TimedGivingWindowEntity> TimedGivings { get; set; }
 
         public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
         public virtual DbSet<HeadTasks> HeadTasks { get; set; }
+        public virtual DbSet<ActCreation> ActCreation { get; set; }
+        public virtual DbSet<DocumInWork> DocumInWork { get; set; }
+        public virtual DbSet<InWork> InWork { get; set; }
+        public virtual DbSet<NoSpec> NoSpec { get; set; }
+        public virtual DbSet<OECStorage> OECStorage { get; set; }
+        public virtual DbSet<SKBCheck> SKBCheck { get; set; }
+        public virtual DbSet<TimedGiving> TimedGiving { get; set; }
+        public virtual DbSet<WorkedDocs> WorkedDocs { get; set; }
+        public virtual DbSet<VKOnStorage> VKOnStorage { get; set; }
         //public virtual DbSet<NoSpecifications> NoSpecifications { get; set; }
         public virtual DbSet<SpecificationsOnControl> SpecOnControl { get; set; }
         public virtual DbSet<SpecificationsInVipisk> SpecInVipisk { get; set; }
@@ -147,7 +156,7 @@ namespace CP_2021.Data
                 i.HasNoKey();
                 i.ToView("Documentation");
             });
-            modelBuilder.Entity<SKBCheck>(i =>
+            modelBuilder.Entity<SKBCheckReport>(i =>
             {
                 i.HasNoKey();
                 i.ToView("SKBCheck");

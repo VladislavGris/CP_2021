@@ -2,18 +2,32 @@
               xmlns:local="clr-namespace:CP_2021.Data.doc"
               ColumnWidth="400" FontSize="14" FontFamily="Georgia">
     <Paragraph>
-        Отработка документации
+        <Bold>Отработка документации</Bold>
     </Paragraph>
     <Paragraph>
-        Условия формирования:
-        - Статус "Отработка документации"
-        Сортировка по:
-        - проекту
+        <Bold>Условия формирования:</Bold>
     </Paragraph>
     <Paragraph>
-        Вывод:
-        - Документ
-        - Изделие на уровень выше
-        - Изделие
+        <ListBox>
+            <ListBoxItem>Статус "Отработка документации"</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Сортировка по:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>проекту</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Вывод:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Документ</ListBoxItem>
+            <ListBoxItem>Изделие на уровень выше</ListBoxItem>
+            <ListBoxItem>Изделие</ListBoxItem>
+        </ListBox>
     </Paragraph>
 </FlowDocument>

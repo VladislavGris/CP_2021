@@ -30,6 +30,8 @@
     <convertComp:ShelfVisibility x:Key="ShelfVisibility"/>
     <convertUtil:AddingPercentage x:Key="AddingPercentage"/>
     <convert:UserNamesConverter x:Key="UserNamesConverter"/>
+    <convert:ItalicConverter x:Key="ItalicConverter"/>
+    <convert:ColorFromItalicConverter x:Key="ColorFromItalic"/>
 
     <!--Brushes #575757 -->
     <SolidColorBrush x:Key="ForegroundBrush" Color="White" />

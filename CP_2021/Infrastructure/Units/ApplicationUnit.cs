@@ -34,7 +34,7 @@ namespace CP_2021.Infrastructure.Units
         private BaseRepository<CoopWork> _coopWork;
         private BaseRepository<InProgressView> _inProgressView;
         private BaseRepository<DocumentationView> _docView;
-        private BaseRepository<SKBCheck> _skbCheck;
+        private BaseRepository<SKBCheckReport> _skbCheck;
         private BaseRepository<OETSStorage> _oetsStorage;
         private BaseRepository<GivingStorage> _givingStorage;
         private BaseRepository<GivingReports> _givingReports;
@@ -214,11 +214,11 @@ namespace CP_2021.Infrastructure.Units
                 return _docView ?? (_docView = new BaseRepository<DocumentationView>(_context));
             }
         }
-        public IRepository<SKBCheck> SKBCheck
+        public IRepository<SKBCheckReport> SKBCheck
         {
             get
             {
-                return _skbCheck ?? (_skbCheck = new BaseRepository<SKBCheck>(_context));
+                return _skbCheck ?? (_skbCheck = new BaseRepository<SKBCheckReport>(_context));
             }
         }
 

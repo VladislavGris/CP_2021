@@ -1,11 +1,7 @@
 ﻿using CP_2021.Infrastructure.Commands;
 using CP_2021.ViewModels.Base;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -18,10 +14,18 @@ namespace CP_2021.ViewModels
     {
         #region Свойства
 
-        private static string _basePath = "Data/doc/";
-        private string _noSpecNumberPath =  $"{_basePath}NoSpecificationNumber.xaml";
-        private string _searchDescriptionPath = $"{_basePath}SearchDescriptions.xaml";
-        private string _nalichieNaSkladePath = $"{_basePath}NalichieNaSklade.xaml";
+        private static readonly string _basePath = "Data/doc/";
+        private readonly string _searchDescriptionPath = $"{_basePath}SearchDescriptions.xaml";
+        private readonly string _actCreation = $"{_basePath}ActCreation.xaml";
+        private readonly string _coopWorkReport = $"{_basePath}CoopWorkReport.xaml";
+        private readonly string _documInWorkReport = $"{_basePath}DocumInWorkReport.xaml";
+        private readonly string _inWorkReport = $"{_basePath}InWorkReport.xaml";
+        private readonly string _noSpecReport = $"{_basePath}NoSpecReport.xaml";
+        private readonly string _oECStorage = $"{_basePath}OECStorage.xaml";
+        private readonly string _sKBCheck = $"{_basePath}SKBCheck.xaml";
+        private readonly string _timedGivingReport = $"{_basePath}TimedGivingReport.xaml";
+        private readonly string _workedDocsReport = $"{_basePath}WorkedDocsReport.xaml";
+        private readonly string _vkOnStorageReport = $"{_basePath}VKOnStorage.xaml";
 
         #region ContentContainerContent
 
@@ -53,37 +57,35 @@ namespace CP_2021.ViewModels
                 case "SearchDescriptions":
                     LoadDocument(_searchDescriptionPath);
                     break;
-                case "NoSpecNum":
-                    LoadDocument(_noSpecNumberPath);
+                case "ActCreation":
+                    LoadDocument(_actCreation);
                     break;
-                case "NalichieNaSklade":
-                    LoadDocument(_nalichieNaSkladePath);
+                case "CoopWorkReport":
+                    LoadDocument(_coopWorkReport);
                     break;
-                case "PredostavlenieDavalchOtch":
+                case "DocumInWorkReport":
+                    LoadDocument(_documInWorkReport);
                     break;
-                case "SpecifNaControle":
+                case "InWorkReport":
+                    LoadDocument(_inWorkReport);
                     break;
-                case "SpecifKVipisk":
+                case "NoSpecReport":
+                    LoadDocument(_noSpecReport);
                     break;
-                case "VRabote":
+                case "OECStorage":
+                    LoadDocument(_oECStorage);
                     break;
-                case "OtrabotkDoc":
+                case "SKBCheck":
+                    LoadDocument(_sKBCheck);
                     break;
-                case "FormirovanieActov":
+                case "TimedGivingReport":
+                    LoadDocument(_timedGivingReport);
                     break;
-                case "ProverkaSKB":
+                case "WorkedDocsReport":
+                    LoadDocument(_workedDocsReport);
                     break;
-                case "SkladO":
-                    break;
-                case "VRabotePoIsp":
-                    break;
-                case "GotovPoIsp":
-                    break;
-                case "PlanProizv":
-                    break;
-                case "IzdZaPeriod":
-                    break;
-                default:
+                case "VKOnStorage":
+                    LoadDocument(_vkOnStorageReport);
                     break;
             }
         }
@@ -111,6 +113,10 @@ namespace CP_2021.ViewModels
             {
                 MessageBox.Show("Ошибка загрузки документа");
             }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Ошибка при открытии файла: {ex.Message}");
+            }
             
         }
 
@@ -125,14 +131,7 @@ namespace CP_2021.ViewModels
             #endregion
 
             DocumentContent = new FlowDocumentScrollViewer();
-            using(FileStream fs = File.Open(_noSpecNumberPath, FileMode.Open))
-            {
-                FlowDocument doc = XamlReader.Load(fs) as FlowDocument;
-                if(doc != null)
-                {
-                    DocumentContent.Document = doc;
-                }
-            }
+            LoadDocument(_searchDescriptionPath);
         }
     }
 }

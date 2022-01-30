@@ -2,18 +2,32 @@
               xmlns:local="clr-namespace:CP_2021.Data.doc"
               ColumnWidth="400" FontSize="14" FontFamily="Georgia">
     <Paragraph>
-        Формирование актов
+        <Bold>Формирование актов</Bold>
     </Paragraph>
     <Paragraph>
-        Условия формирования:
-        - Наличие галочки Формирование актв(столбец Акт расходования)
-        Сортировка по:
-        - проекту
+        <Bold>Условия формирования:</Bold>
     </Paragraph>
     <Paragraph>
-        Вывод:
-        - Документ
-        - Изделие
-        - Количество
+        <ListBox>
+            <ListBoxItem>Наличие галочки Формирование актв(столбец Акт расходования)</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Сортировка по:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>проекту</ListBoxItem>
+        </ListBox>
+    </Paragraph>
+    <Paragraph>
+        <Bold>Вывод:</Bold>
+    </Paragraph>
+    <Paragraph>
+        <ListBox>
+            <ListBoxItem>Документ</ListBoxItem>
+            <ListBoxItem>Изделие</ListBoxItem>
+            <ListBoxItem>Количество</ListBoxItem>
+        </ListBox>
     </Paragraph>
 </FlowDocument>

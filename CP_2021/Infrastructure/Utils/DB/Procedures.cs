@@ -35,6 +35,8 @@
         public static string PasteTask = "exec PasteTask {0},{1},{2}";
         /// <summary>TaskId, BoldValue</summary>
         public static string SetBold = "exec SetBold {0},{1}";
+        /// <summary>TaskId, ItalicValue</summary>
+        public static string SetItalic = "exec SetItalic {0},{1}";
         /// <summary>TaskId, UnderlineValue</summary>
         public static string SetUnderline = "exec SetUnderline {0},{1}";
         /// <summary>TaskId, FontSizeValue</summary>
@@ -99,10 +101,21 @@
 
         public static string GetHeadTasks = "exec GetHeadTasks";
         public static string GetManufactureNames = "exec GetManufactureNames";
-        public static string GetCoopWork = "exec GetCoopWork";
+        
         public static string GetTasksInProgress = "exec GetTasksInProgress";
         public static string GetSpecificationsOnControl = "exec GetSpecificationsOnControl";
         public static string GetSpecificationsInVipisk = "exec GetSpecificationsInVipisk";
+
+        public static string GetCoopWork = "exec GetCoopWork";
+        public static string GetActCreation = "exec GetActCreation";
+        public static string GetDocumInWork = "exec GetDocumInWork";
+        public static string GetInWork = "exec GetInWork";
+        public static string GetNoSpec = "exec GetNoSpec";
+        public static string GetOECStorage = "exec GetOECStorage";
+        public static string GetSKBCheck = "exec GetSKBCheck";
+        public static string GetTimedGivingReport = "exec GetTimedGivingReport";
+        public static string GetWorkedDocs = "exec GetWorkedDocs";
+        public static string GetVKOnStorage = "exec GetVKOnStorage";
 
         public static string SearchProductionPlan = "exec SearchProductionPlan {0}";
         public static string SearchAct = "exec SearchAct {0}";

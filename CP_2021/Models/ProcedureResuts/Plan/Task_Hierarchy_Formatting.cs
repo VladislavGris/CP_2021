@@ -50,7 +50,12 @@ namespace CP_2021.Models.ProcedureResuts.Plan
             get => _isBold;
             set => Set(ref _isBold, value);
         }
-        public bool IsItalic { get; set; }
+        private bool _isItalic;
+        public bool IsItalic
+        {
+            get => _isItalic;
+            set => Set(ref _isItalic, value);
+        }
         public bool IsUnderline { get; set; }
         public string FontFamily { get; set; }
         private int _fontSize;

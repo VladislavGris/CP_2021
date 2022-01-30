@@ -44,6 +44,8 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                         {
                             Entity.ActCreation = false;
                             Entity.ByAct = true;
+                            TasksOperations.SetItalic(_task.data.Id, true);
+                            _task.data.IsItalic = true;
                         }
                         TasksOperations.UpdateConsumeActData(Entity.Id, 
                             Entity.ActNumber, 
@@ -51,6 +53,8 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                             Entity.ActCreation, 
                             Entity.ByAct, 
                             Entity.Note);
+                        _task.data.Completion = 0;
+                        TasksOperations.UpdateProductionPlan(_task.data.Id, _task.data.IncDoc, _task.data.Name, _task.data.Count, _task.data.SpecCost, _task.data.Note, _task.data.Expanded, _task.data.Completion, _task.data.EditingBy);
                         _task.data.ActNumber = Entity.ActNumber;
                         _task.data.ActDate = Entity.ActDate;
                         _task.data.ActCreation = Entity.ActCreation;
