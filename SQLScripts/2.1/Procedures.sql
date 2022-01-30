@@ -534,7 +534,7 @@ select p1.Id as Id,
 		i.Executor_Name as Executor1,
 		i.Install_Executor_Name as Executor2,
 		i.Giving_Date as GivingDate,
-		i.Completion_Date as CompletionDate
+		i.Projected_Date as CompletionDate
 from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
 inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
 inner join Complectation c on c.Production_Task_Id = p1.Id
@@ -580,6 +580,7 @@ select p1.Id as Id,
 		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
 		Manufacture.M_Name as Manufacturer,
 		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		p1.P_Count as Count,
 		c.Rack,
 		c.Shelf
 from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
@@ -684,12 +685,13 @@ select p1.Id as Id,
 from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
 inner join Manufacture on p1.Id = Manufacture.Production_Task_Id
 inner join Complectation c on c.Production_Task_Id = p1.Id
-where p1.Completion = 10
+where p1.Completion = 2
 go
---drop view OECStorage
+--drop view VKOnStorage
 create procedure GetVKOnStorage as
 begin
 set nocount on;
 select * from VKOnStorage;
 end
 exec GetVKOnStorage;
+select * from Production_Plan where Id = '05749d79-a297-4678-b32b-3492d8df8adc';
