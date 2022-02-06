@@ -9,6 +9,7 @@
              xmlns:convert="clr-namespace:CP_2021.Infrastructure.Converters"
              xmlns:valid="clr-namespace:CP_2021.Infrastructure.Validators"
              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:ext="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
@@ -130,7 +131,13 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <!--<ComboBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" ItemsSource="{Binding FontFamilies}" Style="{StaticResource SearchBoxStyle}"/>-->
+                <ext:ColorPicker Grid.Row="0" Grid.Column="0" SelectedColor="{Binding SelectedTask.data.Color, Converter={StaticResource ColorPickerConverter}}">
+                    <ie:Interaction.Triggers>
+                        <ie:EventTrigger EventName="SelectedColorChanged">
+                            <ie:InvokeCommandAction Command="{Binding DataContext.ColorSelectionChanged, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
+                        </ie:EventTrigger>
+                    </ie:Interaction.Triggers>
+                </ext:ColorPicker>
                 <ComboBox Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0" ItemsSource="{Binding FontSizes}" Style="{StaticResource SearchBoxStyle}" SelectedValue="{Binding SelectedFontSize}"/>
                 <Button Grid.Column="2" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Применить шрифт" Command="{Binding SetFontSize}">
                     <fa:ImageAwesome Icon="Solid_Check" Foreground="{StaticResource ForegroundBrush}"/>
@@ -260,7 +267,8 @@
                             <TextBlock Text="{Binding data.Completion, Converter={StaticResource CompletionConverter}}"
                                        HorizontalAlignment="Left" 
                                        TextWrapping="Wrap" 
-                                       FontSize="{Binding data.FontSize}"/>
+                                       FontSize="{Binding data.FontSize}"
+                                       Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -328,7 +336,8 @@
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ManagDoc, Mode=TwoWay}"
                                     FontSize="{Binding data.FontSize}"
-                                    HorizontalAlignment="Center"/>
+                                    HorizontalAlignment="Center"
+                                    Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenDocumentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
@@ -393,7 +402,7 @@
                                            MaxWidth="200"
                                            FontSize="{Binding data.FontSize}"
                                            FontStyle="{Binding data.IsItalic, Converter={StaticResource ItalicConverter}}"
-                                           Foreground="{Binding data.IsItalic, Converter={StaticResource ColorFromItalic}}"/>
+                                           Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}, UpdateSourceTrigger=PropertyChanged}"/>
 
                             </Grid>
                         </DataTemplate>
@@ -417,6 +426,7 @@
                                            TextWrapping="Wrap"
                                            MaxWidth="60"
                                            FontSize="{Binding data.FontSize}"
+                                       Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"
                                        HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -439,6 +449,7 @@
                                            TextWrapping="Wrap"
                                            MaxWidth="100"
                                            FontSize="{Binding data.FontSize}"
+                                       Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"
                                        HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -483,6 +494,7 @@
                                            Grid.Row="0"
                                            FontSize="{Binding data.FontSize}"
                                            TextWrapping="Wrap"
+                                           Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"
                                            HorizontalAlignment="Center"/>
                                 <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Percentage, Converter={StaticResource PercentageVisibility}, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
@@ -559,7 +571,8 @@
                             <Grid>
                                 <TextBlock Text="{Binding data.M_Name}"
                                        HorizontalAlignment="Center"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                           Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenManufactureWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
 
@@ -594,7 +607,8 @@
                                            TextWrapping="Wrap"
                                            MaxWidth="200"
                                            FontSize="{Binding data.FontSize}"
-                                       HorizontalAlignment="Center"/>
+                                       HorizontalAlignment="Center"
+                                       Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -631,12 +645,14 @@
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ActNumber, Mode=TwoWay}"
                                            FontSize="{Binding data.FontSize}"
-                                               HorizontalAlignment="Center"/>
+                                               HorizontalAlignment="Center"
+                                               Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                                     <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ActDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"
                                            FontSize="{Binding data.FontSize}"
-                                               HorizontalAlignment="Center"/>
+                                               HorizontalAlignment="Center"
+                                               Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                                 </StackPanel>
                                 <fa:ImageAwesome Icon="Regular_FolderOpen" Width="40" Height="40" Foreground="Black" Visibility="{Binding data.ActCreation,Converter={StaticResource TreeToggleConverter}}" ToolTip="Формирование акта"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenActWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
@@ -683,7 +699,8 @@
                             <Grid>
                                 <TextBlock Text="{Binding data.GivingDate, Converter={StaticResource DateConverter}}"
                                        HorizontalAlignment="Center"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                           Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenInProductionWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
@@ -697,7 +714,8 @@
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="400"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                       Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>

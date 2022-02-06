@@ -23,7 +23,6 @@
     <convert:ManagDocBackgroundConverter x:Key="ManagDocConverter"/>
     <convert:CompletionConverter x:Key="CompletionConverter"/>
     <convert:ShowReportButtonVisibilityConverter x:Key="ShowReportConverter"/>
-    <convert:SendReportButtonVisibilityConverter x:Key="SendReportConverter"/>
     <convert:MultiParameterConverter x:Key="MultiParameterConverter"/>
     <convert:TextBoxToDecimalConverter x:Key="StringToDecimalConverter"/>
     <convertComp:PercentageVisibility x:Key="PercentageVisibility"/>
@@ -34,6 +33,8 @@
     <convert:ItalicConverter x:Key="ItalicConverter"/>
     <convert:ColorFromItalicConverter x:Key="ColorFromItalic"/>
     <convert:RelativeDateBackgroundConverter x:Key="DateColorConverter"/>
+    <convert:StringToColorConverter x:Key="StringToColorConverter"/>
+    <convert:ColorPickerConverter x:Key="ColorPickerConverter"/>
 
     <valid:NoteLengthValidator x:Key="NoteLengthValidator" ValidationStep="UpdatedValue"/>
 

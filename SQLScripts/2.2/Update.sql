@@ -63,4 +63,99 @@ begin
 	select * from SKBNumbers
 end
 go
-exec GetSKBNumbers
+alter table Formatting
+add Color nvarchar(10) not null default('#FF000000');
+go
+create procedure SetColor @id uniqueidentifier, @color nvarchar(10)
+as
+begin
+set nocount on;
+update Formatting
+set Color = @color
+where ProductionTaskId = @id;
+end;
+--drop procedure SerColor
+go
+create procedure GetTaskById @id uniqueidentifier
+as
+begin
+	set nocount on;
+	declare @idCopy uniqueidentifier;
+	set @idCopy = @id
+	select top 1 p.Id, p.Inc_Doc, p.Manag_Doc, p.Task_Name, p.P_Count, p.Specification_Cost, p.Expend_Num, p.Note, p.Expanded, p.Completion, p.EditingBy,
+				h.ChildId, h.LineOrder, h.ParentId,
+				f.FontFamily, f.FontSize, f.IsBold, f.IsItalic, f.IsUnderline,f.Color,
+				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
+				g.G_State,
+				m.M_Name,
+				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
+				i.Giving_Date,
+				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
+				(select count(*) from HierarchyDB h2 where h2.ParentId = p.Id) ChildrenCount
+		from Production_Plan p 
+		inner join Formatting f on p.Id = f.ProductionTaskId
+		inner join Complectation c on p.Id = c.Production_Task_Id
+		inner join Giving g on p.Id = g.Production_Task_Id
+		inner join Manufacture m on p.Id = m.Production_Task_Id
+		inner join Act a on p.Id = a.ProductionTaskId
+		inner join In_Production i on p.Id = i.Production_Task_Id
+		inner join HierarchyDB h on p.Id = h.ChildId
+		inner join TimedGiving tg on tg.ProductionTaskId = p.Id
+		where p.Id = @idCopy;
+END
+--DROP PROCEDURE GetTaskById;
+go
+create procedure GetTasksByParent @parentId uniqueidentifier = NULL
+as
+begin
+	set nocount on;
+	declare @idCopy uniqueidentifier;
+	select @idCopy = @parentId;
+	if @idCopy is null
+		select p.Id, p.Inc_Doc, p.Manag_Doc, p.Task_Name, p.P_Count, p.Specification_Cost, p.Expend_Num, p.Note, p.Expanded, p.Completion, p.EditingBy,
+				h.ChildId, h.LineOrder, h.ParentId,
+				f.FontFamily, f.FontSize, f.IsBold, f.IsItalic, f.IsUnderline,f.Color,
+				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
+				g.G_State,
+				m.M_Name,
+				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
+				i.Giving_Date,
+				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
+				(select count(*) from HierarchyDB h2 where h2.ParentId = p.Id) ChildrenCount
+		from Production_Plan p 
+		inner join Manufacture m on p.Id = m.Production_Task_Id
+		inner join Formatting f on p.Id = f.ProductionTaskId
+		inner join Complectation c on p.Id = c.Production_Task_Id
+		inner join Giving g on p.Id = g.Production_Task_Id
+		inner join Act a on p.Id = a.ProductionTaskId
+		inner join In_Production i on p.Id = i.Production_Task_Id
+		inner join HierarchyDB h on p.Id = h.ChildId
+		inner join TimedGiving tg on tg.ProductionTaskId = p.Id
+		where h.ParentId is null
+		order by h.LineOrder
+		--option(recompile);
+	else
+		select p.Id, p.Inc_Doc, p.Manag_Doc, p.Task_Name, p.P_Count, p.Specification_Cost, p.Expend_Num, p.Note, p.Expanded, p.Completion, p.EditingBy,
+				h.ChildId, h.LineOrder, h.ParentId,
+				f.FontFamily, f.FontSize, f.IsBold, f.IsItalic, f.IsUnderline,f.Color,
+				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
+				g.G_State,
+				m.M_Name,
+				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
+				i.Giving_Date,
+				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
+				(select count(*) from HierarchyDB h2 where h2.ParentId = p.Id) ChildrenCount
+		from Production_Plan p 
+		inner join Manufacture m on p.Id = m.Production_Task_Id
+		inner join Formatting f on p.Id = f.ProductionTaskId
+		inner join Complectation c on p.Id = c.Production_Task_Id
+		inner join Giving g on p.Id = g.Production_Task_Id
+		inner join Act a on p.Id = a.ProductionTaskId
+		inner join In_Production i on p.Id = i.Production_Task_Id
+		inner join HierarchyDB h on p.Id = h.ChildId
+		inner join TimedGiving tg on tg.ProductionTaskId = p.Id
+		where h.ParentId = @idCopy
+		order by h.LineOrder
+		--option(recompile);
+end
+--drop procedure GetTasksByParent;

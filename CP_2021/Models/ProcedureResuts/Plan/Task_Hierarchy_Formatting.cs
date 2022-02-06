@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Windows.Media;
 
 namespace CP_2021.Models.ProcedureResuts.Plan
 {
@@ -63,6 +64,13 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         {
             get => _fontSize;
             set => Set(ref _fontSize, value);
+        }
+
+        private string _color;
+        public string Color
+        {
+            get => _color;
+            set => Set(ref _color, value);
         }
         // Complectation
         [NotMapped]

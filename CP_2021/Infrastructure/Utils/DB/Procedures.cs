@@ -41,6 +41,8 @@
         public static string SetUnderline = "exec SetUnderline {0},{1}";
         /// <summary>TaskId, FontSizeValue</summary>
         public static string SetFontSize = "exec SetFontSize {0},{1}";
+        /// <summary>TaskId, </summary>
+        public static string SetColor = "exec SetColor {0},{1}";
 
         public static string ExportTaskWithChildren = "exec ExportTaskWithChildren {0}, {1} output";
         /// <summary>Filepath, parentId, lineOrder</summary>

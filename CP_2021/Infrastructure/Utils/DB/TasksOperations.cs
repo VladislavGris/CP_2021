@@ -89,6 +89,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             _context.Database.ExecuteSqlRaw(Procedures.SetFontSize, taskId, fontSize);
         }
 
+        public static void SetColor(Guid taskId,string color)
+        {
+            _context.Database.ExecuteSqlRaw(Procedures.SetColor, taskId, color);
+        }
+
         public static IEnumerable<HeadTasks> GetHeadTasks()
         {
             return _context.HeadTasks.FromSqlRaw(Procedures.GetHeadTasks).AsNoTracking().AsEnumerable();

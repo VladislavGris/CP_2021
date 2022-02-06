@@ -7,7 +7,6 @@ namespace CP_2021.Models.ProcedureResuts.PaymentReports
     {
         public string ManufactureName { get; set; }
         public string SpecNum { get; set; }
-        public string ManagDoc { get; set; }
         public string SpecSum { get; set; }
         public string ProjectMan { get; set; }
         public string FirstPaymentSum { get; set; }

@@ -24,6 +24,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace CP_2021.ViewModels
 {
@@ -53,6 +54,18 @@ namespace CP_2021.ViewModels
         {
             get => _user;
             set => Set(ref _user, value);
+        }
+
+        #endregion
+
+        #region Color
+
+        private Color _color;
+
+        public Color Color
+        {
+            get => _color;
+            set => Set(ref _color, value);
         }
 
         #endregion
@@ -1001,6 +1014,28 @@ namespace CP_2021.ViewModels
         }
 
         #endregion
+
+        #region ColorSelectionChanged
+
+        public ICommand ColorSelectionChanged { get; }
+
+        private bool CanColorSelectionChangedExecute(object p) => SelectedTask != null;
+
+        private void OnColorSelectionChangedExecuted(object p)
+        {
+            if(SelectedTask != null && SelectedTask.data!=null)
+            {
+                TasksOperations.SetColor(SelectedTask.data.Id, SelectedTask.data.Color);
+            }
+            else
+            {
+                MessageBox.Show("Не удалось выполнить операцию. Строка не выбрана или данные отсутствуют");
+            }
+            
+        }
+
+        #endregion
+
         #endregion
         #region Методы
 
@@ -1106,6 +1141,7 @@ namespace CP_2021.ViewModels
             ImportTaskCommand = new LambdaCommand(OnImportTaskCommandExecuted, CanImportTaskCommandExecute);
             SetFontSize = new LambdaCommand(OnSetFontSizeCommandExecuted, CanSetFontSizeCommandExecute);
             SetCurrentElementFontSize = new LambdaCommand(OnSetCurrentElementFontSizeCommandExecuted, CanSetCurrentElementFontSizeCommandExecute);
+            ColorSelectionChanged = new LambdaCommand(OnColorSelectionChangedExecuted, CanColorSelectionChangedExecute);
             #endregion
 
             FontSizes = new List<int> {10, 12, 14, 16, 18, 20, 22 };
