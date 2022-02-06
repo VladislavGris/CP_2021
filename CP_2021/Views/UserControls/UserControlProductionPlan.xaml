@@ -327,7 +327,8 @@
                                     MaxWidth="140"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ManagDoc, Mode=TwoWay}"
-                                    FontSize="{Binding data.FontSize}"/>
+                                    FontSize="{Binding data.FontSize}"
+                                    HorizontalAlignment="Center"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenDocumentWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
                         </DataTemplate>
@@ -414,7 +415,8 @@
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="200"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                       HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -435,7 +437,8 @@
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="200"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                       HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -477,7 +480,8 @@
                                            Grid.Column="0" 
                                            Grid.ColumnSpan="3" 
                                            Grid.Row="0"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                           HorizontalAlignment="Center"/>
                                 <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Percentage, Converter={StaticResource PercentageVisibility}, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                                Grid.Row="1" 
@@ -587,7 +591,8 @@
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="200"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                       HorizontalAlignment="Center"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
@@ -620,11 +625,13 @@
                                     <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ActNumber, Mode=TwoWay}"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                               HorizontalAlignment="Center"/>
                                     <TextBlock MaxWidth="140"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ActDate, Mode=TwoWay, Converter={StaticResource DateConverter}}"
-                                           FontSize="{Binding data.FontSize}"/>
+                                           FontSize="{Binding data.FontSize}"
+                                               HorizontalAlignment="Center"/>
                                 </StackPanel>
                                 <fa:ImageAwesome Icon="Regular_FolderOpen" Width="40" Height="40" Foreground="Black" Visibility="{Binding data.ActCreation,Converter={StaticResource TreeToggleConverter}}" ToolTip="Формирование акта"/>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenActWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
