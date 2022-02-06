@@ -24,5 +24,10 @@ namespace CP_2021.Views.UserControls.Reports
         {
             InitializeComponent();
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

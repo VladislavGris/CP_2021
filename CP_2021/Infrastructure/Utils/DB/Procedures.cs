@@ -82,7 +82,7 @@
         /// <summary>ProductionTaskId</summary>
         public static string GetTimedGivingData = "exec GetTimedGivingData {0}";
         /// <summary>Id, IsTimedGiving, IsSKBCheck, IsOECStorage, SKBNumber, FIO, GivingDate, Note</summary>
-        public static string UpdateTimedGivingData = "exec UpdateTimedGiving {0},{1},{2},{3},{4},{5},{6},{7};";
+        public static string UpdateTimedGivingData = "exec UpdateTimedGiving {0},{1},{2},{3},{4},{5},{6},{7},{8};";
 
         // Given tasks
         public static string GetAllGivenTasksByUser = "exec GetAllGivenTasksByUser {0}";
@@ -101,7 +101,8 @@
 
         public static string GetHeadTasks = "exec GetHeadTasks";
         public static string GetManufactureNames = "exec GetManufactureNames";
-        
+        public static string GetSKBNumbers = "exec GetSKBNumbers";
+
         public static string GetTasksInProgress = "exec GetTasksInProgress";
         public static string GetSpecificationsOnControl = "exec GetSpecificationsOnControl";
         public static string GetSpecificationsInVipisk = "exec GetSpecificationsInVipisk";

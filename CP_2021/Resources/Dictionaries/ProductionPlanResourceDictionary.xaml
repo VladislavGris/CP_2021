@@ -33,6 +33,7 @@
     <convert:UserNamesConverter x:Key="UserNamesConverter"/>
     <convert:ItalicConverter x:Key="ItalicConverter"/>
     <convert:ColorFromItalicConverter x:Key="ColorFromItalic"/>
+    <convert:RelativeDateBackgroundConverter x:Key="DateColorConverter"/>
 
     <valid:NoteLengthValidator x:Key="NoteLengthValidator" ValidationStep="UpdatedValue"/>
 

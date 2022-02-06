@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:CP_2021.ViewModels.DataWindowViewModels"
         mc:Ignorable="d"
         Title="TimedGivingWindow" 
-        Height="410" 
+        Height="440" 
         Width="575"
         WindowStyle="None"
         Style="{StaticResource WindowStyle}"
@@ -81,6 +81,7 @@
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
+                        <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="1*"/>
@@ -91,7 +92,9 @@
                     <TextBlock Text="ФИО" FontSize="18" Grid.Column="0" Grid.Row="1" Margin="10 0 0 0"/>
                     <TextBox Text="{Binding Entity.FIO, Mode=TwoWay}" Height="25" Width="200" FontSize="16" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center"/>
                     <TextBlock Text="Дата выдачи" FontSize="18" Grid.Column="0" Grid.Row="2" Margin="10 0 0 0"/>
+                    <TextBlock Text="Дата возврата" FontSize="18" Grid.Column="0" Grid.Row="3" Margin="10 0 0 0"/>
                     <DatePicker FontSize="16" Grid.Column="1" Grid.Row="2" Width="200" SelectedDate="{Binding Entity.GivingDate, Mode=TwoWay}"/>
+                    <DatePicker FontSize="16" Grid.Column="1" Grid.Row="3" Width="200" SelectedDate="{Binding Entity.ReturnDate, Mode=TwoWay}"/>
                 </Grid>
                 <StackPanel>
                     <TextBlock Text="Примечание" HorizontalAlignment="Center" FontSize="18" TextWrapping="Wrap"/>

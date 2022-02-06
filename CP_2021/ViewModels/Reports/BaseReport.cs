@@ -1,14 +1,11 @@
 ﻿using CP_2021.Infrastructure.Commands;
-using CP_2021.Infrastructure.Singletons;
 using CP_2021.Infrastructure.Utils.CustomEventArgs;
+using CP_2021.Infrastructure.Utils.DB;
 using CP_2021.Models.ViewEntities;
 using CP_2021.ViewModels.Base;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace CP_2021.ViewModels.Reports
@@ -115,13 +112,37 @@ namespace CP_2021.ViewModels.Reports
 
         #region Команды
 
+        #region GenerateReportCommand
+
+        public ICommand GenerateReportCommand { get; }
+
+        private bool CanGenerateReportCommandExecute(object p) => true;
+
+        protected virtual void OnGenerateReportCommandExecuted(object p)
+        {
+            var heads = TasksOperations.GetHeadTasks();
+            var manufacturers = TasksOperations.GetManufactures();
+            HeadTasks = new ObservableCollection<string>();
+            Manufactirers = new ObservableCollection<string>();
+            foreach (var head in heads)
+            {
+                HeadTasks.Add(head.Task);
+            }
+            foreach (var manufacture in manufacturers)
+            {
+                Manufactirers.Add(manufacture.Name);
+            }
+        }
+
+        #endregion
+
         #region ProjectChangedCommand
 
         public ICommand ProjectChangedCommand { get; }
 
         private bool CanProjectChangedCommandExecute(object p) => true;
 
-        private void OnProjectChangedCommandExecuted(object p)
+        protected virtual void OnProjectChangedCommandExecuted(object p)
         {
             Content = new ObservableCollection<T>(FullContent.Where(t => t.Project == SelectedHead));
             if(!String.IsNullOrEmpty(SelectedManufacture))
@@ -138,7 +159,7 @@ namespace CP_2021.ViewModels.Reports
 
         private bool CanManufactureChangedCommandExecute(object p) => true;
 
-        private void OnManufactureChangedCommandExecuted(object p)
+        protected virtual void OnManufactureChangedCommandExecuted(object p)
         {
             Content = new ObservableCollection<T>(FullContent.Where(t => t.Manufacturer == SelectedManufacture));
             if(!String.IsNullOrEmpty(SelectedHead))
@@ -177,6 +198,22 @@ namespace CP_2021.ViewModels.Reports
 
         #endregion
 
+
+        #region DropFiltersCommand
+
+        public ICommand DropFiltersCommand { get; }
+
+        private bool CanDropFiltersCommandExecute(object p) => FullContent != null;
+
+        protected virtual void OnDropFiltersCommandExecuted(object p)
+        {
+            SelectedHead = null;
+            SelectedManufacture = null;
+            Content = FullContent;
+        }
+
+        #endregion
+
         #endregion
 
         public BaseReport()
@@ -186,6 +223,8 @@ namespace CP_2021.ViewModels.Reports
             GotoTaskCommand = new LambdaCommand(OnGotoTaskCommandExecuted, CanGotoTaskCommandExecute);
             GotoParentTaskCommand = new LambdaCommand(OnGotoParentTaskCommandExecuted, CanGotoParentTaskCommandExecute);
             ManufactureChangedCommand = new LambdaCommand(OnManufactureChangedCommandExecuted, CanManufactureChangedCommandExecute);
+            DropFiltersCommand = new LambdaCommand(OnDropFiltersCommandExecuted, CanDropFiltersCommandExecute);
+            GenerateReportCommand = new LambdaCommand(OnGenerateReportCommandExecuted, CanGenerateReportCommandExecute);
         }
     }
 }

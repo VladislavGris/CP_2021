@@ -10,6 +10,7 @@ namespace CP_2021.Models.DataWindowEntities
         public bool IsOECStorage { get; set; }
         public string SKBNumber { get; set; }
         public string FIO { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public DateTime? GivingDate { get; set; }
         public string Note { get; set; }
     }

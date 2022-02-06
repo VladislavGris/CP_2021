@@ -44,6 +44,7 @@ namespace CP_2021.Data
         public virtual DbSet<TimedGivingWindowEntity> TimedGivings { get; set; }
 
         public virtual DbSet<ManufactureNames> ManufactureNames { get; set; }
+        public virtual DbSet<SKBNumber> SKBNumbers { get; set; }
         public virtual DbSet<HeadTasks> HeadTasks { get; set; }
         public virtual DbSet<ActCreation> ActCreation { get; set; }
         public virtual DbSet<DocumInWork> DocumInWork { get; set; }
@@ -124,6 +125,11 @@ namespace CP_2021.Data
             {
                 c.HasNoKey();
                 c.ToView("ManufactureNames");
+            });
+            modelBuilder.Entity<SKBNumber>(c =>
+            {
+                c.HasNoKey();
+                c.ToView("SKBNumbers");
             });
             modelBuilder.Entity<NoSpecifications>(ns =>
             {

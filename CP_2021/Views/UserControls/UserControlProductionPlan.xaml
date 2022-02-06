@@ -309,7 +309,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn x:Name="Document">
+                <DataGridTemplateColumn x:Name="Document" MaxWidth="100">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -325,7 +325,6 @@
                         <DataTemplate>
                             <Grid>
                                 <TextBlock 
-                                    MaxWidth="140"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ManagDoc, Mode=TwoWay}"
                                     FontSize="{Binding data.FontSize}"
@@ -336,7 +335,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="125">
+                <DataGridTemplateColumn MaxWidth="85">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -346,7 +345,8 @@
                                                  Height="12" Margin="0 0 3 0"/>
                                 <TextBlock Text="Временная выдача" 
                                            TextWrapping="Wrap" 
-                                           MaxWidth="100"/>
+                                           MaxWidth="85"
+                                           FontSize="12"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
@@ -409,13 +409,13 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Количество" Width="100">
+                <DataGridTemplateColumn Header="Кол-во" MaxWidth="60">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding data.Count}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
-                                           MaxWidth="200"
+                                           MaxWidth="60"
                                            FontSize="{Binding data.FontSize}"
                                        HorizontalAlignment="Center"/>
                         </DataTemplate>
@@ -425,19 +425,19 @@
                             <TextBox Text="{Binding data.Count, UpdateSourceTrigger=PropertyChanged}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MaxWidth="200"
+                                     MaxWidth="60"
                                      FontSize="{Binding data.FontSize}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Цена за единицу без НДС" Width="100">
+                <DataGridTemplateColumn Header="Цена за единицу без НДС" MaxWidth="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding data.SpecCost}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
-                                           MaxWidth="200"
+                                           MaxWidth="100"
                                            FontSize="{Binding data.FontSize}"
                                        HorizontalAlignment="Center"/>
                         </DataTemplate>
@@ -447,7 +447,7 @@
                             <TextBox Text="{Binding data.SpecCost, UpdateSourceTrigger=PropertyChanged}"
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MaxWidth="200"
+                                     MaxWidth="100"
                                      FontSize="{Binding data.FontSize}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
@@ -482,6 +482,7 @@
                                            Grid.ColumnSpan="3" 
                                            Grid.Row="0"
                                            FontSize="{Binding data.FontSize}"
+                                           TextWrapping="Wrap"
                                            HorizontalAlignment="Center"/>
                                 <Border BorderBrush="Black" Grid.Row="1" Grid.Column="0" BorderThickness="1" Background="Yellow" Visibility="{Binding data.Percentage, Converter={StaticResource PercentageVisibility}, UpdateSourceTrigger=PropertyChanged}">
                                     <TextBlock Text="{Binding data.Percentage,Converter={StaticResource AddingPercentage}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
@@ -509,7 +510,7 @@
                     
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="125">
+                <DataGridTemplateColumn MaxWidth="80">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -517,9 +518,9 @@
                                                  Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12" Margin="0 0 3 0"/>
-                                <TextBlock Text="Давальческое имущество" 
+                                <TextBlock Text="Давальч. имущ." 
                                            TextWrapping="Wrap" 
-                                           MaxWidth="100"/>
+                                           MaxWidth="80"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
@@ -566,7 +567,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="100">
+                <DataGridTemplateColumn>
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -607,7 +608,7 @@
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn MaxWidth="100">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -615,7 +616,10 @@
                                                  Foreground="{StaticResource FontColor}"
                                                  Width="12"
                                                  Height="12"/>
-                                <TextBlock Text="Акт расходования"/>
+                                <TextBlock Text="Акт расходования"
+                                           MaxWidth="100"
+                                           TextWrapping="Wrap"
+                                           FontSize="12"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
@@ -623,7 +627,7 @@
                         <DataTemplate>
                             <Grid>
                                 <StackPanel Visibility="{Binding data.ByAct,Converter={StaticResource TreeToggleConverter}}">
-                                    <TextBlock MaxWidth="140"
+                                    <TextBlock MaxWidth="100"
                                        TextWrapping="Wrap"
                                        Text="{Binding data.ActNumber, Mode=TwoWay}"
                                            FontSize="{Binding data.FontSize}"
@@ -660,7 +664,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Width="125">
+                <DataGridTemplateColumn MaxWidth="100">
                     <DataGridTemplateColumn.HeaderTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
@@ -669,7 +673,8 @@
                                                  Width="12"
                                                  Height="12" Margin="0 0 3 0"/>
                                 <TextBlock Text="Выдача в производство"
-                                           TextWrapping="Wrap" MaxWidth="100"/>
+                                           TextWrapping="Wrap" MaxWidth="100"
+                                           FontSize="12"/>
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.HeaderTemplate>
@@ -685,13 +690,13 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Примечания" MinWidth="100" MaxWidth="300">
+                <DataGridTemplateColumn Header="Примечания" MinWidth="100" MaxWidth="400">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding data.Note}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
-                                           MaxWidth="200"
+                                           MaxWidth="400"
                                            FontSize="{Binding data.FontSize}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -700,7 +705,7 @@
                             <TextBox
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
-                                     MaxWidth="200"
+                                     MaxWidth="400"
                                      FontSize="{Binding data.FontSize}">
                                 <TextBox.Text>
                                     <Binding Path="data.Note" UpdateSourceTrigger="PropertyChanged">

@@ -32,20 +32,33 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="20"/>
-                <ComboBox ItemsSource="{Binding Manufactirers}" Width="200" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedManufacture}">
-                    <ie:Interaction.Triggers>
-                        <ie:EventTrigger EventName="SelectionChanged">
-                            <ie:InvokeCommandAction Command="{Binding ManufactureChangedCommand}"/>
-                        </ie:EventTrigger>
-                    </ie:Interaction.Triggers>
-                </ComboBox>
-                <ComboBox ItemsSource="{Binding HeadTasks}" Width="200" Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedHead}">
-                    <ie:Interaction.Triggers>
-                        <ie:EventTrigger EventName="SelectionChanged">
-                            <ie:InvokeCommandAction Command="{Binding ProjectChangedCommand}"/>
-                        </ie:EventTrigger>
-                    </ie:Interaction.Triggers>
-                </ComboBox>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" >
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="20"
+                               Foreground="{StaticResource ForegroundBrush}"
+                               Margin="0 0 10 0">СКБ</TextBlock>
+                    <ComboBox ItemsSource="{Binding SKBNumbers}" Width="200" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedNumber}">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="SelectionChanged">
+                                <ie:InvokeCommandAction Command="{Binding SKBNumberChangedCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="2" >
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="20"
+                               Foreground="{StaticResource ForegroundBrush}"
+                               Margin="0 0 10 0">Проект</TextBlock>
+                    <ComboBox ItemsSource="{Binding HeadTasks}" Width="200" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedHead}">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="SelectionChanged">
+                                <ie:InvokeCommandAction Command="{Binding ProjectChangedCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+                
                 <Button Content="Сбросить"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
@@ -77,6 +90,16 @@
                     <DataGridTextColumn Header="Изделие на уровень выше" Binding="{Binding ParentTask}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Изделие" Binding="{Binding Task}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Дата выдачи" Binding="{Binding GivingDate, Converter={StaticResource DateConverter}}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
+                    <DataGridTextColumn Header="Дата возврата" Binding="{Binding ReturnDate, Converter={StaticResource DateConverter}}" Width="2*">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="MinWidth" Value="20"/>
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                                <Setter Property="Background" Value="{Binding ReturnDate, Converter={StaticResource DateColorConverter}}"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Номер СКБ" Binding="{Binding SKBNumber}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Примечание" Binding="{Binding Note}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>

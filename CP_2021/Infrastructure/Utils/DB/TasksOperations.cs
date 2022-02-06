@@ -99,6 +99,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.ManufactureNames.FromSqlRaw(Procedures.GetManufactureNames).AsNoTracking().AsEnumerable();
         }
 
+        public static IEnumerable<SKBNumber> GetSKBNumbers()
+        {
+            return _context.SKBNumbers.FromSqlRaw(Procedures.GetSKBNumbers).AsNoTracking().AsEnumerable();
+        }
+
         public static IEnumerable<CoopWork> GetCoopWork()
         {
             return _context.CoopWork.FromSqlRaw(Procedures.GetCoopWork).AsNoTracking().AsEnumerable();
@@ -236,9 +241,9 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.TimedGivings.FromSqlRaw(Procedures.GetTimedGivingData,taskId).AsNoTracking().AsEnumerable().FirstOrDefault();
         }
 
-        public static void UpdateTimedGivingData(Guid id, bool isTimedGiving, bool isSKBCheck, bool isOECStorage, string skbNumber, string fio, DateTime? givingDate, string note)
+        public static void UpdateTimedGivingData(Guid id, bool isTimedGiving, bool isSKBCheck, bool isOECStorage, string skbNumber, string fio, DateTime? givingDate, DateTime? returnDate, string note)
         {
-            _context.Database.ExecuteSqlRaw(Procedures.UpdateTimedGivingData, id, isTimedGiving, isSKBCheck, isOECStorage, skbNumber, fio, givingDate, note);
+            _context.Database.ExecuteSqlRaw(Procedures.UpdateTimedGivingData, id, isTimedGiving, isSKBCheck, isOECStorage, skbNumber, fio, givingDate, returnDate, note);
         }
 
         #endregion

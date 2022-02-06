@@ -48,6 +48,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                             Entity.SKBNumber,
                             Entity.FIO,
                             Entity.GivingDate.HasValue ? Entity.GivingDate.Value : null,
+                            Entity.ReturnDate.HasValue ? Entity.ReturnDate.Value : null,
                             Entity.Note);
                         _task.data.IsTimedGiving = Entity.IsTimedGiving;
                         _task.data.IsOECStorage = Entity.IsOECStorage;

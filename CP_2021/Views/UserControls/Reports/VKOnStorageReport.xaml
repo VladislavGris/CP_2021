@@ -32,20 +32,32 @@
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="20"/>
-                <ComboBox ItemsSource="{Binding Manufactirers}" Width="200" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedManufacture}">
-                    <ie:Interaction.Triggers>
-                        <ie:EventTrigger EventName="SelectionChanged">
-                            <ie:InvokeCommandAction Command="{Binding ManufactureChangedCommand}"/>
-                        </ie:EventTrigger>
-                    </ie:Interaction.Triggers>
-                </ComboBox>
-                <ComboBox ItemsSource="{Binding HeadTasks}" Width="200" Grid.Column="2" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedHead}">
-                    <ie:Interaction.Triggers>
-                        <ie:EventTrigger EventName="SelectionChanged">
-                            <ie:InvokeCommandAction Command="{Binding ProjectChangedCommand}"/>
-                        </ie:EventTrigger>
-                    </ie:Interaction.Triggers>
-                </ComboBox>
+                <StackPanel Orientation="Horizontal" Grid.Column="1">
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="20"
+                               Foreground="{StaticResource ForegroundBrush}"
+                               Margin="0 0 10 0">Изготовитель</TextBlock>
+                    <ComboBox ItemsSource="{Binding Manufactirers}" Width="200"  HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedManufacture}">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="SelectionChanged">
+                                <ie:InvokeCommandAction Command="{Binding ManufactureChangedCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="2">
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="20"
+                               Foreground="{StaticResource ForegroundBrush}"
+                               Margin="0 0 10 0">Проект</TextBlock>
+                    <ComboBox ItemsSource="{Binding HeadTasks}" Width="200"  HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedHead}">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="SelectionChanged">
+                                <ie:InvokeCommandAction Command="{Binding ProjectChangedCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
                 <Button Content="Сбросить"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"

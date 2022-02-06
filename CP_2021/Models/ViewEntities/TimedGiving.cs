@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace CP_2021.Models.ViewEntities
 {
-    internal class TimedGiving : BaseViewEntity
+    internal class TimedGiving : BaseSKBViewEntity
     {
         public DateTime? GivingDate { get; set; }
         public string FIO { get; set; }
-        public string SKBNumber { get; set; }
         public string Note { get; set; }
     }
 }
