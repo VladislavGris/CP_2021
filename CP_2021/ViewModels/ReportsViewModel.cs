@@ -29,6 +29,7 @@ namespace CP_2021.ViewModels
         private TimedGivingReport _timedGivingReport = new TimedGivingReport();
         private WorkedDocsReport _workedDocsReport = new WorkedDocsReport();
         private VKOnStorageReport _vkOnStorageReport = new VKOnStorageReport();
+        private PaymentReport _paymentReport = new PaymentReport();
 
         #endregion
 
@@ -184,6 +185,19 @@ namespace CP_2021.ViewModels
 
         #endregion
 
+        #region ShowPaymentReportCommand
+
+        public ICommand ShowPaymentReportCommand { get; }
+
+        private bool CanShowPaymentReportCommandExecute(object p) => true;
+
+        private void OnShowPaymentReportCommandExecuted(object p)
+        {
+            Content = _paymentReport;
+        }
+
+        #endregion
+
         #endregion
         #region События отчетов
 
@@ -228,6 +242,7 @@ namespace CP_2021.ViewModels
             ShowTimedGivingCommand = new LambdaCommand(OnShowTimedGivingCommandExecuted, CanShowTimedGivingCommandExecute);
             ShowWorkedDocsCommand = new LambdaCommand(OnShowWorkedDocsCommandExecuted, CanShowWorkedDocsCommandExecute);
             ShowVKOnStorageCommand = new LambdaCommand(OnShowVKOnStorageCommandExecuted, CanShowVKOnStorageCommandExecute);
+            ShowPaymentReportCommand = new LambdaCommand(OnShowPaymentReportCommandExecuted, CanShowPaymentReportCommandExecute);
             #endregion
 
             #region Subscribe
@@ -241,6 +256,7 @@ namespace CP_2021.ViewModels
             ((TimedGivingReportVM)_timedGivingReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((WorkedDocsReportVM)_workedDocsReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
             ((VKOnStorageReportVM)_vkOnStorageReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
+            ((PaymentReportVM)_paymentReport.DataContext).SendTaskIdToReportVM += GetTaskIdFromReport;
             #endregion
         }
     }

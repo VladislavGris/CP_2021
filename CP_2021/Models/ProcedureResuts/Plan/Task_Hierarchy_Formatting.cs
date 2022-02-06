@@ -114,6 +114,13 @@ namespace CP_2021.Models.ProcedureResuts.Plan
             get => _mName;
             set => Set(ref _mName, value);
         }
+
+        private string _specNum;
+        public string SpecNum
+        {
+            get => _specNum;
+            set => Set(ref _specNum, value);
+        }
         // Act
         [NotMapped]
         private string _actNumber;

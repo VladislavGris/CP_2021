@@ -569,10 +569,14 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
-                                <TextBlock Text="{Binding data.M_Name}"
-                                       HorizontalAlignment="Center"
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock Text="{Binding data.M_Name}"
                                            FontSize="{Binding data.FontSize}"
                                            Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
+                                    <TextBlock Text="{Binding data.SpecNum}"
+                                           FontSize="{Binding data.FontSize}"
+                                           Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
+                                </StackPanel>
                                 <Button Width="10" Margin="0" Style="{StaticResource TriangleButton}" HorizontalAlignment="Right" Command="{Binding DataContext.OpenManufactureWindowCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type UserControl}}}"/>
                             </Grid>
 

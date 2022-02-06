@@ -87,7 +87,7 @@ begin
 				f.FontFamily, f.FontSize, f.IsBold, f.IsItalic, f.IsUnderline,f.Color,
 				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
 				g.G_State,
-				m.M_Name,
+				m.M_Name,m.Specification_Num as 'SpecNum',
 				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
 				i.Giving_Date,
 				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
@@ -117,7 +117,7 @@ begin
 				f.FontFamily, f.FontSize, f.IsBold, f.IsItalic, f.IsUnderline,f.Color,
 				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
 				g.G_State,
-				m.M_Name,
+				m.M_Name,m.Specification_Num as 'SpecNum',
 				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
 				i.Giving_Date,
 				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
@@ -140,7 +140,7 @@ begin
 				f.FontFamily, f.FontSize, f.IsBold, f.IsItalic, f.IsUnderline,f.Color,
 				c.Complectation, c.Comp_Percentage, c.Rack, c.Shelf,
 				g.G_State,
-				m.M_Name,
+				m.M_Name,m.Specification_Num as 'SpecNum',
 				a.ActNumber,a.ActDate,a.ActCreation,a.ByAct,
 				i.Giving_Date,
 				tg.IsTimedGiving, tg.IsSKBCheck, tg.IsOECStorage,
@@ -159,3 +159,31 @@ begin
 		--option(recompile);
 end
 --drop procedure GetTasksByParent;
+go
+create view PaymentReport as
+select p1.Id as Id,
+		p1.Task_Name as Task,
+		p1.Manag_Doc as ManagDoc,
+		(select p2.Task_Name from Production_Plan p2 where p2.Id=h1.ParentId) as ParentTask,
+		(select p2.Id from Production_Plan p2 where p2.Id=h1.ParentId) as ParentId,
+		m.M_Name as Manufacturer,
+		(select Task_Name from dbo.GetParent(p1.Id)) as Project,
+		pay.Contract,
+		m.Specification_Num as 'SpecNum',
+		pay.SpecificationSum as 'SpecSum',
+		pay.Project as 'PaymentProject',
+		pay.FirstPaymentDate,
+		pay.SecondPaymentDate,
+		pay.FullPaymentDate,
+		p1.Inc_Doc as 'IncDoc'
+from Production_Plan p1 inner join HierarchyDB h1 on p1.Id = h1.ChildId
+inner join Manufacture m on p1.Id = m.Production_Task_Id
+inner join Payment pay on p1.Id = pay.ProductionTaskId
+where m.Specification_Num is not null and m.Specification_Num <> '';
+--drop view PaymentReport
+go
+create procedure GetPaymentReport as
+begin
+set nocount on;
+select * from PaymentReport;
+end

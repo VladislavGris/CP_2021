@@ -129,6 +129,11 @@ namespace CP_2021.Infrastructure.Utils.DB
             return _context.InProductionView.FromSqlRaw(Procedures.GetTasksInProgress).AsNoTracking().AsEnumerable();
         }
 
+        public static IEnumerable<PaymentReport> GetPaymentReport()
+        { 
+            return _context.PaymentReport.FromSqlRaw(Procedures.GetPaymentReport).AsNoTracking().AsEnumerable();
+        }
+
         #region DataWindows
         #region Complectation
         public static ComplectationWindowEntity GetComplectationWindowEntity(Guid taskId)

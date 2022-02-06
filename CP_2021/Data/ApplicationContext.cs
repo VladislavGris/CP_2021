@@ -60,6 +60,7 @@ namespace CP_2021.Data
         public virtual DbSet<SpecificationsInVipisk> SpecInVipisk { get; set; }
         public virtual DbSet<CoopWork> CoopWork { get; set; }
         public virtual DbSet<InProgressView> InProductionView { get; set; }
+        public virtual DbSet<PaymentReport> PaymentReport { get; set; }
         //public virtual DbSet<DocumentationView> DocumentationView { get; set; }
         //public virtual DbSet<SKBCheck> SKBCkecks {  get; set; }
         //public virtual DbSet<OETSStorage> OETSStorage { get; set; }

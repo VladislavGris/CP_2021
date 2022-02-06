@@ -119,6 +119,7 @@
         public static string GetTimedGivingReport = "exec GetTimedGivingReport";
         public static string GetWorkedDocs = "exec GetWorkedDocs";
         public static string GetVKOnStorage = "exec GetVKOnStorage";
+        public static string GetPaymentReport = "exec GetPaymentReport";
 
         public static string SearchProductionPlan = "exec SearchProductionPlan {0}";
         public static string SearchAct = "exec SearchAct {0}";

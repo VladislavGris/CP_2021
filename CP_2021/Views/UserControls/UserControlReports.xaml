@@ -111,6 +111,13 @@
                         </ie:EventTrigger>
                     </ie:Interaction.Triggers>
                 </TreeViewItem>
+                <TreeViewItem Header="Оплата">
+                    <ie:Interaction.Triggers>
+                        <ie:EventTrigger EventName="Selected">
+                            <ie:InvokeCommandAction Command="{Binding ShowPaymentReportCommand}"/>
+                        </ie:EventTrigger>
+                    </ie:Interaction.Triggers>
+                </TreeViewItem>
                 
             </TreeView>
             <GridSplitter Grid.Column="1"
