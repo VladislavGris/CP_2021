@@ -81,8 +81,8 @@
                     <DataGridTextColumn Header="Номер МСЛ" Binding="{Binding Number}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Сборка" Binding="{Binding Executor1}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Электромонтаж" Binding="{Binding Executor2}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
-                    <DataGridTextColumn Header="Дата выдачи" Binding="{Binding GivingDate}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
-                    <DataGridTextColumn Header="Дата готовности(п)" Binding="{Binding CompletionDate}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
+                    <DataGridTextColumn Header="Дата выдачи" Binding="{Binding GivingDate, Converter={StaticResource DateConverter}}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
+                    <DataGridTextColumn Header="Дата готовности(п)" Binding="{Binding CompletionDate, Converter={StaticResource DateConverter}}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

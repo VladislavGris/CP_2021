@@ -1,5 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:valid="clr-namespace:CP_2021.Infrastructure.Validators"
                     xmlns:convert="clr-namespace:CP_2021.Infrastructure.Converters"
                     xmlns:convertComp="clr-namespace:CP_2021.Infrastructure.Converters.VisibilityConverters.Complectation"
                     xmlns:convertUtil="clr-namespace:CP_2021.Infrastructure.Converters.Utility"
@@ -32,6 +33,8 @@
     <convert:UserNamesConverter x:Key="UserNamesConverter"/>
     <convert:ItalicConverter x:Key="ItalicConverter"/>
     <convert:ColorFromItalicConverter x:Key="ColorFromItalic"/>
+
+    <valid:NoteLengthValidator x:Key="NoteLengthValidator" ValidationStep="UpdatedValue"/>
 
     <!--Brushes #575757 -->
     <SolidColorBrush x:Key="ForegroundBrush" Color="White" />

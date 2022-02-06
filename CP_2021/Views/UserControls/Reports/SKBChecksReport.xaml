@@ -76,7 +76,7 @@
                     <DataGridTextColumn Header="Документ" Binding="{Binding ManagDoc}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Изделие на уровень выше" Binding="{Binding ParentTask}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Изделие" Binding="{Binding Task}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
-                    <DataGridTextColumn Header="Дата выдачи" Binding="{Binding GivingDate}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
+                    <DataGridTextColumn Header="Дата выдачи" Binding="{Binding GivingDate, Converter={StaticResource DateConverter}}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="ФИО" Binding="{Binding FIO}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Номер СКБ" Binding="{Binding SKBNumber}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>
                     <DataGridTextColumn Header="Примечание" Binding="{Binding Note}" Width="2*" ElementStyle="{StaticResource DatagridCenterCellStyle}"/>

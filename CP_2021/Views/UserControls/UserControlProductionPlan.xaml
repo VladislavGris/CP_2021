@@ -7,6 +7,7 @@
              xmlns:vm="clr-namespace:CP_2021.ViewModels"
              xmlns:fa="http://schemas.fontawesome.com/icons/"
              xmlns:convert="clr-namespace:CP_2021.Infrastructure.Converters"
+             xmlns:valid="clr-namespace:CP_2021.Infrastructure.Validators"
              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -696,11 +697,19 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <TextBox Text="{Binding data.Note, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MaxWidth="200"
-                                     FontSize="{Binding data.FontSize}"/>
+                                     FontSize="{Binding data.FontSize}">
+                                <TextBox.Text>
+                                    <Binding Path="data.Note" UpdateSourceTrigger="PropertyChanged">
+                                        <!--<Binding.ValidationRules>
+                                            <valid:NoteLengthValidator ValidationStep="UpdatedValue"/>
+                                        </Binding.ValidationRules>-->
+                                    </Binding>
+                                </TextBox.Text>
+                            </TextBox>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
