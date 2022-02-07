@@ -187,3 +187,4 @@ begin
 set nocount on;
 select * from PaymentReport;
 end
+exec GetPaymentReport

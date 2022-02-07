@@ -51,7 +51,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                             Entity.Note,
                             Entity.IsFirstPayment,
                             Entity.FirstPaymentSum,
-                            Entity.FirstPaymentDate.HasValue ? Entity.FullPaymentDate.Value : null,
+                            Entity.FirstPaymentDate.HasValue ? Entity.FirstPaymentDate.Value : null,
                             Entity.IsSecondPayment,
                             Entity.SecondPaymentSum,
                             Entity.SecondPaymentDate.HasValue ? Entity.SecondPaymentDate.Value : null,

@@ -711,13 +711,14 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <DataGridTemplateColumn Header="Примечания" MinWidth="100" MaxWidth="400">
+                <DataGridTemplateColumn Header="Примечания" MaxWidth="400">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding data.Note}"
                                            Grid.Column="2"
                                            TextWrapping="Wrap"
                                            MaxWidth="400"
+                                           MaxHeight="80"
                                            FontSize="{Binding data.FontSize}"
                                        Foreground="{Binding data.Color, Converter={StaticResource StringToColorConverter}}"/>
                         </DataTemplate>
@@ -728,6 +729,7 @@
                                      AcceptsReturn="True"
                                      TextWrapping="Wrap"
                                      MaxWidth="400"
+
                                      FontSize="{Binding data.FontSize}">
                                 <TextBox.Text>
                                     <Binding Path="data.Note" UpdateSourceTrigger="PropertyChanged">
