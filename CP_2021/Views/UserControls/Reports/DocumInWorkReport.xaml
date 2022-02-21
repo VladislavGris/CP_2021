@@ -26,12 +26,22 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Отработка документации"
-                       Grid.Column="0"
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="0">
+                    <TextBlock Text="Отработка документации"
                        Foreground="{StaticResource ForegroundBrush}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="20"/>
+                    <Button Style="{StaticResource EnterButton}"
+                            Margin="5 0 0 0"
+                            ToolTip="Сохранить в PDF"
+                            Command="{Binding GeneratePDFCommand}">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Solid_Save" Foreground="{StaticResource ForegroundBrush}" Width="30" Height="30"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                     <TextBlock VerticalAlignment="Center"
                                FontSize="20"
@@ -75,6 +85,7 @@
                   Style="{StaticResource ExampleStyle}"
                   ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
                   CanUserDeleteRows="False"
+                      CanUserSortColumns="True"
                       ItemsSource="{Binding Content}"
                       IsReadOnly="True"
                       SelectedItem="{Binding SelectedRow}">

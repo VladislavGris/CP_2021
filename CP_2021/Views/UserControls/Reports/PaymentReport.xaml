@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:CP_2021.Views.UserControls.Reports"
-             xmlns:vm="clr-namespace:CP_2021.ViewModels.Reports"
              xmlns:ie="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:fa="http://schemas.fontawesome.com/icons/"
+             xmlns:vm="clr-namespace:CP_2021.ViewModels.Reports"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.DataContext>
@@ -25,12 +26,23 @@
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Оплата"
-                       Grid.Column="0"
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="0">
+                    <TextBlock Text="Оплата"
                        Foreground="{StaticResource ForegroundBrush}"
                        HorizontalAlignment="Left"
                        VerticalAlignment="Center"
                        FontSize="20"/>
+                    <Button Style="{StaticResource EnterButton}"
+                            Margin="5 0 0 0"
+                            ToolTip="Сохранить в PDF"
+                            Command="{Binding GeneratePDFCommand}">
+                        <Button.Content>
+                            <fa:ImageAwesome Icon="Solid_Save" Foreground="{StaticResource ForegroundBrush}" Width="30" Height="30"/>
+                        </Button.Content>
+                    </Button>
+                </StackPanel>
+
                 <StackPanel Orientation="Horizontal" Grid.Column="1">
                     <TextBlock VerticalAlignment="Center"
                                FontSize="20"
@@ -75,6 +87,7 @@
                   Style="{StaticResource ExampleStyle}"
                   ColumnHeaderStyle="{StaticResource DatagridHeaderTextWrapping}"
                   CanUserDeleteRows="False"
+                      CanUserSortColumns="True"
                       ItemsSource="{Binding Content}"
                       IsReadOnly="True"
                       SelectedItem="{Binding SelectedRow}">

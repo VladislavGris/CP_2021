@@ -136,6 +136,19 @@ namespace CP_2021.ViewModels.Reports
 
         #endregion
 
+        #region GeneratePDFCommand
+
+        public ICommand GeneratePDFCommand { get; }
+
+        private bool CanGeneratePDFCommandExecute(object p) => Content != null && Content.Count > 0;
+
+        protected virtual void OnGeneratePDFCommandExecuted(object p)
+        {
+            
+        }
+
+        #endregion
+
         #region ProjectChangedCommand
 
         public ICommand ProjectChangedCommand { get; }
@@ -225,6 +238,7 @@ namespace CP_2021.ViewModels.Reports
             ManufactureChangedCommand = new LambdaCommand(OnManufactureChangedCommandExecuted, CanManufactureChangedCommandExecute);
             DropFiltersCommand = new LambdaCommand(OnDropFiltersCommandExecuted, CanDropFiltersCommandExecute);
             GenerateReportCommand = new LambdaCommand(OnGenerateReportCommandExecuted, CanGenerateReportCommandExecute);
+            GeneratePDFCommand = new LambdaCommand(OnGeneratePDFCommandExecuted, CanGeneratePDFCommandExecute);
         }
     }
 }
