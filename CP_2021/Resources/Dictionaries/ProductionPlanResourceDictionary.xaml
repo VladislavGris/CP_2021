@@ -88,7 +88,11 @@
         <Setter Property="BorderBrush" Value="{StaticResource DatagridBorderBrush}"/>
         <Setter Property="Padding" Value="2"/>
         <Setter Property="Background" Value="{StaticResource DatagridHeaderBrush}"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="BorderThickness" Value="0,0,1,0"></Setter>
+    </Style>
+    <Style TargetType="DataGridColumnHeader" x:Key="TableHeaderStyle">
+        <Setter Property="BorderThickness" Value="10"/>
     </Style>
     <Style TargetType="DataGrid"
            x:Key="ExampleStyle">
@@ -101,7 +105,7 @@
         <Setter Property="CanUserReorderColumns" Value="False"/>
         <Setter Property="CanUserSortColumns" Value="False"/>
         <Setter Property="CanUserAddRows" Value="False"/>
-        <Setter Property="CanUserResizeColumns" Value="False"/>
+        <Setter Property="CanUserResizeColumns" Value="True"/>
         <Setter Property="FontFamily" Value="Arial"/>
         <Setter Property="FontSize" Value="14"/>
         <Setter Property="RowHeaderWidth" Value="0"/>

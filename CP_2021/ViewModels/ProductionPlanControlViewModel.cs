@@ -871,14 +871,7 @@ namespace CP_2021.ViewModels
         private void OnOpenSearchWindowCommandExecuted(object p)
         {
             SearchWindow window = new SearchWindow();
-            if(SelectedTask == null)
-            {
-                ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
-            }
-            else
-            {
-                SearchResultsVM searchResultsVM = new SearchResultsVM(SelectedTask.Task.Name);
-            }
+            ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
             window.Show();
         }
 
