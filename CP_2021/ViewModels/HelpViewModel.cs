@@ -109,7 +109,7 @@ namespace CP_2021.ViewModels
                     }
                 }
             }
-            catch(FileNotFoundException ex)
+            catch(FileNotFoundException /*ex*/)
             {
                 MessageBox.Show("Ошибка загрузки документа");
             }

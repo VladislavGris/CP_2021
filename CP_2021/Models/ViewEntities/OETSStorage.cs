@@ -2,7 +2,6 @@
 {
     internal class OETSStorage : BaseViewEntity
     {
-        public string ManagDoc { get; set; }
         public int? Count { get; set; }
         public string Complectation { get; set; }
         public string Rack { get; set; }

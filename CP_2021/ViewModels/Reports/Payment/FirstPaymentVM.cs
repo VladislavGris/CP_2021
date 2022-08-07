@@ -41,11 +41,11 @@ namespace CP_2021.ViewModels.Reports.Payment
 
         #region GenerateReportCommand
 
-        public ICommand GenerateReportCommand { get; }
+        public new ICommand GenerateReportCommand { get; }
 
         protected bool CanGenerateReportCommandExecute(object p) => true;
 
-        protected virtual void OnGenerateReportCommandExecuted(object p)
+        override protected void OnGenerateReportCommandExecuted(object p)
         {
             var heads = ApplicationUnitSingleton.GetInstance().dbUnit.HeadTasks.Get().OrderBy(t => t.Task);
             HeadTasks = new ObservableCollection<string>();

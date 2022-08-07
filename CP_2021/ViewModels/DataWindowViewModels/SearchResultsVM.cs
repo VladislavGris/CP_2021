@@ -15,7 +15,6 @@ namespace CP_2021.ViewModels.DataWindowViewModels
     internal class SearchResultsVM : ViewModelBase
     {
         private SearchManager _searchManager = new SearchManager();
-        private readonly string _executeProcedure = "exec Search @parm = {0}";
 
         #region SearchString
 

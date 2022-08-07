@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <StartupObject>CP_2021.App</StartupObject>
     <ApplicationIcon>icon.ico</ApplicationIcon>
@@ -68,10 +68,6 @@
     <PackageReference Include="PDFsharp-MigraDoc-GDI" Version="1.50.5147" />
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
     <PackageReference Include="System.Runtime.Extensions" Version="4.3.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Lib\Common\Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -185,6 +181,10 @@
     <None Include="Data\doc\TimedGivingReport.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Common\Data\TreeGrid\" />
   </ItemGroup>
 
 </Project>

@@ -8,6 +8,6 @@ namespace CP_2021.Models.ViewEntities
 {
     internal class DocumentationView : BaseViewEntity
     {
-        public string ManagDoc { get; set; }
+        public new string ManagDoc { get; set; }
     }
 }

@@ -27,7 +27,6 @@ namespace CP_2021.ViewModels
     {
         #region Свойства
 
-        Thread _backgroundThread;
         private ApplicationContext _context;
 
         #region Login
