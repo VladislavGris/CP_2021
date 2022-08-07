@@ -1,0 +1,259 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Diagnostics;
+
+namespace Common.Wpf.Data
+{
+	[Serializable]
+	public class TreeGridModel : ObservableCollection<TreeGridElement>
+	{
+		public TreeGridFlatModel FlatModel { get; private set; }
+
+		private ObservableCollection<TreeGridElement> itemCache;
+
+		public TreeGridModel()
+		{
+			// Initialize the model
+			itemCache = new ObservableCollection<TreeGridElement>();
+			FlatModel = new TreeGridFlatModel();
+		}
+
+		protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
+		{
+			// Process the event
+			switch(args.Action)
+			{
+				case NotifyCollectionChangedAction.Add:
+
+					// Process added item
+					OnRootAdded(args.NewItems[0]);
+					break;
+				case NotifyCollectionChangedAction.Remove:
+					OnRootRemoved((TreeGridElement)args.OldItems[0]);
+					break;
+                case NotifyCollectionChangedAction.Move:
+					
+                    break;
+
+            }
+		}
+
+		internal void OnChildrenMoved(int oldIndex, int newIndex, TreeGridElement oldElement, TreeGridElement newElement)
+        {
+			int old = FindFlatInsertionIndex(oldElement);
+			int newEl = FindFlatInsertionIndex(newElement);
+			TreeGridElement parent = oldElement.Parent;
+			int parentIndex = FindFlatInsertionIndex(parent);
+			
+        }
+
+		public void SwapItems(int oldIndex, int newIndex)
+        {
+			this.Move(oldIndex, newIndex);
+			FlatModel.PrivateMove(oldIndex, newIndex);
+        }
+
+		internal void Expand(TreeGridElement item)
+		{
+			// Do we need to expand the item?
+            if (!FlatModel.ContainsKey(item) || !item.IsExpanded)
+            {
+                // We do not need to expand the item
+                return;
+            }
+
+            // Clear the item cache
+            itemCache.Clear();
+
+			// Cache the flat children for the item
+			CacheFlatChildren(item);
+
+			// Get the insertion index for the item
+			int index = (FlatModel.IndexOf(item) + 1);
+
+			// Add the flat children to the flat model
+			FlatModel.PrivateInsertRange(index, itemCache);
+
+
+
+		}
+
+		public void ExpandAll()
+		{
+			foreach(TreeGridElement item in this)
+            {
+				item.Expand();
+            }
+		}
+
+		internal void Collapse(TreeGridElement item)
+		{
+			// Do we need to collapse the item?
+			if (!FlatModel.ContainsKey(item))
+			{
+				// We do not need to collapse the item
+				return;
+			}
+
+			// Get the collapse information
+			int index = (FlatModel.IndexOf(item) + 1);
+			int count = CountFlatChildren(item);
+
+			// Remove the items from the flat model to collapse them
+			FlatModel.PrivateRemoveRange(index, count);
+		}
+
+		public void CollapseAll()
+        {
+			foreach(TreeGridElement item in this)
+            {
+				item.Collapse();
+            }
+        }
+
+		internal void OnChildAdded(TreeGridElement child)
+		{
+			// Get the parent of the child
+			TreeGridElement parent = child.Parent;
+
+            // Check if the parent is expanded
+            if (!FlatModel.ContainsKey(parent) || !parent.IsExpanded)
+            {
+                // We don't need to update the flat model
+                return;
+            }
+
+            // Find the insertion index for the child into the flat model
+            int index = FindFlatInsertionIndex(child);
+
+			// Insert the child into the flat model
+			FlatModel.PrivateInsert(index, child);
+
+            // Expand the child
+            Expand(child);
+
+		}
+
+		internal void OnChildRemoved(TreeGridElement child)
+		{
+			TreeGridElement parent = child.Parent;
+			if (child.IsExpanded)
+				Collapse(child);
+			FlatModel.PrivateRemove(child);
+		}
+
+		internal void OnChildReplaced(TreeGridElement oldChild, TreeGridElement child, int index)
+		{
+
+		}
+
+		internal void OnChildrenRemoved(TreeGridElement parent, IList children)
+		{
+
+		}
+
+		// Добавление корневого элемента в модель
+		private void OnRootAdded(object item)
+		{
+			// Verify the root item
+			TreeGridElement root = TreeGridElement.VerifyItem(item);
+
+			// Set the model for the root
+			root.SetModel(this);
+
+			// Find the index for insertion into the flat model
+			int index = FindFlatInsertionIndex(root);
+
+			// Insert the root into the flat model
+			FlatModel.PrivateInsert(index, root);
+
+			// Expand the root
+			//Expand(root);
+
+		}
+
+		// Удлаение корневого элемента из модели
+		private void OnRootRemoved(TreeGridElement root)
+        {
+			//TreeGridElement.VerifyItem(root);
+			// Скрыть все элементы, если модель развернута
+			if(root.IsExpanded)
+				Collapse(root);
+			root.SetModel(null);
+			// Удалить элемент из FlatModel
+			FlatModel.PrivateRemove(root);
+        }
+
+		private void CacheFlatChildren(TreeGridElement item)
+		{
+			// Iterate through all of the children within the item
+			foreach (TreeGridElement child in item.Children)
+			{
+				// Add the child to the item cache
+				itemCache.Add(child);
+
+				// Is the child expanded?
+				if (child.IsExpanded)
+				{
+					// Recursively cache the children within the child
+					CacheFlatChildren(child);
+				}
+			}
+		}
+
+		private int CountFlatChildren(TreeGridElement item)
+		{
+			// Initialize child count
+			int children = item.Children.Count;
+
+			// Iterate through each child
+			foreach (TreeGridElement child in item.Children)
+			{
+				// Is the child expanded?
+				if (child.IsExpanded)
+				{
+					// Recursively count the children
+					children += CountFlatChildren(child);
+				}
+			}
+
+			// Return the number of flat children
+			return children;
+		}
+
+		private int FindFlatInsertionIndex(TreeGridElement item)
+		{
+			// Get the search information
+			TreeGridElement        parent    = item.Parent;
+			IList<TreeGridElement> items     = ((parent != null) ? parent.Children : this);
+			int                    index     = items.IndexOf(item);
+			int                    lastIndex = (items.Count - 1);
+
+			// Determine if the item is the last item in the items
+			if (index < lastIndex)
+			{
+				// Return the insertion index using the items
+				return FlatModel.IndexOf(items[(index + 1)]);
+			}
+
+			// Is the parent valid?
+			else if (parent != null)
+			{
+				// Determine the number of flat children the parent has
+				int children = CountFlatChildren(parent);
+
+				// Return the insertion index using the number of flat children
+				return (FlatModel.IndexOf(parent) + children);
+			}
+			else
+			{
+				// Return the flat model count
+				return FlatModel.Count;
+			}
+		}
+
+	}
+}
