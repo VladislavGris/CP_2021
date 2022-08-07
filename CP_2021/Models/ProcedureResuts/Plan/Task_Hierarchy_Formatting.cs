@@ -25,7 +25,7 @@ namespace CP_2021.Models.ProcedureResuts.Plan
         [Column("P_Count")]
         public int? Count { get; set; }
         [Column("Specification_Cost", TypeName = "nvarchar(MAX)")]
-        public String SpecCost { get; set; }
+        public string SpecCost { get; set; }
         [Column("Expend_Num", TypeName = "nvarchar(MAX)")]
         public string ExpendNum { get; set; }
         [Column("Note", TypeName = "nvarchar(MAX)")]

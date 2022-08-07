@@ -102,16 +102,7 @@
                         </Image>
                     </Button.Content>
                 </Button>
-                <Button Grid.Column="3" Grid.Row="0" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Удалить задачу" Command="{Binding DeleteProductionTaskCommand}">
-                    <Button.Content>
-                        <Image>
-                            <Image.Source>
-                                <BitmapImage UriSource="/Resources/Images/delete.png"/>
-                            </Image.Source>
-                        </Image>
-                    </Button.Content>
-                </Button>
-                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Обновить" Command="{Binding UpdateModelCommand}">
+                <Button Grid.Column="3" Grid.Row="1" Margin="2" Style="{StaticResource EnterButton}" ToolTip="Обновить (F5)" Command="{Binding UpdateModelCommand}">
                     <Button.Content>
                         <Image>
                             <Image.Source>
@@ -155,7 +146,7 @@
             </Grid>
             <Grid Grid.Column="2">
                 
-                <Button Content="Панель поиска" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
+                <Button Content="Панель поиска" ToolTip="Ctrl+F" Style="{StaticResource EnterButton}" Margin="10 0 0 0" Command="{Binding OpenSearchWindowCommand}"/>
             </Grid>
             
         </Grid>
@@ -177,6 +168,7 @@
                         </MenuItem.Icon>
                     </MenuItem>-->
                     <MenuItem Header="Копировать"
+                              InputGestureText="Ctrl+C"
                               Command="{Binding CopyTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Regular_Copy"
@@ -184,6 +176,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="Вставить"
+                              InputGestureText="Ctrl+V"
                               Command="{Binding PasteTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Solid_Paste"
@@ -192,27 +185,13 @@
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="Удалить"
+                              InputGestureText="Ctrl+X"
                               Command="{Binding DeleteProductionTaskCommand}">
                         <MenuItem.Icon>
                             <fa:ImageAwesome Icon="Solid_Minus"
                                              Foreground="{StaticResource FontColor}"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <!--<Separator/>
-                    <MenuItem Header="Экспорт"
-                              Command="{Binding ExportTaskCommand}">
-                        <MenuItem.Icon>
-                            <fa:ImageAwesome Icon="Solid_Paste"
-                                             Foreground="{StaticResource FontColor}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>-->
-                    <!--<MenuItem Header="Импорт"
-                              Command="{Binding ImportTaskCommand}">
-                        <MenuItem.Icon>
-                            <fa:ImageAwesome Icon="Solid_Paste"
-                                             Foreground="{StaticResource FontColor}"/>
-                        </MenuItem.Icon>
-                    </MenuItem>-->
                 </ContextMenu>
             </DataGrid.ContextMenu>
             <DataGrid.RowStyle>
@@ -264,6 +243,8 @@
             <DataGrid.InputBindings>
                 <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding CopyTaskCommand}"/>
                 <KeyBinding Modifiers="Ctrl" Key="V" Command="{Binding PasteTaskCommand}"/>
+                <KeyBinding Modifiers="Ctrl" Key="X" Command="{Binding DeleteProductionTaskCommand}"/>
+                <KeyBinding Modifiers="Ctrl" Key="B" Command="{Binding SetBoldCommand}"/>
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Статус" Width="110">

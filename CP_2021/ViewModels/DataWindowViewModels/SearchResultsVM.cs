@@ -151,6 +151,7 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         public SearchResultsVM(string searchString) : this()
         {
             SearchString = searchString;
+            SelectedIndex = 6; // Изготовитель
         }
     }
 }
