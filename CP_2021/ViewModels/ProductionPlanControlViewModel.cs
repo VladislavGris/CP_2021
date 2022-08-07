@@ -17,6 +17,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -409,11 +410,15 @@ namespace CP_2021.ViewModels
 
         public ICommand CopyTaskCommand { get; }
 
-        private bool CanCopyTaskCommandExecute(object p) => SelectedTask?.data != null;
+        private bool CanCopyTaskCommandExecute(object p) => true;
 
         private void OnCopyTaskCommandExecuted(object p)
         {
-            _taskToCopyId = SelectedTask.data.Id;
+            Debug.WriteLine("Copy");
+            if(SelectedTask?.data != null)
+            {
+                _taskToCopyId = SelectedTask.data.Id;
+            }
         }
 
         #endregion
@@ -866,10 +871,28 @@ namespace CP_2021.ViewModels
         private void OnOpenSearchWindowCommandExecuted(object p)
         {
             SearchWindow window = new SearchWindow();
-            ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
+            if(SelectedTask == null)
+            {
+                ((SearchResultsVM)(window.DataContext)).SendTaskIdToReportVM += SetSelectedTaskFromReport;
+            }
+            else
+            {
+                SearchResultsVM searchResultsVM = new SearchResultsVM(SelectedTask.Task.Name);
+            }
             window.Show();
         }
 
+        #endregion
+        #region OpenSearchWindowFromShortcutCommand
+        public ICommand OpenSearchWindowFromShortcutCommand { get; }
+        private bool CanOpenSearchWindowFromShortcutCommandExecute(object p) => SelectedTask != null;
+        private void OnOpenSearchWindowFromShortcutCommandExecuted(object p)
+        {
+            SearchWindow window = new SearchWindow();
+            SearchResultsVM searchVm = new SearchResultsVM(SelectedTask.data.Name);
+            window.DataContext = searchVm;
+            window.Show();
+        }
         #endregion
         #region OpenTimedGivingWindowCommand
 
@@ -1142,6 +1165,7 @@ namespace CP_2021.ViewModels
             SetFontSize = new LambdaCommand(OnSetFontSizeCommandExecuted, CanSetFontSizeCommandExecute);
             SetCurrentElementFontSize = new LambdaCommand(OnSetCurrentElementFontSizeCommandExecuted, CanSetCurrentElementFontSizeCommandExecute);
             ColorSelectionChanged = new LambdaCommand(OnColorSelectionChangedExecuted, CanColorSelectionChangedExecute);
+            OpenSearchWindowFromShortcutCommand = new LambdaCommand(OnOpenSearchWindowFromShortcutCommandExecuted, CanOpenSearchWindowFromShortcutCommandExecute);
             #endregion
 
             FontSizes = new List<int> {10, 12, 14, 16, 18, 20, 22 };

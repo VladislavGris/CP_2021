@@ -35,7 +35,7 @@
                 <ComboBoxItem>Изготовитель</ComboBoxItem>
                 <ComboBoxItem>Оплата</ComboBoxItem>
             </ComboBox>
-            <TextBox Grid.Column="1" Margin="5 13" Text="{Binding SearchString, Mode=TwoWay}" FontSize="24"/>
+            <TextBox Name="SearchTextBox" Grid.Column="1" Margin="5 13" Text="{Binding SearchString, Mode=TwoWay}" FontSize="24" CaretIndex="1000"/>
             <Button Grid.Column="2" Margin="5" Content="Поиск" Style="{StaticResource EnterButton}" Command="{Binding SearchCommand}"/>
         </Grid>
         <Grid Grid.Row="1">

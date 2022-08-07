@@ -147,5 +147,10 @@ namespace CP_2021.ViewModels.DataWindowViewModels
             SearchCommand = new LambdaCommand(OnSearchCommandExecuted, CanSearchCommandExecute);
             GotoTaskCommand = new LambdaCommand(OnGotoTaskCommandExecuted, CanGotoTaskCommandExecute);
         }
+
+        public SearchResultsVM(string searchString) : this()
+        {
+            SearchString = searchString;
+        }
     }
 }

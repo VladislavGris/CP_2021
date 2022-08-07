@@ -19,6 +19,7 @@
     </UserControl.Resources>
     <UserControl.InputBindings>
         <KeyBinding Key="F5" Command="{Binding UpdateModelCommand}"/>
+        <KeyBinding Modifiers="Ctrl" Key="F" Command="{Binding OpenSearchWindowFromShortcutCommand}"/>
     </UserControl.InputBindings>
     <UserControl.DataContext>
         <vm:ProductionPlanControlViewModel/>
@@ -260,6 +261,10 @@
                     </Style.Triggers>
                 </Style>
             </DataGrid.RowStyle>
+            <DataGrid.InputBindings>
+                <KeyBinding Modifiers="Ctrl" Key="C" Command="{Binding CopyTaskCommand}"/>
+                <KeyBinding Modifiers="Ctrl" Key="V" Command="{Binding PasteTaskCommand}"/>
+            </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTemplateColumn Header="Статус" Width="110">
                     <DataGridTemplateColumn.CellTemplate>
