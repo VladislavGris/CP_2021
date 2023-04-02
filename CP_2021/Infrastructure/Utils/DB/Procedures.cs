@@ -15,6 +15,7 @@
 
         /// <summary>ParentId</summary>
         public static string GetTasksByParent = "exec GetTasksByParent {0}";
+        public static string GetSubTasksByProjectName = "exec GetSubTasksByProjectName {0}";
         public static string GetTasksByParentNULL = "exec GetTasksByParent";
         public static string GetTaskById = "exec GetTaskById {0}";
         /// <summary>ParentId, LineOrder</summary>

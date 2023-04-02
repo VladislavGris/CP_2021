@@ -5,6 +5,7 @@ using CP_2021.Models.ViewEntities;
 using CP_2021.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
 
@@ -49,6 +50,18 @@ namespace CP_2021.ViewModels.Reports
 
         #endregion
 
+        #region SubTasksOfHead
+
+        private ObservableCollection<string> _subTasksOfHead;
+
+        public ObservableCollection<string> SubTasksOfHead
+        {
+            get => _subTasksOfHead;
+            set => Set(ref _subTasksOfHead, value);
+        }
+
+        #endregion
+
         #region Manufactirers
 
         private ObservableCollection<string> _manufactirers;
@@ -69,6 +82,18 @@ namespace CP_2021.ViewModels.Reports
         {
             get => _selectedHead;
             set => Set(ref _selectedHead, value);
+        }
+
+        #endregion
+
+        #region SelectedSubTaskOfHead
+
+        private string _selectedSubTaskOfHead;
+
+        public string SelectedSubTaskOfHead
+        {
+            get => _selectedSubTaskOfHead;
+            set => Set(ref _selectedSubTaskOfHead, value);
         }
 
         #endregion
@@ -122,7 +147,9 @@ namespace CP_2021.ViewModels.Reports
         {
             var heads = TasksOperations.GetHeadTasks();
             var manufacturers = TasksOperations.GetManufactures();
+
             HeadTasks = new ObservableCollection<string>();
+            SubTasksOfHead = new ObservableCollection<string>();
             Manufactirers = new ObservableCollection<string>();
             foreach (var head in heads)
             {
@@ -157,11 +184,28 @@ namespace CP_2021.ViewModels.Reports
 
         protected virtual void OnProjectChangedCommandExecuted(object p)
         {
-            Content = new ObservableCollection<T>(FullContent.Where(t => t.Project == SelectedHead));
-            if(!String.IsNullOrEmpty(SelectedManufacture))
+            // Загрузка подпроектов выбранного головного проекта
+            var tasks = TasksOperations.GetSubTasksByProjectName(SelectedHead);
+            SubTasksOfHead = new ObservableCollection<string>();
+            SelectedSubTaskOfHead = null;
+            foreach (var task in tasks)
             {
-                Content = new ObservableCollection<T>(Content.Where(t => t.Manufacturer == SelectedManufacture));
+                SubTasksOfHead.Add(task.Name);
             }
+            ApplyFilters();
+        }
+
+        #endregion
+
+        #region SubTaskOfHeadChangedCommand 
+
+        public ICommand SubTaskOfHeadChangedCommand { get; }
+
+        private bool CanSubTaskOfHeadChangedCommandExecute(object p) => !String.IsNullOrEmpty(SelectedHead);
+
+        protected virtual void OnSubTaskOfHeadChangedCommandExecuted(object p)
+        {
+            ApplyFilters();
         }
 
         #endregion
@@ -174,11 +218,7 @@ namespace CP_2021.ViewModels.Reports
 
         protected virtual void OnManufactureChangedCommandExecuted(object p)
         {
-            Content = new ObservableCollection<T>(FullContent.Where(t => t.Manufacturer == SelectedManufacture));
-            if(!String.IsNullOrEmpty(SelectedHead))
-            {
-                Content = new ObservableCollection<T>(Content.Where(t => t.Project == SelectedHead));
-            }
+            ApplyFilters();
         }
 
         #endregion
@@ -229,10 +269,28 @@ namespace CP_2021.ViewModels.Reports
 
         #endregion
 
+        private void ApplyFilters()
+        {
+            Content = FullContent;
+            if(!String.IsNullOrEmpty(SelectedHead))
+            {
+                Content = new ObservableCollection<T>(Content.Where(t => t.Project == SelectedHead));
+            }
+            if (!String.IsNullOrEmpty(SelectedManufacture))
+            {
+                Content = new ObservableCollection<T>(Content.Where(t=>t.Manufacturer == SelectedManufacture));
+            }
+            if(!String.IsNullOrEmpty(SelectedSubTaskOfHead))
+            {
+                Content = new ObservableCollection<T>(Content.Where(t => t.SubProject == SelectedSubTaskOfHead));
+            }
+        }
+
         public BaseReport()
         {
 
             ProjectChangedCommand = new LambdaCommand(OnProjectChangedCommandExecuted, CanProjectChangedCommandExecute);
+            SubTaskOfHeadChangedCommand = new LambdaCommand(OnSubTaskOfHeadChangedCommandExecuted, CanSubTaskOfHeadChangedCommandExecute);
             GotoTaskCommand = new LambdaCommand(OnGotoTaskCommandExecuted, CanGotoTaskCommandExecute);
             GotoParentTaskCommand = new LambdaCommand(OnGotoParentTaskCommandExecuted, CanGotoParentTaskCommandExecute);
             ManufactureChangedCommand = new LambdaCommand(OnManufactureChangedCommandExecuted, CanManufactureChangedCommandExecute);

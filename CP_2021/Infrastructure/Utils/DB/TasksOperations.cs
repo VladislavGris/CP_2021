@@ -29,6 +29,12 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         }
 
+        public static IEnumerable<Task_Hierarchy_Formatting> GetSubTasksByProjectName(string projectName)
+        {
+            var result = _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.GetSubTasksByProjectName, projectName).AsNoTracking();
+            return result;
+        }
+
         public static Task_Hierarchy_Formatting InsertEmptyTask(Guid? parentId, int lineOrder)
         {
             return _context.Task_Hierarchy_Formatting.FromSqlRaw(Procedures.InsertEmptyTask, parentId, lineOrder).AsNoTracking().ToList().FirstOrDefault();

@@ -20,11 +20,12 @@
             </Grid.RowDefinitions>
             <Grid Background="{StaticResource BackgroundBrush}" Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
                     <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Orientation="Horizontal"
                             Grid.Column="0">
@@ -68,17 +69,30 @@
                         </ie:Interaction.Triggers>
                     </ComboBox>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Grid.Column="3" >
+                    <TextBlock VerticalAlignment="Center"
+                               FontSize="20"
+                               Foreground="{StaticResource ForegroundBrush}"
+                               Margin="0 0 10 0">Субконто</TextBlock>
+                    <ComboBox ItemsSource="{Binding SubTasksOfHead}" Width="200" HorizontalAlignment="Right" Style="{StaticResource SearchBoxStyle}" SelectedItem="{Binding SelectedSubTaskOfHead}">
+                        <ie:Interaction.Triggers>
+                            <ie:EventTrigger EventName="SelectionChanged">
+                                <ie:InvokeCommandAction Command="{Binding SubTaskOfHeadChangedCommand}"/>
+                            </ie:EventTrigger>
+                        </ie:Interaction.Triggers>
+                    </ComboBox>
+                </StackPanel>
                 <Button Content="Сбросить"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
                                 Margin="5"
-                        Grid.Column="3"
+                        Grid.Column="4"
                         Command="{Binding DropFiltersCommand}"/>
                 <Button Content="Сформировать"
                                 HorizontalAlignment="Right"
                                 Style="{StaticResource EnterButton}"
                                 Margin="5"
-                        Grid.Column="4"
+                        Grid.Column="5"
                         Command="{Binding GenerateReportCommand}"/>
             </Grid>
             <DataGrid Grid.Row="1"
