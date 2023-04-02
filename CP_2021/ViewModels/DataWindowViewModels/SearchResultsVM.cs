@@ -79,28 +79,28 @@ namespace CP_2021.ViewModels.DataWindowViewModels
                     switch (SelectedIndex)
                     {
                         case 0:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchProductionTask($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchProductionTask($"N'%{SearchString}%'"));
                             break;
                         case 1:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchAct($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchAct($"N'%{SearchString}%'"));
                             break;
                         case 2:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchComplectation($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchComplectation($"N'%{SearchString}%'"));
                             break;
                         case 3:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchGiving($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchGiving($"N'%{SearchString}%'"));
                             break;
                         case 4:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchIn_Production($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchIn_Production($"N'%{SearchString}%'"));
                             break;
                         case 5:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchLaborCosts($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchLaborCosts($"N'%{SearchString}%'"));
                             break;
                         case 6:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchManufacture($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchManufacture($"N'%{SearchString}%'"));
                             break;
                         case 7:
-                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchPayment($"\"{SearchString}*\""));
+                            SearchResults = new ObservableCollection<SearchProcResult>(TasksOperations.SearchPayment($"N'%{SearchString}%'"));
                             break;
                         default:
                             break;
@@ -151,7 +151,6 @@ namespace CP_2021.ViewModels.DataWindowViewModels
         public SearchResultsVM(string searchString) : this()
         {
             SearchString = searchString;
-            SelectedIndex = 6; // Изготовитель
         }
     }
 }

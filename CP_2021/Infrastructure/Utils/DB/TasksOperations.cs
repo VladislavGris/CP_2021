@@ -263,43 +263,42 @@ namespace CP_2021.Infrastructure.Utils.DB
 
         public static IEnumerable<SearchProcResult> SearchProductionTask(string searchString)
         {
-            SearchProcResult task = _context.SearchResults.FromSqlRaw(Procedures.SearchProductionPlan, searchString).AsNoTracking().AsEnumerable().FirstOrDefault();
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchProductionPlan, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchProductionPlan + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchAct(string searchString)
         {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchAct, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchAct + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchComplectation(string searchString)
         {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchComplectation, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchComplectation + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchGiving(string searchString)
         {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchGiving, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchGiving + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchIn_Production(string searchString)
         {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchIn_Production, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchIn_Production + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchLaborCosts(string searchString)
-        {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchIn_Production, searchString).AsNoTracking();
+        {   
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchIn_Production + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchManufacture(string searchString)
         {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchManufacture, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchManufacture + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchProcResult> SearchPayment(string searchString)
         {
-            return _context.SearchResults.FromSqlRaw(Procedures.SearchPayment, searchString).AsNoTracking();
+            return _context.SearchResults.FromSqlRaw(Procedures.SearchPayment + searchString).AsNoTracking();
         }
 
         public static IEnumerable<SearchGoTo> GetAllParents(Guid taskId)

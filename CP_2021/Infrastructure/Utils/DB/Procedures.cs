@@ -121,14 +121,14 @@
         public static string GetVKOnStorage = "exec GetVKOnStorage";
         public static string GetPaymentReport = "exec GetPaymentReport";
 
-        public static string SearchProductionPlan = "exec SearchProductionPlan {0}";
-        public static string SearchAct = "exec SearchAct {0}";
-        public static string SearchComplectation = "exec SearchComplectation {0}";
-        public static string SearchGiving = "exec SearchGiving {0}";
-        public static string SearchIn_Production = "exec SearchIn_Production {0}";
-        public static string SearchLaborCosts = "exec SearchLaborCosts {0}";
-        public static string SearchManufacture = "exec SearchManufacture {0}";
-        public static string SearchPayment = "exec SearchPayment {0}";
+        public static string SearchProductionPlan = "exec SearchProductionPlan ";
+        public static string SearchAct = "exec SearchAct ";
+        public static string SearchComplectation = "exec SearchComplectation ";
+        public static string SearchGiving = "exec SearchGiving ";
+        public static string SearchIn_Production = "exec SearchIn_Production ";
+        public static string SearchLaborCosts = "exec SearchLaborCosts ";
+        public static string SearchManufacture = "exec SearchManufacture ";
+        public static string SearchPayment = "exec SearchPayment ";
         public static string GetAllParents = "exec GetAllParents {0}";
     }
 }

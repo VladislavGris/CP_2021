@@ -882,7 +882,7 @@ namespace CP_2021.ViewModels
         private void OnOpenSearchWindowFromShortcutCommandExecuted(object p)
         {
             SearchWindow window = new SearchWindow();
-            SearchResultsVM searchVm = new SearchResultsVM(SelectedTask.data.SpecNum);
+            SearchResultsVM searchVm = new SearchResultsVM(SelectedTask.data.Name);
             window.DataContext = searchVm;
             window.Show();
         }
